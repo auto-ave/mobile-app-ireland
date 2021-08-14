@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:themotorwash/data/models/review.dart';
-import 'package:themotorwash/data/repository.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 
 part 'store_reviews_event.dart';
 part 'store_reviews_state.dart';

@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
-import 'package:themotorwash/data/repository.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 
 part 'store_list_event.dart';
 part 'store_list_state.dart';

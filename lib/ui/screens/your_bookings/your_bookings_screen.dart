@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/bloc/your_bookings_bloc.dart';
 
 class YourBookingsScreen extends StatefulWidget {
@@ -46,12 +48,13 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
                     delegate: SliverChildBuilderDelegate((_, index) {
                       var booking = bookings[index];
                       return YourBookingTile(
-                        address: 'Address Api',
+                        address: booking.store!.address!,
                         serviceNames: booking.serviceNames!,
-                        storeName: 'Store Name API',
+                        storeName: booking.store!.name!,
                         total: booking.amount!.toString(),
                         imageUrl: 'imageUrl API',
                         bookedAt: booking.createdAt!,
+                        bookingId: booking.bookingId!,
                       );
                     }, childCount: bookings.length),
                   );
@@ -88,7 +91,8 @@ class YourBookingTile extends StatefulWidget {
       required this.total,
       required this.serviceNames,
       required this.imageUrl,
-      required this.bookedAt})
+      required this.bookedAt,
+      required this.bookingId})
       : super(key: key);
   final String storeName;
   final String address;
@@ -96,6 +100,7 @@ class YourBookingTile extends StatefulWidget {
   final List<String> serviceNames;
   final String imageUrl;
   final DateTime bookedAt;
+  final String bookingId;
 
   @override
   _YourBookingTileState createState() => _YourBookingTileState();
@@ -127,17 +132,20 @@ class _YourBookingTileState extends State<YourBookingTile> {
                 height: 50,
               ),
               kHorizontalMargin8,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(widget.storeName, style: kStyle16SemiBold),
-                  Text(
-                    widget.address,
-                    style: kStyle12.copyWith(color: Color(0xff888888)),
-                  )
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(widget.storeName, style: kStyle16SemiBold),
+                    Text(
+                      widget.address,
+                      style: kStyle12.copyWith(color: Color(0xff888888)),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
               ),
-              Spacer(),
               Text('₹${widget.total}', style: kStyle16SemiBold)
             ]),
             Divider(),
@@ -148,10 +156,17 @@ class _YourBookingTileState extends State<YourBookingTile> {
             kverticalMargin4,
             ...(widget.serviceNames.map((e) => getBulletText(e)).toList()),
             kverticalMargin4,
-            Text(
-              'More Info',
-              style: TextStyle(
-                  color: Colors.blue, decoration: TextDecoration.underline),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, BookingSummaryScreen.route,
+                    arguments: BookingSummaryScreenArguments(
+                        bookingId: widget.bookingId));
+              },
+              child: Text(
+                'More Info',
+                style: TextStyle(
+                    color: Colors.blue, decoration: TextDecoration.underline),
+              ),
             ),
             Divider(),
             kverticalMargin8,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
+import 'package:themotorwash/data/local/local_auth_service.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/ui/screens/store_list/bloc/store_list_bloc.dart';
-import 'package:themotorwash/ui/screens/store_list/components/search_bar.dart';
+import 'package:themotorwash/ui/widgets/search_bar.dart';
 import 'package:themotorwash/ui/widgets/store_tile.dart';
 import 'package:themotorwash/ui/widgets/vehicle_dropdown.dart';
 
@@ -45,6 +47,16 @@ class _StoreListScreenState extends State<StoreListScreen> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           leading: Icon(Icons.chevron_left),
+          actions: [
+            TextButton(
+              child: Text("Logout"),
+              onPressed: () async {
+                await LocalAuthService().removeTokens();
+                BlocProvider.of<GlobalAuthBloc>(context)
+                  ..add(CheckAuthStatus());
+              },
+            )
+          ],
           title: Row(
             children: [
               Icon(Icons.location_on),

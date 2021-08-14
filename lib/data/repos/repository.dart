@@ -1,7 +1,10 @@
-import 'package:themotorwash/data/models/booking.dart';
+import 'package:themotorwash/data/models/booking_detail.dart';
+import 'package:themotorwash/data/models/booking_list_model.dart';
 import 'package:themotorwash/data/models/cart.dart';
+import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/review.dart';
+import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 
@@ -20,5 +23,8 @@ abstract class Repository {
 
   Future<CartModel> getCart();
 
-  Future<List<BookingModel>> getYourBookings({required int offset});
+  Future<List<BookingListModel>> getYourBookings({required int offset});
+  Future<BookingDetailModel> getBookingDetail({required String bookingId});
+  Future<List<Slot>> createSlots(
+      {required String date, required String cartId});
 }

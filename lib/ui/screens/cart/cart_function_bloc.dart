@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:themotorwash/data/models/cart.dart';
-import 'package:themotorwash/data/repository.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 
 part 'cart_function_event.dart';
 part 'cart_function_state.dart';

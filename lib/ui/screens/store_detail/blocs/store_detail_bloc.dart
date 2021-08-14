@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:themotorwash/data/models/store.dart';
-import 'package:themotorwash/data/repository.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 
 part 'store_detail_event.dart';
 part 'store_detail_state.dart';

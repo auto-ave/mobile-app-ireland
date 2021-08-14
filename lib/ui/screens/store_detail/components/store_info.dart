@@ -5,14 +5,14 @@ import 'package:themotorwash/theme_constants.dart';
 
 class StoreInfo extends StatelessWidget {
   final String address;
-  final TimeOfDay openingTime;
-  final TimeOfDay closingTime;
+  // final TimeOfDay openingTime;
+  // final TimeOfDay closingTime;
   final String serviceStartsAt;
   const StoreInfo({
     Key? key,
     required this.address,
-    required this.openingTime,
-    required this.closingTime,
+    // required this.openingTime,
+    // required this.closingTime,
     required this.serviceStartsAt,
   }) : super(key: key);
   @override
@@ -42,8 +42,9 @@ class StoreInfo extends StatelessWidget {
             SizedBox(
               width: 8,
             ),
-            Text(
-                "${openingTime.format(context)} to ${closingTime.format(context)}")
+            Text("9am to 6pm test")
+            // Text(
+            //     "${openingTime.format(context)} to ${closingTime.format(context)}"),
           ],
         ),
         SizedBox(

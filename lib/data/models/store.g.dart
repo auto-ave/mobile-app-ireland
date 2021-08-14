@@ -9,23 +9,24 @@ part of 'store.dart';
 StoreEntity _$StoreEntityFromJson(Map<String, dynamic> json) {
   return StoreEntity(
     ratingCount: json['rating_count'] as int?,
-    id: json['id'] as int,
-    name: json['name'] as String,
+    id: json['id'] as int?,
+    name: json['name'] as String?,
     thumbnail: json['thumbnail'] as String?,
     rating: json['rating'] as String?,
-    description: json['description'] as String,
-    owner: json['owner'] as int,
-    city: json['city'] as int,
-    address: json['address'] as String,
+    description: json['description'] as String?,
+    owner: json['owner'] as int?,
+    city: json['city'] as String?,
+    address: json['address'] as String?,
     slug: json['slug'] as String?,
-    emails: (json['emails'] as List<dynamic>).map((e) => e as String).toList(),
-    latitude: json['latitude'] as String,
-    longitude: json['longitude'] as String,
+    emails:
+        (json['emails'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    latitude: json['latitude'] as String?,
+    longitude: json['longitude'] as String?,
     createdAt: json['created_at'] as String?,
     updatedAt: json['updated_at'] as String?,
     isActive: json['is_active'] as bool?,
-    contactNumbers: (json['contact_numbers'] as List<dynamic>)
-        .map((e) => e as String)
+    contactNumbers: (json['contact_numbers'] as List<dynamic>?)
+        ?.map((e) => e as String)
         .toList(),
     storeRegistrationType: json['store_registration_type'] as String?,
     storeRegistrationNumber: json['registration_number'] as String?,

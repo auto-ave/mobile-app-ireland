@@ -4,6 +4,7 @@ import 'package:themotorwash/ui/screens/home/components/motto.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
+  static final String route = '/homeScreen';
 
   @override
   Widget build(BuildContext context) {

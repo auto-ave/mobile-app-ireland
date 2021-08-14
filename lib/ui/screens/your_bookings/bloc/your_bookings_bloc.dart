@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:themotorwash/data/models/booking.dart';
-import 'package:themotorwash/data/repository.dart';
+import 'package:themotorwash/data/models/booking_list_model.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 
 part 'your_bookings_event.dart';
 part 'your_bookings_state.dart';
@@ -33,11 +33,11 @@ class YourBookingsBloc extends Bloc<YourBookingsEvent, YourBookingsState> {
         if (state is YourBookingsLoaded) {
           yield YourBookingsLoading();
         }
-        List<BookingModel> bookings = state is YourBookingsLoaded
+        List<BookingListModel> bookings = state is YourBookingsLoaded
             ? (state as YourBookingsLoaded).bookings
             : [];
 
-        List<BookingModel> moreBookings =
+        List<BookingListModel> moreBookings =
             await _repository.getYourBookings(offset: offset);
         yield YourBookingsLoaded(
             bookings: bookings + moreBookings,

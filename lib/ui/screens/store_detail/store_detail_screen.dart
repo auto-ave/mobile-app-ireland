@@ -32,29 +32,33 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
     super.initState();
     _storeDetailBloc = BlocProvider.of<StoreDetailBloc>(context);
     _cartFunctionBloc = BlocProvider.of<CartFunctionBloc>(context);
+    _cartFunctionBloc.add(GetCart());
     _storeDetailBloc.add(LoadStoreDetail(storeSlug: widget.storeSlug));
   }
 
   late PersistentBottomSheetController bottomSheetController;
 
   _showCartSheet({required String storeName}) {
-    // showBottomSheet(
-    //   context: ctx,
-    //   builder: (context) => CartBottomSheet(),
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+        builder: (_) {
+          return CartBottomSheet(
+            storeName: storeName,
+          );
+        });
+    // bottomSheetController = _scaffoldState.currentState!.showBottomSheet(
+    //   (context) => CartBottomSheet(
+    //     storeName: storeName,
+    //   ),
     //   shape: RoundedRectangleBorder(
     //     borderRadius: BorderRadius.only(
-    //         topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+    //         topLeft: Radius.circular(8), topRight: Radius.circular(8)),
     //   ),
     // );
-    bottomSheetController = _scaffoldState.currentState!.showBottomSheet(
-      (context) => CartBottomSheet(
-        storeName: storeName,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-      ),
-    );
   }
 
   @override
@@ -70,48 +74,47 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
           builder: (context, detailState) {
             return BlocBuilder<CartFunctionBloc, CartFunctionState>(
               builder: (context, state) {
-                if (state is CartLoading) {
-                  return Container(
-                    width: 0,
-                    height: 0,
-                  );
-                }
-                if (state is CartFunctionUninitialized) {
-                  return Container(
-                    width: 0,
-                    height: 0,
-                  );
-                }
-                if (state is CartItemAdded) {
-                  return state.cart.items!.isNotEmpty
-                      ? getBottonNav(
-                          cart: state.cart,
-                          store: (detailState as StoreDetailLoaded).store)
-                      : Container(
-                          width: 0,
-                          height: 0,
-                        );
-                }
+                if (detailState is StoreDetailLoaded) {
+                  if (state is CartLoading) {
+                    return Container(
+                      width: 0,
+                      height: 0,
+                    );
+                  }
+                  if (state is CartFunctionUninitialized) {
+                    return Container(
+                      width: 0,
+                      height: 0,
+                    );
+                  }
+                  if (state is CartItemAdded) {
+                    return state.cart.items!.isNotEmpty
+                        ? getBottonNav(
+                            cart: state.cart, store: (detailState).store)
+                        : Container(
+                            width: 0,
+                            height: 0,
+                          );
+                  }
 
-                if (state is CartItemDeleted) {
-                  return state.cart.items!.isNotEmpty
-                      ? getBottonNav(
-                          cart: state.cart,
-                          store: (detailState as StoreDetailLoaded).store)
-                      : Container(
-                          width: 0,
-                          height: 0,
-                        );
-                }
-                if (state is CartLoaded) {
-                  return state.cart.items!.isNotEmpty
-                      ? getBottonNav(
-                          cart: state.cart,
-                          store: (detailState as StoreDetailLoaded).store)
-                      : Container(
-                          width: 0,
-                          height: 0,
-                        );
+                  if (state is CartItemDeleted) {
+                    return state.cart.items!.isNotEmpty
+                        ? getBottonNav(
+                            cart: state.cart, store: (detailState).store)
+                        : Container(
+                            width: 0,
+                            height: 0,
+                          );
+                  }
+                  if (state is CartLoaded) {
+                    return state.cart.items!.isNotEmpty
+                        ? getBottonNav(
+                            cart: state.cart, store: (detailState).store)
+                        : Container(
+                            width: 0,
+                            height: 0,
+                          );
+                  }
                 }
                 return Container(
                   width: 0,
@@ -222,7 +225,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
               Spacer(),
               TextButton(
                 child: Text('View Cart', style: TextStyle(color: Colors.white)),
-                onPressed: () => _showCartSheet(storeName: store.name),
+                onPressed: () => _showCartSheet(storeName: store.name!),
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
                         Theme.of(context).primaryColor)),
@@ -249,6 +252,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
       StoreServicesTab(
         nestedScrollContext: nestedScrollContext,
         storeSlug: widget.storeSlug,
+        scaffoldState: _scaffoldState,
       ),
     ];
     return tabPages[index];

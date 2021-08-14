@@ -9,7 +9,7 @@ part of 'price_time_list_model.dart';
 PriceTimeListEntity _$PriceTimeListEntityFromJson(Map<String, dynamic> json) {
   return PriceTimeListEntity(
     id: json['id'] as int?,
-    service: json['service'] as String?,
+    service: json['service'],
     createdAt: json['created_at'] as String?,
     updatedAt: json['updated_at'] as String?,
     price: json['price'] as int?,

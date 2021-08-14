@@ -1,8 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'booking.g.dart';
+import 'package:themotorwash/data/models/review.dart';
+import 'package:themotorwash/data/models/store.dart';
 
-class BookingModel {
+part 'booking_list_model.g.dart';
+
+class BookingListModel {
   final int? id;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -12,13 +15,13 @@ class BookingModel {
   final String? otp;
   final int? event;
   final int? vehicleType;
-  final int? store;
+  final Store? store;
   final int? bookedBy;
   final bool? isRefunded;
   final List<String>? serviceNames;
   final int? amount;
 
-  BookingModel(
+  BookingListModel(
       {this.id,
       this.createdAt,
       this.updatedAt,
@@ -33,8 +36,8 @@ class BookingModel {
       this.bookedBy,
       this.isRefunded,
       this.amount});
-  factory BookingModel.fromEntity(BookingEntity e) {
-    return BookingModel(
+  factory BookingListModel.fromEntity(BookingListEntity e) {
+    return BookingListModel(
         amount: e.amount,
         bookedBy: e.bookedBy,
         bookingId: e.bookingId,
@@ -46,19 +49,19 @@ class BookingModel {
         serviceNames: e.serviceNames,
         status: e.status,
         statusChangedTime: DateTime.parse(e.statusChangedTime!),
-        store: e.store,
+        store: Store.fromEntity(e.store!),
         updatedAt: DateTime.parse(e.updatedAt!),
         vehicleType: e.vehicleType);
   }
 
   @override
   String toString() {
-    return 'BookingModel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, bookingId: $bookingId, status: $status, statusChangedTime: $statusChangedTime, otp: $otp, event: $event, vehicleType: $vehicleType, store: $store, bookedBy: $bookedBy, isRefunded: $isRefunded, serviceNames: $serviceNames, amount: $amount)';
+    return 'BookingListModel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, bookingId: $bookingId, status: $status, statusChangedTime: $statusChangedTime, otp: $otp, event: $event, vehicleType: $vehicleType, store: $store, bookedBy: $bookedBy, isRefunded: $isRefunded, serviceNames: $serviceNames, amount: $amount)';
   }
 }
 
-@JsonSerializable()
-class BookingEntity {
+@JsonSerializable(explicitToJson: true)
+class BookingListEntity {
   final int? id;
 
   @JsonKey(name: 'created_at')
@@ -81,7 +84,7 @@ class BookingEntity {
   @JsonKey(name: 'vehicle_type')
   final int? vehicleType;
 
-  final int? store;
+  final StoreEntity? store;
   @JsonKey(name: 'booked_by')
   final int? bookedBy;
 
@@ -92,7 +95,9 @@ class BookingEntity {
   final List<String>? serviceNames;
 
   final int? amount;
-  BookingEntity(
+
+  final ReviewEntity? review;
+  BookingListEntity(
       {this.id,
       this.createdAt,
       this.updatedAt,
@@ -106,9 +111,15 @@ class BookingEntity {
       this.bookedBy,
       this.isRefunded,
       this.serviceNames,
-      this.amount});
-  factory BookingEntity.fromJson(Map<String, dynamic> data) =>
-      _$BookingEntityFromJson(data);
+      this.amount,
+      this.review});
+  factory BookingListEntity.fromJson(Map<String, dynamic> data) =>
+      _$BookingListEntityFromJson(data);
 
-  Map<String, dynamic> toJson() => _$BookingEntityToJson(this);
+  Map<String, dynamic> toJson() => _$BookingListEntityToJson(this);
+
+  @override
+  String toString() {
+    return 'BookingListEntity(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, bookingId: $bookingId, status: $status, statusChangedTime: $statusChangedTime, otp: $otp, event: $event, vehicleType: $vehicleType, store: $store, bookedBy: $bookedBy, isRefunded: $isRefunded, serviceNames: $serviceNames, amount: $amount, review: $review)';
+  }
 }

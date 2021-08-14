@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:themotorwash/theme_constants.dart';
 
 class SlotSelectionTab extends StatelessWidget {
@@ -13,7 +14,48 @@ class SlotSelectionTab extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    // return StaggeredGridView.count(
+    //   crossAxisCount: MediaQuery.of(context).size.width < 400 ? 2 : 3,
+    //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    //   children: slots.asMap().entries.map((e) {
+    //     final item = e.value;
+    //     // return Text('Hello');
+    //     return SlotSelectionTabWidget(
+    //       startTime: item.startTime,
+    //       endTime: item.endTime,
+    //       isSelected: currentSelectedTabIndex == e.key,
+    //       slotsAvailable: item.slotsAvailable,
+    //       onTap: (tabIndex) => onTap(tabIndex),
+    //       tabIndex: e.key,
+    //     );
+    //   }).toList(),
+    //   staggeredTiles: slots.map((e) => StaggeredTile.count(1, 1)).toList(),
+    //   mainAxisSpacing: 8.0,
+    //   crossAxisSpacing: 4.0,
+    // );
+    // return StaggeredGridView.countBuilder(
+    //   crossAxisCount: MediaQuery.of(context).size.width < 400 ? 2 : 3,
+    //   itemCount: slots.length,
+    //   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    //   itemBuilder: (BuildContext context, int index) {
+    //     final item = slots[index];
+    //     // return Text('Hello');
+    //     return SlotSelectionTabWidget(
+    //       startTime: item.startTime,
+    //       endTime: item.endTime,
+    //       isSelected: currentSelectedTabIndex == index,
+    //       slotsAvailable: item.slotsAvailable,
+    //       onTap: (tabIndex) => onTap(tabIndex),
+    //       tabIndex: index,
+    //     );
+    //   },
+    //   staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+    //   mainAxisSpacing: 4.0,
+    //   crossAxisSpacing: 4.0,
+    // );
+
     return GridView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemBuilder: (_, index) {
         final item = slots[index];
         return SlotSelectionTabWidget(
@@ -27,7 +69,8 @@ class SlotSelectionTab extends StatelessWidget {
       },
       itemCount: slots.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 2,
+          // childAspectRatio: MediaQuery.of(context).size.width < 400 ? 2.5 : 1.8,
+          mainAxisExtent: 60,
           crossAxisCount: MediaQuery.of(context).size.width < 400 ? 2 : 3,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8),
@@ -47,17 +90,22 @@ class SlotSelectionTabItem {
 }
 
 class SlotSelectionTabWidget extends StatelessWidget {
-  final int slotsAvailable;
+  late int _slotsAvailable;
 
   SlotSelectionTabWidget(
       {Key? key,
       required this.startTime,
       required this.endTime,
       required this.isSelected,
-      required this.slotsAvailable,
+      required int slotsAvailable,
       required this.onTap,
-      required this.tabIndex})
-      : super(key: key);
+      required this.tabIndex}) {
+    if (slotsAvailable < 1)
+      _slotsAvailable = 0;
+    else
+      _slotsAvailable = slotsAvailable;
+  }
+
   final String startTime;
   final String endTime;
   final bool isSelected;
@@ -68,12 +116,12 @@ class SlotSelectionTabWidget extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: slotsAvailable == 0 ? () {} : () => onTap(tabIndex),
+          onTap: _slotsAvailable == 0 ? () {} : () => onTap(tabIndex),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
             decoration: BoxDecoration(
                 border: Border.all(
-                    color: slotsAvailable == 0
+                    color: _slotsAvailable == 0
                         ? Color(0xff8D8D8D)
                         : Theme.of(context).primaryColor,
                     width: 1),
@@ -81,16 +129,18 @@ class SlotSelectionTabWidget extends StatelessWidget {
                 color:
                     isSelected ? Theme.of(context).primaryColor : Colors.white),
             child: Center(
-                child: Text(
-              '9am - 10am',
-              style: kStyle14SemiBold.copyWith(color: getButtonTextColor()),
+                child: FittedBox(
+              child: Text(
+                '$startTime - $endTime' + " $tabIndex",
+                style: kStyle14SemiBold.copyWith(color: getButtonTextColor()),
+              ),
             )),
           ),
         ),
         Text(
-          '$slotsAvailable slots available',
+          '$_slotsAvailable slots available',
           style: TextStyle(
-              color: slotsAvailable == 0
+              color: _slotsAvailable == 0
                   ? Colors.red
                   : Theme.of(context).primaryColor),
         ),
@@ -99,7 +149,7 @@ class SlotSelectionTabWidget extends StatelessWidget {
   }
 
   Color getButtonTextColor() {
-    return slotsAvailable == 0
+    return _slotsAvailable == 0
         ? Color(0xff8D8D8D)
         : (!isSelected ? Colors.black : Colors.white);
   }

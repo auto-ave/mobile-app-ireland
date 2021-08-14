@@ -57,7 +57,7 @@ class LocationBar extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed(StoreListScreen.route,
-                          arguments: StoreListArguments(city: '462001'));
+                          arguments: StoreListArguments(city: 'bpl'));
                     },
                     child: Text("Find"),
                     style: ButtonStyle(

@@ -1,14 +1,29 @@
 import 'package:dio/dio.dart';
 
+import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
+import 'package:themotorwash/data/api/log_interceptor.dart';
+import 'package:themotorwash/data/local/local_auth_service.dart';
+
 class ApiConstants {
-  BaseOptions options = new BaseOptions(
-      baseUrl: "<URL>",
-      responseType: ResponseType.plain,
-      headers: {
-        'Authorization':
-            'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjI4MTg5MDM2LCJqdGkiOiIwMjVjZjk4MjlhNDE0ODJiYjA4ODQ2MGZhZWU1Njk3ZiIsInVzZXJfaWQiOjF9.icyYWetBBg2oevd8gVUuSiMFzbu96lKCxpyafmaPcmg'
-      });
-  Dio get dioClient => Dio(options);
+  final GlobalAuthBloc _globalAuthBloc;
+  ApiConstants({
+    required GlobalAuthBloc globalAuthBloc,
+  }) : _globalAuthBloc = globalAuthBloc;
+
+  Dio dioClient() {
+    var state = _globalAuthBloc.state;
+    Map<String, dynamic>? headers;
+    if (state is Authenticated) {
+      headers = {'Authorization': 'JWT ${state.tokens.accessToken}'};
+    }
+    BaseOptions options = new BaseOptions(
+        baseUrl: "<URL>", responseType: ResponseType.plain, headers: headers);
+    Dio client = Dio(options);
+    client.interceptors.add(Logging());
+
+    return client;
+  }
+
   final String baseUrl = "motorwash.herokuapp.com";
   final int pageLimit = 10;
 
@@ -84,6 +99,36 @@ class ApiConstants {
 
   String postDeleteItemFromCartEndpoint() {
     var uri = Uri.https(baseUrl, "/cart/removeitem/");
+    return uri.toString();
+  }
+
+  String postCheckOTPEndpoint() {
+    var uri = Uri.https(baseUrl, "/consumer/login/checkOTP/");
+    return uri.toString();
+  }
+
+  String postSendOTPEndpoint() {
+    var uri = Uri.https(baseUrl, "/consumer/login/sendOTP/");
+    return uri.toString();
+  }
+
+  String getBookingDetailsEndpoint({required String bookingId}) {
+    var uri = Uri.https(baseUrl, "/booking/$bookingId");
+    return uri.toString();
+  }
+
+  String postGetSlotsByCartDateEndpoint() {
+    var uri = Uri.https(baseUrl, "/slots/create");
+    return uri.toString();
+  }
+
+  String postInitiatePaytmPaymentEndpoint() {
+    var uri = Uri.https(baseUrl, "/payment/initiate/");
+    return uri.toString();
+  }
+
+  String postCheckPaytmPaymentStatusEndpoint() {
+    var uri = Uri.https(baseUrl, "/payment/callback/");
     return uri.toString();
   }
 }

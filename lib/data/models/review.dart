@@ -69,7 +69,7 @@ class ReviewEntity {
   final int? id;
 
   @JsonKey(name: 'user')
-  final customerName;
+  final String? customerName;
   @JsonKey(name: 'created_at')
   final String? createdAt;
   @JsonKey(name: 'updated_at')

@@ -5,25 +5,25 @@ import 'package:themotorwash/utils.dart';
 part 'store.g.dart';
 
 class Store {
-  final int id;
-  final String name;
+  final int? id;
+  final String? name;
   final String? thumbnail;
   final double? rating;
-  final String description;
-  final int owner;
-  final int city;
-  final String address;
+  final String? description;
+  final int? owner;
+  final String? city;
+  final String? address;
   final String? slug;
-  final List<String> emails;
-  final double latitude;
-  final double longitude;
+  final List<String>? emails;
+  final double? latitude;
+  final double? longitude;
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
 
   final bool? isActive;
 
-  final List<String> contactNumbers;
+  final List<String>? contactNumbers;
 
   final String? storeRegistrationType;
 
@@ -35,9 +35,9 @@ class Store {
 
   final String? contactPersonPhoto;
 
-  final TimeOfDay storeOpeningTime;
+  final TimeOfDay? storeOpeningTime;
 
-  final TimeOfDay storeClosingTime;
+  final TimeOfDay? storeClosingTime;
 
   final int? ratingCount;
 
@@ -78,20 +78,26 @@ class Store {
         city: entity.city,
         address: entity.address,
         emails: entity.emails,
-        latitude: double.parse(entity.latitude),
-        longitude: double.parse(entity.longitude),
+        latitude:
+            entity.latitude != null ? double.parse(entity.latitude!) : null,
+        longitude:
+            entity.longitude != null ? double.parse(entity.longitude!) : null,
         contactNumbers: entity.contactNumbers,
         storeRegistrationType: entity.storeRegistrationType,
         storeRegistrationNumber: entity.storeRegistrationNumber,
         contactPersonName: entity.contactPersonName,
         contactPersonNumber: entity.contactPersonNumber,
-        storeOpeningTime: getTimeOfDayFromString(entity.storeOpeningTime!),
-        storeClosingTime: getTimeOfDayFromString(entity.storeClosingTime!),
+        storeOpeningTime: entity.storeOpeningTime != null
+            ? getTimeOfDayFromString(entity.storeOpeningTime!)
+            : null,
+        storeClosingTime: entity.storeClosingTime != null
+            ? getTimeOfDayFromString(entity.storeClosingTime!)
+            : null,
         contactPersonPhoto: entity.contactPersonPhoto,
         createdAt:
             entity.createdAt != null ? DateTime.parse(entity.createdAt!) : null,
         isActive: entity.isActive,
-        rating: double.parse(entity.rating!),
+        rating: entity.rating != null ? double.parse(entity.rating!) : null,
         slug: entity.slug,
         supportedVehicleType: entity.supportedVehicleType,
         thumbnail: entity.thumbnail,
@@ -103,18 +109,18 @@ class Store {
 
 @JsonSerializable()
 class StoreEntity {
-  final int id;
-  final String name;
+  final int? id;
+  final String? name;
   final String? thumbnail;
   final String? rating;
-  final String description;
-  final int owner;
-  final int city;
-  final String address;
+  final String? description;
+  final int? owner;
+  final String? city;
+  final String? address;
   final String? slug;
-  final List<String> emails;
-  final String latitude;
-  final String longitude;
+  final List<String>? emails;
+  final String? latitude;
+  final String? longitude;
 
   @JsonKey(name: 'created_at')
   final String? createdAt;
@@ -126,7 +132,7 @@ class StoreEntity {
   final bool? isActive;
 
   @JsonKey(name: 'contact_numbers')
-  final List<String> contactNumbers;
+  final List<String>? contactNumbers;
 
   @JsonKey(name: 'store_registration_type')
   final String? storeRegistrationType;

@@ -35,7 +35,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.org.themotorwash"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -56,4 +56,9 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation ('com.paytm.appinvokesdk:appinvokesdk:1.6.0'){
+    exclude group: "com.squareup.okhttp3", module: 'okhttp3'
+    }
+    implementation "com.squareup.okhttp3:okhttp:4.8.0"
 }

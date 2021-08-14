@@ -5,7 +5,7 @@ part 'price_time_list_model.g.dart';
 class PriceTimeListModel {
   final int? id;
 
-  final String? service;
+  final service;
 
   final DateTime? createdAt;
 
@@ -54,7 +54,7 @@ class PriceTimeListModel {
 class PriceTimeListEntity {
   final int? id;
 
-  final String? service;
+  final service; //TODO : typee
 
   @JsonKey(name: 'created_at')
   final String? createdAt;

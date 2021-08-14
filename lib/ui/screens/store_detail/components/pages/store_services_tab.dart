@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
+import 'package:themotorwash/data/models/price_time_list_model.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/ui/screens/cart/cart_function_bloc.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_services/store_services_bloc.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/store_service_tile.dart';
@@ -8,8 +11,12 @@ import 'package:themotorwash/ui/widgets/vehicle_dropdown.dart';
 class StoreServicesTab extends StatefulWidget {
   final BuildContext nestedScrollContext;
   final String storeSlug;
+  final GlobalKey<ScaffoldState> scaffoldState;
+
   StoreServicesTab(
-      {required this.nestedScrollContext, required this.storeSlug});
+      {required this.nestedScrollContext,
+      required this.storeSlug,
+      required this.scaffoldState});
 
   @override
   _StoreServicesTabState createState() => _StoreServicesTabState();
@@ -24,14 +31,18 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
   ];
   late StoreServicesBloc _servicesBloc;
   late CartFunctionBloc _cartFunctionBloc;
+  late GlobalAuthBloc _globalAuthBloc;
+  List<PriceTimeListModel> services = [];
   List<int> cartItems = [];
   @override
   void initState() {
     super.initState();
-    _servicesBloc = BlocProvider.of<StoreServicesBloc>(context);
+    _servicesBloc = StoreServicesBloc(
+        repository: RepositoryProvider.of<Repository>(context));
     _servicesBloc.add(
         LoadStoreServices(slug: widget.storeSlug, vehicleType: 2, offset: 0));
     _cartFunctionBloc = BlocProvider.of<CartFunctionBloc>(context);
+    _globalAuthBloc = BlocProvider.of<GlobalAuthBloc>(context);
 
     //TODO : Vehicle Type
   }
@@ -104,15 +115,19 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
                 );
               }
               if (state is StoreServicesLoaded) {
-                var services = state.services;
+                services = [];
+                services = state.services;
+
                 return SliverList(
                     delegate: SliverChildBuilderDelegate((_, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 16),
                     child: StoreServiceTile(
+                        scaffoldState: widget.scaffoldState,
                         itemId: services[index].id!,
                         bloc: _cartFunctionBloc,
+                        globalAuthBloc: _globalAuthBloc,
                         isAddedToCart:
                             getIsAddedToCart(itemId: services[index].id!),
                         isLoading: (cartFunctionState is CartFunctionLoading &&

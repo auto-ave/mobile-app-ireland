@@ -7,3 +7,10 @@ getTimeOfDayFromString(String s) {
     minute: int.parse(splitted[1]),
   );
 }
+
+showSnackbar(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    content: Text(text),
+    duration: Duration(seconds: 1),
+  ));
+}

@@ -17,7 +17,7 @@ ReviewEntity _$ReviewEntityFromJson(Map<String, dynamic> json) {
     consumerId: json['consumer'] as int?,
     bookingId: json['booking'] as int?,
     storeId: json['store_id'] as int?,
-    customerName: json['user'],
+    customerName: json['user'] as String?,
   );
 }
 

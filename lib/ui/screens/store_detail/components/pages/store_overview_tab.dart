@@ -29,7 +29,7 @@ class StoreOverviewTab extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           sliver: SliverToBoxAdapter(
               child: StoreHeading(
-            name: store.name,
+            name: store.name!,
             numberOfRatings: store.ratingCount!,
             rating: store.rating,
           )),
@@ -38,9 +38,9 @@ class StoreOverviewTab extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           sliver: SliverToBoxAdapter(
               child: StoreInfo(
-            address: store.address,
-            closingTime: store.storeClosingTime,
-            openingTime: store.storeOpeningTime,
+            address: store.address!,
+            // closingTime: store.storeClosingTime!,
+            // openingTime: store.storeOpeningTime!,
             serviceStartsAt: "499", //TODO : todo
           )),
         ),
@@ -48,8 +48,8 @@ class StoreOverviewTab extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           sliver: SliverToBoxAdapter(
               child: StoreMap(
-            latitute: store.latitude,
-            longitute: store.longitude,
+            latitute: store.latitude!,
+            longitute: store.longitude!,
           )),
         ),
         SliverPadding(

@@ -10,7 +10,7 @@ class YourBookingsInitial extends YourBookingsState {
 }
 
 class YourBookingsLoaded extends YourBookingsState {
-  final List<BookingModel> bookings;
+  final List<BookingListModel> bookings;
   final bool hasReachedMax;
   YourBookingsLoaded({required this.bookings, required this.hasReachedMax});
 

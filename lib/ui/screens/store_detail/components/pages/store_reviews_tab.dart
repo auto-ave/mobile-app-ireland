@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:themotorwash/data/models/review.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_reviews/store_reviews_bloc.dart';
@@ -21,7 +22,8 @@ class _StoreReviewsTabState extends State<StoreReviewsTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _reviewsBloc = BlocProvider.of<StoreReviewsBloc>(context);
+    _reviewsBloc = StoreReviewsBloc(
+        repository: RepositoryProvider.of<Repository>(context));
     _reviewsBloc.add(LoadStoreReviews(slug: widget.storeSlug, offset: 0));
   }
 
@@ -102,6 +104,7 @@ class StoreReviewTile extends StatelessWidget {
           border: Border.all(color: kPrimaryColor, width: 1),
           borderRadius: BorderRadius.circular(5)),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: <Widget>[

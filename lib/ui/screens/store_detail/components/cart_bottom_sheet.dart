@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:themotorwash/data/models/cart.dart';
+import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/cart/cart_function_bloc.dart';
 import 'package:themotorwash/ui/screens/slot_select/slot_select_screen.dart';
@@ -17,6 +18,8 @@ class CartBottomSheet extends StatefulWidget {
 
 class _CartBottomSheetState extends State<CartBottomSheet> {
   late CartFunctionBloc _cartFunctionBloc;
+  late CartModel cart;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -32,8 +35,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
         builder: (context, state) {
           if (state is CartItemAdded ||
               state is CartItemDeleted ||
-              state is CartLoaded) {
-            late CartModel cart;
+              state is CartLoaded ||
+              state is CartFunctionLoading) {
             if (state is CartItemAdded) {
               cart = state.cart;
             }
@@ -67,6 +70,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                 ),
                 ...(cart.itemsObj!.map((e) {
                   return CartItemTile(
+                      cartFunctionBloc: _cartFunctionBloc,
+                      itemId: e.id,
                       price: e.price!.toString(),
                       service: e.service!,
                       timeInterval: e.timeInterval!.toString());
@@ -144,7 +149,10 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                 style: TextStyle(color: Colors.white)),
                             onPressed: () {
                               Navigator.pushNamed(
-                                  context, SlotSelectScreen.route);
+                                  context, SlotSelectScreen.route,
+                                  arguments: SlotSelectScreenArguments(
+                                      cartTotal: cart.total!,
+                                      cardId: cart.id!.toString()));
                             },
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
@@ -171,12 +179,16 @@ class CartItemTile extends StatelessWidget {
       {Key? key,
       required this.service,
       required this.timeInterval,
-      required this.price})
+      required this.price,
+      required this.itemId,
+      required this.cartFunctionBloc})
       : super(key: key);
 
-  final String service;
-  final String timeInterval;
-  final String price;
+  final String? service;
+  final String? timeInterval;
+  final String? price;
+  final int? itemId;
+  final CartFunctionBloc cartFunctionBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +203,7 @@ class CartItemTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      service,
+                      service!,
                       style: TextStyle(fontSize: kfontSize16),
                     ),
                     SizedBox(
@@ -223,7 +235,9 @@ class CartItemTile extends StatelessWidget {
                 width: 16,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  cartFunctionBloc.add(DeleteItemFromCart(itemId: itemId!));
+                },
                 child: Text(
                   'Remove',
                   style: TextStyle(color: Color(0xffDC1313)),
