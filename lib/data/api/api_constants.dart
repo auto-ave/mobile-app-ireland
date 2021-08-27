@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/data/api/log_interceptor.dart';
-import 'package:themotorwash/data/local/local_auth_service.dart';
+import 'package:themotorwash/data/local/local_data_service.dart';
 
 class ApiConstants {
   final GlobalAuthBloc _globalAuthBloc;
@@ -17,7 +17,9 @@ class ApiConstants {
       headers = {'Authorization': 'JWT ${state.tokens.accessToken}'};
     }
     BaseOptions options = new BaseOptions(
-        baseUrl: "<URL>", responseType: ResponseType.plain, headers: headers);
+        // baseUrl: "<URL>",
+        responseType: ResponseType.plain,
+        headers: headers);
     Dio client = Dio(options);
     client.interceptors.add(Logging());
 
@@ -25,14 +27,17 @@ class ApiConstants {
   }
 
   final String baseUrl = "motorwash.herokuapp.com";
-  final int pageLimit = 10;
+  final int pageLimit = 3;
 
   String getStoreListEndPoint() {
     return "$baseUrl/store/list";
   }
 
-  String getStoreListByCityEndPoint(
-      {required String city, required int offset}) {
+  String getStoreListByLocationEndPoint(
+      {required String city,
+      required double lat,
+      required double long,
+      required int offset}) {
     Map<String, dynamic> params = {
       'offset': offset.toString(),
       'limit': pageLimit.toString()
@@ -58,17 +63,26 @@ class ApiConstants {
   }
 
   String getStoreServicesBySlugVehicleTypeEndPoint(
-      {required String slug, required int vehicleType, required int offset}) {
+      {required String slug,
+      required String vehicleType,
+      required int offset}) {
     Map<String, dynamic> params = {
       'offset': offset.toString(),
-      'limit': pageLimit.toString()
+      'limit': pageLimit.toString(),
+      'vehicle_type': vehicleType.toString()
     };
     var uri = Uri.https(baseUrl, "/store/$slug/services", params);
     return uri.toString();
   }
 
-  String postReviewEndPoint({required String slug}) {
-    return "$baseUrl/store/$slug/reviews";
+  String postReviewEndPoint() {
+    var uri = Uri.https(baseUrl, "/review/");
+    return uri.toString();
+  }
+
+  String getReviewEndPoint({required String bookingId}) {
+    var uri = Uri.https(baseUrl, "/review/$bookingId");
+    return uri.toString();
   }
 
   String getBookingListEndPoint({required int offset}) {
@@ -76,7 +90,7 @@ class ApiConstants {
       'offset': offset.toString(),
       'limit': pageLimit.toString()
     };
-    var uri = Uri.https(baseUrl, "/booking/list/", params);
+    var uri = Uri.https(baseUrl, "/booking/list/consumer", params);
     return uri.toString();
   }
 
@@ -129,6 +143,39 @@ class ApiConstants {
 
   String postCheckPaytmPaymentStatusEndpoint() {
     var uri = Uri.https(baseUrl, "/payment/callback/");
+    return uri.toString();
+  }
+
+  String getVehicleTypeListEndpoint() {
+    var uri = Uri.https(baseUrl, "/vehicle_type/list/");
+    return uri.toString();
+  }
+
+  String getServicesBySearchQueryEndPoint(
+      {required String query, required int offset}) {
+    Map<String, dynamic> params = {
+      'search': query,
+      'offset': offset.toString(),
+      'limit': pageLimit.toString()
+    };
+    var uri = Uri.https(baseUrl, "/service/list/", params);
+    return uri.toString();
+  }
+
+  String getStoresBySearchQueryAndLocationEndPoint(
+      {required String query,
+      required String city,
+      required double lat,
+      required double long,
+      required int offset}) {
+    Map<String, dynamic> params = {
+      'query': query.toString(),
+      'offset': offset.toString(),
+      'limit': pageLimit.toString(),
+      'latitude': lat.toString(),
+      'longitude': long.toString()
+    };
+    var uri = Uri.https(baseUrl, "/store/list/$city", params);
     return uri.toString();
   }
 }

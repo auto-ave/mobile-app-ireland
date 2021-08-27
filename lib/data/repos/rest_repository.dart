@@ -3,11 +3,14 @@ import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/location_model.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
+import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/review.dart';
+import 'package:themotorwash/data/models/vehicle_type.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 
 class RestRepository implements Repository {
@@ -21,10 +24,14 @@ class RestRepository implements Repository {
   }
 
   @override
-  Future<List<StoreListModel>> getStoreListByCity(
-      {required String city, required int offset}) async {
+  Future<List<StoreListModel>> getStoreListByLocation(
+      {required LocationModel locationModel, required int offset}) async {
     List<StoreListEntity> entities =
-        await _apiMethodsImp.getStoreListByCity(city: city, offset: offset);
+        await _apiMethodsImp.getStoreListByLocation(
+            city: locationModel.city,
+            lat: locationModel.lat,
+            long: locationModel.long,
+            offset: offset);
     List<StoreListModel> stores =
         entities.map((e) => StoreListModel.fromEntity(e)).toList();
     return stores;
@@ -42,7 +49,7 @@ class RestRepository implements Repository {
   @override
   Future<List<PriceTimeListModel>> getStoreServicesBySlugAndVehicleType(
       {required String slug,
-      required int vehicleType,
+      required String vehicleType,
       required int offset}) async {
     List<PriceTimeListEntity> entities =
         await _apiMethodsImp.getStoreServicesBySlugAndVehicleType(
@@ -100,13 +107,53 @@ class RestRepository implements Repository {
   }
 
   @override
-  Future<InitiatePaymentModel> initiatePaytmPayment(
-      {required String date,
-      required int bay,
-      required String slotStart,
-      required String slotEnd}) async {
-    InitiatePaymentEntity e = await _apiMethodsImp.initiatePaytmPayment(
-        date: date, bay: bay, slotStart: slotStart, slotEnd: slotEnd);
-    return InitiatePaymentModel.fromEntity(e);
+  Future<List<VehicleTypeModel>> getVehicleTypeList() async {
+    List<VehicleTypeEntity> entities =
+        await _apiMethodsImp.getVehicleTypeList();
+    List<VehicleTypeModel> vehicleTypes = entities
+        .map<VehicleTypeModel>((e) => VehicleTypeModel.fromEntity(e))
+        .toList();
+
+    return vehicleTypes;
+  }
+
+  @override
+  Future<List<StoreListModel>> searchStores(
+      {required String query,
+      required LocationModel locationModel,
+      required int offset}) async {
+    List<StoreListEntity> entities = await _apiMethodsImp.searchStores(
+        query: query,
+        city: locationModel.city,
+        lat: locationModel.lat,
+        long: locationModel.long,
+        offset: offset);
+    List<StoreListModel> stores =
+        entities.map((e) => StoreListModel.fromEntity(e)).toList();
+    return stores;
+  }
+
+  @override
+  Future<List<ServiceModel>> searchServices(
+      {required String query, required int offset}) async {
+    List<ServiceEntity> entities =
+        await _apiMethodsImp.searchServices(query: query, offset: offset);
+    List<ServiceModel> services =
+        entities.map<ServiceModel>((e) => ServiceModel.fromEntity(e)).toList();
+    return services;
+  }
+
+  @override
+  Future<Review> addReview({required ReviewEntity review}) async {
+    ReviewEntity entity = await _apiMethodsImp.addReview(review: review);
+    Review reviewModel = Review.fromEntity(entity);
+    return reviewModel;
+  }
+
+  @override
+  Future<Review> getReview({required String bookingId}) async {
+    ReviewEntity entity = await _apiMethodsImp.getReview(bookingId: bookingId);
+    Review reviewModel = Review.fromEntity(entity);
+    return reviewModel;
   }
 }

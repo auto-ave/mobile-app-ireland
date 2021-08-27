@@ -23,6 +23,11 @@ class YourBookingsLoading extends YourBookingsState {
   List<Object?> get props => [];
 }
 
+class MoreYourBookingsLoading extends YourBookingsState {
+  @override
+  List<Object?> get props => [];
+}
+
 class YourBookingsError extends YourBookingsState {
   final String message;
   YourBookingsError({

@@ -19,28 +19,35 @@ class StoreReviewsBloc extends Bloc<StoreReviewsEvent, StoreReviewsState> {
   ) async* {
     if (event is LoadStoreReviews) {
       yield* _mapLoadStoreReviewsToState(
-          slug: event.slug, offset: event.offset);
+          slug: event.slug,
+          offset: event.offset,
+          forLoadMore: event.forLoadMore);
     }
   }
 
-  bool _hasReachedMax(StoreReviewsState state) =>
+  bool hasReachedMax(StoreReviewsState state) =>
       state is StoreReviewsLoaded && state.hasReachedMax;
 
   Stream<StoreReviewsState> _mapLoadStoreReviewsToState(
-      {required String slug, required int offset}) async* {
-    if (!_hasReachedMax(state)) {
+      {required String slug,
+      required int offset,
+      required bool forLoadMore}) async* {
+    if (!hasReachedMax(state)) {
       try {
-        if (state is StoreReviewsLoaded) {
+        List<Review> reviews = [];
+        if (state is StoreReviewsLoaded && forLoadMore) {
+          reviews = (state as StoreReviewsLoaded).reviews;
+          yield MoreStoreReviewsLoading();
+        } else {
           yield StoreReviewsLoading();
         }
-        List<Review> reviews = state is StoreReviewsLoaded
-            ? (state as StoreReviewsLoaded).reviews
-            : [];
 
         List<Review> moreReviews =
             await _repository.getStoreReviewsBySlug(slug: slug, offset: offset);
         yield StoreReviewsLoaded(
-            reviews: reviews + moreReviews, hasReachedMax: moreReviews.isEmpty);
+            reviews: reviews + moreReviews,
+            hasReachedMax: moreReviews.length !=
+                10); // Page Limit set in apiconstants is 10. Therefore if services retured are less than 10, then hasReachedMax is true
       } catch (e) {
         yield StoreReviewsError(message: e.toString());
       }

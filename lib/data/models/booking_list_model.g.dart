@@ -16,7 +16,7 @@ BookingListEntity _$BookingListEntityFromJson(Map<String, dynamic> json) {
     statusChangedTime: json['status_changed_time'] as String?,
     otp: json['otp'] as String?,
     event: json['event'] as int?,
-    vehicleType: json['vehicle_type'] as int?,
+    vehicleType: json['vehicle_type'] as String?,
     store: json['store'] == null
         ? null
         : StoreEntity.fromJson(json['store'] as Map<String, dynamic>),
@@ -25,7 +25,7 @@ BookingListEntity _$BookingListEntityFromJson(Map<String, dynamic> json) {
     serviceNames: (json['price_times'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
-    amount: json['amount'] as int?,
+    amount: json['amount'] as String?,
     review: json['review'] == null
         ? null
         : ReviewEntity.fromJson(json['review'] as Map<String, dynamic>),

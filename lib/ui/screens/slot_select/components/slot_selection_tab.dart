@@ -70,7 +70,7 @@ class SlotSelectionTab extends StatelessWidget {
       itemCount: slots.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           // childAspectRatio: MediaQuery.of(context).size.width < 400 ? 2.5 : 1.8,
-          mainAxisExtent: 60,
+          mainAxisExtent: 70,
           crossAxisCount: MediaQuery.of(context).size.width < 400 ? 2 : 3,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8),
@@ -114,11 +114,12 @@ class SlotSelectionTabWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
           onTap: _slotsAvailable == 0 ? () {} : () => onTap(tabIndex),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+            padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
                 border: Border.all(
                     color: _slotsAvailable == 0
@@ -131,18 +132,20 @@ class SlotSelectionTabWidget extends StatelessWidget {
             child: Center(
                 child: FittedBox(
               child: Text(
-                '$startTime - $endTime' + " $tabIndex",
+                '$startTime - $endTime',
                 style: kStyle14SemiBold.copyWith(color: getButtonTextColor()),
               ),
             )),
           ),
         ),
-        Text(
-          '$_slotsAvailable slots available',
-          style: TextStyle(
-              color: _slotsAvailable == 0
-                  ? Colors.red
-                  : Theme.of(context).primaryColor),
+        FittedBox(
+          child: Text(
+            '$_slotsAvailable slots available',
+            style: TextStyle(
+                color: _slotsAvailable == 0
+                    ? Colors.red
+                    : Theme.of(context).primaryColor),
+          ),
         ),
       ],
     );

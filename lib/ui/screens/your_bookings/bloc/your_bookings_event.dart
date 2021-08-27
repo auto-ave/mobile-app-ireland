@@ -6,9 +6,8 @@ abstract class YourBookingsEvent extends Equatable {
 
 class GetYourBookings extends YourBookingsEvent {
   final int offset;
-  GetYourBookings({
-    required this.offset,
-  });
+  final bool forLoadMore;
+  GetYourBookings({required this.offset, required this.forLoadMore});
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [offset, forLoadMore];
 }

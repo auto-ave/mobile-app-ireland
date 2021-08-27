@@ -1,7 +1,10 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:themotorwash/data/models/event.dart';
 
 import 'package:themotorwash/data/models/payment.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
+import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/store.dart';
 
 part 'booking_detail.g.dart';
@@ -11,35 +14,36 @@ class BookingDetailModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? bookingId;
-  final int? status;
+  final BookingStatus? status;
   final DateTime? statusChangedTime;
   final String? otp;
-  final int? event;
-  final int? vehicleType;
-  final int? store;
+  final String? vehicleType;
+  final Store? store;
   final int? bookedBy;
   final bool? isRefunded;
   final List<PriceTimeListModel>? services;
-  final int? amount;
+  final String? amount;
   final PaymentModel? payment;
+  final EventModel? event;
+  final Review? review;
 
-  BookingDetailModel({
-    this.id,
-    this.createdAt,
-    this.updatedAt,
-    this.bookingId,
-    this.status,
-    this.statusChangedTime,
-    this.otp,
-    this.event,
-    this.vehicleType,
-    this.store,
-    this.bookedBy,
-    this.isRefunded,
-    this.services,
-    this.amount,
-    this.payment,
-  });
+  BookingDetailModel(
+      {this.id,
+      this.createdAt,
+      this.updatedAt,
+      this.bookingId,
+      this.status,
+      this.statusChangedTime,
+      this.otp,
+      this.event,
+      this.vehicleType,
+      this.store,
+      this.bookedBy,
+      this.isRefunded,
+      this.services,
+      this.amount,
+      this.payment,
+      this.review});
 
   factory BookingDetailModel.fromEntity(BookingDetailEntity e) {
     return BookingDetailModel(
@@ -48,7 +52,7 @@ class BookingDetailModel {
         bookingId: e.bookingId,
         createdAt: e.createdAt != null ? DateTime.parse(e.createdAt!) : null,
         updatedAt: e.updatedAt != null ? DateTime.parse(e.updatedAt!) : null,
-        event: e.event,
+        event: e.event != null ? EventModel.fromEntity(e.event!) : null,
         id: e.id,
         isRefunded: e.isRefunded,
         otp: e.otp,
@@ -59,12 +63,15 @@ class BookingDetailModel {
                     (e) => PriceTimeListModel.fromEntity(e))
                 .toList()
             : null,
-        status: e.status,
+        status: e.status != null
+            ? getBookingStatusFromCode(e.status!)
+            : BookingStatus.notDefined,
         statusChangedTime: e.statusChangedTime != null
             ? DateTime.parse(e.statusChangedTime!)
             : null,
-        store: e.store,
-        vehicleType: e.vehicleType);
+        store: e.store != null ? Store.fromEntity(e.store!) : null,
+        vehicleType: e.vehicleType,
+        review: e.review != null ? Review.fromEntity(e.review!) : null);
   }
 
   @override
@@ -86,18 +93,18 @@ class BookingDetailEntity {
   final String? updatedAt;
 
   final int? status;
-  final int? amount;
+  final String? amount;
 
   @JsonKey(name: 'status_changed_time')
   final String? statusChangedTime;
 
   final String? otp;
-  final int? event;
+  final EventEntity? event;
 
   @JsonKey(name: 'vehicle_type')
-  final int? vehicleType;
+  final String? vehicleType;
 
-  final int? store;
+  final StoreEntity? store;
 
   @JsonKey(name: 'booked_by')
   final int? bookedBy;
@@ -106,26 +113,57 @@ class BookingDetailEntity {
   final bool? isRefunded;
   @JsonKey(name: 'price_times')
   final List<PriceTimeListEntity>? services;
-  BookingDetailEntity({
-    this.id,
-    this.bookingId,
-    required this.payment,
-    this.createdAt,
-    this.updatedAt,
-    this.status,
-    this.amount,
-    this.statusChangedTime,
-    this.otp,
-    this.event,
-    this.vehicleType,
-    this.store,
-    this.bookedBy,
-    this.isRefunded,
-    this.services,
-  });
+
+  final ReviewEntity? review;
+  BookingDetailEntity(
+      {this.id,
+      this.bookingId,
+      required this.payment,
+      this.createdAt,
+      this.updatedAt,
+      this.status,
+      this.amount,
+      this.statusChangedTime,
+      this.otp,
+      this.event,
+      this.vehicleType,
+      this.store,
+      this.bookedBy,
+      this.isRefunded,
+      this.services,
+      this.review});
 
   factory BookingDetailEntity.fromJson(Map<String, dynamic> data) =>
       _$BookingDetailEntityFromJson(data);
 
   Map<String, dynamic> toJson() => _$BookingDetailEntityToJson(this);
+}
+
+BookingStatus getBookingStatusFromCode(int code) {
+  switch (code) {
+    case 0:
+      return BookingStatus.notPaid;
+    case 10:
+      return BookingStatus.paymentDone;
+    case 20:
+      return BookingStatus.paymentFailed;
+    case 30:
+      return BookingStatus.notAttended;
+    case 0:
+      return BookingStatus.serviceStarted;
+    case 0:
+      return BookingStatus.serviceCompleted;
+    default:
+      return BookingStatus.notDefined;
+  }
+}
+
+enum BookingStatus {
+  notPaid,
+  paymentDone,
+  paymentFailed,
+  notAttended,
+  serviceStarted,
+  serviceCompleted,
+  notDefined
 }

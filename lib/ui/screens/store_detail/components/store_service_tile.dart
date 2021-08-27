@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/ui/screens/cart/cart_function_bloc.dart';
 import 'package:themotorwash/ui/widgets/authentication_bottom_sheet.dart';
 
 class StoreServiceTile extends StatelessWidget {
@@ -14,6 +14,7 @@ class StoreServiceTile extends StatelessWidget {
   final bool isLoading;
   final bool isAddedToCart;
   final CartFunctionBloc bloc;
+
   final GlobalKey<ScaffoldState> scaffoldState;
   final GlobalAuthBloc globalAuthBloc;
 
@@ -33,9 +34,9 @@ class StoreServiceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     print(isLoading.toString() + "loading");
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
       child: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         width: MediaQuery.of(context).size.width * .8,
         // height: MediaQuery.of(context).size.height * .27,
         decoration: BoxDecoration(
@@ -43,9 +44,9 @@ class StoreServiceTile extends StatelessWidget {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                  color: Color.fromRGBO(17, 17, 17, 0.06),
-                  blurRadius: 24,
-                  offset: Offset(0, 20))
+                  color: Color.fromRGBO(0, 0, 0, 0.25),
+                  blurRadius: 8,
+                  offset: Offset(0, 0))
             ]),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -92,21 +93,7 @@ class StoreServiceTile extends StatelessWidget {
                               bloc.add(DeleteItemFromCart(itemId: itemId));
                             }
                           } else {
-                            showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(8),
-                                        topRight: Radius.circular(8))),
-                                builder: (_) {
-                                  return AuthenticationBottomSheet(
-                                    cartBloc: bloc,
-                                    event: !isAddedToCart
-                                        ? AddItemToCart(itemId: itemId)
-                                        : DeleteItemFromCart(itemId: itemId),
-                                  );
-                                });
+                            showAuthBottomSheet(context);
                             // scaffoldState.currentState!.showBottomSheet(
                             //     (context) => AuthenticationBottomSheet(
                             //           cartBloc: bloc,
@@ -156,5 +143,22 @@ class StoreServiceTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  showAuthBottomSheet(BuildContext ctx) {
+    showModalBottomSheet(
+        context: ctx,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+        builder: (_) {
+          return AuthenticationBottomSheet(
+            cartBloc: bloc,
+            event: !isAddedToCart
+                ? AddItemToCart(itemId: itemId)
+                : DeleteItemFromCart(itemId: itemId),
+          );
+        });
   }
 }

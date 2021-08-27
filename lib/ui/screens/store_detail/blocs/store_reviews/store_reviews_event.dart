@@ -7,8 +7,13 @@ abstract class StoreReviewsEvent extends Equatable {
 class LoadStoreReviews extends StoreReviewsEvent {
   final String slug;
   final int offset;
+  final bool forLoadMore;
+  LoadStoreReviews({
+    required this.slug,
+    required this.offset,
+    required this.forLoadMore,
+  });
 
-  LoadStoreReviews({required this.slug, required this.offset});
   @override
   List<Object?> get props => [];
 }

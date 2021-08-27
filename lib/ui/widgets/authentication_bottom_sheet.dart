@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:themotorwash/data/repos/auth_repository.dart';
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/ui/screens/cart/cart_function_bloc.dart';
+import 'package:themotorwash/ui/screens/login/login_screen.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
 
 class AuthenticationBottomSheet extends StatefulWidget {
@@ -95,40 +96,7 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
           ),
           Text('Continue with number'),
           kverticalMargin8,
-          TextFormField(
-            controller: phoneController,
-            decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                  borderSide: BorderSide(color: kPrimaryColor)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                  borderSide: BorderSide(color: kPrimaryColor)),
-              prefixIcon: SizedBox(
-                height: 50,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    kHorizontalMargin16,
-                    Text('+91', style: kStyle14SemiBold),
-                    kHorizontalMargin8,
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: VerticalDivider(
-                        thickness: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-                borderSide: BorderSide(color: kPrimaryColor),
-              ),
-            ),
-          ),
+          PhoneTextField(phoneController: phoneController),
           kverticalMargin16,
           Align(
             alignment: Alignment.center,

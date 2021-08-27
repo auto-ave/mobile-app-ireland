@@ -17,7 +17,7 @@ class _SelectLocationBottomSheetState extends State<SelectLocationBottomSheet> {
         Text(
           'Select City',
         ),
-        SearchBar(),
+        // SearchBar(),
         Text('Popular Tities'),
         ListView.separated(
             itemBuilder: (_, index) {

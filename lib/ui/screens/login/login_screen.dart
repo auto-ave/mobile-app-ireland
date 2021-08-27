@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
+import 'package:themotorwash/utils.dart';
 
 class LoginScreen extends StatelessWidget {
   static final String route = '/loginScreen';
@@ -11,10 +15,17 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark));
     return SafeArea(
       child: Scaffold(
+        appBar: getAppBarLoginScreen(context: context),
         backgroundColor: Colors.white,
-        body: Column(
+        body:
+            //  Stack(
+            //   children: [
+            Column(
           children: [
             Flexible(
               child: Image.asset(
@@ -39,6 +50,27 @@ class LoginScreen extends StatelessWidget {
             ),
           ],
         ),
+        // Positioned(
+        //   top: 0,
+        //   child: SizedBox(
+        //     width: MediaQuery.of(context).size.width,
+        //     child: Row(
+        //       children: [
+        //         Image.asset(
+        //           'assets/images/logo.png',
+        //           width: MediaQuery.of(context).size.width * .3,
+        //         ),
+        //         Spacer(),
+        //         Text(
+        //           'skip',
+        //           style: kStyle16PrimaryColor,
+        //         )
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        //   ],
+        // ),
       ),
     );
   }
@@ -60,6 +92,7 @@ class _LoginBottomState extends State<LoginBottom> {
     phoneAuthBloc = BlocProvider.of<PhoneAuthBloc>(context);
   }
 
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -78,109 +111,128 @@ class _LoginBottomState extends State<LoginBottom> {
               bloc: phoneAuthBloc,
               listener: (_, state) {
                 if (state is SendingOTP) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Sending OTP...'),
-                    duration: Duration(seconds: 1),
-                  ));
+                  showSnackbar(context, 'Sending OTP to your phone');
                 }
                 if (state is FailedToSendOTP) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Failed to send OTP. ${state.message}'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
+                  showSnackbar(context, 'Failed to send OTP');
                 }
                 if (state is OTPSent) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('OTP Sent..'),
-                    duration: Duration(seconds: 1),
-                  ));
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, VerifyPhoneScreen.route, (route) => false,
+                  showSnackbar(context, 'OTP sent');
+                  Navigator.pushNamed(context, VerifyPhoneScreen.route,
                       arguments: VerifyPhoneScreenArguments(
                           phoneNumber: "+91" + phoneController.text));
                 }
               },
               builder: (context, state) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Enter your phone number',
-                      style: kStyle14SemiBold.copyWith(
-                          fontWeight: FontWeight.normal),
-                    ),
-                    kverticalMargin8,
-                    TextFormField(
-                      controller: phoneController,
-                      decoration: InputDecoration(
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: kPrimaryColor)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            borderSide: BorderSide(color: kPrimaryColor)),
-                        prefixIcon: SizedBox(
-                          height: 50,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              kHorizontalMargin16,
-                              Text('+91', style: kStyle14SemiBold),
-                              kHorizontalMargin8,
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: VerticalDivider(
-                                  thickness: 1.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: BorderSide(color: kPrimaryColor),
-                        ),
+                return Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter your phone number',
+                        style: kStyle14SemiBold.copyWith(
+                            fontWeight: FontWeight.normal),
                       ),
-                    ),
-                    kverticalMargin8,
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: () {
-                            phoneAuthBloc.add(SendOTP(
-                                phoneNumber: "+91" + phoneController.text));
-                          },
-                          child: Text(
-                            'Send OTP',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(kPrimaryColor),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
+                      kverticalMargin8,
+                      PhoneTextField(phoneController: phoneController),
+                      kverticalMargin16,
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: TextButton(
+                            onPressed: state is SendingOTP
+                                ? () {}
+                                : () {
+                                    if (_formKey.currentState!.validate()) {
+                                      phoneAuthBloc.add(SendOTP(
+                                          phoneNumber:
+                                              "+91" + phoneController.text));
+                                    }
+                                  },
+                            child: Text(
+                              'Send OTP',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  state is SendingOTP
+                                      ? Colors.grey
+                                      : kPrimaryColor),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      kverticalMargin16,
+                    ],
+                  ),
                 );
               },
             )
           ],
         ));
+  }
+}
+
+class PhoneTextField extends StatelessWidget {
+  final TextEditingController phoneController;
+  const PhoneTextField({
+    Key? key,
+    required this.phoneController,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      validator: (value) {
+        if (value != null) {
+          if (value.length == 10 && RegExp(r'^[0-9]+$').hasMatch(value)) {
+            return null;
+          }
+        }
+        return 'Enter a valid phone number';
+      },
+      controller: phoneController,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4),
+            borderSide: BorderSide(color: kPrimaryColor)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4),
+            borderSide: BorderSide(color: kPrimaryColor)),
+        prefixIcon: SizedBox(
+          height: 50,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              kHorizontalMargin16,
+              Text('+91', style: kStyle14SemiBold),
+              kHorizontalMargin8,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: VerticalDivider(
+                  thickness: 1.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: BorderSide(color: kPrimaryColor),
+        ),
+      ),
+    );
   }
 }

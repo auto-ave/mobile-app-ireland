@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 import 'package:themotorwash/data/api/api_constants.dart';
 import 'package:themotorwash/data/api/api_methods.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
@@ -12,12 +13,15 @@ import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
+import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/review.dart';
+import 'package:themotorwash/data/models/vehicle_type.dart';
 
 class ApiService implements ApiMethods {
+  static final getItInstanceName = 'ApiService';
   final ApiConstants _apiConstants;
   ApiService({required ApiConstants apiConstants})
       : _apiConstants = apiConstants;
@@ -37,11 +41,14 @@ class ApiService implements ApiMethods {
   }
 
   @override
-  Future<List<StoreListEntity>> getStoreListByCity(
-      {required String city, required int offset}) async {
+  Future<List<StoreListEntity>> getStoreListByLocation(
+      {required String city,
+      required double lat,
+      required double long,
+      required int offset}) async {
     Dio client = _apiConstants.dioClient();
-    String url =
-        _apiConstants.getStoreListByCityEndPoint(city: city, offset: offset);
+    String url = _apiConstants.getStoreListByLocationEndPoint(
+        city: city, lat: lat, long: long, offset: offset);
 
     Response res = await client.get(url);
 
@@ -62,7 +69,7 @@ class ApiService implements ApiMethods {
 
     Response res = await client.get(url);
     dynamic data = jsonDecode(res.data);
-    print(data.toString());
+    print(data.toString() + "hell");
     List<ReviewEntity> reviews = data['results']
         .map<ReviewEntity>((e) => ReviewEntity.fromJson(e))
         .toList();
@@ -72,7 +79,7 @@ class ApiService implements ApiMethods {
   @override
   Future<List<PriceTimeListEntity>> getStoreServicesBySlugAndVehicleType(
       {required String slug,
-      required int vehicleType,
+      required String vehicleType,
       required int offset}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.getStoreServicesBySlugVehicleTypeEndPoint(
@@ -179,7 +186,8 @@ class ApiService implements ApiMethods {
     String url = _apiConstants.getBookingDetailsEndpoint(bookingId: bookingId);
     Response res = await client.get(url);
     dynamic data = jsonDecode(res.data);
-    print(res.data.toString() + "booking");
+    // var logger = Logger();
+    // logger.d("hello" + res.data.toString().substring(400) + "booking");
 
     BookingDetailEntity entity = BookingDetailEntity.fromJson(data);
 
@@ -191,7 +199,7 @@ class ApiService implements ApiMethods {
       {required String date, required String cartId}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postGetSlotsByCartDateEndpoint();
-    Response res = await client.post(url, data: {'cart': cartId, 'date': date});
+    Response res = await client.post(url, data: {'date': date});
     List<dynamic> data = jsonDecode(res.data);
 
     List<SlotEntity> slots =
@@ -225,5 +233,82 @@ class ApiService implements ApiMethods {
     Response res = await client.post(url, data: paymentResponseEntity.toJson());
     dynamic data = jsonDecode(res.data);
     return PaytmPaymentResponseEntity.fromJson(data);
+  }
+
+  @override
+  Future<List<VehicleTypeEntity>> getVehicleTypeList() async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getVehicleTypeListEndpoint();
+    Response res = await client.get(url);
+    dynamic data = jsonDecode(res.data);
+    List<VehicleTypeEntity> entities = data['results']
+        .map<VehicleTypeEntity>((e) => VehicleTypeEntity.fromJson(e))
+        .toList();
+
+    return entities;
+  }
+
+  @override
+  Future<List<ServiceEntity>> searchServices(
+      {required String query, required int offset}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getServicesBySearchQueryEndPoint(
+        query: query, offset: offset);
+    Response res = await client.get(url);
+
+    dynamic data = jsonDecode(res.data);
+
+    // print(data.toString() + "hello");
+    List<ServiceEntity> services = data['results']
+        .map<ServiceEntity>((e) => ServiceEntity.fromJson(e))
+        .toList();
+
+    return services;
+  }
+
+  @override
+  Future<List<StoreListEntity>> searchStores(
+      {required String query,
+      required String city,
+      required double lat,
+      required double long,
+      required int offset}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getStoresBySearchQueryAndLocationEndPoint(
+        query: query, city: city, lat: lat, long: long, offset: offset);
+
+    Response res = await client.get(url);
+
+    print(res.data.toString() + 'hell');
+    Map<dynamic, dynamic> data = jsonDecode(res.data);
+    List<StoreListEntity> stores = data['results']
+        .map<StoreListEntity>((e) => StoreListEntity.fromJson(e))
+        .toList();
+    return stores;
+  }
+
+  @override
+  Future<ReviewEntity> addReview({required ReviewEntity review}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.postReviewEndPoint();
+    print("helloreview");
+
+    print("helloreview" + review.toJson().toString());
+
+    Response res = await client.post(url, data: review.toJson());
+    print(res.data.toString() + "hello");
+    dynamic data = jsonDecode(res.data);
+    ReviewEntity reviewEntity = ReviewEntity.fromJson(data);
+    return reviewEntity;
+  }
+
+  @override
+  Future<ReviewEntity> getReview({required String bookingId}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getReviewEndPoint(bookingId: bookingId);
+    Response res = await client.get(url);
+    dynamic data = jsonDecode(res.data);
+    ReviewEntity review = ReviewEntity.fromJson(data);
+    return review;
   }
 }

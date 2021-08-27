@@ -3,17 +3,17 @@ import 'package:json_annotation/json_annotation.dart';
 part 'payment.g.dart';
 
 class PaymentModel {
-  final int? id;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final int? paymentStatus;
+  final int id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String? paymentStatus;
   final String? modeOfPayment;
-  final int? amount;
-  final int? booking;
+  final String? amount;
+  final String? booking;
   PaymentModel({
-    this.id,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
     this.paymentStatus,
     this.modeOfPayment,
     this.amount,
@@ -24,8 +24,8 @@ class PaymentModel {
         id: e.id,
         amount: e.amount,
         booking: e.booking,
-        createdAt: e.createdAt != null ? DateTime.parse(e.createdAt!) : null,
-        updatedAt: e.updatedAt != null ? DateTime.parse(e.updatedAt!) : null,
+        createdAt: DateTime.parse(e.createdAt),
+        updatedAt: DateTime.parse(e.updatedAt),
         modeOfPayment: e.modeOfPayment,
         paymentStatus: e.paymentStatus);
   }
@@ -33,24 +33,24 @@ class PaymentModel {
 
 @JsonSerializable()
 class PaymentEntity {
-  final int? id;
+  final int id;
   @JsonKey(name: 'created_at')
-  final String? createdAt;
+  final String createdAt;
 
   @JsonKey(name: 'updated_at')
-  final String? updatedAt;
+  final String updatedAt;
 
   @JsonKey(name: 'payment_status')
-  final int? paymentStatus;
+  final String? paymentStatus;
 
   @JsonKey(name: 'mode_of_payment')
   final String? modeOfPayment;
-  final int? amount;
-  final int? booking;
+  final String? amount;
+  final String? booking;
   PaymentEntity({
-    this.id,
-    this.createdAt,
-    this.updatedAt,
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
     this.paymentStatus,
     this.modeOfPayment,
     this.amount,

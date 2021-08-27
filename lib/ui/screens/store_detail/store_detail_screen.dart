@@ -2,15 +2,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
+import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/ui/screens/cart/cart_function_bloc.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_detail_bloc.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/cart_bottom_sheet.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/store_overview_tab.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/store_reviews_tab.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/store_services_tab.dart';
+import 'package:themotorwash/utils.dart';
 
 class StoreDetailScreen extends StatefulWidget {
   final String storeSlug;
@@ -26,6 +28,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
   late StoreDetailBloc _storeDetailBloc;
   late CartFunctionBloc _cartFunctionBloc;
   final _scaffoldState = GlobalKey<ScaffoldState>();
+  late OrderReviewBloc _orderReviewBloc;
   @override
   void initState() {
     // TODO: implement initState
@@ -34,7 +37,11 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
     _cartFunctionBloc = BlocProvider.of<CartFunctionBloc>(context);
     _cartFunctionBloc.add(GetCart());
     _storeDetailBloc.add(LoadStoreDetail(storeSlug: widget.storeSlug));
+
+    _orderReviewBloc = BlocProvider.of<OrderReviewBloc>(context, listen: false);
   }
+
+  String? storeName;
 
   late PersistentBottomSheetController bottomSheetController;
 
@@ -50,25 +57,24 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
             storeName: storeName,
           );
         });
-    // bottomSheetController = _scaffoldState.currentState!.showBottomSheet(
-    //   (context) => CartBottomSheet(
-    //     storeName: storeName,
-    //   ),
-    //   shape: RoundedRectangleBorder(
-    //     borderRadius: BorderRadius.only(
-    //         topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-    //   ),
-    // );
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
-    final heigth = mediaQuery.height;
+    final height = mediaQuery.height;
     final width = mediaQuery.width;
 
     return SafeArea(
       child: Scaffold(
+        appBar: storeName != null
+            ? getAppBarWithBackButton(
+                context: context,
+                title: Text(
+                  storeName!,
+                  style: kStyle14.copyWith(color: Colors.black),
+                ))
+            : null,
         key: _scaffoldState,
         bottomNavigationBar: BlocBuilder<StoreDetailBloc, StoreDetailState>(
           builder: (context, detailState) {
@@ -88,7 +94,8 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                     );
                   }
                   if (state is CartItemAdded) {
-                    return state.cart.items!.isNotEmpty
+                    return state.cart.items!.isNotEmpty &&
+                            detailState.store.id == state.cart.store
                         ? getBottonNav(
                             cart: state.cart, store: (detailState).store)
                         : Container(
@@ -98,7 +105,8 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                   }
 
                   if (state is CartItemDeleted) {
-                    return state.cart.items!.isNotEmpty
+                    return state.cart.items!.isNotEmpty &&
+                            detailState.store.id == state.cart.store
                         ? getBottonNav(
                             cart: state.cart, store: (detailState).store)
                         : Container(
@@ -107,7 +115,8 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                           );
                   }
                   if (state is CartLoaded) {
-                    return state.cart.items!.isNotEmpty
+                    return state.cart.items!.isNotEmpty &&
+                            detailState.store.id == state.cart.store
                         ? getBottonNav(
                             cart: state.cart, store: (detailState).store)
                         : Container(
@@ -124,8 +133,16 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
             );
           },
         ),
-        body: BlocBuilder<StoreDetailBloc, StoreDetailState>(
+        body: BlocConsumer<StoreDetailBloc, StoreDetailState>(
           bloc: _storeDetailBloc,
+          listener: (_, state) {
+            if (state is StoreDetailLoaded) {
+              setState(() {
+                storeName = state.store.name;
+              });
+              _orderReviewBloc.add(SetStore(store: state.store));
+            }
+          },
           builder: (context, state) {
             if (state is StoreDetailLoading) {
               Center(
@@ -144,11 +161,11 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                     SliverToBoxAdapter(
                       child: CarouselSlider(
                         options: CarouselOptions(viewportFraction: 1),
-                        items: [1, 2, 3, 4, 5].map((i) {
+                        items: store.images!.map<Widget>((i) {
                           return Builder(
                             builder: (BuildContext context) {
                               return CachedNetworkImage(
-                                imageUrl: store.thumbnail!,
+                                imageUrl: i,
                                 width: width,
                                 height: width * 3 / 5,
                                 fit: BoxFit.fill,
@@ -174,8 +191,8 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                               unselectedLabelColor: Colors.grey,
                               tabs: [
                                 new Tab(text: "Overview"),
-                                new Tab(text: "Reviews"),
                                 new Tab(text: "Services"),
+                                new Tab(text: "Reviews"),
                               ],
                             ),
                           )),
@@ -245,14 +262,14 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
         storeSlug: widget.storeSlug,
         store: store,
       ),
-      StoreReviewsTab(
-        nestedScrollContext: nestedScrollContext,
-        storeSlug: widget.storeSlug,
-      ),
       StoreServicesTab(
         nestedScrollContext: nestedScrollContext,
         storeSlug: widget.storeSlug,
         scaffoldState: _scaffoldState,
+      ),
+      StoreReviewsTab(
+        nestedScrollContext: nestedScrollContext,
+        storeSlug: widget.storeSlug,
       ),
     ];
     return tabPages[index];

@@ -1,13 +1,29 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+
 import 'package:themotorwash/blocs/booking_summary/bloc/booking_summary_bloc.dart';
+import 'package:themotorwash/blocs/review/review_bloc.dart';
+import 'package:themotorwash/data/models/booking_detail.dart';
+import 'package:themotorwash/data/models/review.dart';
+import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
+import 'package:themotorwash/ui/widgets/common_button.dart';
+import 'package:themotorwash/ui/widgets/dashed_booking_box.dart';
+import 'package:themotorwash/utils.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
-  BookingSummaryScreen({Key? key, required this.bookingId}) : super(key: key);
+  final bool isTransactionSuccessful;
+  BookingSummaryScreen(
+      {Key? key,
+      required this.bookingId,
+      required this.isTransactionSuccessful})
+      : super(key: key);
   static final String route = "/bookingSummaryScreen";
   final String bookingId;
 
@@ -16,26 +32,18 @@ class BookingSummaryScreen extends StatefulWidget {
 }
 
 class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
-  late final TextStyle rightSideInfoPrimaryColor;
+  final TextStyle rightSideInfoPrimaryColor = TextStyle(
+      color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize12);
+  final TextStyle leftSideInfo =
+      const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
+  final TextStyle leftSide14SemiBold =
+      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
+  final TextStyle rightSide12SemiBold =
+      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
 
-  late final TextStyle leftSideInfo;
-
-  late final TextStyle leftSide14SemiBold;
-
-  late final TextStyle rightSide12SemiBold;
-
-  SizedBox verticalMargin8 = SizedBox(
-    height: 8,
-  );
-
-  SizedBox verticalMargin16 = SizedBox(
-    height: 16,
-  );
-
-  SizedBox verticalMargin32 = SizedBox(
-    height: 32,
-  );
   late BookingSummaryBloc _bookingSummaryBloc;
+
+  Review? _review;
   @override
   void initState() {
     // TODO: implement initState
@@ -48,204 +56,323 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
   @override
   Widget build(BuildContext context) {
     DateFormat formatter = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);
-    rightSideInfoPrimaryColor = TextStyle(
-        color: Theme.of(context).primaryColor,
-        fontWeight: FontWeight.w400,
-        fontSize: kfontSize12);
-    leftSideInfo =
-        const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
-    leftSide14SemiBold =
-        TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
-    rightSide12SemiBold =
-        TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
 
-    return Scaffold(
-      body: BlocBuilder<BookingSummaryBloc, BookingSummaryState>(
-        bloc: _bookingSummaryBloc,
-        builder: (context, state) {
-          if (state is BookingSummaryLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (state is BookingSummaryLoaded) {
-            var bookingDetail = state.booking;
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: <Widget>[
-                        Image.asset('assets/images/bookingConfirmedHands.png'),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Booking Confirmed',
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: kfontSize20),
-                              ),
-                              Text(
-                                  'We have sent a receipt on your number and email',
-                                  style: TextStyle(fontSize: kfontSize12)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    Text('Booking Details',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: kfontSize20)),
-                    verticalMargin8,
-                    DottedBorder(
-                      dashPattern: [8, 4],
-                      color: Theme.of(context).primaryColor,
-                      borderType: BorderType.Rect,
-                      child: Container(
-                        decoration: BoxDecoration(color: Color(0xffF3F8FF)),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushNamedAndRemoveUntil(
+            context, ExploreScreen.route, (route) => false);
+        return false;
+      },
+      child: Scaffold(
+        appBar: getAppBarWithBackButton(context: context),
+        body: BlocBuilder<BookingSummaryBloc, BookingSummaryState>(
+          bloc: _bookingSummaryBloc,
+          builder: (context, state) {
+            if (state is BookingSummaryLoading) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is BookingSummaryLoaded) {
+              var bookingDetail = state.booking;
+              var reviewState = state.booking.review;
+              return Center(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
                           children: <Widget>[
-                            getDetailsRow(
-                                leftText: 'Booking Id',
-                                rightText: bookingDetail.bookingId!,
-                                leftStyle: leftSideInfo,
-                                rightStyle: rightSideInfoPrimaryColor),
-                            verticalMargin8,
-                            getDetailsRow(
-                                leftText: 'Car Model:',
-                                rightText: 'BMW X4',
-                                leftStyle: leftSideInfo,
-                                rightStyle: rightSideInfoPrimaryColor),
-                            verticalMargin8,
-                            getDetailsRow(
-                                leftText: 'Scheduled on',
-                                rightText:
-                                    formatter.format(bookingDetail.createdAt!),
-                                leftStyle: leftSideInfo,
-                                rightStyle: rightSideInfoPrimaryColor),
-                            verticalMargin8,
-                            Divider(),
-                            verticalMargin8,
-                            getDetailsRow(
-                                leftText: 'Time:',
-                                rightText: '5:30pm to 6:30pm',
-                                leftStyle: leftSideInfo,
-                                rightStyle: rightSideInfoPrimaryColor),
-                            verticalMargin8,
-                            getDetailsRow(
-                                leftText: 'Premium Carwash',
-                                rightText: '₹499',
-                                leftStyle: leftSide14SemiBold,
-                                rightStyle: rightSide12SemiBold),
-                            verticalMargin8,
-                            getDetailsRow(
-                                leftText: 'Interior cleaning',
-                                rightText: '₹1199',
-                                leftStyle: leftSide14SemiBold,
-                                rightStyle: rightSide12SemiBold),
-                            verticalMargin8,
-                            Divider(),
-                            verticalMargin8,
-                            Text('Payment Summary', style: leftSide14SemiBold),
-                            verticalMargin8,
-                            getDetailsRow(
-                                leftText: 'Item Total',
-                                rightText: '₹${bookingDetail.payment!.amount}',
-                                leftStyle: leftSideInfo,
-                                rightStyle: rightSide12SemiBold),
-                            verticalMargin8,
-                            getDetailsRow(
-                                leftText: 'Taxes',
-                                rightText: '₹0',
-                                leftStyle: leftSideInfo,
-                                rightStyle: rightSide12SemiBold),
-                            verticalMargin8,
-                            getDetailsRow(
-                                leftText: 'Grand Total',
-                                rightText: '₹${bookingDetail.payment!.amount}',
-                                leftStyle: leftSideInfo.copyWith(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: kfontSize16,
-                                    fontWeight: FontWeight.w600),
-                                rightStyle: rightSideInfoPrimaryColor.copyWith(
-                                    color: Colors.black,
-                                    fontSize: kfontSize16,
-                                    fontWeight: FontWeight.w600)),
-                            verticalMargin8,
+                            Image.asset(widget.isTransactionSuccessful
+                                ? 'assets/images/bookingConfirmedHands.png'
+                                : 'assets/images/bookingFailedHands.png'),
+                            SizedBox(
+                              width: 16,
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    widget.isTransactionSuccessful
+                                        ? 'Booking Confirmed'
+                                        : 'Booking Failed',
+                                    style: TextStyle(
+                                        color: widget.isTransactionSuccessful
+                                            ? Theme.of(context).primaryColor
+                                            : Colors.red,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: kfontSize20),
+                                  ),
+                                  Text(
+                                      widget.isTransactionSuccessful
+                                          ? 'We have sent a receipt on your number and email'
+                                          : 'There was an error processing the payment. Any amount deducted will be refunded in 3-5 business days. Your order isn’t booked.',
+                                      style: TextStyle(fontSize: kfontSize12)),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
-                      ),
-                    ),
-                    verticalMargin16,
-                    Align(
-                      alignment: Alignment.center,
-                      child: TextButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.calendar_today_outlined,
-                            color: Colors.white),
-                        label: Text(
-                          'Add to calendar',
-                          style: TextStyle(color: Colors.white),
+                        SizedBox(
+                          height: 32,
                         ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).primaryColor),
-                          elevation: MaterialStateProperty.all(4),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
+                        Text('Booking Details',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: kfontSize20)),
+                        kverticalMargin8,
+                        DashedBookingBox(bookingDetail: bookingDetail),
+                        kverticalMargin16,
+                        Align(
+                          alignment: Alignment.center,
+                          child: TextButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.calendar_today_outlined,
+                                color: Colors.white),
+                            label: Text(
+                              'Add to calendar',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).primaryColor),
+                              elevation: MaterialStateProperty.all(4),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                        Divider(),
+                        widget.isTransactionSuccessful
+                            ? (_review != null || reviewState != null)
+                                ? ReviewWidget(
+                                    rating: double.parse(
+                                        getNotNullReview(_review, reviewState)!
+                                            .rating!),
+                                    review:
+                                        getNotNullReview(_review, reviewState)!
+                                            .reviewDescription)
+                                : RateServiceWidget(
+                                    bookingId: state.booking.bookingId!,
+                                    onReview: (review) {
+                                      setState(() {
+                                        _review = review;
+                                      });
+                                    },
+                                    store: state.booking.store!,
+                                  )
+                            : Container(),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            );
-          }
-          if (state is BookingSummaryError) {
+              );
+            }
+            if (state is BookingSummaryError) {
+              return Center(
+                child: Text('Failed to load'),
+              );
+            }
             return Center(
-              child: Text('Failed to load'),
+              child: CircularProgressIndicator(),
             );
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+          },
+        ),
       ),
     );
   }
 
-  Widget getDetailsRow(
-      {required String leftText,
-      required String rightText,
-      required TextStyle leftStyle,
-      required TextStyle rightStyle}) {
-    return Row(
-      children: <Widget>[
+  Review? getNotNullReview(Review? review1, Review? review2) {
+    if (review1 != null) {
+      return review1;
+    }
+    return review2;
+  }
+}
+
+class RateServiceWidget extends StatefulWidget {
+  final Function(Review review) onReview;
+  final String bookingId;
+  final Store store;
+  const RateServiceWidget({
+    Key? key,
+    required this.onReview,
+    required this.bookingId,
+    required this.store,
+  }) : super(key: key);
+
+  @override
+  _RateServiceWidgetState createState() => _RateServiceWidgetState();
+}
+
+class _RateServiceWidgetState extends State<RateServiceWidget> {
+  late ReviewBloc _reviewBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _reviewBloc =
+        ReviewBloc(repository: RepositoryProvider.of<Repository>(context));
+  }
+
+  double _rating = 0;
+
+  TextEditingController reviewDescriptionController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<ReviewBloc, ReviewState>(
+      bloc: _reviewBloc,
+      listener: (context, state) {
+        if (state is FailedToAddReview) {
+          showSnackbar(context, 'Failed to add review. Something went wrong.');
+        }
+        if (state is ReviewAdded) {
+          widget.onReview(state.review);
+        }
+      },
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Rate Service',
+              style: kStyle20W500,
+            ),
+            kverticalMargin8,
+            RatingBar(
+              itemSize: 24,
+              initialRating: 0,
+              direction: Axis.horizontal,
+              allowHalfRating: false,
+              itemCount: 5,
+              ratingWidget: RatingWidget(
+                half: Container(),
+                full: SvgPicture.asset(
+                  'assets/icons/rating_star_filled.svg',
+                ),
+                empty: SvgPicture.asset(
+                  'assets/icons/rating_star_raw.svg',
+                ),
+              ),
+              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+              onRatingUpdate: (rating) {
+                _rating = rating;
+              },
+            ),
+            kverticalMargin8,
+            Text(
+              'Add a review',
+              style: kStyle16,
+            ),
+            kverticalMargin8,
+            Container(
+              height: MediaQuery.of(context).size.height * .2,
+              child: TextField(
+                controller: reviewDescriptionController,
+                style: TextStyle(fontSize: 18),
+                maxLines: 100,
+                decoration: InputDecoration(
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(color: kPrimaryColor)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        borderSide: BorderSide(color: kPrimaryColor)),
+                    hintText: "Write a review"),
+              ),
+            ),
+            CommonTextButton(
+                onPressed: () {
+                  if (_rating == 0) {
+                    showSnackbar(context, 'Please rate from 1-5 stars');
+                  } else {
+                    bool isOnlyRating =
+                        reviewDescriptionController.text.trim() == "";
+                    _reviewBloc.add(
+                      AddReview(
+                        review: ReviewEntity(
+                          bookingId: widget.bookingId,
+                          isOnlyRating: isOnlyRating,
+                          store: widget.store.id,
+                          reviewDescription: reviewDescriptionController.text,
+                          rating: _rating.toString(),
+                        ),
+                      ),
+                    );
+                  }
+                },
+                child: state is AddingReview
+                    ? SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.white,
+                        ),
+                      )
+                    : Text('Post', style: TextStyle(color: Colors.white)),
+                backgroundColor: Theme.of(context).primaryColor),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ReviewWidget extends StatelessWidget {
+  final double rating;
+  final String? review;
+  const ReviewWidget({
+    Key? key,
+    required this.rating,
+    required this.review,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Text(
-          leftText,
-          style: leftStyle,
+          'Your Review',
+          style: kStyle20W500,
         ),
-        Spacer(),
-        Text(rightText, style: rightStyle),
+        kverticalMargin8,
+        RatingBar(
+          itemSize: 24,
+          initialRating: rating,
+          ignoreGestures: true,
+          direction: Axis.horizontal,
+          allowHalfRating: false,
+          itemCount: 5,
+          ratingWidget: RatingWidget(
+            half: Container(),
+            full: SvgPicture.asset(
+              'assets/icons/rating_star_filled.svg',
+            ),
+            empty: SvgPicture.asset(
+              'assets/icons/rating_star_raw.svg',
+            ),
+          ),
+          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+          onRatingUpdate: (rating) {
+            print(rating);
+          },
+        ),
+        Text(
+          review ?? "",
+          style: kStyle12,
+        )
       ],
     );
   }

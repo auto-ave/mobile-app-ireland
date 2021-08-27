@@ -49,7 +49,9 @@ class PaytmPaymentResponseModel {
         orderId: e.orderId,
         bankTransactionId: e.bankTransactionId,
         status: e.status,
-        transactionDate: DateTime.parse(e.transactionDate!),
+        transactionDate: e.transactionDate != null
+            ? DateTime.parse(e.transactionDate!)
+            : null,
         transactionDateString: e.transactionDate,
         checksumHash: e.checksumHash);
   }

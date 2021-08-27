@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:themotorwash/utils.dart';
 
 part 'store.g.dart';
@@ -42,6 +43,8 @@ class Store {
   final int? ratingCount;
 
   final List<int>? supportedVehicleType;
+  final List<String>? images;
+
   Store(
       {required this.id,
       required this.name,
@@ -67,7 +70,8 @@ class Store {
       required this.storeOpeningTime,
       required this.storeClosingTime,
       this.supportedVehicleType,
-      this.ratingCount});
+      this.ratingCount,
+      this.images});
 
   factory Store.fromEntity(StoreEntity entity) {
     return Store(
@@ -103,7 +107,13 @@ class Store {
         thumbnail: entity.thumbnail,
         updatedAt:
             entity.updatedAt != null ? DateTime.parse(entity.updatedAt!) : null,
-        ratingCount: entity.ratingCount);
+        ratingCount: entity.ratingCount,
+        images: entity.images);
+  }
+
+  @override
+  String toString() {
+    return 'Store(id: $id, name: $name, thumbnail: $thumbnail, rating: $rating, description: $description, owner: $owner, city: $city, address: $address, slug: $slug, emails: $emails, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt, isActive: $isActive, contactNumbers: $contactNumbers, storeRegistrationType: $storeRegistrationType, storeRegistrationNumber: $storeRegistrationNumber, contactPersonName: $contactPersonName, contactPersonNumber: $contactPersonNumber, contactPersonPhoto: $contactPersonPhoto, storeOpeningTime: $storeOpeningTime, storeClosingTime: $storeClosingTime, ratingCount: $ratingCount, supportedVehicleType: $supportedVehicleType, images: $images)';
   }
 }
 
@@ -161,33 +171,35 @@ class StoreEntity {
   @JsonKey(name: 'rating_count')
   final int? ratingCount;
 
-  StoreEntity({
-    required this.ratingCount,
-    required this.id,
-    required this.name,
-    this.thumbnail,
-    this.rating,
-    required this.description,
-    required this.owner,
-    required this.city,
-    required this.address,
-    this.slug,
-    required this.emails,
-    required this.latitude,
-    required this.longitude,
-    this.createdAt,
-    this.updatedAt,
-    this.isActive,
-    required this.contactNumbers,
-    required this.storeRegistrationType,
-    required this.storeRegistrationNumber,
-    required this.contactPersonName,
-    required this.contactPersonNumber,
-    this.contactPersonPhoto,
-    required this.storeOpeningTime,
-    required this.storeClosingTime,
-    this.supportedVehicleType,
-  });
+  final List<String>? images;
+
+  StoreEntity(
+      {required this.ratingCount,
+      required this.id,
+      required this.name,
+      this.thumbnail,
+      this.rating,
+      required this.description,
+      required this.owner,
+      required this.city,
+      required this.address,
+      this.slug,
+      required this.emails,
+      required this.latitude,
+      required this.longitude,
+      this.createdAt,
+      this.updatedAt,
+      this.isActive,
+      required this.contactNumbers,
+      required this.storeRegistrationType,
+      required this.storeRegistrationNumber,
+      required this.contactPersonName,
+      required this.contactPersonNumber,
+      this.contactPersonPhoto,
+      required this.storeOpeningTime,
+      required this.storeClosingTime,
+      this.supportedVehicleType,
+      this.images});
 
   factory StoreEntity.fromJson(Map<String, dynamic> data) =>
       _$StoreEntityFromJson(data);
@@ -196,6 +208,6 @@ class StoreEntity {
 
   @override
   String toString() {
-    return 'StoreEntity(id: $id, name: $name, thumbnail: $thumbnail, rating: $rating, description: $description, owner: $owner, city: $city, address: $address, slug: $slug, emails: $emails, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt, isActive: $isActive, contactNumbers: $contactNumbers, storeRegistrationType: $storeRegistrationType, storeRegistrationNumber: $storeRegistrationNumber, contactPersonName: $contactPersonName, contactPersonNumber: $contactPersonNumber, contactPersonPhoto: $contactPersonPhoto, storeOpeningTime: $storeOpeningTime, storeClosingTime: $storeClosingTime, supportedVehicleType: $supportedVehicleType)';
+    return 'StoreEntity(id: $id, name: $name, thumbnail: $thumbnail, rating: $rating, description: $description, owner: $owner, city: $city, address: $address, slug: $slug, emails: $emails, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt, isActive: $isActive, contactNumbers: $contactNumbers, storeRegistrationType: $storeRegistrationType, storeRegistrationNumber: $storeRegistrationNumber, contactPersonName: $contactPersonName, contactPersonNumber: $contactPersonNumber, contactPersonPhoto: $contactPersonPhoto, storeOpeningTime: $storeOpeningTime, storeClosingTime: $storeClosingTime, supportedVehicleType: $supportedVehicleType, ratingCount: $ratingCount, images: $images)';
   }
 }

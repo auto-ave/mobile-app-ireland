@@ -79,9 +79,11 @@ class PaytmPaymentSuccessful extends PaytmPaymentState {
 
 class PaytmPaymentFailed extends PaytmPaymentState {
   final String message;
+  final PlatformException? e;
   PaytmPaymentFailed({
     required this.message,
+    this.e,
   });
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [message, e];
 }

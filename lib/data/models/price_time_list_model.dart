@@ -19,7 +19,7 @@ class PriceTimeListModel {
 
   final int? store;
 
-  final int? vehicleType;
+  final String? vehicleType;
 
   final List<int>? bays;
   PriceTimeListModel({
@@ -48,6 +48,11 @@ class PriceTimeListModel {
         createdAt: DateTime.parse(entity.createdAt!),
         updatedAt: DateTime.parse(entity.updatedAt!));
   }
+
+  @override
+  String toString() {
+    return 'PriceTimeListModel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, price: $price, timeInterval: $timeInterval, description: $description, store: $store, vehicleType: $vehicleType, bays: $bays)';
+  }
 }
 
 @JsonSerializable()
@@ -72,7 +77,7 @@ class PriceTimeListEntity {
   final int? store;
 
   @JsonKey(name: 'vehicle_type')
-  final int? vehicleType;
+  final String? vehicleType;
 
   final List<int>? bays;
   PriceTimeListEntity({

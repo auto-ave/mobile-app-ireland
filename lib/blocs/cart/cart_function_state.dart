@@ -53,7 +53,11 @@ class CartFunctionLoading extends CartFunctionState {
   });
 
   @override
-  List<Object?> get props => [itemId];
+  List<Object?> get props => [...itemId];
+  // ...
+
+  @override
+  String toString() => 'CartFunctionLoading(itemId: $itemId)';
 }
 
 class CartLoading extends CartFunctionState {

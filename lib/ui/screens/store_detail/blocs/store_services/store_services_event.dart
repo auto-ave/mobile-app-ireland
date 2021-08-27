@@ -6,11 +6,15 @@ abstract class StoreServicesEvent extends Equatable {
 
 class LoadStoreServices extends StoreServicesEvent {
   final String slug;
-  final int vehicleType;
+  final String vehicleType;
   final int offset;
+  final bool forLoadMore;
 
   LoadStoreServices(
-      {required this.slug, required this.vehicleType, required this.offset});
+      {required this.slug,
+      required this.vehicleType,
+      required this.offset,
+      required this.forLoadMore});
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [slug, vehicleType, offset, forLoadMore];
 }

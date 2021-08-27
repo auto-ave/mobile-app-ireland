@@ -19,29 +19,33 @@ class YourBookingsBloc extends Bloc<YourBookingsEvent, YourBookingsState> {
     YourBookingsEvent event,
   ) async* {
     if (event is GetYourBookings) {
-      yield* _mapGetYourBookingToState(offset: event.offset);
+      yield* _mapGetYourBookingToState(
+          offset: event.offset, forLoadMore: event.forLoadMore);
     }
   }
 
-  bool _hasReachedMax(YourBookingsState state) =>
+  bool hasReachedMax(YourBookingsState state) =>
       state is YourBookingsLoaded && state.hasReachedMax;
 
   Stream<YourBookingsState> _mapGetYourBookingToState(
-      {required int offset}) async* {
-    if (!_hasReachedMax(state)) {
+      {required int offset, required bool forLoadMore}) async* {
+    if (!hasReachedMax(state)) {
+      print("hellobook");
       try {
-        if (state is YourBookingsLoaded) {
+        List<BookingListModel> bookings = [];
+        if (state is YourBookingsLoaded && forLoadMore) {
+          yield MoreYourBookingsLoading();
+          bookings = (state as YourBookingsLoaded).bookings;
+        } else {
           yield YourBookingsLoading();
         }
-        List<BookingListModel> bookings = state is YourBookingsLoaded
-            ? (state as YourBookingsLoaded).bookings
-            : [];
 
         List<BookingListModel> moreBookings =
             await _repository.getYourBookings(offset: offset);
         yield YourBookingsLoaded(
             bookings: bookings + moreBookings,
-            hasReachedMax: moreBookings.isEmpty);
+            hasReachedMax:
+                moreBookings.length != 10); //page limit in apiconstants is 10
       } catch (e) {
         yield YourBookingsError(message: e.toString());
       }

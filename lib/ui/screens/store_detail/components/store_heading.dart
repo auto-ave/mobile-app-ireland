@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themotorwash/theme_constants.dart';
 
 class StoreHeading extends StatelessWidget {
   final String name;
@@ -18,10 +19,7 @@ class StoreHeading extends StatelessWidget {
         Expanded(
           child: Text(
             name,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-            ),
+            style: kStyle20W500,
           ),
         ),
         Column(

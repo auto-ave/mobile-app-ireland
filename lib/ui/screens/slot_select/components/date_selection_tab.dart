@@ -72,16 +72,20 @@ class DateSelectionWidget extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                '${date.day}',
-                style: kStyle24Bold.copyWith(
-                    color: isSelected ? Colors.white : Color(0xff8C8C8C)),
+              FittedBox(
+                child: Text(
+                  '${date.day}',
+                  style: kStyle24Bold.copyWith(
+                      color: isSelected ? Colors.white : Color(0xff8C8C8C)),
+                ),
               ),
-              Text(
-                getWeekdayText(date.weekday),
-                style: kStyle16SemiBold.copyWith(
-                    color: isSelected ? Colors.white : Color(0xff8C8C8C),
-                    fontWeight: FontWeight.w400),
+              FittedBox(
+                child: Text(
+                  getWeekdayText(date.weekday),
+                  style: kStyle16SemiBold.copyWith(
+                      color: isSelected ? Colors.white : Color(0xff8C8C8C),
+                      fontWeight: FontWeight.w400),
+                ),
               )
             ],
           ),
@@ -96,11 +100,10 @@ class DateSelectionWidget extends StatelessWidget {
         {
           return 'Mon';
         }
-        break;
 
       case 2:
         {
-          return 'Tues';
+          return 'Tue';
         }
       case 3:
         {
@@ -108,7 +111,7 @@ class DateSelectionWidget extends StatelessWidget {
         }
       case 4:
         {
-          return 'Thur';
+          return 'Thu';
         }
       case 5:
         {

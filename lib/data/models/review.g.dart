@@ -15,9 +15,10 @@ ReviewEntity _$ReviewEntityFromJson(Map<String, dynamic> json) {
     reviewDescription: json['review_description'] as String?,
     rating: json['rating'] as String?,
     consumerId: json['consumer'] as int?,
-    bookingId: json['booking'] as int?,
-    storeId: json['store_id'] as int?,
+    bookingId: json['booking'] as String?,
+    store: json['store'] as int?,
     customerName: json['user'] as String?,
+    image: json['image'] as String?,
   );
 }
 
@@ -32,5 +33,6 @@ Map<String, dynamic> _$ReviewEntityToJson(ReviewEntity instance) =>
       'rating': instance.rating,
       'consumer': instance.consumerId,
       'booking': instance.bookingId,
-      'store_id': instance.storeId,
+      'store': instance.store,
+      'image': instance.image,
     };

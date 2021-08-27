@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:themotorwash/data/local/local_auth_service.dart';
+import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
 
 part 'global_auth_event.dart';
@@ -26,7 +26,7 @@ class GlobalAuthBloc extends Bloc<GlobalAuthEvent, GlobalAuthState> {
   Stream<GlobalAuthState> _mapAppStartedtoState() async* {
     try {
       yield CheckingAuthStatus();
-      AuthTokensModel tokens = await LocalAuthService().getAuthTokens();
+      AuthTokensModel tokens = await LocalDataService().getAuthTokens();
       if (tokens.authenticated) {
         yield Authenticated(tokens: tokens);
       } else {

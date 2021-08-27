@@ -26,6 +26,11 @@ class StoreReviewsLoading extends StoreReviewsState {
   List<Object?> get props => [];
 }
 
+class MoreStoreReviewsLoading extends StoreReviewsState {
+  @override
+  List<Object?> get props => [];
+}
+
 class StoreReviewsError extends StoreReviewsState {
   final String message;
   StoreReviewsError({required this.message});

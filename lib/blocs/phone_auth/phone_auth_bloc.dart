@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
-import 'package:themotorwash/data/local/local_auth_service.dart';
+import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
 import 'package:themotorwash/data/repos/auth_repository.dart';
@@ -60,7 +60,7 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
       if (tokens.authenticated) {
         _globalAuthBloc.add(YieldAuthenticatedState(tokens: tokens));
       }
-      await LocalAuthService().storeAuthToken(tokens);
+      await LocalDataService().storeAuthToken(tokens);
 
       yield tokens.authenticated
           ? OTPCheckedPassed(tokens: tokens)

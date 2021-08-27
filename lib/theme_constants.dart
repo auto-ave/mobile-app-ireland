@@ -16,11 +16,16 @@ const SizedBox kverticalMargin8 = const SizedBox(
 const SizedBox kverticalMargin4 = const SizedBox(
   height: 4,
 );
+
 const SizedBox kverticalMargin16 = const SizedBox(
   height: 16,
 );
+
 const SizedBox kverticalMargin32 = const SizedBox(
   height: 32,
+);
+const SizedBox kHorizontalMargin4 = const SizedBox(
+  width: 4,
 );
 const SizedBox kHorizontalMargin8 = const SizedBox(
   width: 8,
@@ -37,6 +42,10 @@ const TextStyle kStyle12 =
     const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
 const TextStyle kStyle14SemiBold =
     const TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
+const TextStyle kStyle14 = const TextStyle(fontSize: kfontSize14);
+
+const TextStyle kStyle14PrimaryColor =
+    const TextStyle(fontSize: kfontSize14, color: kPrimaryColor);
 const TextStyle kStyle14W500 =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize14);
 const TextStyle kStyle12SemiBold =
@@ -44,7 +53,9 @@ const TextStyle kStyle12SemiBold =
 
 const TextStyle kStyle16SemiBold =
     const TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize16);
-
+const TextStyle kStyle16 = const TextStyle(fontSize: kfontSize16);
+const TextStyle kStyle16W500 =
+    const TextStyle(fontSize: kfontSize16, fontWeight: FontWeight.w500);
 const TextStyle kStyle16PrimaryColor =
     const TextStyle(fontSize: kfontSize16, color: kPrimaryColor);
 
@@ -52,3 +63,5 @@ const TextStyle kStyle24Bold =
     const TextStyle(fontWeight: FontWeight.bold, fontSize: kfontSize24);
 const TextStyle kStyle20Bold =
     const TextStyle(fontWeight: FontWeight.bold, fontSize: kfontSize20);
+const TextStyle kStyle20W500 =
+    const TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize20);

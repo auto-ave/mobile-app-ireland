@@ -29,7 +29,7 @@ class PaymentRestRepository implements PaymentRepository {
         initiatedPayment.orderId,
         initiatedPayment.amount,
         initiatedPayment.transactionToken,
-        '',
+        'https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=${initiatedPayment.orderId}',
         true,
         false);
     print(result.toString() + " hello");

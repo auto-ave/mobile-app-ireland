@@ -35,10 +35,15 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
       if (state is CartFunctionLoading) {
         var previousItems = (state as CartFunctionLoading).itemId;
         previousItems.add(itemId);
+        print(previousItems.toString() + "helolo" + "add");
+
         yield CartFunctionLoading(itemId: previousItems);
       } else {
+        print("loladdhelolo");
+
         yield CartFunctionLoading(itemId: [itemId]);
       }
+
       CartModel cart = await _repository.postAddItemToCart(itemId: itemId);
       yield CartItemAdded(cart: cart);
     } catch (e) {
@@ -52,11 +57,12 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
       if (state is CartFunctionLoading) {
         var previousItems = (state as CartFunctionLoading).itemId;
         previousItems.add(itemId);
+        // print(previousItems.toString() + "helolo");
         yield CartFunctionLoading(itemId: previousItems);
       } else {
+        // print("lolhelolo");
         yield CartFunctionLoading(itemId: [itemId]);
       }
-
       CartModel cart = await _repository.postDeleteItemFromCart(itemId: itemId);
       yield CartItemDeleted(cart: cart);
     } catch (e) {

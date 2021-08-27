@@ -5,7 +5,7 @@ import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 
 import '../../theme_constants.dart';
 
-class StoreTile extends StatelessWidget {
+class StoreSearchTile extends StatelessWidget {
   final String imageURL;
   final String storeName;
   final String distance;
@@ -13,7 +13,7 @@ class StoreTile extends StatelessWidget {
   final String startingFrom;
   final String storeSlug;
 
-  const StoreTile(
+  const StoreSearchTile(
       {required this.distance,
       required this.imageURL,
       required this.rating,

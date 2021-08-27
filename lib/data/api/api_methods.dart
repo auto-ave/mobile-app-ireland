@@ -7,19 +7,24 @@ import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
+import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
+import 'package:themotorwash/data/models/vehicle_type.dart';
 
 abstract class ApiMethods {
-  Future<List<StoreListEntity>> getStoreListByCity(
-      {required String city, required int offset});
+  Future<List<StoreListEntity>> getStoreListByLocation(
+      {required String city,
+      required double lat,
+      required double long,
+      required int offset});
   Future<StoreEntity> getStoreDetailBySlug({required String slug});
   Future<List<ReviewEntity>> getStoreReviewsBySlug(
       {required String slug, required int offset});
   Future<List<PriceTimeListEntity>> getStoreServicesBySlugAndVehicleType(
-      {required String slug, required int vehicleType, required int offset});
+      {required String slug, required String vehicleType, required int offset});
 
   Future<CartEntity> postAddItemToCart({required int itemId});
 
@@ -45,4 +50,17 @@ abstract class ApiMethods {
       required String slotEnd});
   Future<PaytmPaymentResponseEntity> checkPaytmPaymentStatus(
       {required PaytmPaymentResponseEntity paymentResponseEntity});
+  Future<List<VehicleTypeEntity>> getVehicleTypeList();
+  Future<List<StoreListEntity>> searchStores(
+      {required String query,
+      required String city,
+      required double lat,
+      required double long,
+      required int offset});
+
+  Future<List<ServiceEntity>> searchServices(
+      {required String query, required int offset});
+
+  Future<ReviewEntity> addReview({required ReviewEntity review});
+  Future<ReviewEntity> getReview({required String bookingId});
 }

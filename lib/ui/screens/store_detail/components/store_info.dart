@@ -28,40 +28,41 @@ class StoreInfo extends StatelessWidget {
             ),
             Expanded(
                 child: Text(
-              address + "asdasdadsasdasdasdasd",
+              address,
+              style: kStyle14,
               overflow: TextOverflow.ellipsis,
             ))
           ],
         ),
-        SizedBox(
-          height: 8,
-        ),
+        kverticalMargin8,
         Row(
           children: [
             SvgPicture.asset('assets/icons/time.svg'),
             SizedBox(
               width: 8,
             ),
-            Text("9am to 6pm test")
+            Text(
+              "9am to 6pm test",
+              style: kStyle14,
+            )
             // Text(
             //     "${openingTime.format(context)} to ${closingTime.format(context)}"),
           ],
         ),
-        SizedBox(
-          height: 8,
-        ),
+        kverticalMargin8,
         Row(
           children: [
             SvgPicture.asset('assets/icons/calendar.svg'),
             SizedBox(
               width: 8,
             ),
-            Text("Monday - Saturday")
+            Text(
+              "Monday - Saturday",
+              style: kStyle14,
+            )
           ],
         ),
-        SizedBox(
-          height: 8,
-        ),
+        kverticalMargin8,
         RichText(
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

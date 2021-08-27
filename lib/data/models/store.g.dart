@@ -38,6 +38,8 @@ StoreEntity _$StoreEntityFromJson(Map<String, dynamic> json) {
     supportedVehicleType: (json['supported_vehicle_type'] as List<dynamic>?)
         ?.map((e) => e as int)
         .toList(),
+    images:
+        (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
   );
 }
 
@@ -68,4 +70,5 @@ Map<String, dynamic> _$StoreEntityToJson(StoreEntity instance) =>
       'closing_time': instance.storeClosingTime,
       'supported_vehicle_type': instance.supportedVehicleType,
       'rating_count': instance.ratingCount,
+      'images': instance.images,
     };

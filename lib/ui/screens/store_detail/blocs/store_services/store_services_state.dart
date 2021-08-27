@@ -12,16 +12,22 @@ class StoreServicesInitial extends StoreServicesState {
 class StoreServicesLoaded extends StoreServicesState {
   final List<PriceTimeListModel> services;
   final bool hasReachedMax;
-  StoreServicesLoaded({
-    required this.services,
-    required this.hasReachedMax,
-  });
+  final String vehicleType;
+  StoreServicesLoaded(
+      {required this.services,
+      required this.hasReachedMax,
+      required this.vehicleType});
 
   @override
   List<Object?> get props => [services];
 }
 
 class StoreServicesLoading extends StoreServicesState {
+  @override
+  List<Object?> get props => [];
+}
+
+class MoreStoreServicesLoading extends StoreServicesState {
   @override
   List<Object?> get props => [];
 }

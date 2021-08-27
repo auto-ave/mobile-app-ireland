@@ -15,9 +15,11 @@ class Review {
 
   final int? consumerId;
 
-  final int? bookingId;
+  final String? bookingId;
 
-  final int? storeId;
+  final int? store;
+  final String? image;
+
   Review({
     this.customerName,
     this.id,
@@ -28,7 +30,8 @@ class Review {
     this.rating,
     this.consumerId,
     this.bookingId,
-    this.storeId,
+    this.store,
+    this.image,
   });
 
   factory Review.fromEntity(ReviewEntity e) {
@@ -37,12 +40,13 @@ class Review {
         rating: e.rating,
         consumerId: e.consumerId,
         bookingId: e.bookingId,
-        storeId: e.storeId,
+        store: e.store,
         createdAt: e.createdAt != null ? DateTime.parse(e.createdAt!) : null,
         id: e.id,
         isOnlyRating: e.isOnlyRating,
         reviewDescription: e.reviewDescription,
-        updatedAt: e.updatedAt != null ? DateTime.parse(e.updatedAt!) : null);
+        updatedAt: e.updatedAt != null ? DateTime.parse(e.updatedAt!) : null,
+        image: e.image);
   }
 
   ReviewEntity toEntity() {
@@ -50,7 +54,7 @@ class Review {
         rating: this.rating,
         consumerId: this.consumerId,
         bookingId: this.bookingId,
-        storeId: this.storeId,
+        store: this.store,
         createdAt: this.createdAt?.toIso8601String(),
         updatedAt: this.updatedAt?.toIso8601String(),
         id: this.id,
@@ -60,7 +64,7 @@ class Review {
 
   @override
   String toString() {
-    return 'Review(id: $id, customerName: $customerName, createdAt: $createdAt, updatedAt: $updatedAt, isOnlyRating: $isOnlyRating, reviewDescription: $reviewDescription, rating: $rating, consumerId: $consumerId, bookingId: $bookingId, storeId: $storeId)';
+    return 'Review(id: $id, customerName: $customerName, createdAt: $createdAt, updatedAt: $updatedAt, isOnlyRating: $isOnlyRating, reviewDescription: $reviewDescription, rating: $rating, consumerId: $consumerId, bookingId: $bookingId, store: $store, image: $image)';
   }
 }
 
@@ -86,10 +90,12 @@ class ReviewEntity {
   final int? consumerId;
 
   @JsonKey(name: 'booking')
-  final int? bookingId;
+  final String? bookingId;
 
-  @JsonKey(name: 'store_id')
-  final int? storeId;
+  @JsonKey(name: 'store')
+  final int? store;
+
+  final String? image;
   ReviewEntity(
       {this.id,
       this.createdAt,
@@ -99,8 +105,9 @@ class ReviewEntity {
       this.rating,
       this.consumerId,
       this.bookingId,
-      this.storeId,
-      this.customerName});
+      this.store,
+      this.customerName,
+      this.image});
 
   factory ReviewEntity.fromJson(Map<String, dynamic> data) =>
       _$ReviewEntityFromJson(data);

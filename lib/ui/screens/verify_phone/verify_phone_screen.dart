@@ -5,6 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/home/home_screen.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
 import 'package:themotorwash/utils.dart';
@@ -34,103 +35,132 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+          appBar: getAppBarLoginScreen(context: context),
           body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: BlocListener<PhoneAuthBloc, PhoneAuthState>(
-          bloc: phoneAuthBloc,
-          listener: (_, state) {
-            if (state is SendingOTP) {
-              showSnackbar(context, 'Sending OTP...');
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Sending OTP...'),
-                duration: Duration(seconds: 1),
-              ));
-            }
-            if (state is FailedToSendOTP) {
-              showSnackbar(context, 'Failed to send OTP. ${state.message}');
-            }
-            if (state is OTPSent) {
-              showSnackbar(context, 'OTP Sent..');
-            }
-            if (state is CheckingOTP) {
-              showSnackbar(context, 'Verifying OTP..');
-            }
-            if (state is OTPCheckedPassed) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, HomeScreen.route, (route) => false);
-            }
-          },
-          child: Column(
-            children: [
-              kverticalMargin32,
-              Text('An OTP is sent to ${widget.phoneNumber}',
-                  style:
-                      kStyle16SemiBold.copyWith(fontWeight: FontWeight.normal)),
-              kverticalMargin16,
-              RichText(
-                text: TextSpan(
-                    text: 'Not your number? ',
-                    style: kStyle12.copyWith(color: Colors.black),
-                    children: [
-                      TextSpan(
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => Navigator.pushNamedAndRemoveUntil(
-                              context, LoginScreen.route, (route) => false),
-                        text: 'Change number',
-                        style: kStyle12PrimaryColor.copyWith(
-                            decoration: TextDecoration.underline),
-                      )
-                    ]),
-              ),
-              kverticalMargin16,
-              OTPFieldWidget(onChange: onChanged),
-              kverticalMargin16,
-              RichText(
-                text: TextSpan(
-                    text: 'Didn’t recive a Code? ',
-                    style: kStyle12.copyWith(color: Colors.black),
-                    children: [
-                      TextSpan(
-                          text: 'Request again',
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => phoneAuthBloc
-                                .add(SendOTP(phoneNumber: widget.phoneNumber)),
-                          style: kStyle12PrimaryColor.copyWith(
-                              decoration: TextDecoration.underline))
-                    ]),
-              ),
-              kverticalMargin16,
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: TextButton(
-                  onPressed: () {
-                    phoneAuthBloc.add(CheckOTP(
-                        otp: enteredOtp, phoneNumber: widget.phoneNumber));
-                  },
-                  child: Text(
-                    'Verify',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(kPrimaryColor),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: BlocListener<PhoneAuthBloc, PhoneAuthState>(
+              bloc: phoneAuthBloc,
+              listener: (_, state) {
+                if (state is SendingOTP) {
+                  showSnackbar(context, 'Resending OTP...');
+                }
+                if (state is FailedToSendOTP) {
+                  showSnackbar(context, 'Failed to send OTP.');
+                }
+                if (state is OTPSent) {
+                  showSnackbar(context, 'OTP Sent..');
+                }
+                if (state is CheckingOTP) {
+                  showSnackbar(context, 'Verifying OTP..');
+                }
+                if (state is OTPCheckedPassed) {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, ExploreScreen.route, (route) => false);
+                }
+                if (state is OTPCheckFailed) {
+                  showSnackbar(context, 'Wrong OTP entered');
+                }
+              },
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('An OTP is sent to ${widget.phoneNumber}',
+                              style: kStyle16SemiBold.copyWith(
+                                  fontWeight: FontWeight.normal)),
+                          kverticalMargin16,
+                          RichText(
+                            text: TextSpan(
+                                text: 'Not your number? ',
+                                style: kStyle12.copyWith(color: Colors.black),
+                                children: [
+                                  TextSpan(
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () =>
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              LoginScreen.route,
+                                              (route) => false),
+                                    text: 'Change number',
+                                    style: kStyle12PrimaryColor.copyWith(
+                                        decoration: TextDecoration.underline),
+                                  )
+                                ]),
+                          ),
+                          kverticalMargin16,
+                          OTPFieldWidget(onChange: onChanged),
+                          kverticalMargin16,
+                          RichText(
+                            text: TextSpan(
+                                text: 'Didn’t recive a Code? ',
+                                style: kStyle12.copyWith(color: Colors.black),
+                                children: [
+                                  TextSpan(
+                                      text: 'Request again',
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => phoneAuthBloc.add(
+                                            SendOTP(
+                                                phoneNumber:
+                                                    widget.phoneNumber)),
+                                      style: kStyle12PrimaryColor.copyWith(
+                                          decoration: TextDecoration.underline))
+                                ]),
+                          ),
+                          kverticalMargin16,
+                        ],
                       ),
                     ),
                   ),
-                ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 50,
+                    child: BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
+                      bloc: phoneAuthBloc,
+                      builder: (context, state) {
+                        return TextButton(
+                          onPressed:
+                              enteredOtp.length == 4 && !(state is CheckingOTP)
+                                  ? () {
+                                      phoneAuthBloc.add(CheckOTP(
+                                          otp: enteredOtp,
+                                          phoneNumber: widget.phoneNumber));
+                                    }
+                                  : null,
+                          child: Text(
+                            'Verify',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                enteredOtp.length == 4 &&
+                                        !(state is CheckingOTP)
+                                    ? kPrimaryColor
+                                    : Colors.grey),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  kverticalMargin32
+                ],
               ),
-            ],
-          ),
-        ),
-      )),
+            ),
+          )),
     );
   }
 
   onChanged(String pin) {
-    enteredOtp = pin;
+    setState(() {
+      enteredOtp = pin;
+    });
   }
 }
 
@@ -144,6 +174,7 @@ class OTPFieldWidget extends StatelessWidget {
       appContext: context,
       length: 4,
       onChanged: onChange,
+      keyboardType: TextInputType.number,
       mainAxisAlignment: MainAxisAlignment.center,
       pinTheme: PinTheme(
           fieldOuterPadding: EdgeInsets.all(8),

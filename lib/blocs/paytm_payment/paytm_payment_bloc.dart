@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/services.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/repos/payment_repository.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
@@ -56,8 +57,8 @@ class PaytmPaymentBloc extends Bloc<PaytmPaymentEvent, PaytmPaymentState> {
       PaytmPaymentResponseModel paymentResponseModel = await _paymentRepository
           .startPaytmTransaction(initiatedPayment: initiatedPayment);
       yield PaytmPaymentSuccessful(paymentResponseModel: paymentResponseModel);
-    } catch (e) {
-      yield PaytmPaymentFailed(message: e.toString());
+    } on PlatformException catch (e) {
+      yield PaytmPaymentFailed(message: e.toString(), e: e);
     }
   }
 

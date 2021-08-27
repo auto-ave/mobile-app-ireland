@@ -16,7 +16,7 @@ PriceTimeListEntity _$PriceTimeListEntityFromJson(Map<String, dynamic> json) {
     timeInterval: json['time_interval'] as int?,
     description: json['description'] as String?,
     store: json['store'] as int?,
-    vehicleType: json['vehicle_type'] as int?,
+    vehicleType: json['vehicle_type'] as String?,
     bays: (json['bays'] as List<dynamic>?)?.map((e) => e as int).toList(),
   );
 }

@@ -1,8 +1,15 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
+import 'package:themotorwash/data/models/vehicle_type.dart';
 
-class LocalAuthService {
+class LocalDataService {
+  static final getItInstanceName = "LocalDataService";
   final storage = new FlutterSecureStorage();
+  LocalDataService() {
+    Hive.registerAdapter(VehicleTypeModelAdapter(), override: true);
+  }
 
   Future storeAuthToken(AuthTokensModel tokens) async {
     await storage.write(key: 'refresh_token', value: tokens.refreshToken);
@@ -31,5 +38,29 @@ class LocalAuthService {
     await storage.delete(key: 'access_token');
 
     return true;
+  }
+
+  Future<VehicleTypeModel?> getSavedVehicleType() async {
+    final documentDirectory = await getApplicationDocumentsDirectory();
+
+    Hive.init(documentDirectory.path);
+
+    var box = await Hive.openBox('vehicle_type');
+    VehicleTypeModel? vehicleTypeModel;
+    if (box.containsKey(0)) {
+      vehicleTypeModel = await box.get(0);
+    }
+
+    return vehicleTypeModel;
+  }
+
+  Future<void> saveVehicleType(
+      {required VehicleTypeModel vehicleTypeModel}) async {
+    var box = await Hive.openBox('vehicle_type');
+    if (box.containsKey(0)) {
+      await box.delete(0);
+    }
+
+    await box.put(0, vehicleTypeModel);
   }
 }

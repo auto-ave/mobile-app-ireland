@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
+import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/ui/screens/cart/cart_function_bloc.dart';
 import 'package:themotorwash/ui/screens/slot_select/slot_select_screen.dart';
 
 class CartBottomSheet extends StatefulWidget {
@@ -19,19 +20,41 @@ class CartBottomSheet extends StatefulWidget {
 class _CartBottomSheetState extends State<CartBottomSheet> {
   late CartFunctionBloc _cartFunctionBloc;
   late CartModel cart;
+  late OrderReviewBloc _orderReviewBloc;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _orderReviewBloc = BlocProvider.of<OrderReviewBloc>(context, listen: false);
     _cartFunctionBloc = BlocProvider.of<CartFunctionBloc>(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: BlocBuilder<CartFunctionBloc, CartFunctionState>(
+      child: BlocConsumer<CartFunctionBloc, CartFunctionState>(
         bloc: _cartFunctionBloc,
+        listener: (_, state) {
+          if (state is CartItemAdded ||
+              state is CartItemDeleted ||
+              state is CartLoaded) {
+            if (state is CartItemAdded) {
+              if (state.cart.items!.isEmpty) {
+                Navigator.pop(context);
+              }
+            }
+            if (state is CartItemDeleted) {
+              if (state.cart.items!.isEmpty) {
+                Navigator.pop(context);
+              }
+            }
+            if (state is CartLoaded) {
+              if (state.cart.items!.isEmpty) {
+                Navigator.pop(context);
+              }
+            }
+          }
+        },
         builder: (context, state) {
           if (state is CartItemAdded ||
               state is CartItemDeleted ||
@@ -137,9 +160,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                               ),
                               Text(
                                 'T O T A L',
-                                style: TextStyle(
-                                    fontSize: kfontSize12,
-                                    color: Colors.grey[700]),
+                                style:
+                                    kStyle12.copyWith(color: Colors.grey[700]),
                               ),
                             ],
                           ),
@@ -148,6 +170,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                             child: Text('Select Slot',
                                 style: TextStyle(color: Colors.white)),
                             onPressed: () {
+                              _orderReviewBloc.add(SetCart(cart: cart));
                               Navigator.pushNamed(
                                   context, SlotSelectScreen.route,
                                   arguments: SlotSelectScreenArguments(
