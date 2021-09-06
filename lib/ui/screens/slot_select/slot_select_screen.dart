@@ -54,85 +54,88 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        bottomNavigationBar: buildBottom(),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DateSelectionTab(
-                dates: calendarDays
-                    .map((e) => DateSelectionItem(date: e))
-                    .toList(),
-                currentSelectedTabIndex: currentSelectedDateIndex,
-                onTap: (index) {
-                  setState(() {
-                    currentSelectedDateIndex = index;
-                    currentSelectedSlotIndex = -1;
-                  });
-                  _bloc.add(GetSlots(
-                      date: DateFormat('y-M-d').format(calendarDays[index]),
-                      cartId: widget.cartId));
-                }),
-            currentSelectedDateIndex >= 0
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 16.0, top: 16),
-                    child: Text(
-                        'Slots on  ${calendarDays[currentSelectedDateIndex].day}',
-                        style: kStyle20Bold),
-                  )
-                : Container(),
-            kverticalMargin16,
-            Expanded(
-                child: BlocBuilder<SlotSelectionBloc, SlotSelectionState>(
-              bloc: _bloc,
-              builder: (context, state) {
-                if (state is SlotSelectionInitial) {
-                  return Center(child: Text('Select a Date'));
-                }
-                if (state is LoadingSlots) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (state is SlotsLoaded) {
-                  var slots = state.slots;
-                  return
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      //   child:
-                      SlotSelectionTab(
-                    slots: slots
-                        .map<SlotSelectionTabItem>(
-                          (e) => SlotSelectionTabItem(
-                            startTime:
-                                e.start!.format(context).replaceAll(' ', ''),
-                            endTime: e.end!.format(context).replaceAll(' ', ''),
-                            slotsAvailable: e.count!,
-                          ),
-                        )
-                        .toList(),
-                    currentSelectedTabIndex: currentSelectedSlotIndex,
-                    onTap: (int tabIndex) {
-                      setState(() {
-                        currentSelectedSlotIndex = tabIndex;
-                      });
-                    },
-                    // ),
-                  );
-                }
-                if (state is SlotSelectionError) {
-                  return Center(
-                      child: Text('Failed to load. ${state.message}'));
-                }
+    return Scaffold(
+      appBar: getAppBarWithBackButton(
+          context: context,
+          title: Text(
+            'Select Slot',
+            style: kStyle14SemiBold.copyWith(color: Colors.black),
+          )),
+      backgroundColor: Colors.white,
+      bottomNavigationBar: buildBottom(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          kverticalMargin8,
+          DateSelectionTab(
+              dates:
+                  calendarDays.map((e) => DateSelectionItem(date: e)).toList(),
+              currentSelectedTabIndex: currentSelectedDateIndex,
+              onTap: (index) {
+                setState(() {
+                  currentSelectedDateIndex = index;
+                  currentSelectedSlotIndex = -1;
+                });
+                _bloc.add(GetSlots(
+                    date: DateFormat('y-M-d').format(calendarDays[index]),
+                    cartId: widget.cartId));
+              }),
+          currentSelectedDateIndex >= 0
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 16),
+                  child: Text(
+                      'Slots on  ${calendarDays[currentSelectedDateIndex].day}',
+                      style: kStyle20Bold),
+                )
+              : Container(),
+          kverticalMargin16,
+          Expanded(
+              child: BlocBuilder<SlotSelectionBloc, SlotSelectionState>(
+            bloc: _bloc,
+            builder: (context, state) {
+              if (state is SlotSelectionInitial) {
+                return Center(child: Text('Select a Date'));
+              }
+              if (state is LoadingSlots) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
-              },
-            )),
-          ],
-        ),
+              }
+              if (state is SlotsLoaded) {
+                var slots = state.slots;
+                return
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    //   child:
+                    SlotSelectionTab(
+                  slots: slots
+                      .map<SlotSelectionTabItem>(
+                        (e) => SlotSelectionTabItem(
+                          startTime:
+                              e.start!.format(context).replaceAll(' ', ''),
+                          endTime: e.end!.format(context).replaceAll(' ', ''),
+                          slotsAvailable: e.count!,
+                        ),
+                      )
+                      .toList(),
+                  currentSelectedTabIndex: currentSelectedSlotIndex,
+                  onTap: (int tabIndex) {
+                    setState(() {
+                      currentSelectedSlotIndex = tabIndex;
+                    });
+                  },
+                  // ),
+                );
+              }
+              if (state is SlotSelectionError) {
+                return Center(child: Text('Failed to load. ${state.message}'));
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          )),
+        ],
       ),
     );
   }

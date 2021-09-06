@@ -9,6 +9,7 @@ import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
+import 'package:themotorwash/data/models/user_profile.dart';
 import 'package:themotorwash/data/models/vehicle_type.dart';
 
 abstract class Repository {
@@ -43,4 +44,8 @@ abstract class Repository {
 
   Future<Review> getReview({required String bookingId});
   Future<Review> addReview({required ReviewEntity review});
+
+  Future<UserProfile> getAccountDetails();
+  Future<UserProfile> updateAccountDetails(
+      {required UserProfileEntity userProfileEntity});
 }

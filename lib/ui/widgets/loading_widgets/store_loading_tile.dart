@@ -17,10 +17,10 @@ class StoreLoadingTile extends StatelessWidget {
           child: Column(
             children: [
               Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[400]!,
+                baseColor: kShimmerBaseColor!,
+                highlightColor: kShimmerHighlightColor!,
                 child: Container(
-                  height: 250,
+                  height: 200,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
@@ -41,8 +41,8 @@ class StoreLoadingTile extends StatelessWidget {
                     Row(
                       children: [
                         Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey,
+                          baseColor: kShimmerBaseColor!,
+                          highlightColor: kShimmerHighlightColor!,
                           child: Container(
                             height: 20,
                             width: 200,
@@ -51,8 +51,8 @@ class StoreLoadingTile extends StatelessWidget {
                         ),
                         Spacer(),
                         Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[400]!,
+                          baseColor: kShimmerBaseColor!,
+                          highlightColor: kShimmerHighlightColor!,
                           child: Container(
                             height: 20,
                             width: 20,
@@ -63,8 +63,8 @@ class StoreLoadingTile extends StatelessWidget {
                     ),
                     kverticalMargin8,
                     Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[400]!,
+                      baseColor: kShimmerBaseColor!,
+                      highlightColor: kShimmerHighlightColor!,
                       child: Container(
                         height: 20,
                         width: 150,

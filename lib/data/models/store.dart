@@ -44,6 +44,7 @@ class Store {
 
   final List<int>? supportedVehicleType;
   final List<String>? images;
+  final int? servicesStart;
 
   Store(
       {required this.id,
@@ -71,7 +72,8 @@ class Store {
       required this.storeClosingTime,
       this.supportedVehicleType,
       this.ratingCount,
-      this.images});
+      this.images,
+      this.servicesStart});
 
   factory Store.fromEntity(StoreEntity entity) {
     return Store(
@@ -108,12 +110,13 @@ class Store {
         updatedAt:
             entity.updatedAt != null ? DateTime.parse(entity.updatedAt!) : null,
         ratingCount: entity.ratingCount,
-        images: entity.images);
+        images: entity.images,
+        servicesStart: entity.servicesStart);
   }
 
   @override
   String toString() {
-    return 'Store(id: $id, name: $name, thumbnail: $thumbnail, rating: $rating, description: $description, owner: $owner, city: $city, address: $address, slug: $slug, emails: $emails, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt, isActive: $isActive, contactNumbers: $contactNumbers, storeRegistrationType: $storeRegistrationType, storeRegistrationNumber: $storeRegistrationNumber, contactPersonName: $contactPersonName, contactPersonNumber: $contactPersonNumber, contactPersonPhoto: $contactPersonPhoto, storeOpeningTime: $storeOpeningTime, storeClosingTime: $storeClosingTime, ratingCount: $ratingCount, supportedVehicleType: $supportedVehicleType, images: $images)';
+    return 'Store(id: $id, name: $name, thumbnail: $thumbnail, rating: $rating, description: $description, owner: $owner, city: $city, address: $address, slug: $slug, emails: $emails, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt, isActive: $isActive, contactNumbers: $contactNumbers, storeRegistrationType: $storeRegistrationType, storeRegistrationNumber: $storeRegistrationNumber, contactPersonName: $contactPersonName, contactPersonNumber: $contactPersonNumber, contactPersonPhoto: $contactPersonPhoto, storeOpeningTime: $storeOpeningTime, storeClosingTime: $storeClosingTime, ratingCount: $ratingCount, supportedVehicleType: $supportedVehicleType, images: $images, servicesStart: $servicesStart)';
   }
 }
 
@@ -172,6 +175,8 @@ class StoreEntity {
   final int? ratingCount;
 
   final List<String>? images;
+  @JsonKey(name: 'services_start')
+  final int? servicesStart;
 
   StoreEntity(
       {required this.ratingCount,
@@ -199,15 +204,11 @@ class StoreEntity {
       required this.storeOpeningTime,
       required this.storeClosingTime,
       this.supportedVehicleType,
-      this.images});
+      this.images,
+      this.servicesStart});
 
   factory StoreEntity.fromJson(Map<String, dynamic> data) =>
       _$StoreEntityFromJson(data);
 
   Map<String, dynamic> toJson() => _$StoreEntityToJson(this);
-
-  @override
-  String toString() {
-    return 'StoreEntity(id: $id, name: $name, thumbnail: $thumbnail, rating: $rating, description: $description, owner: $owner, city: $city, address: $address, slug: $slug, emails: $emails, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt, isActive: $isActive, contactNumbers: $contactNumbers, storeRegistrationType: $storeRegistrationType, storeRegistrationNumber: $storeRegistrationNumber, contactPersonName: $contactPersonName, contactPersonNumber: $contactPersonNumber, contactPersonPhoto: $contactPersonPhoto, storeOpeningTime: $storeOpeningTime, storeClosingTime: $storeClosingTime, supportedVehicleType: $supportedVehicleType, ratingCount: $ratingCount, images: $images)';
-  }
 }

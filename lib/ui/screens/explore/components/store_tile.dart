@@ -1,14 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
+import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 
 class StoreTile extends StatelessWidget {
   final String imageURL;
   final String storeName;
   final String distance;
-  final String rating;
+  final String? rating;
   final String startingFrom;
   final String storeSlug;
   final String address;
@@ -43,6 +45,9 @@ class StoreTile extends StatelessWidget {
                 Stack(
                   children: [
                     CachedNetworkImage(
+                      placeholder: (_, __) {
+                        return ShimmerPlaceholder();
+                      },
                       height: 200,
                       imageUrl: imageURL,
                       width: MediaQuery.of(context).size.width,
@@ -98,15 +103,22 @@ class StoreTile extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: 16,
-                          ),
-                          Text(rating),
-                          kHorizontalMargin4,
-                          Text("•"),
-                          kHorizontalMargin4,
+                          rating != null
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                      size: 16,
+                                    ),
+                                    Text(rating!),
+                                    kHorizontalMargin4,
+                                    Text("•"),
+                                    kHorizontalMargin4,
+                                  ],
+                                )
+                              : Container(),
                           Text('Starts from ₹$startingFrom')
                         ],
                       ),

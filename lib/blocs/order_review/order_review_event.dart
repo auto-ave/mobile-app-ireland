@@ -4,15 +4,6 @@ abstract class OrderReviewEvent extends Equatable {
   const OrderReviewEvent();
 }
 
-class SetStore extends OrderReviewEvent {
-  final Store store;
-  SetStore({
-    required this.store,
-  });
-  @override
-  List<Object> get props => [store];
-}
-
 class SetCart extends OrderReviewEvent {
   final CartModel cart;
   SetCart({
@@ -30,14 +21,4 @@ class SetSlot extends OrderReviewEvent {
   });
   @override
   List<Object> get props => [slot];
-}
-
-class SetVehicle extends OrderReviewEvent {
-  final VehicleTypeModel vehicle;
-  SetVehicle({
-    required this.vehicle,
-  });
-
-  @override
-  List<Object> get props => [vehicle];
 }

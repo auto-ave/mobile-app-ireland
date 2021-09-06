@@ -3,6 +3,7 @@ import 'package:rxdart/rxdart.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
 import 'package:themotorwash/data/models/location_model.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
@@ -12,8 +13,12 @@ part 'search_stores_state.dart';
 
 class SearchStoresBloc extends Bloc<SearchStoresEvent, SearchStoresState> {
   final Repository _repository;
-  SearchStoresBloc({required Repository repository})
+  final GlobalLocationBloc _globalLocationBloc;
+  SearchStoresBloc(
+      {required Repository repository,
+      required GlobalLocationBloc globalLocationBloc})
       : _repository = repository,
+        _globalLocationBloc = globalLocationBloc,
         super(SearchStoresInitial());
 
   @override
@@ -37,16 +42,15 @@ class SearchStoresBloc extends Bloc<SearchStoresEvent, SearchStoresState> {
     }
   }
 
-  bool hasReachedMax(SearchStoresState state) =>
-      state is SearchedStoresResult && state.hasReachedMax;
+  bool hasReachedMax(SearchStoresState state, bool forLoadMore) =>
+      state is SearchedStoresResult && state.hasReachedMax && forLoadMore;
   Stream<SearchStoresState> _mapSearchStoresToState(
       {required String query,
       required int offset,
       required bool forLoadMore}) async* {
-    // var locationState = _globalLocationBloc.state as LocationSet;
-
-    if (!hasReachedMax(state)) {
+    if (!hasReachedMax(state, forLoadMore)) {
       try {
+        var locationState = _globalLocationBloc.state as LocationSet;
         List<StoreListModel> stores = [];
         if (state is SearchedStoresResult && forLoadMore) {
           yield LoadingMoreSearchStoresResult();
@@ -58,8 +62,7 @@ class SearchStoresBloc extends Bloc<SearchStoresEvent, SearchStoresState> {
         List<StoreListModel> moreStores = await _repository.searchStores(
           query: query,
           offset: offset,
-          locationModel:
-              LocationModel(city: '462001', lat: 7.123, long: 23.123),
+          locationModel: locationState.location,
         );
         yield SearchedStoresResult(
             searchedStores: stores + moreStores,

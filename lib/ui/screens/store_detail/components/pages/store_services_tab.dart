@@ -14,6 +14,7 @@ import 'package:themotorwash/ui/screens/store_detail/blocs/store_services/store_
 import 'package:themotorwash/ui/screens/store_detail/components/store_service_tile.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
+import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 import 'package:themotorwash/ui/widgets/vehicle_dropdown.dart';
 import 'package:themotorwash/ui/widgets/vehicle_type_selection_bottom_sheet.dart';
 import 'package:themotorwash/utils.dart';
@@ -155,6 +156,9 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
                           ),
                           kHorizontalMargin8,
                           CachedNetworkImage(
+                              placeholder: (_, __) {
+                                return ShimmerPlaceholder();
+                              },
                               width: 65,
                               imageUrl: vehicleState.vehicleTypeModel.image!),
                         ],
@@ -211,9 +215,11 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
                         )
                       : SliverList(
                           delegate: SliverChildBuilderDelegate((_, index) {
+                          var service = services[index];
                           var tile = StoreServiceTile(
+                              time: service.timeInterval.toString(),
                               scaffoldState: widget.scaffoldState,
-                              itemId: services[index].id!,
+                              itemId: service.id!,
                               bloc: _cartFunctionBloc,
                               globalAuthBloc: _globalAuthBloc,
                               isAddedToCart:
@@ -224,8 +230,8 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
                                           .itemId
                                           .contains(services[index].id!)),
                               description: services[index].description!,
-                              price: services[index].price!.toString(),
-                              service: services[index].service!);
+                              price: service.price!.toString(),
+                              service: service.service!);
 
                           if (state is MoreStoreServicesLoading &&
                               index == services.length - 1) {
@@ -286,9 +292,7 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
         context: ctx,
         isScrollControlled: true,
         isDismissible: false,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+        backgroundColor: Colors.transparent,
         builder: (_) {
           return VehicleTypeSelectionBottomSheet(
             pageController: pageController,

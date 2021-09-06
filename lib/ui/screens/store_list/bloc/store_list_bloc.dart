@@ -37,16 +37,17 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
     }
   }
 
-  bool hasReachedMax(StoreListState state) =>
-      state is StoreListLoaded && state.hasReachedMax;
+  bool hasReachedMax(StoreListState state, bool forLoadMore) =>
+      state is StoreListLoaded && state.hasReachedMax && forLoadMore;
 
   Stream<StoreListState> _mapLoadNearbyStoreListToState(
       {required int offset, required bool forLoadMore}) async* {
-    // var locationState = _globalLocationBloc.state as LocationSet;
-    if (!hasReachedMax(state)) {
+    if (!hasReachedMax(state, forLoadMore)) {
       try {
+        var locationState = _globalLocationBloc.state as LocationSet;
+
         List<StoreListModel> stores = [];
-        if (state is StoreListLoaded || forLoadMore) {
+        if (state is StoreListLoaded && forLoadMore) {
           yield MoreStoreListLoading();
           stores = (state as StoreListLoaded).stores;
         } else {
@@ -55,9 +56,7 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
 
         List<StoreListModel> moreStores =
             await _repository.getStoreListByLocation(
-                locationModel:
-                    LocationModel(city: '462001', lat: 7.123, long: 23.123),
-                offset: offset);
+                locationModel: locationState.location, offset: offset);
         yield StoreListLoaded(
             stores: stores + moreStores,
             hasReachedMax: moreStores.length != 10); //Page limit 10

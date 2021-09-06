@@ -57,14 +57,16 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
       print('checking otp');
       AuthTokensModel tokens =
           await _repository.checkOTP(phoneNumber: phoneNumber, otp: otp);
-      if (tokens.authenticated) {
-        _globalAuthBloc.add(YieldAuthenticatedState(tokens: tokens));
-      }
+
       await LocalDataService().storeAuthToken(tokens);
 
       yield tokens.authenticated
           ? OTPCheckedPassed(tokens: tokens)
           : OTPCheckFailed(message: 'Wrong OTP entered');
+
+      if (tokens.authenticated) {
+        _globalAuthBloc.add(YieldAuthenticatedState(tokens: tokens));
+      }
     } catch (e) {
       yield OTPCheckFailed(message: e.toString());
     }

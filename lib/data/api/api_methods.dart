@@ -12,6 +12,7 @@ import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
+import 'package:themotorwash/data/models/user_profile.dart';
 import 'package:themotorwash/data/models/vehicle_type.dart';
 
 abstract class ApiMethods {
@@ -63,4 +64,8 @@ abstract class ApiMethods {
 
   Future<ReviewEntity> addReview({required ReviewEntity review});
   Future<ReviewEntity> getReview({required String bookingId});
+
+  Future<UserProfileEntity> getAccountDetails();
+  Future<UserProfileEntity> patchAccountDetails(
+      {required UserProfileEntity userProfileEntity});
 }

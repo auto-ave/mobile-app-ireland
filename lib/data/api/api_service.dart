@@ -18,6 +18,7 @@ import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/review.dart';
+import 'package:themotorwash/data/models/user_profile.dart';
 import 'package:themotorwash/data/models/vehicle_type.dart';
 
 class ApiService implements ApiMethods {
@@ -231,6 +232,7 @@ class ApiService implements ApiMethods {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postCheckPaytmPaymentStatusEndpoint();
     Response res = await client.post(url, data: paymentResponseEntity.toJson());
+    print(res.toString() + "response");
     dynamic data = jsonDecode(res.data);
     return PaytmPaymentResponseEntity.fromJson(data);
   }
@@ -310,5 +312,32 @@ class ApiService implements ApiMethods {
     dynamic data = jsonDecode(res.data);
     ReviewEntity review = ReviewEntity.fromJson(data);
     return review;
+  }
+
+  @override
+  Future<UserProfileEntity> getAccountDetails() async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getPutPatchAccountEndPoint();
+
+    Response res = await client.get(url);
+
+    dynamic data = jsonDecode(res.data);
+
+    UserProfileEntity entity = UserProfileEntity.fromJson(data);
+    return entity;
+  }
+
+  @override
+  Future<UserProfileEntity> patchAccountDetails(
+      {required UserProfileEntity userProfileEntity}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getPutPatchAccountEndPoint();
+
+    Response res = await client.patch(url, data: userProfileEntity.toJson());
+
+    dynamic data = jsonDecode(res.data);
+
+    UserProfileEntity entity = UserProfileEntity.fromJson(data);
+    return entity;
   }
 }

@@ -18,18 +18,10 @@ class GlobalLocationBloc
   ) async* {
     if (event is GetCurrentUserLocation) {
       yield* _mapGetCurrentUserLocationToState();
+    } else if (event is SetUserLocation) {
+      yield* _mapSetUserLocationToState(location: event.location);
     }
   }
-
-  // Stream<GlobalLocationState> _mapSetUserLocationToState(
-  //     {required LocationModel location}) async* {
-  //   yield LocationSet(location: location);
-  // }
-
-  // Stream<GlobalLocationState> _mapYieldLocationPermissionErrorToState(
-  //     {required LocationPermission permission}) async* {
-  //   yield LocationPermissionError(locationPermission: permission);
-  // }
 
   Stream<GlobalLocationState> _mapGetCurrentUserLocationToState() async* {
     try {
@@ -57,12 +49,17 @@ class GlobalLocationBloc
         Position location = await Geolocator.getCurrentPosition();
         yield LocationSet(
             location: LocationModel(
-                city: 'Banglore',
+                city: '462001',
                 lat: location.latitude,
                 long: location.longitude));
       }
     } catch (e) {
       GlobalLocationError(message: e.toString());
     }
+  }
+
+  Stream<GlobalLocationState> _mapSetUserLocationToState(
+      {required LocationModel location}) async* {
+    yield LocationSet(location: location);
   }
 }

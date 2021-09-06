@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
+import 'package:themotorwash/data/models/store.dart';
+import 'package:themotorwash/data/models/vehicle_type.dart';
 
 part 'cart.g.dart';
 
@@ -9,10 +11,11 @@ class CartModel {
   final String? subTotal;
   final String? total;
   final bool? completed;
-  final int? store;
+  final Store? store;
   final int? consumer;
   final List<int>? items;
   final List<PriceTimeListModel>? itemsObj;
+  final VehicleTypeModel? vehicleType;
 
   CartModel(
       {this.id,
@@ -23,7 +26,8 @@ class CartModel {
       this.store,
       this.consumer,
       this.items,
-      this.itemsObj});
+      this.itemsObj,
+      this.vehicleType});
 
   factory CartModel.fromEntity(CartEntity entity) {
     return CartModel(
@@ -32,12 +36,15 @@ class CartModel {
         subTotal: entity.subTotal,
         total: entity.total,
         completed: entity.completed,
-        store: entity.store,
+        store: entity.store != null ? Store.fromEntity(entity.store!) : null,
         consumer: entity.consumer,
         items: entity.items,
         itemsObj: entity.itemsObj!
             .map((e) => PriceTimeListModel.fromEntity(e))
-            .toList());
+            .toList(),
+        vehicleType: entity.vehicleType == null
+            ? null
+            : VehicleTypeModel.fromEntity(entity.vehicleType!));
   }
 }
 
@@ -52,9 +59,11 @@ class CartEntity {
   final String? subTotal;
   final String? total;
   final bool? completed;
-  final int? store;
+  final StoreEntity? store;
   final int? consumer;
   final List<int>? items;
+  @JsonKey(name: 'vehicle_type')
+  final VehicleTypeEntity? vehicleType;
   @JsonKey(name: 'item_objs')
   final List<PriceTimeListEntity>? itemsObj;
   CartEntity(
@@ -66,7 +75,8 @@ class CartEntity {
       this.store,
       this.consumer,
       this.items,
-      this.itemsObj});
+      this.itemsObj,
+      this.vehicleType});
   factory CartEntity.fromJson(Map<String, dynamic> data) =>
       _$CartEntityFromJson(data);
 

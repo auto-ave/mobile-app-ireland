@@ -22,32 +22,32 @@ class StoreHeading extends StatelessWidget {
             style: kStyle20W500,
           ),
         ),
-        Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                rating != null
-                    ? Icon(
+        rating != null
+            ? Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Icon(
                         Icons.star,
                         color: Colors.orange,
+                      ),
+                      Text(
+                        rating.toString(),
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
                       )
-                    : Container(),
-                Text(
-                  rating == null ? 'Unrated' : rating.toString(),
-                  style: TextStyle(
-                    fontSize: 14,
+                    ],
                   ),
-                )
-              ],
-            ),
-            Text(
-              "${numberOfRatings.toString()}+ ratings",
-              style: TextStyle(
-                fontSize: 12,
-              ),
-            )
-          ],
-        )
+                  Text(
+                    "${numberOfRatings.toString()}+ ratings",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  )
+                ],
+              )
+            : Container(),
       ],
     );
   }

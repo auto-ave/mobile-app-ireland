@@ -53,6 +53,8 @@ const TextStyle kStyle12SemiBold =
 
 const TextStyle kStyle16SemiBold =
     const TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize16);
+const TextStyle kStyle16Bold =
+    const TextStyle(fontWeight: FontWeight.w700, fontSize: kfontSize16);
 const TextStyle kStyle16 = const TextStyle(fontSize: kfontSize16);
 const TextStyle kStyle16W500 =
     const TextStyle(fontSize: kfontSize16, fontWeight: FontWeight.w500);
@@ -65,3 +67,10 @@ const TextStyle kStyle20Bold =
     const TextStyle(fontWeight: FontWeight.bold, fontSize: kfontSize20);
 const TextStyle kStyle20W500 =
     const TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize20);
+
+TextStyle selectedTabTextStyle = kStyle16Bold.copyWith(color: kPrimaryColor);
+TextStyle unSelectedTabTextStyle = kStyle16;
+
+Color? kShimmerBaseColor = Colors.grey[100];
+
+Color? kShimmerHighlightColor = Colors.grey[200];

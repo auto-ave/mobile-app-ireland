@@ -13,6 +13,7 @@ getTimeOfDayFromString(String s) {
 
 showSnackbar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    behavior: SnackBarBehavior.floating,
     content: Text(text),
     duration: Duration(seconds: 1),
   ));
@@ -21,6 +22,8 @@ showSnackbar(BuildContext context, String text) {
 PreferredSizeWidget getAppBarWithBackButton(
     {required BuildContext context, Widget? title}) {
   return AppBar(
+    systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.white, statusBarBrightness: Brightness.dark),
     title: title,
     leading: IconButton(
       icon: Icon(Icons.arrow_back_outlined, color: Colors.black),

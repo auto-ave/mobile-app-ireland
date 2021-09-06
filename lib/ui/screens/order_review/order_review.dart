@@ -81,8 +81,8 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
             startPaytmTransaction(initiatedPayment: state.initiatedPayment);
           }
           if (state is FailedToInitiatePaytmPayment) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Failed to initiate payment. ${state.message}')));
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Failed to initiate payment.')));
             _dialog.hide();
           }
           if (state is PaytmPaymentSuccessful) {
@@ -133,26 +133,40 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
           builder: (context, state) {
             if (state is LocalOrderRetrieved) {
               return Scaffold(
+                appBar: getAppBarWithBackButton(
+                    context: context,
+                    title: Text(
+                      'Review Order',
+                      style: kStyle14SemiBold.copyWith(color: Colors.black),
+                    )),
                 bottomNavigationBar: buildBottom(slot: state.slot),
-                body: Container(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildStoreDetails(store: state.store),
-                      kverticalMargin16,
-                      _buildCarTypeDetails(vehicle: state.vehicle),
-                      kverticalMargin16,
-                      _buildSlotTiming(slot: state.slot),
-                      kverticalMargin16,
-                      ..._buildServices(cart: state.cart),
-                      ..._buildListPriceInfo(cart: state.cart),
-                    ],
+                body: SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildStoreDetails(store: state.cart.store!),
+                        kverticalMargin16,
+                        _buildCarTypeDetails(vehicle: state.cart.vehicleType!),
+                        kverticalMargin16,
+                        _buildSlotTiming(slot: state.slot),
+                        kverticalMargin16,
+                        ..._buildServices(cart: state.cart),
+                        ..._buildListPriceInfo(cart: state.cart),
+                      ],
+                    ),
                   ),
                 ),
               );
             }
             return Scaffold(
+              appBar: getAppBarWithBackButton(
+                  context: context,
+                  title: Text(
+                    'Review Order',
+                    style: kStyle14SemiBold.copyWith(color: Colors.black),
+                  )),
               body: Center(child: CircularProgressIndicator()),
             );
           },
@@ -167,7 +181,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
         Text('STORE', style: kStyle12.copyWith(color: Colors.grey[700])),
         kverticalMargin4,
         Text(
-          '${store.name}',
+          '${store.name!}',
           style: kStyle14.copyWith(color: kPrimaryColor),
         )
       ],
@@ -228,8 +242,12 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
   List<Widget> _buildServices({required CartModel cart}) {
     return (cart.itemsObj!
         .map((e) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+                Text('SERVICES',
+                    style: kStyle12.copyWith(color: Colors.grey[700])),
+                kverticalMargin8,
                 getDetailsRow(
                     leftText: e.service,
                     rightText: '₹${e.price}',
@@ -239,19 +257,6 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
               ],
             ))
         .toList());
-    // return Column(
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   mainAxisSize: MainAxisSize.min,
-    //   children: [
-    //     Text('SERVICES', style: kStyle12.copyWith(color: Colors.grey[700])),
-    //     kverticalMargin8,
-    //     getDetailsRow(
-    //         leftText: 'Premium Carwash',
-    //         rightText: '₹499',
-    //         leftStyle: leftSide14SemiBold,
-    //         rightStyle: rightSide12SemiBold),
-    //   ],
-    // );
   }
 
   List<Widget> _buildListPriceInfo({required CartModel cart}) {
@@ -308,9 +313,11 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
   Widget buildBottom({required Slot slot}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Spacer(),
+          Divider(),
           TextButton(
             child: Text('Proceed to payment',
                 style: TextStyle(color: Colors.white)),

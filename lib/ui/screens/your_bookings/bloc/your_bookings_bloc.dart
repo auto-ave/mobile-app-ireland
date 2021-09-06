@@ -24,12 +24,12 @@ class YourBookingsBloc extends Bloc<YourBookingsEvent, YourBookingsState> {
     }
   }
 
-  bool hasReachedMax(YourBookingsState state) =>
-      state is YourBookingsLoaded && state.hasReachedMax;
+  bool hasReachedMax(YourBookingsState state, bool forLoadMore) =>
+      state is YourBookingsLoaded && state.hasReachedMax && forLoadMore;
 
   Stream<YourBookingsState> _mapGetYourBookingToState(
       {required int offset, required bool forLoadMore}) async* {
-    if (!hasReachedMax(state)) {
+    if (!hasReachedMax(state, forLoadMore)) {
       print("hellobook");
       try {
         List<BookingListModel> bookings = [];

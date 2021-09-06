@@ -49,3 +49,10 @@ class BookingDetailScreenArguments {
     required this.bookingId,
   });
 }
+
+class ProfileScreenArguments {
+  final bool showSkip;
+  ProfileScreenArguments({
+    required this.showSkip,
+  });
+}

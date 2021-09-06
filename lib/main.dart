@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
@@ -40,10 +42,16 @@ import 'package:get_it/get_it.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/bloc/your_bookings_bloc.dart';
 import 'package:themotorwash/ui/screens/your_bookings/your_bookings_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 GetIt getIt = GetIt.instance;
 
 void main() async {
+  try {
+    await Hive.initFlutter();
+  } on Exception catch (e) {
+    print(e.toString());
+  }
   Bloc.observer = SimpleBlocObserver();
   runApp(MyApp());
 }
@@ -63,11 +71,12 @@ class _MyAppState extends State<MyApp> {
   late GlobalLocationBloc _globalLocationBloc;
   late GlobalVehicleTypeBloc _globalVehicleTypeBloc;
   late OrderReviewBloc _orderReviewBloc;
+  late CartFunctionBloc _cartFunctionBloc;
   @override
   void initState() {
     super.initState();
-    _globalAuthBloc = GlobalAuthBloc();
 
+    _globalAuthBloc = GlobalAuthBloc();
     _globalAuthBloc.add(AppStarted());
     getIt.registerSingleton<ApiMethods>(
         ApiService(apiConstants: ApiConstants(globalAuthBloc: _globalAuthBloc)),
@@ -89,6 +98,8 @@ class _MyAppState extends State<MyApp> {
     _paymentRepository = PaymentRestRepository(apiMethodsImp: _apiMethodsImp);
     _authRepository = AuthRestRepository(apiMethodsImp: _apiMethodsImp);
     _orderReviewBloc = OrderReviewBloc();
+    _cartFunctionBloc = CartFunctionBloc(
+        repository: _repository, orderReviewBloc: _orderReviewBloc);
   }
 
   @override
@@ -111,7 +122,7 @@ class _MyAppState extends State<MyApp> {
           create: (_) => StoreReviewsBloc(repository: _repository),
         ),
         BlocProvider<CartFunctionBloc>(
-          create: (_) => CartFunctionBloc(repository: _repository),
+          create: (_) => _cartFunctionBloc,
         ),
         BlocProvider<YourBookingsBloc>(
           create: (_) => YourBookingsBloc(repository: _repository),
@@ -136,158 +147,166 @@ class _MyAppState extends State<MyApp> {
           RepositoryProvider(create: (_) => _repository),
           RepositoryProvider(create: (_) => _paymentRepository),
         ],
-        child: BlocListener<GlobalVehicleTypeBloc, GlobalVehicleTypeState>(
-          bloc: _globalVehicleTypeBloc,
-          listener: (context, state) {
-            if (state is GlobalVehicleTypeSelected) {
-              _orderReviewBloc.add(SetVehicle(vehicle: state.vehicleTypeModel));
-            }
-          },
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeData(
-                primaryColor: kPrimaryColor,
-                fontFamily: 'DM Sans',
-                scaffoldBackgroundColor: Colors.white),
-            home: FutureBuilder<AuthTokensModel>(
-                future: LocalDataService().getAuthTokens(),
-                builder: (ctx, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data!.authenticated) {
-                        // return BookingSummaryScreen(bookingId: '8D6D98');
-                        return ExploreScreen();
-                      } else {
-                        return LoginScreen();
-                      }
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+              appBarTheme: AppBarTheme(
+                systemOverlayStyle: SystemUiOverlayStyle(
+                    statusBarColor: Colors.white,
+                    statusBarBrightness: Brightness.dark),
+              ),
+              primaryColor: kPrimaryColor,
+              fontFamily: 'DM Sans',
+              scaffoldBackgroundColor: Colors.white),
+          home: FutureBuilder<AuthTokensModel>(
+              future: LocalDataService().getAuthTokens(),
+              builder: (ctx, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.authenticated) {
+                      // return BookingSummaryScreen(bookingId: '8D6D98');
+                      return ExploreScreen();
+                    } else {
+                      return LoginScreen();
                     }
                   }
-                  return Scaffold(
-                    body: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image:
-                              AssetImage('assets/images/splash_background.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          scale: 4,
-                        ),
+                }
+                return Scaffold(
+                  body: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image:
+                            AssetImage('assets/images/splash_background.png'),
+                        fit: BoxFit.cover,
                       ),
                     ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        scale: 4,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+          onGenerateRoute: (settings) {
+            if (settings.name == StoreListScreen.route) {
+              final args = settings.arguments as StoreListArguments;
+
+              return MaterialPageRoute(
+                builder: (context) {
+                  return StoreListScreen(
+                    city: args.city,
+                    title: args.title,
                   );
-                }),
-            onGenerateRoute: (settings) {
-              if (settings.name == StoreListScreen.route) {
-                final args = settings.arguments as StoreListArguments;
+                },
+              );
+            }
+            if (settings.name == HomeScreen.route) {
+              return MaterialPageRoute(
+                builder: (context) {
+                  return HomeScreen();
+                },
+              );
+            }
+            if (settings.name == StoreDetailScreen.route) {
+              final args = settings.arguments as StoreDetailArguments;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return StoreDetailScreen(
+                    storeSlug: args.storeSlug,
+                  );
+                },
+              );
+            }
+            if (settings.name == SlotSelectScreen.route) {
+              final args = settings.arguments as SlotSelectScreenArguments;
 
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return StoreListScreen(
-                      city: args.city,
-                      title: args.title,
-                    );
-                  },
-                );
-              }
-              if (settings.name == HomeScreen.route) {
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return HomeScreen();
-                  },
-                );
-              }
-              if (settings.name == StoreDetailScreen.route) {
-                final args = settings.arguments as StoreDetailArguments;
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return StoreDetailScreen(
-                      storeSlug: args.storeSlug,
-                    );
-                  },
-                );
-              }
-              if (settings.name == SlotSelectScreen.route) {
-                final args = settings.arguments as SlotSelectScreenArguments;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return SlotSelectScreen(
+                    cartTotal: args.cartTotal,
+                    cartId: args.cardId,
+                  );
+                },
+              );
+            }
+            if (settings.name == BookingSummaryScreen.route) {
+              final args = settings.arguments as BookingSummaryScreenArguments;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return BookingSummaryScreen(
+                    bookingId: args.bookingId,
+                    isTransactionSuccessful: args.isTransactionSuccesful,
+                  );
+                },
+              );
+            }
+            if (settings.name == LoginScreen.route) {
+              return MaterialPageRoute(
+                builder: (context) {
+                  return LoginScreen();
+                },
+              );
+            }
+            if (settings.name == ProfileScreen.route) {
+              final args = settings.arguments as ProfileScreenArguments;
 
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return SlotSelectScreen(
-                      cartTotal: args.cartTotal,
-                      cartId: args.cardId,
-                    );
-                  },
-                );
-              }
-              if (settings.name == BookingSummaryScreen.route) {
-                final args =
-                    settings.arguments as BookingSummaryScreenArguments;
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return BookingSummaryScreen(
-                      bookingId: args.bookingId,
-                      isTransactionSuccessful: args.isTransactionSuccesful,
-                    );
-                  },
-                );
-              }
-              if (settings.name == LoginScreen.route) {
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return LoginScreen();
-                  },
-                );
-              }
-              if (settings.name == VerifyPhoneScreen.route) {
-                final args = settings.arguments as VerifyPhoneScreenArguments;
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return VerifyPhoneScreen(phoneNumber: args.phoneNumber);
-                  },
-                );
-              }
-              if (settings.name == ExploreScreen.route) {
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return ExploreScreen();
-                  },
-                );
-              }
-              if (settings.name == OrderReviewScreen.route) {
-                final args = settings.arguments as OrderReviewScreenArguments;
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return OrderReviewScreen(
-                      dateSelected: args.dateSelected,
-                    );
-                  },
-                );
-              }
-              if (settings.name == YourBookingsScreen.route) {
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return YourBookingsScreen();
-                  },
-                );
-              }
+              return MaterialPageRoute(
+                builder: (context) {
+                  return ProfileScreen(
+                    showSkip: args.showSkip,
+                  );
+                },
+              );
+            }
+            if (settings.name == VerifyPhoneScreen.route) {
+              final args = settings.arguments as VerifyPhoneScreenArguments;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return VerifyPhoneScreen(phoneNumber: args.phoneNumber);
+                },
+              );
+            }
+            if (settings.name == ExploreScreen.route) {
+              return MaterialPageRoute(
+                builder: (context) {
+                  return ExploreScreen();
+                },
+              );
+            }
+            if (settings.name == OrderReviewScreen.route) {
+              final args = settings.arguments as OrderReviewScreenArguments;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return OrderReviewScreen(
+                    dateSelected: args.dateSelected,
+                  );
+                },
+              );
+            }
+            if (settings.name == YourBookingsScreen.route) {
+              return MaterialPageRoute(
+                builder: (context) {
+                  return YourBookingsScreen();
+                },
+              );
+            }
 
-              if (settings.name == BookingDetailScreen.route) {
-                final args = settings.arguments as BookingDetailScreenArguments;
+            if (settings.name == BookingDetailScreen.route) {
+              final args = settings.arguments as BookingDetailScreenArguments;
 
-                return MaterialPageRoute(
-                  builder: (context) {
-                    return BookingDetailScreen(
-                        status: args.status, bookingId: args.bookingId);
-                  },
-                );
-              }
-              assert(false, 'Need to implement ${settings.name}');
-            },
-          ),
+              return MaterialPageRoute(
+                builder: (context) {
+                  return BookingDetailScreen(
+                      status: args.status, bookingId: args.bookingId);
+                },
+              );
+            }
+
+            assert(false, 'Need to implement ${settings.name}');
+          },
         ),
       ),
     );

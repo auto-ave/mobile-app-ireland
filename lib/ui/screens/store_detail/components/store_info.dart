@@ -74,7 +74,7 @@ class StoreInfo extends StatelessWidget {
               ),
             ),
             TextSpan(
-              text: serviceStartsAt,
+              text: '₹$serviceStartsAt ',
               style: TextStyle(
                   color: kPrimaryColor,
                   fontSize: 16,

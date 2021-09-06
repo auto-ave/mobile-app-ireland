@@ -5,6 +5,7 @@ import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/widgets/authentication_bottom_sheet.dart';
+import 'package:themotorwash/ui/widgets/badge.dart';
 
 class StoreServiceTile extends StatelessWidget {
   final String description;
@@ -14,6 +15,7 @@ class StoreServiceTile extends StatelessWidget {
   final bool isLoading;
   final bool isAddedToCart;
   final CartFunctionBloc bloc;
+  final String time;
 
   final GlobalKey<ScaffoldState> scaffoldState;
   final GlobalAuthBloc globalAuthBloc;
@@ -28,6 +30,7 @@ class StoreServiceTile extends StatelessWidget {
       required this.bloc,
       required this.itemId,
       required this.scaffoldState,
+      required this.time,
       required this.globalAuthBloc})
       : super(key: key);
   @override
@@ -52,12 +55,18 @@ class StoreServiceTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              service,
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: kPrimaryColor),
+            Row(
+              children: [
+                Text(
+                  service,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: kPrimaryColor),
+                ),
+                Spacer(),
+                BadgeWidget(text: '$time mins'),
+              ],
             ),
             SizedBox(
               height: 8,
@@ -82,57 +91,56 @@ class StoreServiceTile extends StatelessWidget {
                 BlocBuilder<GlobalAuthBloc, GlobalAuthState>(
                   bloc: globalAuthBloc,
                   builder: (context, state) {
-                    return SizedBox(
-                      width: 120,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          if (state is Authenticated) {
-                            if (!isAddedToCart) {
-                              bloc.add(AddItemToCart(itemId: itemId));
+                    return Builder(
+                      builder: (ctx) => SizedBox(
+                        width: 120,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            if (state is Authenticated) {
+                              if (!isAddedToCart) {
+                                bloc.add(AddItemToCart(itemId: itemId));
+                              } else {
+                                bloc.add(DeleteItemFromCart(itemId: itemId));
+                              }
                             } else {
-                              bloc.add(DeleteItemFromCart(itemId: itemId));
+                              showAuthBottomSheet(ctx);
                             }
-                          } else {
-                            showAuthBottomSheet(context);
-                            // scaffoldState.currentState!.showBottomSheet(
-                            //     (context) => AuthenticationBottomSheet(
-                            //           cartBloc: bloc,
-                            //           event: !isAddedToCart
-                            //               ? AddItemToCart(itemId: itemId)
-                            //               : DeleteItemFromCart(itemId: itemId),
-                            //         ),
-                            //     elevation: 5);
-                          }
-                        },
-                        style: ButtonStyle(
-                          side: MaterialStateProperty.all(
-                              BorderSide(color: kPrimaryColor)),
-                          padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 16)),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                        ),
-                        child: isLoading
-                            ? SizedBox(
-                                height: 25,
-                                width: 25,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : FittedBox(
-                                child: Text(
-                                  !isAddedToCart ? "Add to cart" : "Remove",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: kPrimaryColor),
-                                ),
+                          },
+                          style: ButtonStyle(
+                            side: MaterialStateProperty.all(BorderSide(
+                                color: !isAddedToCart
+                                    ? kPrimaryColor
+                                    : Colors.red)),
+                            padding: MaterialStateProperty.all(
+                                EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
                               ),
+                            ),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white),
+                          ),
+                          child: isLoading
+                              ? SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : FittedBox(
+                                  child: Text(
+                                    !isAddedToCart ? "Add to cart" : "Remove",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: !isAddedToCart
+                                            ? kPrimaryColor
+                                            : Colors.red),
+                                  ),
+                                ),
+                        ),
                       ),
                     );
                   },
@@ -154,6 +162,7 @@ class StoreServiceTile extends StatelessWidget {
                 topLeft: Radius.circular(8), topRight: Radius.circular(8))),
         builder: (_) {
           return AuthenticationBottomSheet(
+            ctx: ctx,
             cartBloc: bloc,
             event: !isAddedToCart
                 ? AddItemToCart(itemId: itemId)

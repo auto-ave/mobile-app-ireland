@@ -35,7 +35,7 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
       child: Scaffold(
         appBar: getAppBarWithBackButton(context: context),
         body: LazyLoadScrollView(
-          onEndOfPage: _bookingsBloc.hasReachedMax(_bookingsBloc.state)
+          onEndOfPage: _bookingsBloc.hasReachedMax(_bookingsBloc.state, true)
               ? () {}
               : () {
                   if (_bookingsBloc.state is YourBookingsLoaded) {

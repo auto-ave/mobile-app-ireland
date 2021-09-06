@@ -55,7 +55,7 @@ class _StoreListScreenState extends State<StoreListScreen> {
             context: context,
             title: Text(
               widget.title,
-              style: kStyle14.copyWith(color: Colors.black),
+              style: kStyle14SemiBold.copyWith(color: Colors.black),
             )),
         backgroundColor: Colors.white,
         body: LazyLoadScrollView(
@@ -91,9 +91,10 @@ class _StoreListScreenState extends State<StoreListScreen> {
                       (BuildContext _, int index) {
                         final store = stores[index];
                         var tile = StoreSearchTile(
+                          isNew: store.rating == null,
                           distance: store.distance!,
                           imageURL: store.thumbnail!,
-                          rating: store.rating ?? "4.5",
+                          rating: store.rating ?? 'unrated',
                           storeName: store.name,
                           startingFrom: store.servicesStart!,
                           storeSlug: store.storeSlug!,
@@ -130,7 +131,7 @@ class _StoreListScreenState extends State<StoreListScreen> {
 
   void _loadMoreStores() {
     StoreListState currentState = _storeListBloc.state;
-    if (!_storeListBloc.hasReachedMax(currentState)) {
+    if (!_storeListBloc.hasReachedMax(currentState, true)) {
       if (currentState is StoreListLoaded) {
         _storeListBloc
             .add(LoadNearbyStoreList(offset: stores.length, forLoadMore: true));

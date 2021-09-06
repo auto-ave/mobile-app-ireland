@@ -54,27 +54,32 @@ class SlotSelectionTab extends StatelessWidget {
     //   crossAxisSpacing: 4.0,
     // );
 
-    return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      itemBuilder: (_, index) {
-        final item = slots[index];
-        return SlotSelectionTabWidget(
-          startTime: item.startTime,
-          endTime: item.endTime,
-          isSelected: currentSelectedTabIndex == index,
-          slotsAvailable: item.slotsAvailable,
-          onTap: (tabIndex) => onTap(tabIndex),
-          tabIndex: index,
-        );
-      },
-      itemCount: slots.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          // childAspectRatio: MediaQuery.of(context).size.width < 400 ? 2.5 : 1.8,
-          mainAxisExtent: 70,
-          crossAxisCount: MediaQuery.of(context).size.width < 400 ? 2 : 3,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8),
-    );
+    return slots.isEmpty
+        ? Expanded(
+            child: Center(
+            child: Text('Store remains closed this day.'),
+          ))
+        : GridView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            itemBuilder: (_, index) {
+              final item = slots[index];
+              return SlotSelectionTabWidget(
+                startTime: item.startTime,
+                endTime: item.endTime,
+                isSelected: currentSelectedTabIndex == index,
+                slotsAvailable: item.slotsAvailable,
+                onTap: (tabIndex) => onTap(tabIndex),
+                tabIndex: index,
+              );
+            },
+            itemCount: slots.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                // childAspectRatio: MediaQuery.of(context).size.width < 400 ? 2.5 : 1.8,
+                mainAxisExtent: 70,
+                crossAxisCount: MediaQuery.of(context).size.width < 400 ? 2 : 3,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8),
+          );
   }
 }
 

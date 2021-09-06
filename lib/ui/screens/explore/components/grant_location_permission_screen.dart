@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 
 import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
+import 'package:themotorwash/data/models/location_model.dart';
 import 'package:themotorwash/theme_constants.dart';
 
 class GrantLocationPermissionScreen extends StatelessWidget {
@@ -49,6 +50,28 @@ class GrantLocationPermissionScreen extends StatelessWidget {
               text: forPermission
                   ? 'Grant location permission'
                   : 'Turn on location service'),
+          kverticalMargin8,
+          GestureDetector(
+            onTap: () => globalLocationBloc.add(SetUserLocation(
+                location: LocationModel(
+                    city: '462001',
+                    lat: 23.2599,
+                    long: 77.4126))), //TODO : Get lat long for banglore
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Skip for now',
+                  style: kStyle16PrimaryColor,
+                ),
+                Icon(
+                  Icons.arrow_forward,
+                  color: kPrimaryColor,
+                  size: 20,
+                )
+              ],
+            ),
+          ),
           Spacer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),

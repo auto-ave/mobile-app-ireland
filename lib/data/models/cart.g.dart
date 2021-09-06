@@ -13,12 +13,18 @@ CartEntity _$CartEntityFromJson(Map<String, dynamic> json) {
     subTotal: json['subtotal'] as String?,
     total: json['total'] as String?,
     completed: json['completed'] as bool?,
-    store: json['store'] as int?,
+    store: json['store'] == null
+        ? null
+        : StoreEntity.fromJson(json['store'] as Map<String, dynamic>),
     consumer: json['consumer'] as int?,
     items: (json['items'] as List<dynamic>?)?.map((e) => e as int).toList(),
     itemsObj: (json['item_objs'] as List<dynamic>?)
         ?.map((e) => PriceTimeListEntity.fromJson(e as Map<String, dynamic>))
         .toList(),
+    vehicleType: json['vehicle_type'] == null
+        ? null
+        : VehicleTypeEntity.fromJson(
+            json['vehicle_type'] as Map<String, dynamic>),
   );
 }
 
@@ -29,8 +35,9 @@ Map<String, dynamic> _$CartEntityToJson(CartEntity instance) =>
       'subtotal': instance.subTotal,
       'total': instance.total,
       'completed': instance.completed,
-      'store': instance.store,
+      'store': instance.store?.toJson(),
       'consumer': instance.consumer,
       'items': instance.items,
+      'vehicle_type': instance.vehicleType?.toJson(),
       'item_objs': instance.itemsObj?.map((e) => e.toJson()).toList(),
     };

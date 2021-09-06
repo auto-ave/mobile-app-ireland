@@ -12,6 +12,7 @@ import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/booking_detail/booking_detail.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/dashed_booking_box.dart';
@@ -32,14 +33,14 @@ class BookingSummaryScreen extends StatefulWidget {
 }
 
 class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
-  final TextStyle rightSideInfoPrimaryColor = TextStyle(
-      color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize12);
-  final TextStyle leftSideInfo =
-      const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
-  final TextStyle leftSide14SemiBold =
-      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
-  final TextStyle rightSide12SemiBold =
-      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
+  // final TextStyle rightSideInfoPrimaryColor = TextStyle(
+  //     color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize12);
+  // final TextStyle leftSideInfo =
+  //     const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
+  // final TextStyle leftSide14SemiBold =
+  //     TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
+  // final TextStyle rightSide12SemiBold =
+  //     TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
 
   late BookingSummaryBloc _bookingSummaryBloc;
 
@@ -121,6 +122,32 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                         SizedBox(
                           height: 32,
                         ),
+                        SizedBox(
+                          child:
+                              bookingDetail.status == BookingStatus.paymentDone
+                                  ? AddToCalendarButton(
+                                      bookingDetail: bookingDetail)
+                                  : CommonTextButton(
+                                      onPressed: () =>
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              ExploreScreen.route,
+                                              (route) => false),
+                                      child: Text(
+                                        'Back to home',
+                                        style: kStyle16W500.copyWith(
+                                            color: Colors.white),
+                                      ),
+                                      backgroundColor: kPrimaryColor),
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                        bookingDetail.status == BookingStatus.paymentDone
+                            ? StoreContactWidget(
+                                personToContact:
+                                    bookingDetail.store!.contactPersonName!,
+                                phoneNumber:
+                                    bookingDetail.store!.contactPersonNumber!)
+                            : Container(),
                         Text('Booking Details',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -128,48 +155,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                         kverticalMargin8,
                         DashedBookingBox(bookingDetail: bookingDetail),
                         kverticalMargin16,
-                        Align(
-                          alignment: Alignment.center,
-                          child: TextButton.icon(
-                            onPressed: () {},
-                            icon: Icon(Icons.calendar_today_outlined,
-                                color: Colors.white),
-                            label: Text(
-                              'Add to calendar',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  Theme.of(context).primaryColor),
-                              elevation: MaterialStateProperty.all(4),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
                         Divider(),
-                        widget.isTransactionSuccessful
-                            ? (_review != null || reviewState != null)
-                                ? ReviewWidget(
-                                    rating: double.parse(
-                                        getNotNullReview(_review, reviewState)!
-                                            .rating!),
-                                    review:
-                                        getNotNullReview(_review, reviewState)!
-                                            .reviewDescription)
-                                : RateServiceWidget(
-                                    bookingId: state.booking.bookingId!,
-                                    onReview: (review) {
-                                      setState(() {
-                                        _review = review;
-                                      });
-                                    },
-                                    store: state.booking.store!,
-                                  )
-                            : Container(),
                       ],
                     ),
                   ),
@@ -189,12 +175,50 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
       ),
     );
   }
+}
 
-  Review? getNotNullReview(Review? review1, Review? review2) {
-    if (review1 != null) {
-      return review1;
-    }
-    return review2;
+class StoreContactWidget extends StatelessWidget {
+  final String personToContact;
+  final String phoneNumber;
+  const StoreContactWidget({
+    Key? key,
+    required this.personToContact,
+    required this.phoneNumber,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Divider(
+          height: 16,
+        ),
+        Text.rich(TextSpan(children: [
+          TextSpan(
+              text: 'Person to contact: ',
+              style: kStyle14.copyWith(
+                color: Colors.black,
+              )),
+          TextSpan(
+              text: personToContact,
+              style: kStyle16Bold.copyWith(color: kPrimaryColor))
+        ])),
+        kverticalMargin4,
+        Text.rich(TextSpan(children: [
+          TextSpan(
+              text: 'Contact number: ',
+              style: kStyle14.copyWith(color: Colors.black)),
+          TextSpan(
+              text: phoneNumber,
+              style: kStyle16Bold.copyWith(color: kPrimaryColor))
+        ])),
+        Divider(
+          height: 16,
+        ),
+      ],
+    );
   }
 }
 
@@ -369,6 +393,7 @@ class ReviewWidget extends StatelessWidget {
             print(rating);
           },
         ),
+        kverticalMargin16,
         Text(
           review ?? "",
           style: kStyle12,

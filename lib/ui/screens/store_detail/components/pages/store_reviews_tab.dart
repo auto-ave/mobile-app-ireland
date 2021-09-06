@@ -72,7 +72,7 @@ class _StoreReviewsTabState extends State<StoreReviewsTab> {
                           customerName: review.customerName!,
                           date: review.createdAt!,
                           rating: review.rating!,
-                          reviewDescription: review.reviewDescription!,
+                          reviewDescription: review.reviewDescription,
                         ),
                       );
 
@@ -115,7 +115,7 @@ class _StoreReviewsTabState extends State<StoreReviewsTab> {
 }
 
 class StoreReviewTile extends StatelessWidget {
-  final String reviewDescription;
+  final String? reviewDescription;
   final String customerName;
   final DateTime date;
   final String rating;
@@ -186,7 +186,19 @@ class StoreReviewTile extends StatelessWidget {
               ],
             ),
           ),
-          Text(reviewDescription)
+          reviewDescription != null
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Divider(
+                      height: 16,
+                      thickness: 1,
+                    ),
+                    Text(reviewDescription ?? ""),
+                  ],
+                )
+              : Container()
         ],
       ),
     );

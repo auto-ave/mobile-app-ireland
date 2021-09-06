@@ -4,9 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
+import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
+import 'package:themotorwash/ui/screens/profile/profile_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/your_bookings_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 
@@ -29,6 +31,15 @@ class AppDrawer extends StatelessWidget {
               _createDrawerItem(
                   context, Icons.local_offer_outlined, Text("Your Orders"), () {
                 Navigator.pushNamed(context, YourBookingsScreen.route);
+              }),
+              Divider(
+                thickness: 1,
+                height: 0,
+              ),
+              _createDrawerItem(context, FontAwesomeIcons.user, Text("Profile"),
+                  () {
+                Navigator.pushNamed(context, ProfileScreen.route,
+                    arguments: ProfileScreenArguments(showSkip: false));
               }),
               Divider(
                 thickness: 1,

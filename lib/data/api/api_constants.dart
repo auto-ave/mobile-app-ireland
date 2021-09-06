@@ -27,7 +27,7 @@ class ApiConstants {
   }
 
   final String baseUrl = "motorwash.herokuapp.com";
-  final int pageLimit = 3;
+  final int pageLimit = 10;
 
   String getStoreListEndPoint() {
     return "$baseUrl/store/list";
@@ -40,7 +40,9 @@ class ApiConstants {
       required int offset}) {
     Map<String, dynamic> params = {
       'offset': offset.toString(),
-      'limit': pageLimit.toString()
+      'limit': pageLimit.toString(),
+      'latitude': lat.toString(),
+      'longitude': long.toString()
     };
     var uri = Uri.https(baseUrl, "/store/list/$city", params);
     return uri.toString();
@@ -92,10 +94,6 @@ class ApiConstants {
     };
     var uri = Uri.https(baseUrl, "/booking/list/consumer", params);
     return uri.toString();
-  }
-
-  String getPutPatchAccountEndPoint() {
-    return "$baseUrl/account/";
   }
 
   String getCartEndpoint() {
@@ -169,13 +167,18 @@ class ApiConstants {
       required double long,
       required int offset}) {
     Map<String, dynamic> params = {
-      'query': query.toString(),
+      'search': query,
       'offset': offset.toString(),
       'limit': pageLimit.toString(),
       'latitude': lat.toString(),
       'longitude': long.toString()
     };
     var uri = Uri.https(baseUrl, "/store/list/$city", params);
+    return uri.toString();
+  }
+
+  String getPutPatchAccountEndPoint() {
+    var uri = Uri.https(baseUrl, "/account");
     return uri.toString();
   }
 }

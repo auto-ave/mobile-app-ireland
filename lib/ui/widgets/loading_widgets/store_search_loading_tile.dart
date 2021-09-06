@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:themotorwash/theme_constants.dart';
 
 class StoreSearchLoadingTile extends StatelessWidget {
   const StoreSearchLoadingTile({Key? key}) : super(key: key);
@@ -12,14 +13,14 @@ class StoreSearchLoadingTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey,
+            baseColor: kShimmerBaseColor!,
+            highlightColor: kShimmerHighlightColor!,
             child: Container(
               height: 80,
               width: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: Colors.grey[300],
+                color: kShimmerBaseColor,
               ),
             ),
           ),
@@ -31,48 +32,48 @@ class StoreSearchLoadingTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey,
+                  baseColor: kShimmerBaseColor!,
+                  highlightColor: kShimmerHighlightColor!,
                   child: Container(
                     height: 20,
                     width: 150,
-                    color: Colors.grey[300],
+                    color: kShimmerBaseColor,
                   ),
                 ),
                 SizedBox(
                   height: 8,
                 ),
                 Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey,
+                  baseColor: kShimmerBaseColor!,
+                  highlightColor: kShimmerHighlightColor!,
                   child: Container(
                     height: 20,
                     width: 30,
-                    color: Colors.grey[300],
+                    color: kShimmerBaseColor,
                   ),
                 ),
                 SizedBox(
                   height: 8,
                 ),
                 Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey,
+                  baseColor: kShimmerBaseColor!,
+                  highlightColor: kShimmerHighlightColor!,
                   child: Container(
                     height: 20,
                     width: 100,
-                    color: Colors.grey[300],
+                    color: kShimmerBaseColor,
                   ),
                 ),
               ],
             ),
           ),
           Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey,
+            baseColor: kShimmerBaseColor!,
+            highlightColor: kShimmerHighlightColor!,
             child: Container(
               height: 20,
               width: 50,
-              color: Colors.grey[300],
+              color: kShimmerBaseColor,
             ),
           ),
         ],

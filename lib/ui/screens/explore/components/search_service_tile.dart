@@ -20,21 +20,28 @@ class SearchServiceTile extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),
-        child: Column(
-          children: [
-            Container(
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                width: 100,
-                height: 100,
-                imageUrl: imageUrl,
+        child: SizedBox(
+          width: 120,
+          child: Column(
+            children: [
+              Container(
+                clipBehavior: Clip.hardEdge,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(4)),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  width: 100,
+                  height: 100,
+                  imageUrl: imageUrl,
+                ),
               ),
-            ),
-            kverticalMargin8,
-            Text(serviceName)
-          ],
+              kverticalMargin8,
+              Text(
+                serviceName,
+                overflow: TextOverflow.ellipsis,
+              )
+            ],
+          ),
         ),
       ),
     );

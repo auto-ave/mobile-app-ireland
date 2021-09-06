@@ -10,6 +10,7 @@ import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/review.dart';
+import 'package:themotorwash/data/models/user_profile.dart';
 import 'package:themotorwash/data/models/vehicle_type.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 
@@ -155,5 +156,21 @@ class RestRepository implements Repository {
     ReviewEntity entity = await _apiMethodsImp.getReview(bookingId: bookingId);
     Review reviewModel = Review.fromEntity(entity);
     return reviewModel;
+  }
+
+  @override
+  Future<UserProfile> getAccountDetails() async {
+    UserProfileEntity entity = await _apiMethodsImp.getAccountDetails();
+    UserProfile profileModel = UserProfile.fromEntity(entity: entity);
+    return profileModel;
+  }
+
+  @override
+  Future<UserProfile> updateAccountDetails(
+      {required UserProfileEntity userProfileEntity}) async {
+    UserProfileEntity entity = await _apiMethodsImp.patchAccountDetails(
+        userProfileEntity: userProfileEntity);
+    UserProfile profileModel = UserProfile.fromEntity(entity: entity);
+    return profileModel;
   }
 }

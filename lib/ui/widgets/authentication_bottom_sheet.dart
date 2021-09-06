@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
@@ -7,12 +8,17 @@ import 'package:themotorwash/data/repos/auth_repository.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
+import 'package:themotorwash/utils.dart';
 
 class AuthenticationBottomSheet extends StatefulWidget {
   final CartFunctionEvent event;
   final CartFunctionBloc cartBloc;
+  final BuildContext ctx;
   const AuthenticationBottomSheet(
-      {Key? key, required this.event, required this.cartBloc})
+      {Key? key,
+      required this.event,
+      required this.cartBloc,
+      required this.ctx})
       : super(key: key);
 
   @override
@@ -25,6 +31,8 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   String otpEntered = '';
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -40,14 +48,25 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
       bloc: _phoneAuthBloc,
       listener: (_, state) {
         if (state is FailedToSendOTP) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Failed to send OTP. ${state.message}'),
-          ));
+          print("ok brother");
+          Fluttertoast.showToast(
+              msg: 'Failed to send OTP',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black54,
+              textColor: Colors.white,
+              fontSize: 16.0);
         }
         if (state is OTPCheckFailed) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('OTP check failed. ${state.message}'),
-          ));
+          Fluttertoast.showToast(
+              msg: 'OTP check failed',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black54,
+              textColor: Colors.white,
+              fontSize: 16.0);
         }
         if (state is OTPCheckedPassed) {
           widget.cartBloc.add(widget.event);
@@ -96,7 +115,10 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
           ),
           Text('Continue with number'),
           kverticalMargin8,
-          PhoneTextField(phoneController: phoneController),
+          Form(
+            child: PhoneTextField(phoneController: phoneController),
+            key: _formKey,
+          ),
           kverticalMargin16,
           Align(
             alignment: Alignment.center,
@@ -105,8 +127,10 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
               height: 50,
               child: TextButton(
                 onPressed: () {
-                  _phoneAuthBloc
-                      .add(SendOTP(phoneNumber: '+91${phoneController.text}'));
+                  if (_formKey.currentState!.validate()) {
+                    _phoneAuthBloc.add(
+                        SendOTP(phoneNumber: '+91${phoneController.text}'));
+                  }
                 },
                 child: Text(
                   'Send OTP',

@@ -27,51 +27,52 @@ class BookingDetailModel {
   final EventModel? event;
   final Review? review;
 
-  BookingDetailModel(
-      {this.id,
-      this.createdAt,
-      this.updatedAt,
-      this.bookingId,
-      this.status,
-      this.statusChangedTime,
-      this.otp,
-      this.event,
-      this.vehicleType,
-      this.store,
-      this.bookedBy,
-      this.isRefunded,
-      this.services,
-      this.amount,
-      this.payment,
-      this.review});
+  BookingDetailModel({
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.bookingId,
+    this.status,
+    this.statusChangedTime,
+    this.otp,
+    this.event,
+    this.vehicleType,
+    this.store,
+    this.bookedBy,
+    this.isRefunded,
+    this.services,
+    this.amount,
+    this.payment,
+    this.review,
+  });
 
   factory BookingDetailModel.fromEntity(BookingDetailEntity e) {
     return BookingDetailModel(
-        amount: e.amount,
-        bookedBy: e.bookedBy,
-        bookingId: e.bookingId,
-        createdAt: e.createdAt != null ? DateTime.parse(e.createdAt!) : null,
-        updatedAt: e.updatedAt != null ? DateTime.parse(e.updatedAt!) : null,
-        event: e.event != null ? EventModel.fromEntity(e.event!) : null,
-        id: e.id,
-        isRefunded: e.isRefunded,
-        otp: e.otp,
-        payment: e.payment != null ? PaymentModel.fromEntity(e.payment!) : null,
-        services: e.services != null
-            ? e.services!
-                .map<PriceTimeListModel>(
-                    (e) => PriceTimeListModel.fromEntity(e))
-                .toList()
-            : null,
-        status: e.status != null
-            ? getBookingStatusFromCode(e.status!)
-            : BookingStatus.notDefined,
-        statusChangedTime: e.statusChangedTime != null
-            ? DateTime.parse(e.statusChangedTime!)
-            : null,
-        store: e.store != null ? Store.fromEntity(e.store!) : null,
-        vehicleType: e.vehicleType,
-        review: e.review != null ? Review.fromEntity(e.review!) : null);
+      amount: e.amount,
+      bookedBy: e.bookedBy,
+      bookingId: e.bookingId,
+      createdAt: e.createdAt != null ? DateTime.parse(e.createdAt!) : null,
+      updatedAt: e.updatedAt != null ? DateTime.parse(e.updatedAt!) : null,
+      event: e.event != null ? EventModel.fromEntity(e.event!) : null,
+      id: e.id,
+      isRefunded: e.isRefunded,
+      otp: e.otp,
+      payment: e.payment != null ? PaymentModel.fromEntity(e.payment!) : null,
+      services: e.services != null
+          ? e.services!
+              .map<PriceTimeListModel>((e) => PriceTimeListModel.fromEntity(e))
+              .toList()
+          : null,
+      status: e.status != null
+          ? getBookingStatusFromCode(e.status!)
+          : BookingStatus.notDefined,
+      statusChangedTime: e.statusChangedTime != null
+          ? DateTime.parse(e.statusChangedTime!)
+          : null,
+      store: e.store != null ? Store.fromEntity(e.store!) : null,
+      vehicleType: e.vehicleType,
+      review: e.review != null ? Review.fromEntity(e.review!) : null,
+    );
   }
 
   @override
@@ -115,23 +116,24 @@ class BookingDetailEntity {
   final List<PriceTimeListEntity>? services;
 
   final ReviewEntity? review;
-  BookingDetailEntity(
-      {this.id,
-      this.bookingId,
-      required this.payment,
-      this.createdAt,
-      this.updatedAt,
-      this.status,
-      this.amount,
-      this.statusChangedTime,
-      this.otp,
-      this.event,
-      this.vehicleType,
-      this.store,
-      this.bookedBy,
-      this.isRefunded,
-      this.services,
-      this.review});
+  BookingDetailEntity({
+    this.id,
+    this.bookingId,
+    required this.payment,
+    this.createdAt,
+    this.updatedAt,
+    this.status,
+    this.amount,
+    this.statusChangedTime,
+    this.otp,
+    this.event,
+    this.vehicleType,
+    this.store,
+    this.bookedBy,
+    this.isRefunded,
+    this.services,
+    this.review,
+  });
 
   factory BookingDetailEntity.fromJson(Map<String, dynamic> data) =>
       _$BookingDetailEntityFromJson(data);

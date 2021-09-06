@@ -12,24 +12,20 @@ part 'order_review_state.dart';
 
 class OrderReviewBloc extends Bloc<OrderReviewEvent, OrderReviewState> {
   OrderReviewBloc() : super(OrderReviewInitial());
-  Store? store;
   CartModel? cart;
   Slot? slot;
-  VehicleTypeModel? vehicle;
   @override
   Stream<OrderReviewState> mapEventToState(
     OrderReviewEvent event,
   ) async* {
-    if (event is SetStore) {
-      store = event.store;
-    } else if (event is SetCart) {
+    if (event is SetCart) {
       cart = event.cart;
-    } else if (event is SetVehicle) {
-      vehicle = event.vehicle;
     } else if (event is SetSlot) {
       slot = event.slot;
       yield LocalOrderRetrieved(
-          slot: slot!, cart: cart!, store: store!, vehicle: vehicle!);
+        slot: slot!,
+        cart: cart!,
+      );
     }
   }
 }

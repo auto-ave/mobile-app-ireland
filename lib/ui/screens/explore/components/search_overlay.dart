@@ -121,9 +121,10 @@ class _SearchOverlayState extends State<SearchOverlay> {
                 (_, index) {
                   var store = state.searchedStores[index];
                   return StoreSearchTile(
+                      isNew: store.rating == null,
                       distance: store.distance ?? 'dis',
                       imageURL: store.thumbnail ?? 'thumb',
-                      rating: store.rating ?? '0',
+                      rating: store.rating,
                       storeName: store.name,
                       startingFrom: store.servicesStart ?? 'serviceStarts',
                       storeSlug: store.storeSlug ?? 'store-slug');
@@ -144,7 +145,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
 
   void _loadMoreStores() {
     var currentState = widget.searchStoresBloc.state;
-    if (!widget.searchStoresBloc.hasReachedMax(currentState)) {
+    if (!widget.searchStoresBloc.hasReachedMax(currentState, true)) {
       if (currentState is SearchedStoresResult) {
         widget.searchStoresBloc.add(SearchStores(
             query: widget.textController.text,

@@ -50,123 +50,135 @@ class _VehicleTypeSelectionBottomSheetState
   @override
   Widget build(BuildContext context) {
     print(MediaQuery.of(context).padding.top);
-    return BlocBuilder<VehicleTypeListBloc, VehicleTypeListState>(
-      bloc: _vehicleTypeListBloc,
-      builder: (context, state) {
-        if (state is VehicleTypeListLoaded) {
-          return Padding(
-            padding: EdgeInsets.only(
-              top: 32,
-            ),
-            child: PageView.builder(
-              onPageChanged: (index) {
-                setState(() {});
-              },
-              physics: NeverScrollableScrollPhysics(),
-              controller: widget.pageController,
-              itemBuilder: (ctx, index) {
-                if (index == 0) {
-                  List<VehicleWheel> wheels = state.wheels;
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Select your vehicle type',
-                          style: kStyle20W500,
-                        ),
-                        kverticalMargin16,
-                        Expanded(
-                          child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
+    return DraggableScrollableSheet(builder: (_, __) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+        ),
+        child: BlocBuilder<VehicleTypeListBloc, VehicleTypeListState>(
+          bloc: _vehicleTypeListBloc,
+          builder: (context, state) {
+            if (state is VehicleTypeListLoaded) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  top: 16,
+                ),
+                child: PageView.builder(
+                  onPageChanged: (index) {
+                    setState(() {});
+                  },
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: widget.pageController,
+                  itemBuilder: (ctx, index) {
+                    if (index == 0) {
+                      List<VehicleWheel> wheels = state.wheels;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Select your vehicle type',
+                              style: kStyle20W500,
                             ),
-                            itemBuilder: (ctx, index) {
-                              VehicleWheel wheel = wheels[index];
-                              return VehicleWheelWidget(
-                                  wheel: wheel,
-                                  onTap: (wheelTapped) {
-                                    setState(() {
-                                      selectedWheel = wheelTapped;
-                                      widget.pageController.animateToPage(1,
-                                          duration: Duration(milliseconds: 300),
-                                          curve: Curves.linear);
-                                    });
-                                  });
-                            },
-                            itemCount: state.wheels.length,
-                          ),
+                            kverticalMargin32,
+                            Expanded(
+                              child: GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2, crossAxisSpacing: 8),
+                                itemBuilder: (ctx, index) {
+                                  VehicleWheel wheel = wheels[index];
+                                  return VehicleWheelWidget(
+                                      wheel: wheel,
+                                      onTap: (wheelTapped) {
+                                        setState(() {
+                                          selectedWheel = wheelTapped;
+                                          widget.pageController.animateToPage(1,
+                                              duration:
+                                                  Duration(milliseconds: 300),
+                                              curve: Curves.linear);
+                                        });
+                                      });
+                                },
+                                itemCount: state.wheels.length,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                }
-                List<VehicleTypeModel> vehicles =
-                    state.vehicleTypes.where((element) {
-                  print(element.wheel + " " + selectedWheel.wheel);
-                  return (element.wheel == selectedWheel.wheel);
-                }).toList();
-                print(vehicles.length.toString() + "hello");
-                return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Select ${selectedWheel.wheel} type',
-                        style: kStyle20W500,
-                      ),
-                      kverticalMargin16,
-                      Expanded(
-                        child: ListView.builder(
-                          itemBuilder: (_, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                _vehicleTypeFunctionsBloc.add(SelectVehicleType(
-                                    vehicleTypeModel: vehicles[index]));
-                                Navigator.pop(context);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Column(
+                      );
+                    }
+                    List<VehicleTypeModel> vehicles =
+                        state.vehicleTypes.where((element) {
+                      print(element.wheel + " " + selectedWheel.wheel);
+                      return (element.wheel == selectedWheel.wheel);
+                    }).toList();
+                    print(vehicles.length.toString() + "hello");
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Select ${selectedWheel.wheel} type',
+                            style: kStyle20W500,
+                          ),
+                          kverticalMargin16,
+                          Expanded(
+                            child: ListView.builder(
+                              itemBuilder: (_, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    _vehicleTypeFunctionsBloc.add(
+                                        SelectVehicleType(
+                                            vehicleTypeModel: vehicles[index]));
+                                    Navigator.pop(context);
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
                                       children: [
-                                        CachedNetworkImage(
-                                            imageUrl: vehicles[index].image!),
-                                        Text('${vehicles[index].model}')
+                                        Column(
+                                          children: [
+                                            CachedNetworkImage(
+                                                imageUrl:
+                                                    vehicles[index].image!),
+                                            kverticalMargin8,
+                                            Text('${vehicles[index].model}')
+                                          ],
+                                        ),
+                                        kHorizontalMargin16,
+                                        Text(vehicles[index].description ??
+                                            'Null broder')
                                       ],
                                     ),
-                                    kHorizontalMargin16,
-                                    Text(vehicles[index].description ??
-                                        'Null broder')
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                          itemCount: vehicles.length,
-                        ),
+                                  ),
+                                );
+                              },
+                              itemCount: vehicles.length,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              },
-              itemCount: 2,
-            ),
-          );
-        }
-        if (state is LoadingVehicleTypeList) {
-          return Expanded(
-              child: Center(
-            child: CircularProgressIndicator(),
-          ));
-        }
-        return Container();
-      },
-    );
+                    );
+                  },
+                  itemCount: 2,
+                ),
+              );
+            }
+            if (state is LoadingVehicleTypeList) {
+              return Expanded(
+                  child: Center(
+                child: CircularProgressIndicator(),
+              ));
+            }
+            return Container();
+          },
+        ),
+      );
+    });
   }
 }
 
@@ -184,6 +196,7 @@ class VehicleWheelWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           CachedNetworkImage(imageUrl: wheel.imageUrl),
+          kverticalMargin8,
           Text(wheel.wheel)
         ],
       ),

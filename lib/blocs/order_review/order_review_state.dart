@@ -12,15 +12,15 @@ class OrderReviewInitial extends OrderReviewState {
 class LocalOrderRetrieved extends OrderReviewState {
   final Slot slot;
   final CartModel cart;
-  final Store store;
-  final VehicleTypeModel vehicle;
+
   LocalOrderRetrieved({
     required this.slot,
     required this.cart,
-    required this.store,
-    required this.vehicle,
   });
 
   @override
-  List<Object> get props => [cart, slot, store, vehicle];
+  List<Object> get props => [
+        cart,
+        slot,
+      ];
 }

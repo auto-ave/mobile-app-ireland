@@ -12,8 +12,8 @@ class ServiceSearchLoadingTile extends StatelessWidget {
       child: Column(
         children: [
           Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[400]!,
+            baseColor: kShimmerBaseColor!,
+            highlightColor: kShimmerHighlightColor!,
             child: Container(
               height: 100,
               width: 100,
@@ -25,8 +25,8 @@ class ServiceSearchLoadingTile extends StatelessWidget {
           ),
           kverticalMargin8,
           Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[400]!,
+            baseColor: kShimmerBaseColor!,
+            highlightColor: kShimmerHighlightColor!,
             child: Container(
               height: 20,
               width: 70,

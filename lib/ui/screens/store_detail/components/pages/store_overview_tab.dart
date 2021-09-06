@@ -44,7 +44,7 @@ class StoreOverviewTab extends StatelessWidget {
             address: store.address!,
             // closingTime: store.storeClosingTime!,
             // openingTime: store.storeOpeningTime!,
-            serviceStartsAt: "₹499", //TODO : todo
+            serviceStartsAt: store.servicesStart.toString(), //TODO : todo
           )),
         ),
         SliverPadding(

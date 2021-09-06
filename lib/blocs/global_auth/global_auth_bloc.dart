@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
 

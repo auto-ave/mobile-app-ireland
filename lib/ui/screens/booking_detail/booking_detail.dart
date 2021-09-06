@@ -100,6 +100,21 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                     kverticalMargin16,
                     getBookingStatusTag(bookingDetail.status!),
                     kverticalMargin16,
+                    bookingDetail.status == BookingStatus.paymentDone
+                        ? SizedBox(
+                            child: AddToCalendarButton(
+                                bookingDetail: bookingDetail),
+                            width: MediaQuery.of(context).size.width,
+                          )
+                        : Container(),
+                    kverticalMargin16,
+                    bookingDetail.status == BookingStatus.paymentDone
+                        ? StoreContactWidget(
+                            personToContact:
+                                bookingDetail.store!.contactPersonName!,
+                            phoneNumber:
+                                bookingDetail.store!.contactPersonNumber!)
+                        : Container(),
                     Text('Booking Details',
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -107,57 +122,6 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                     kverticalMargin8,
                     DashedBookingBox(bookingDetail: bookingDetail),
                     kverticalMargin16,
-                    Align(
-                      alignment: Alignment.center,
-                      child: TextButton.icon(
-                        onPressed: () {
-                          try {
-                            String description = '';
-
-                            bookingDetail.services!.forEach((element) {
-                              description = description +
-                                  ', ' +
-                                  element.service.toString();
-                            });
-                            final Event event = Event(
-                              title:
-                                  'MotorWash booking for ${bookingDetail.vehicleType}',
-                              description:
-                                  'Services : ${description.substring(1)}',
-                              location: '${bookingDetail.store!.address}',
-                              startDate: bookingDetail.event!.startDateTime,
-                              endDate: bookingDetail.event!.endDateTime,
-                              // iosParams: IOSParams(
-                              //   reminder: Duration(
-                              //       /* Ex. hours:1 */), // on iOS, you can set alarm notification after your event.
-                              // ),
-                              // androidParams: AndroidParams(
-                              //   emailInvites: [], // on Android, you can add invite emails to your event.
-                              // ),
-                            );
-                            Add2Calendar.addEvent2Cal(event);
-                          } catch (e) {
-                            showSnackbar(context, 'No calendar app found');
-                          }
-                        },
-                        icon: Icon(Icons.calendar_today_outlined,
-                            color: Colors.white),
-                        label: Text(
-                          'Add to calendar',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).primaryColor),
-                          elevation: MaterialStateProperty.all(4),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                     Divider(),
                     widget.status == BookingStatus.serviceCompleted
                         ? (_review != null || reviewState != null)
@@ -200,5 +164,53 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
       return review1;
     }
     return review2;
+  }
+}
+
+class AddToCalendarButton extends StatelessWidget {
+  final BookingDetailModel bookingDetail;
+  const AddToCalendarButton({
+    Key? key,
+    required this.bookingDetail,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      onPressed: () {
+        try {
+          String description = '';
+
+          bookingDetail.services!.forEach((element) {
+            description = description + ', ' + element.service.toString();
+          });
+          final Event event = Event(
+            title: 'MotorWash booking for ${bookingDetail.vehicleType}',
+            description: 'Services : ${description.substring(1)}',
+            location: '${bookingDetail.store!.address}',
+            startDate: bookingDetail.event!.startDateTime,
+            endDate: bookingDetail.event!.endDateTime,
+          );
+          Add2Calendar.addEvent2Cal(event);
+        } catch (e) {
+          showSnackbar(context, 'No calendar app found');
+        }
+      },
+      icon: Icon(Icons.calendar_today_outlined, color: Colors.white),
+      label: Text(
+        'Add to calendar',
+        style: TextStyle(color: Colors.white),
+      ),
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all(Theme.of(context).primaryColor),
+        elevation: MaterialStateProperty.all(4),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ),
+    );
   }
 }

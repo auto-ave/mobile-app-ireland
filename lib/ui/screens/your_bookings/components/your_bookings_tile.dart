@@ -6,6 +6,7 @@ import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_detail/booking_detail.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
+import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 
 class YourBookingTile extends StatefulWidget {
   final String storeName;
@@ -36,97 +37,99 @@ class _YourBookingTileState extends State<YourBookingTile> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  offset: Offset(0, 4),
-                  blurRadius: 16,
-                  color: Color.fromRGBO(0, 0, 0, 0.16))
-            ]),
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(children: <Widget>[
-              Hero(
-                tag: widget.bookingId,
-                child: CachedNetworkImage(
-                  imageUrl: widget.imageUrl,
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              kHorizontalMargin8,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(widget.storeName, style: kStyle16SemiBold),
-                    Text(
-                      widget.address,
-                      style: kStyle12.copyWith(color: Color(0xff888888)),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
-                ),
-              ),
-              Text('₹${widget.total}', style: kStyle16SemiBold)
-            ]),
-            Divider(),
-            getBookingStatusTag(widget.status),
-            kverticalMargin8,
-            Text(
-              'I T E M S',
-              style: kStyle12SemiBold.copyWith(color: Color(0xff888888)),
-            ),
-            kverticalMargin4,
-            ...(widget.serviceNames.map((e) => getBulletText(e)).toList()),
-            kverticalMargin4,
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, BookingDetailScreen.route,
-                    arguments: BookingDetailScreenArguments(
-                        bookingId: widget.bookingId, status: widget.status));
-              },
-              child: Text(
-                'More Info',
-                style: TextStyle(
-                    color: Colors.blue, decoration: TextDecoration.underline),
-              ),
-            ),
-            Divider(),
-            kverticalMargin8,
-            Text(
-              'SCHEDULED ON',
-              style: kStyle12SemiBold.copyWith(
-                  letterSpacing: 2.16, color: Color(0xff888888)),
-            ),
-            kverticalMargin8,
-            Text('24 Jun 2021 at 5:30pm'),
-            kverticalMargin8,
-            Row(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, BookingDetailScreen.route,
+                arguments: BookingDetailScreenArguments(
+                    bookingId: widget.bookingId, status: widget.status));
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      offset: Offset(0, 4),
+                      blurRadius: 16,
+                      color: Color.fromRGBO(0, 0, 0, 0.16))
+                ]),
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                getButton(
-                    borderAndTextColor: Theme.of(context).primaryColor,
-                    buttonText: 'Reschedule',
-                    onPressed: () {}),
-                Spacer(),
-                getButton(
-                    borderAndTextColor: Color(0xffDC1313),
-                    buttonText: 'Cancel',
-                    onPressed: () {}),
+                Row(children: <Widget>[
+                  Hero(
+                    tag: widget.bookingId,
+                    child: CachedNetworkImage(
+                      placeholder: (_, __) {
+                        return ShimmerPlaceholder();
+                      },
+                      imageUrl: widget.imageUrl,
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  kHorizontalMargin8,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(widget.storeName, style: kStyle16SemiBold),
+                        Text(
+                          widget.address,
+                          style: kStyle12.copyWith(color: Color(0xff888888)),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      ],
+                    ),
+                  ),
+                  Text('₹${widget.total}', style: kStyle16SemiBold)
+                ]),
+                Divider(),
+                getBookingStatusTag(widget.status),
+                kverticalMargin8,
+                Text(
+                  'I T E M S',
+                  style: kStyle12SemiBold.copyWith(color: Color(0xff888888)),
+                ),
+                kverticalMargin4,
+                ...(widget.serviceNames.map((e) => getBulletText(e)).toList()),
+                kverticalMargin4,
+                Text(
+                  'More Info',
+                  style: TextStyle(
+                      color: Colors.blue, decoration: TextDecoration.underline),
+                ),
+                Divider(),
+                kverticalMargin8,
+                Text(
+                  'SCHEDULED ON',
+                  style: kStyle12SemiBold.copyWith(
+                      letterSpacing: 2.16, color: Color(0xff888888)),
+                ),
+                kverticalMargin8,
+                Text('24 Jun 2021 at 5:30pm'),
+                kverticalMargin8,
+                // Row(
+                //   children: <Widget>[
+                //     getButton(
+                //         borderAndTextColor: Theme.of(context).primaryColor,
+                //         buttonText: 'Reschedule',
+                //         onPressed: () {}),
+                //     Spacer(),
+                //     getButton(
+                //         borderAndTextColor: Color(0xffDC1313),
+                //         buttonText: 'Cancel',
+                //         onPressed: () {}),
+                //   ],
+                // ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
   Widget getButton(

@@ -6,23 +6,37 @@ import 'package:themotorwash/data/models/vehicle_type.dart';
 
 class LocalDataService {
   static final getItInstanceName = "LocalDataService";
-  final storage = new FlutterSecureStorage();
+  // final storage = new FlutterSecureStorage();
+  final String authBoxKey = 'auth_box';
+  final String vehicleBoxKey = 'vehicle_box';
+  final String accessTokenKey = 'access_token';
+  final String refreshTokenKey = 'refresh_token';
+  final String vehicleKey = 'saved_vehicle';
   LocalDataService() {
     Hive.registerAdapter(VehicleTypeModelAdapter(), override: true);
   }
 
   Future storeAuthToken(AuthTokensModel tokens) async {
-    await storage.write(key: 'refresh_token', value: tokens.refreshToken);
-    await storage.write(key: 'access_token', value: tokens.accessToken);
+    var authBox = await Hive.openBox(authBoxKey);
+    await authBox.put(accessTokenKey, tokens.accessToken);
+    await authBox.put(refreshTokenKey, tokens.refreshToken);
+    // await storage.write(key: 'refresh_token', value: tokens.refreshToken);
+    // await storage.write(key: 'access_token', value: tokens.accessToken);
   }
 
   storeNewAccessToke(String accessToken) async {
-    await storage.write(key: 'access_token', value: accessToken);
+    var authBox = await Hive.openBox(authBoxKey);
+    await authBox.put(accessTokenKey, accessToken);
+    // await storage.write(key: 'access_token', value: accessToken);
   }
 
   Future<AuthTokensModel> getAuthTokens() async {
-    String? refreshToken = await storage.read(key: 'refresh_token');
-    String? accessToken = await storage.read(key: 'access_token');
+    var authBox = await Hive.openBox(authBoxKey);
+    String? refreshToken = authBox.get(refreshTokenKey);
+    String? accessToken = authBox.get(accessTokenKey);
+
+    // String? refreshToken = await storage.read(key: 'refresh_token');
+    // String? accessToken = await storage.read(key: 'access_token');
     if (refreshToken != null && accessToken != null) {
       return AuthTokensModel(
           refreshToken: refreshToken,
@@ -34,21 +48,25 @@ class LocalDataService {
   }
 
   Future<bool> removeTokens() async {
-    await storage.delete(key: 'refresh_token');
-    await storage.delete(key: 'access_token');
+    var authBox = await Hive.openBox(authBoxKey);
+    await authBox.deleteAll([accessTokenKey, refreshTokenKey]);
+    // String? refreshToken = authBox.get('refresh_token');
+    // String? accessToken = authBox.get('access_token');
+    // await storage.delete(key: 'refresh_token');
+    // await storage.delete(key: 'access_token');
 
     return true;
   }
 
   Future<VehicleTypeModel?> getSavedVehicleType() async {
-    final documentDirectory = await getApplicationDocumentsDirectory();
+    // final documentDirectory = await getApplicationDocumentsDirectory();
 
-    Hive.init(documentDirectory.path);
+    // Hive.init(documentDirectory.path);
 
-    var box = await Hive.openBox('vehicle_type');
+    var vehicleBox = await Hive.openBox(vehicleBoxKey);
     VehicleTypeModel? vehicleTypeModel;
-    if (box.containsKey(0)) {
-      vehicleTypeModel = await box.get(0);
+    if (vehicleBox.containsKey(0)) {
+      vehicleTypeModel = vehicleBox.get(0);
     }
 
     return vehicleTypeModel;
@@ -56,11 +74,11 @@ class LocalDataService {
 
   Future<void> saveVehicleType(
       {required VehicleTypeModel vehicleTypeModel}) async {
-    var box = await Hive.openBox('vehicle_type');
-    if (box.containsKey(0)) {
-      await box.delete(0);
+    var vehicleBox = await Hive.openBox(vehicleBoxKey);
+    if (vehicleBox.containsKey(0)) {
+      await vehicleBox.delete(0);
     }
 
-    await box.put(0, vehicleTypeModel);
+    await vehicleBox.put(0, vehicleTypeModel);
   }
 }
