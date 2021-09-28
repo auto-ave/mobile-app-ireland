@@ -16,6 +16,7 @@ import 'package:themotorwash/ui/screens/booking_detail/booking_detail.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/dashed_booking_box.dart';
+import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/utils.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
@@ -164,7 +165,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
             }
             if (state is BookingSummaryError) {
               return Center(
-                child: Text('Failed to load'),
+                child: ErrorScreen(isHome: false),
               );
             }
             return Center(

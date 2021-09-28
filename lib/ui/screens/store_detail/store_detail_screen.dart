@@ -10,6 +10,7 @@ import 'package:themotorwash/ui/screens/store_detail/components/pages/store_over
 import 'package:themotorwash/ui/screens/store_detail/components/pages/store_reviews_tab.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/store_services_tab.dart';
 import 'package:themotorwash/ui/widgets/bottom_cart_tile.dart';
+import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 import 'package:themotorwash/utils.dart';
 
@@ -201,6 +202,11 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
                 //   child: getSelectedTabPage(context, _selectedTab, state.store),
                 // );
               })),
+            );
+          }
+          if (state is StoreDetailError) {
+            return Center(
+              child: ErrorScreen(isHome: false),
             );
           }
           return Center(

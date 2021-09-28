@@ -8,6 +8,7 @@ import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
+import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/utils.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -125,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }
                   if (state is FailedToLoadProfile) {
                     return Center(
-                      child: Text('Failed To Load Profile'),
+                      child: ErrorScreen(isHome: false),
                     );
                   }
                   if (state is ProfileLoaded ||

@@ -17,6 +17,7 @@ import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.d
 import 'package:themotorwash/ui/screens/order_review/order_review.dart';
 import 'package:themotorwash/ui/screens/slot_select/components/date_selection_tab.dart';
 import 'package:themotorwash/ui/screens/slot_select/components/slot_selection_tab.dart';
+import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/utils.dart';
 
 class SlotSelectScreen extends StatefulWidget {
@@ -132,7 +133,12 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
                 );
               }
               if (state is SlotSelectionError) {
-                return Center(child: Text('Failed to load. ${state.message}'));
+                return Center(
+                  child: ErrorScreen(
+                    showCTA: false,
+                    isHome: false,
+                  ),
+                );
               }
               return Center(
                 child: loadingAnimation(),

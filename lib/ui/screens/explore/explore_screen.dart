@@ -30,6 +30,7 @@ import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/screens/store_list/bloc/store_list_bloc.dart';
 import 'package:themotorwash/ui/widgets/bottom_cart_tile.dart';
 import 'package:themotorwash/ui/widgets/drawer.dart';
+import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/scrollable_service_loading.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/service_search_loading_tile.dart';
@@ -292,15 +293,14 @@ class _ExploreScreenState extends State<ExploreScreen>
                               ),
                             ),
                           )
-                        : Container(
-                            child:
-                                Center(child: Text('No services to display')),
-                            width: double.infinity,
-                            height: 100,
-                          ),
+                        : Container(),
                   );
                 }
-                if (state is SearchedServicesError) {}
+                if (state is SearchedServicesError) {
+                  return SliverToBoxAdapter(
+                    child: Container(),
+                  );
+                }
                 return SliverToBoxAdapter(child: ScrollableServiceLoading());
               },
             ),
@@ -346,6 +346,14 @@ class _ExploreScreenState extends State<ExploreScreen>
                       },
                       childCount: stores.length,
                     ));
+                  }
+                  if (state is StoreListError) {
+                    return SliverFillRemaining(
+                      child: ErrorScreen(
+                        isHome: true,
+                        onPressed: _onRefresh,
+                      ),
+                    );
                   }
                   return SliverList(
                     delegate: SliverChildListDelegate(
