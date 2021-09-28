@@ -71,7 +71,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
           builder: (context, state) {
             if (state is BookingSummaryLoading) {
               return Center(
-                child: CircularProgressIndicator(),
+                child: loadingAnimation(),
               );
             }
             if (state is BookingSummaryLoaded) {
@@ -168,7 +168,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
               );
             }
             return Center(
-              child: CircularProgressIndicator(),
+              child: loadingAnimation(),
             );
           },
         ),
@@ -306,7 +306,7 @@ class _RateServiceWidgetState extends State<RateServiceWidget> {
                 maxLines: 100,
                 decoration: InputDecoration(
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                        EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
                         borderSide: BorderSide(color: kPrimaryColor)),
@@ -342,6 +342,7 @@ class _RateServiceWidgetState extends State<RateServiceWidget> {
                         width: 30,
                         child: CircularProgressIndicator(
                           backgroundColor: Colors.white,
+                          strokeWidth: 2,
                         ),
                       )
                     : Text('Post', style: TextStyle(color: Colors.white)),

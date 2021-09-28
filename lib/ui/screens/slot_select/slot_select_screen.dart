@@ -31,7 +31,7 @@ class SlotSelectScreen extends StatefulWidget {
 
 class _SlotSelectScreenState extends State<SlotSelectScreen> {
   int currentSelectedSlotIndex = -1;
-  int currentSelectedDateIndex = -1;
+  int currentSelectedDateIndex = 0;
   late DateTime sevenDaysFromNow;
   List<DateTime> calendarDays = [];
 
@@ -50,6 +50,10 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
         repository: RepositoryProvider.of<Repository>(context));
 
     _orderReviewBloc = BlocProvider.of<OrderReviewBloc>(context, listen: false);
+    _bloc.add(GetSlots(
+        date:
+            DateFormat('y-M-d').format(calendarDays[currentSelectedDateIndex]),
+        cartId: widget.cartId));
   }
 
   @override
@@ -98,7 +102,7 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
               }
               if (state is LoadingSlots) {
                 return Center(
-                  child: CircularProgressIndicator(),
+                  child: loadingAnimation(),
                 );
               }
               if (state is SlotsLoaded) {
@@ -131,7 +135,7 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
                 return Center(child: Text('Failed to load. ${state.message}'));
               }
               return Center(
-                child: CircularProgressIndicator(),
+                child: loadingAnimation(),
               );
             },
           )),

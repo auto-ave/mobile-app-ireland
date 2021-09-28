@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
-import 'package:themotorwash/data/models/vehicle_type.dart';
+import 'package:themotorwash/data/models/vehicle_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 
 part 'store_services_event.dart';

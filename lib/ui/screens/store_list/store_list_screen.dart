@@ -49,81 +49,78 @@ class _StoreListScreenState extends State<StoreListScreen> {
     final mediaQuery = MediaQuery.of(context);
     final height = mediaQuery.size.height;
     final width = mediaQuery.size.width;
-    return SafeArea(
-      child: Scaffold(
-        appBar: getAppBarWithBackButton(
-            context: context,
-            title: Text(
-              widget.title,
-              style: kStyle14SemiBold.copyWith(color: Colors.black),
-            )),
-        backgroundColor: Colors.white,
-        body: LazyLoadScrollView(
-          onEndOfPage: _loadMoreStores,
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                sliver: SliverToBoxAdapter(
-                  child: Text(
-                    "Stores near you",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  ),
+    return Scaffold(
+      appBar: getAppBarWithBackButton(
+          context: context,
+          title: Text(
+            widget.title,
+            style: kStyle14SemiBold.copyWith(color: Colors.black),
+          )),
+      backgroundColor: Colors.white,
+      body: LazyLoadScrollView(
+        onEndOfPage: _loadMoreStores,
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              sliver: SliverToBoxAdapter(
+                child: Text(
+                  "Stores near you",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
               ),
-              BlocBuilder<StoreListBloc, StoreListState>(
-                bloc: _storeListBloc,
-                builder: (context, state) {
-                  if (state is StoreListLoading) {
-                    return SliverFillRemaining(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-                  if (state is StoreListLoaded ||
-                      state is MoreStoreListLoading) {
-                    if (state is StoreListLoaded) {
-                      stores = state.stores;
-                    }
-                    return SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                      (BuildContext _, int index) {
-                        final store = stores[index];
-                        var tile = StoreSearchTile(
-                          isNew: store.rating == null,
-                          distance: store.distance!,
-                          imageURL: store.thumbnail!,
-                          rating: store.rating ?? 'unrated',
-                          storeName: store.name,
-                          startingFrom: store.servicesStart!,
-                          storeSlug: store.storeSlug!,
-                        );
-                        if (state is MoreStoreListLoading &&
-                            index == stores.length - 1) {
-                          return LoadingMoreTile(tile: tile);
-                        }
-                        return tile;
-                      },
-                      childCount: stores.length,
-                    ));
-                  }
-                  if (state is StoreListError) {
-                    return SliverFillRemaining(
-                      child: Center(
-                        child: Text("Failed to load"),
-                      ),
-                    );
-                  }
+            ),
+            BlocBuilder<StoreListBloc, StoreListState>(
+              bloc: _storeListBloc,
+              builder: (context, state) {
+                if (state is StoreListLoading) {
                   return SliverFillRemaining(
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: loadingAnimation(),
                     ),
                   );
-                },
-              )
-            ],
-          ),
+                }
+                if (state is StoreListLoaded || state is MoreStoreListLoading) {
+                  if (state is StoreListLoaded) {
+                    stores = state.stores;
+                  }
+                  return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    (BuildContext _, int index) {
+                      final store = stores[index];
+                      var tile = StoreSearchTile(
+                        isNew: store.rating == null,
+                        distance: store.distance!,
+                        imageURL: store.thumbnail!,
+                        rating: store.rating ?? 'unrated',
+                        storeName: store.name,
+                        startingFrom: store.servicesStart!,
+                        storeSlug: store.storeSlug!,
+                      );
+                      if (state is MoreStoreListLoading &&
+                          index == stores.length - 1) {
+                        return LoadingMoreTile(tile: tile);
+                      }
+                      return tile;
+                    },
+                    childCount: stores.length,
+                  ));
+                }
+                if (state is StoreListError) {
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: Text("Failed to load"),
+                    ),
+                  );
+                }
+                return SliverFillRemaining(
+                  child: Center(
+                    child: loadingAnimation(),
+                  ),
+                );
+              },
+            )
+          ],
         ),
       ),
     );

@@ -7,6 +7,7 @@ import 'package:themotorwash/data/models/user_profile.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
+import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/utils.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -42,14 +43,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   state is LoadingProfile || state is FailedToLoadProfile
                       ? null
                       : [
-                          TextButton(
+                          CommonTextButton(
                             child: state is UpdatingProfile
                                 ? SizedBox(
-                                    height: 24,
-                                    width: 24,
                                     child: CircularProgressIndicator(
+                                      strokeWidth: 2,
                                       backgroundColor: Colors.white,
                                     ),
+                                    width: 25,
+                                    height: 25,
                                   )
                                 : Text('Save',
                                     style: TextStyle(color: Colors.white)),
@@ -65,9 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 }
                               }
                             },
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(kPrimaryColor)),
+                            backgroundColor: kPrimaryColor,
                           )
                         ],
               appBar: AppBar(
@@ -81,6 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: const EdgeInsets.only(top: 0.0, right: 16.0),
                           child: Center(
                             child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
                               onTap: () => Navigator.pushNamedAndRemoveUntil(
                                   context,
                                   ExploreScreen.route,
@@ -119,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 builder: (context, state) {
                   if (state is LoadingProfile) {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: loadingAnimation(),
                     );
                   }
                   if (state is FailedToLoadProfile) {
@@ -131,76 +132,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       state is ProfileUpdated ||
                       state is UpdatingProfile ||
                       state is FailedToUpdateProfile) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Column(
-                        children: [
-                          Stack(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(50.0)),
-                                    border: Border.all(
-                                        color: kPrimaryColor, width: 2)),
-                                child: Image.asset('assets/images/avatar.png'),
-                              ),
-                              // Positioned(
-                              //   child: Container(
-                              //     height: 24,
-                              //     width: 24,
-                              //     child: Center(
-                              //       child: Icon(
-                              //         Icons.edit,
-                              //         color: Colors.white,
-                              //         size: 12,
-                              //       ),
-                              //     ),
-                              //     decoration: BoxDecoration(
-                              //         borderRadius: BorderRadius.circular(4),
-                              //         color: kPrimaryColor),
-                              //   ),
-                              //   bottom: 0,
-                              //   right: 0,
-                              // )
-                            ],
-                          ),
-                          kverticalMargin16,
-                          kverticalMargin8,
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
+                    return SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          children: [
+                            Stack(
                               children: [
-                                ProfileTextField(
-                                    fieldName: 'First Name',
-                                    fieldController: firstNameController),
-                                kverticalMargin16,
-                                ProfileTextField(
-                                    fieldName: 'Last Name',
-                                    fieldController: lastNameController),
-                                kverticalMargin16,
-                                ProfileTextField(
-                                    validator: (string) {
-                                      if (string != null) {
-                                        if (EmailValidator.validate(string)) {
-                                          return null;
-                                        }
-                                        return 'Enter a valid email';
-                                      }
-                                      return 'Enter a valid email';
-                                    },
-                                    fieldName: 'Email',
-                                    fieldController: emailController),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(50.0)),
+                                      border: Border.all(
+                                          color: kPrimaryColor, width: 2)),
+                                  child:
+                                      Image.asset('assets/images/avatar.png'),
+                                ),
+                                // Positioned(
+                                //   child: Container(
+                                //     height: 24,
+                                //     width: 24,
+                                //     child: Center(
+                                //       child: Icon(
+                                //         Icons.edit,
+                                //         color: Colors.white,
+                                //         size: 12,
+                                //       ),
+                                //     ),
+                                //     decoration: BoxDecoration(
+                                //         borderRadius: BorderRadius.circular(4),
+                                //         color: kPrimaryColor),
+                                //   ),
+                                //   bottom: 0,
+                                //   right: 0,
+                                // )
                               ],
                             ),
-                          )
-                        ],
+                            kverticalMargin16,
+                            kverticalMargin8,
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CommonTextField(
+                                      fieldName: 'First Name',
+                                      fieldController: firstNameController),
+                                  kverticalMargin16,
+                                  CommonTextField(
+                                      fieldName: 'Last Name',
+                                      fieldController: lastNameController),
+                                  kverticalMargin16,
+                                  CommonTextField(
+                                      validator: validateEmail,
+                                      fieldName: 'Email',
+                                      fieldController: emailController),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     );
                   }
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: loadingAnimation(),
                   );
                 },
               ));
@@ -208,38 +204,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-class ProfileTextField extends StatelessWidget {
-  final String fieldName;
+class CommonTextField extends StatelessWidget {
+  final String? fieldName;
+  final String? hintText;
   final TextEditingController fieldController;
   final String? Function(String?)? validator;
-  const ProfileTextField({
-    Key? key,
-    required this.fieldName,
-    required this.fieldController,
-    this.validator,
-  }) : super(key: key);
+  final int? maxLines;
+  const CommonTextField(
+      {Key? key,
+      this.fieldName,
+      this.hintText,
+      required this.fieldController,
+      this.validator,
+      this.maxLines})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xffF2F8FF),
-      child: TextFormField(
-        validator: validator,
-        controller: fieldController,
-        style: kStyle14W500,
-        decoration: InputDecoration(
-          labelText: fieldName,
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4),
-              borderSide: BorderSide(color: kPrimaryColor)),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4),
-              borderSide: BorderSide(color: kPrimaryColor)),
-          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-          border: OutlineInputBorder(
+    return TextFormField(
+      validator: validator,
+      controller: fieldController,
+      style: kStyle14W500,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Color(0xffF2F8FF),
+        labelText: fieldName,
+        hintText: hintText,
+        focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: kPrimaryColor),
-          ),
+            borderSide: BorderSide(color: kPrimaryColor)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4),
+            borderSide: BorderSide(color: kPrimaryColor)),
+        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4),
+          borderSide: BorderSide(color: kPrimaryColor),
         ),
       ),
     );

@@ -9,6 +9,8 @@ import 'package:themotorwash/data/models/auth_tokens.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
 import 'package:themotorwash/data/models/cart.dart';
+import 'package:themotorwash/data/models/city.dart';
+import 'package:themotorwash/data/models/fcm_topic.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
@@ -19,7 +21,9 @@ import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/user_profile.dart';
-import 'package:themotorwash/data/models/vehicle_type.dart';
+import 'package:themotorwash/data/models/vehicle_brand.dart';
+import 'package:themotorwash/data/models/vehicle_model.dart';
+import 'package:themotorwash/data/models/vehicle_wheel.dart';
 
 class ApiService implements ApiMethods {
   static final getItInstanceName = 'ApiService';
@@ -150,12 +154,16 @@ class ApiService implements ApiMethods {
 
   @override
   Future<AuthTokensEntity> checkOTP(
-      {required String otp, required String phoneNumber}) async {
+      {required String otp,
+      required String phoneNumber,
+      required String token}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postCheckOTPEndpoint();
 
-    Response res =
-        await client.post(url, data: {'otp': otp, 'phone': phoneNumber});
+    Response res = await client
+        .post(url, data: {'otp': otp, 'phone': phoneNumber, 'token': token});
+
+    print("CHECK OTP " + token);
 
     if (res.statusCode == 400) {
       return AuthTokensEntity(refreshToken: '', accessToken: '');
@@ -238,13 +246,13 @@ class ApiService implements ApiMethods {
   }
 
   @override
-  Future<List<VehicleTypeEntity>> getVehicleTypeList() async {
+  Future<List<VehicleModelEntity>> getVehicleTypeList() async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.getVehicleTypeListEndpoint();
     Response res = await client.get(url);
     dynamic data = jsonDecode(res.data);
-    List<VehicleTypeEntity> entities = data['results']
-        .map<VehicleTypeEntity>((e) => VehicleTypeEntity.fromJson(e))
+    List<VehicleModelEntity> entities = data['results']
+        .map<VehicleModelEntity>((e) => VehicleModelEntity.fromJson(e))
         .toList();
 
     return entities;
@@ -339,5 +347,105 @@ class ApiService implements ApiMethods {
 
     UserProfileEntity entity = UserProfileEntity.fromJson(data);
     return entity;
+  }
+
+  @override
+  Future<void> addFcmToken({required String token}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.addFcmTokenEndpoint();
+    Response res = await client.post(url, data: {'token': token});
+  }
+
+  @override
+  Future<void> subscribeFcmTopics({required List<String> topics}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.subscribeFcmTopicsEndpoint();
+    Response res = await client.post(url, data: {'topics': topics});
+  }
+
+  @override
+  Future<List<FcmTopicEntity>> getFcmTopics() async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getFcmTopicsEndpoint();
+    Response res = await client.get(url);
+    List<dynamic> data = jsonDecode(res.data);
+
+    List<FcmTopicEntity> topics =
+        data.map<FcmTopicEntity>((e) => FcmTopicEntity.fromJson(e)).toList();
+    return topics;
+  }
+
+  @override
+  Future<void> logout({required String token}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getLogoutEndpoint();
+    Response res = await client.post(url, data: {'token': token});
+  }
+
+  @override
+  Future<List<CityEntity>> getListOfCities() async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getCityListEndpoint();
+    Response res = await client.get(url);
+    dynamic data = jsonDecode(res.data);
+    List<dynamic> cityData = data['cities'];
+
+    List<CityEntity> entities =
+        cityData.map<CityEntity>((e) => CityEntity.fromJson(e)).toList();
+
+    return entities;
+  }
+
+  @override
+  Future<void> sendFeedback(
+      {required String email,
+      required String phoneNumber,
+      required String message}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getFeedbackEndpoint();
+    Response res = await client.post(url,
+        data: {'phone': phoneNumber, 'email': email, 'message': message});
+  }
+
+  @override
+  Future<List<VehicleWheelEntity>> getVehicleWheelList() async {
+    String url = _apiConstants.getVehicleWheelListEndpoint();
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.get(url);
+
+    Map<dynamic, dynamic> data = jsonDecode(res.data);
+    List<VehicleWheelEntity> vehicleWheels = data['results']
+        .map<VehicleWheelEntity>((e) => VehicleWheelEntity.fromJson(e))
+        .toList();
+    return vehicleWheels;
+  }
+
+  @override
+  Future<List<VehicleBrandEntity>> getVehicleBrandlList(
+      {required String wheelCode}) async {
+    String url =
+        _apiConstants.getVehicleBrandListEndpoint(wheelCode: wheelCode);
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.get(url);
+
+    Map<dynamic, dynamic> data = jsonDecode(res.data);
+    List<VehicleBrandEntity> vehicleBrands = data['results']
+        .map<VehicleBrandEntity>((e) => VehicleBrandEntity.fromJson(e))
+        .toList();
+    return vehicleBrands;
+  }
+
+  @override
+  Future<List<VehicleModelEntity>> getVehicleModelList(
+      {required String brand}) async {
+    String url = _apiConstants.getVehicleModelListEndpoint(brand: brand);
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.get(url);
+
+    Map<dynamic, dynamic> data = jsonDecode(res.data);
+    List<VehicleModelEntity> vehicleModels = data['results']
+        .map<VehicleModelEntity>((e) => VehicleModelEntity.fromJson(e))
+        .toList();
+    return vehicleModels;
   }
 }

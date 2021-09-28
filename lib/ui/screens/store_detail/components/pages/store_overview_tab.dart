@@ -1,126 +1,166 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:map_launcher/map_launcher.dart';
+
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/google_map.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/store_heading.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/store_info.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/store_map.dart';
-import 'package:themotorwash/ui/screens/store_detail/components/store_popular_service_tile.dart';
-import 'package:themotorwash/ui/widgets/store_search_tile.dart';
 
-class StoreOverviewTab extends StatelessWidget {
+class StoreOverviewTab extends StatefulWidget {
   final BuildContext nestedScrollContext;
   final String storeSlug;
   final Store store;
-  StoreOverviewTab(
-      {required this.nestedScrollContext,
-      required this.storeSlug,
-      required this.store});
+  final Function onPressedBook;
+  final Function onPressedRating;
+  const StoreOverviewTab({
+    Key? key,
+    required this.nestedScrollContext,
+    required this.storeSlug,
+    required this.store,
+    required this.onPressedBook,
+    required this.onPressedRating,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverOverlapInjector(
-          // This is the flip side of the SliverOverlapAbsorber
-          // above.
-          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-              nestedScrollContext),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          sliver: SliverToBoxAdapter(
-              child: StoreHeading(
-            name: store.name!,
-            numberOfRatings: store.ratingCount!,
-            rating: store.rating,
-          )),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          sliver: SliverToBoxAdapter(
-              child: StoreInfo(
-            address: store.address!,
-            // closingTime: store.storeClosingTime!,
-            // openingTime: store.storeOpeningTime!,
-            serviceStartsAt: store.servicesStart.toString(), //TODO : todo
-          )),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-          sliver: SliverToBoxAdapter(
-              child: Text(
-            'About',
-            style: kStyle20W500,
-          )),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-          sliver: SliverToBoxAdapter(
-              child: Text(
-            store.description!,
-            style: kStyle12,
-          )),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          sliver: SliverToBoxAdapter(
-              child: StoreMap(
-            latitute: store.latitude!,
-            longitute: store.longitude!,
-          )),
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          sliver: SliverToBoxAdapter(
-            child: GestureDetector(
-              onTap: () async {
-                final availableMaps = await MapLauncher.installedMaps;
-                print(
-                    availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
+  _StoreOverviewTabState createState() => _StoreOverviewTabState();
+}
 
-                await availableMaps.first.showDirections(
-                    destination: Coords(store.latitude!, store.longitude!));
-              },
-              child: Row(
-                children: [
-                  SvgPicture.asset('assets/icons/map.svg'),
-                  kHorizontalMargin8,
-                  Text(
-                    'Open in maps',
-                    style: kStyle16.copyWith(color: Colors.black),
-                  )
+class _StoreOverviewTabState extends State<StoreOverviewTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: GestureDetector(
+        onTap: () => widget.onPressedBook(),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    offset: Offset(0, 4),
+                    color: Color.fromRGBO(17, 17, 17, .32),
+                    blurRadius: 32)
+              ],
+              gradient: LinearGradient(
+                begin: Alignment(0.0, 0.0),
+                end: Alignment(0.997, 0.082),
+                // transform: GradientRotation(1.5708),
+                colors: [
+                  Theme.of(context).primaryColor,
+                  Color(0xff298ED7),
                 ],
+              ),
+              color: kPrimaryColor,
+              borderRadius: BorderRadius.circular(56)),
+          child: Text(
+            'Book Service',
+            style: kStyle16Bold.copyWith(color: Colors.white),
+          ),
+        ),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverOverlapInjector(
+            // This is the flip side of the SliverOverlapAbsorber
+            // above.
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                widget.nestedScrollContext),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            sliver: SliverToBoxAdapter(
+                child: StoreHeading(
+              onPressedRating: widget.onPressedRating,
+              name: widget.store.name!,
+              numberOfRatings: widget.store.ratingCount!,
+              rating: widget.store.rating,
+            )),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            sliver: SliverToBoxAdapter(
+                child: StoreInfo(
+              address: widget.store.address!,
+              // closingTime: store.storeClosingTime!,
+              // openingTime: store.storeOpeningTime!,
+              serviceStartsAt:
+                  widget.store.servicesStart.toString(), //TODO : todo
+            )),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+            sliver: SliverToBoxAdapter(
+                child: Text(
+              'About',
+              style: kStyle20W500,
+            )),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+            sliver: SliverToBoxAdapter(
+                child: Text(
+              widget.store.description!,
+              style: kStyle12,
+            )),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            sliver: SliverToBoxAdapter(
+                child: MapSample(
+              latitute: widget.store.latitude!,
+              longitute: widget.store.longitude!,
+            )
+                //      StoreMap(
+                // latitute: widget.store.latitude!,
+                // longitute: widget.store.longitude!,
+                // )
+                ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+            sliver: SliverToBoxAdapter(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                    style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(1),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white)),
+                    onPressed: () async {
+                      final availableMaps = await MapLauncher.installedMaps;
+                      print(
+                          availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
+
+                      await availableMaps.first.showDirections(
+                          destination: Coords(
+                              widget.store.latitude!, widget.store.longitude!));
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/icons/map.svg',
+                      width: 24,
+                    ),
+                    label: Text(
+                      'Open in maps',
+                      style: kStyle16.copyWith(color: Colors.black),
+                    )),
               ),
             ),
           ),
-        )
-      ],
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 100,
+            ),
+          )
+        ],
+      ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
-// SliverPadding(
-//           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-//           sliver: SliverToBoxAdapter(
-//             child: Text(
-//               "You may also like",
-//               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-//             ),
-//           ),
-//         ),
-//         SliverList(
-//             delegate: SliverChildBuilderDelegate(
-//           (BuildContext context, int index) {
-//             return StoreSearchTile(
-//               distance: "4",
-//               imageURL: 'assets/images/storeListImage.jpg',
-//               rating: '4.2',
-//               storeName: 'SuperDry Wash',
-//               startingFrom: "499",
-//               storeSlug: 'lol dont click this',
-//               //TODO : see it urself
-//             );
-//           },
-//           childCount: 20,
-//         ))

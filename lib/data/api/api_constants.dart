@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
+import 'package:themotorwash/data/api/auth_interceptor.dart';
 import 'package:themotorwash/data/api/log_interceptor.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
 
@@ -22,6 +23,7 @@ class ApiConstants {
         headers: headers);
     Dio client = Dio(options);
     client.interceptors.add(Logging());
+    client.interceptors.add(AuthInterceptor(globalAuthBloc: _globalAuthBloc));
 
     return client;
   }
@@ -179,6 +181,53 @@ class ApiConstants {
 
   String getPutPatchAccountEndPoint() {
     var uri = Uri.https(baseUrl, "/account");
+    return uri.toString();
+  }
+
+  String addFcmTokenEndpoint() {
+    var uri = Uri.https(baseUrl, "/account/add_fcm/");
+    return uri.toString();
+  }
+
+  String subscribeFcmTopicsEndpoint() {
+    var uri = Uri.https(baseUrl, "/account/topics/register");
+    return uri.toString();
+  }
+
+  String getFcmTopicsEndpoint() {
+    var uri = Uri.https(baseUrl, "/account/topics/list");
+    return uri.toString();
+  }
+
+  String getLogoutEndpoint() {
+    var uri = Uri.https(baseUrl, "/consumer/logout/app/");
+    return uri.toString();
+  }
+
+  String getCityListEndpoint() {
+    var uri = Uri.https(baseUrl, "/city/list");
+    return uri.toString();
+  }
+
+  String getFeedbackEndpoint() {
+    var uri = Uri.https(baseUrl, "/feedback/");
+    return uri.toString();
+  }
+
+  String getVehicleWheelListEndpoint() {
+    var uri = Uri.https(baseUrl, "/vehicle/wheel/list/");
+    return uri.toString();
+  }
+
+  String getVehicleBrandListEndpoint({required String wheelCode}) {
+    Map<String, dynamic> params = {'wheel': wheelCode.toString()};
+    var uri = Uri.https(baseUrl, "/vehicle/brand/list/", params);
+    return uri.toString();
+  }
+
+  String getVehicleModelListEndpoint({required String brand}) {
+    Map<String, dynamic> params = {'brand': brand.toString()};
+    var uri = Uri.https(baseUrl, "/vehicle/model/list/", params);
     return uri.toString();
   }
 }

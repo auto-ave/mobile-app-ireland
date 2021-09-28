@@ -22,15 +22,18 @@ class StoreDetailScreen extends StatefulWidget {
   _StoreDetailScreenState createState() => _StoreDetailScreenState();
 }
 
-class _StoreDetailScreenState extends State<StoreDetailScreen> {
+class _StoreDetailScreenState extends State<StoreDetailScreen>
+    with TickerProviderStateMixin {
   int _selectedTab = 0;
   late StoreDetailBloc _storeDetailBloc;
   late CartFunctionBloc _cartFunctionBloc;
   final _scaffoldState = GlobalKey<ScaffoldState>();
-
+  late final TabController _tabController;
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+
     _storeDetailBloc = BlocProvider.of<StoreDetailBloc>(context);
     _cartFunctionBloc = BlocProvider.of<CartFunctionBloc>(context);
     _cartFunctionBloc.add(GetCart());
@@ -123,7 +126,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
         builder: (context, state) {
           if (state is StoreDetailLoading) {
             Center(
-              child: CircularProgressIndicator(),
+              child: loadingAnimation(),
             );
           }
           if (state is StoreDetailLoaded) {
@@ -148,7 +151,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                               imageUrl: i,
                               width: width,
                               height: width * 3 / 5,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             );
                           },
                         );
@@ -162,37 +165,25 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                         pinned: true,
                         delegate: _SliverTabBarDelegate(
                           TabBar(
+                            controller: _tabController,
                             onTap: (index) {
                               setState(() {
                                 _selectedTab = index;
                               });
                             },
-                            labelColor: Colors.black87,
-                            unselectedLabelColor: Colors.grey,
+                            labelStyle: selectedTabTextStyle,
+                            unselectedLabelColor: Colors.black,
+                            labelColor: kPrimaryColor,
+                            unselectedLabelStyle: unSelectedTabTextStyle,
                             tabs: [
                               new Tab(
-                                child: Text(
-                                  'Overview',
-                                  style: _selectedTab == 0
-                                      ? selectedTabTextStyle
-                                      : unSelectedTabTextStyle,
-                                ),
+                                text: 'Overview',
                               ),
                               new Tab(
-                                child: Text(
-                                  'Services',
-                                  style: _selectedTab == 1
-                                      ? selectedTabTextStyle
-                                      : unSelectedTabTextStyle,
-                                ),
+                                text: 'Services',
                               ),
                               new Tab(
-                                child: Text(
-                                  'Reviews',
-                                  style: _selectedTab == 2
-                                      ? selectedTabTextStyle
-                                      : unSelectedTabTextStyle,
-                                ),
+                                text: 'Reviews',
                               ),
                             ],
                           ),
@@ -200,25 +191,42 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                   ),
                 ];
               }, body: Builder(builder: (context) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: getSelectedTabPage(context, _selectedTab, state.store),
+                return TabBarView(
+                  // physics: NeverScrollableScrollPhysics(),
+                  controller: _tabController,
+                  children: getSelectedTabPage(context, store),
                 );
+                // return Padding(
+                //   padding: const EdgeInsets.only(top: 16),
+                //   child: getSelectedTabPage(context, _selectedTab, state.store),
+                // );
               })),
             );
           }
           return Center(
-            child: CircularProgressIndicator(),
+            child: loadingAnimation(),
           );
         },
       ),
     );
   }
 
-  Widget getSelectedTabPage(
-      BuildContext nestedScrollContext, int index, Store store) {
+  List<Widget> getSelectedTabPage(
+      BuildContext nestedScrollContext, Store store) {
     List<Widget> tabPages = [
       StoreOverviewTab(
+        onPressedBook: () {
+          setState(() {
+            _selectedTab = 1;
+            _tabController.animateTo(1);
+          });
+        },
+        onPressedRating: () {
+          setState(() {
+            _selectedTab = 2;
+            _tabController.animateTo(2);
+          });
+        },
         nestedScrollContext: nestedScrollContext,
         storeSlug: widget.storeSlug,
         store: store,
@@ -233,7 +241,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
         storeSlug: widget.storeSlug,
       ),
     ];
-    return tabPages[index];
+    return tabPages;
   }
 }
 

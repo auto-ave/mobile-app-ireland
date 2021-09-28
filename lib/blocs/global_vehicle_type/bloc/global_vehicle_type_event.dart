@@ -10,7 +10,7 @@ class CheckSavedVehicleType extends GlobalVehicleTypeEvent {
 }
 
 class YieldSelectedVehicleType extends GlobalVehicleTypeEvent {
-  final VehicleTypeModel vehicleType;
+  final VehicleModel vehicleType;
   YieldSelectedVehicleType({
     required this.vehicleType,
   });

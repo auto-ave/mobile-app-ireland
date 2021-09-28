@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
-import 'package:themotorwash/data/models/vehicle_type.dart';
+import 'package:themotorwash/data/models/vehicle_model.dart';
 
 part 'global_vehicle_type_event.dart';
 part 'global_vehicle_type_state.dart';
@@ -31,7 +31,7 @@ class GlobalVehicleTypeBloc
     try {
       yield CheckingSavedVehicleType();
 
-      VehicleTypeModel? vehicleTypeSelected =
+      VehicleModel? vehicleTypeSelected =
           await _localDataService.getSavedVehicleType();
       if (vehicleTypeSelected == null) {
         yield VehicleTypeNotSelected();
@@ -44,7 +44,7 @@ class GlobalVehicleTypeBloc
   }
 
   Stream<GlobalVehicleTypeState> _mapYieldSelectedVehicleTypeToState(
-      {required VehicleTypeModel vehicleTypeModel}) async* {
+      {required VehicleModel vehicleTypeModel}) async* {
     yield GlobalVehicleTypeSelected(vehicleTypeModel: vehicleTypeModel);
   }
 }

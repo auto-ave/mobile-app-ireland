@@ -30,5 +30,4 @@
 
 //   Stream<LocationFunctionsState> _mapGetListOfCitiesToState() async* {}
 
-  
 // }

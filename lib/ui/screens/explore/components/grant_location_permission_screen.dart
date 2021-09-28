@@ -52,11 +52,10 @@ class GrantLocationPermissionScreen extends StatelessWidget {
                   : 'Turn on location service'),
           kverticalMargin8,
           GestureDetector(
-            onTap: () => globalLocationBloc.add(SetUserLocation(
-                location: LocationModel(
-                    city: '462001',
-                    lat: 23.2599,
-                    long: 77.4126))), //TODO : Get lat long for banglore
+            behavior: HitTestBehavior.opaque,
+
+            onTap: () => globalLocationBloc
+                .add(SkipUserLocation()), //TODO : Get lat long for banglore
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

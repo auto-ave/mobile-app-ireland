@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/global_vehicle_type/bloc/global_vehicle_type_bloc.dart';
@@ -33,7 +34,8 @@ class StoreServicesTab extends StatefulWidget {
   _StoreServicesTabState createState() => _StoreServicesTabState();
 }
 
-class _StoreServicesTabState extends State<StoreServicesTab> {
+class _StoreServicesTabState extends State<StoreServicesTab>
+    with AutomaticKeepAliveClientMixin {
   final PageController pageController = PageController();
   late StoreServicesBloc _servicesBloc;
   late CartFunctionBloc _cartFunctionBloc;
@@ -69,10 +71,9 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
           _showVehicleBottomSheet(context);
         }
         if (vehicleState is GlobalVehicleTypeSelected) {
-          showSnackbar(context, 'Vehicle Type Selected');
           _servicesBloc.add(LoadStoreServices(
               slug: widget.storeSlug,
-              vehicleType: vehicleState.vehicleTypeModel.model,
+              vehicleType: vehicleState.vehicleTypeModel.vehicleType,
               offset: 0,
               forLoadMore: false));
         }
@@ -96,7 +97,7 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
               if (_servicesBloc.state is StoreServicesLoaded) {
                 _servicesBloc.add(LoadStoreServices(
                     slug: widget.storeSlug,
-                    vehicleType: vehicleState.vehicleTypeModel.model,
+                    vehicleType: vehicleState.vehicleTypeModel.vehicleType,
                     offset: services.length,
                     forLoadMore: true));
               }
@@ -111,72 +112,9 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
         SliverPadding(
           padding: EdgeInsets.all(16),
           sliver: SliverToBoxAdapter(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: kPrimaryColor,
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.25),
-                        blurRadius: 8,
-                        offset: Offset(0, 0))
-                  ],
-                  borderRadius: BorderRadius.circular(5)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'SELECTED VEHICLE',
-                        style: kStyle12.copyWith(
-                            color: Color(0xff696969), letterSpacing: 1.8),
-                      ),
-                      kverticalMargin8,
-                      Row(
-                        children: [
-                          RichText(
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: vehicleState.vehicleTypeModel.wheel,
-                                style: kStyle16.copyWith(color: Colors.black),
-                              ),
-                              TextSpan(
-                                text: ' ${vehicleState.vehicleTypeModel.model}',
-                                style: kStyle16PrimaryColor,
-                              ),
-                            ]),
-                          ),
-                          kHorizontalMargin8,
-                          CachedNetworkImage(
-                              placeholder: (_, __) {
-                                return ShimmerPlaceholder();
-                              },
-                              width: 65,
-                              imageUrl: vehicleState.vehicleTypeModel.image!),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                  CommonTextButton(
-                      onPressed: () => _showVehicleBottomSheet(context),
-                      child: Text(
-                        'Change',
-                        style: kStyle12.copyWith(color: Colors.white),
-                      ),
-                      backgroundColor: kPrimaryColor)
-                ],
-              ),
-            ),
-          ),
+              child: VehicleSelectedInfo(
+                  vehicleState: vehicleState,
+                  onChangePressed: () => _showVehicleBottomSheet(context))),
         ),
         BlocBuilder<CartFunctionBloc, CartFunctionState>(
           bloc: _cartFunctionBloc,
@@ -196,7 +134,7 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
                 if (state is StoreServicesLoading) {
                   return SliverFillRemaining(
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: loadingAnimation(),
                     ),
                   );
                 }
@@ -249,7 +187,7 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
                 }
                 return SliverFillRemaining(
                   child: Center(
-                    child: CircularProgressIndicator(),
+                    child: loadingAnimation(),
                   ),
                 );
               },
@@ -291,12 +229,96 @@ class _StoreServicesTabState extends State<StoreServicesTab> {
     showModalBottomSheet(
         context: ctx,
         isScrollControlled: true,
-        isDismissible: false,
         backgroundColor: Colors.transparent,
         builder: (_) {
           return VehicleTypeSelectionBottomSheet(
             pageController: pageController,
           );
         });
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+}
+
+class VehicleSelectedInfo extends StatelessWidget {
+  final GlobalVehicleTypeSelected vehicleState;
+  final Function onChangePressed;
+  const VehicleSelectedInfo({
+    Key? key,
+    required this.vehicleState,
+    required this.onChangePressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: kPrimaryColor,
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+                blurRadius: 8,
+                offset: Offset(0, 0))
+          ],
+          borderRadius: BorderRadius.circular(5)),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'SELECTED VEHICLE',
+                style: kStyle12.copyWith(
+                    color: Color(0xff696969), letterSpacing: 1.8),
+              ),
+              kverticalMargin8,
+              Row(
+                children: [
+                  Text.rich(
+                    TextSpan(children: [
+                      TextSpan(
+                        text: vehicleState.vehicleTypeModel.brand,
+                        style: kStyle16.copyWith(color: Colors.black),
+                      ),
+                      TextSpan(
+                        text: ' ${vehicleState.vehicleTypeModel.model}',
+                        style: kStyle16PrimaryColor,
+                      ),
+                    ]),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  kHorizontalMargin8,
+                  CachedNetworkImage(
+                      placeholder: (_, __) {
+                        return ShimmerPlaceholder();
+                      },
+                      width: 65,
+                      imageUrl: vehicleState.vehicleTypeModel.image!),
+                ],
+              ),
+            ],
+          ),
+          Spacer(),
+          CommonTextButton(
+              onPressed: () => onChangePressed(),
+              child: FittedBox(
+                child: Text(
+                  'Change',
+                  style: kStyle12.copyWith(color: Colors.white),
+                ),
+              ),
+              backgroundColor: kPrimaryColor)
+        ],
+      ),
+    );
   }
 }

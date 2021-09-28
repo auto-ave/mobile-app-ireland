@@ -8,6 +8,7 @@ import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/components/search_service_tile.dart';
+import 'package:themotorwash/ui/widgets/loading_widgets/scrollable_service_loading.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/service_search_loading_tile.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/store_search_loading_tile.dart';
 import 'package:themotorwash/ui/widgets/store_search_tile.dart';
@@ -53,12 +54,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
           bloc: widget.searchServicesBloc,
           builder: (context, state) {
             if (state is LoadingSearchServicesResult) {
-              return SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: List.filled(3, ServiceSearchLoadingTile()),
-                ),
-              );
+              return SliverToBoxAdapter(child: ScrollableServiceLoading());
             }
             if (state is SearchedServicesResult) {
               return SliverToBoxAdapter(
@@ -89,12 +85,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
               );
             }
             if (state is SearchedServicesError) {}
-            return SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.filled(3, ServiceSearchLoadingTile()),
-              ),
-            );
+            return SliverToBoxAdapter(child: ScrollableServiceLoading());
           },
         ),
         SliverPadding(

@@ -79,8 +79,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                                 style: kStyle16SemiBold.copyWith(
                                     fontWeight: FontWeight.normal)),
                             kverticalMargin16,
-                            RichText(
-                              text: TextSpan(
+                            Text.rich(
+                              TextSpan(
                                   text: 'Not your number? ',
                                   style: kStyle12.copyWith(color: Colors.black),
                                   children: [
@@ -100,8 +100,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                             kverticalMargin16,
                             OTPFieldWidget(onChange: onChanged),
                             kverticalMargin16,
-                            RichText(
-                              text: TextSpan(
+                            Text.rich(
+                              TextSpan(
                                   text: 'Didn’t recive a Code? ',
                                   style: kStyle12.copyWith(color: Colors.black),
                                   children: [

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
@@ -15,11 +16,17 @@ part 'phone_auth_state.dart';
 class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
   AuthRepository _repository;
   GlobalAuthBloc _globalAuthBloc;
+  FirebaseMessaging _fcmInstance;
+  LocalDataService _localDataService;
   PhoneAuthBloc(
       {required AuthRepository repository,
-      required GlobalAuthBloc globalAuthBloc})
+      required GlobalAuthBloc globalAuthBloc,
+      required FirebaseMessaging fcmInstance,
+      required LocalDataService localDataService})
       : _repository = repository,
         _globalAuthBloc = globalAuthBloc,
+        _fcmInstance = fcmInstance,
+        _localDataService = localDataService,
         super(PhoneAuthUninitialized());
 
   @override
@@ -33,6 +40,8 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
     } else if (event is CheckOTP) {
       yield* _mapCheckOTPtoState(
           otp: event.otp, phoneNumber: event.phoneNumber);
+    } else if (event is LogOut) {
+      yield* _mapLogOutToState();
     }
   }
 
@@ -50,15 +59,20 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
     }
   }
 
-  Stream<PhoneAuthState> _mapCheckOTPtoState(
-      {required String otp, required String phoneNumber}) async* {
+  Stream<PhoneAuthState> _mapCheckOTPtoState({
+    required String otp,
+    required String phoneNumber,
+  }) async* {
     try {
       yield CheckingOTP();
       print('checking otp');
-      AuthTokensModel tokens =
-          await _repository.checkOTP(phoneNumber: phoneNumber, otp: otp);
+      String? token = await _fcmInstance.getToken();
+      //TODO
 
-      await LocalDataService().storeAuthToken(tokens);
+      AuthTokensModel tokens = await _repository.checkOTP(
+          phoneNumber: phoneNumber, otp: otp, token: token ?? '');
+
+      await _localDataService.storeAuthToken(tokens);
 
       yield tokens.authenticated
           ? OTPCheckedPassed(tokens: tokens)
@@ -70,5 +84,21 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
     } catch (e) {
       yield OTPCheckFailed(message: e.toString());
     }
+  }
+
+  Stream<PhoneAuthState> _mapLogOutToState() async* {
+    try {
+      String? token = await _fcmInstance.getToken();
+      print('FCM TOKEN' + token.toString());
+      if (token != null) {
+        await _repository.logout(token: token);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    try {
+      await _localDataService.removeTokens();
+      _globalAuthBloc.add(CheckAuthStatus());
+    } catch (e) {}
   }
 }

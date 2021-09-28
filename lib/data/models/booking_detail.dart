@@ -1,4 +1,4 @@
-import 'package:add_2_calendar/add_2_calendar.dart';
+// import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:themotorwash/data/models/event.dart';
 
@@ -151,9 +151,9 @@ BookingStatus getBookingStatusFromCode(int code) {
       return BookingStatus.paymentFailed;
     case 30:
       return BookingStatus.notAttended;
-    case 0:
+    case 40:
       return BookingStatus.serviceStarted;
-    case 0:
+    case 50:
       return BookingStatus.serviceCompleted;
     default:
       return BookingStatus.notDefined;

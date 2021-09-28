@@ -14,9 +14,10 @@ class SearchServiceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.pushNamed(context, StoreListScreen.route,
-            arguments: StoreListArguments(city: '462001', title: serviceName));
+            arguments: StoreListArguments(city: 'bpl', title: serviceName));
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),

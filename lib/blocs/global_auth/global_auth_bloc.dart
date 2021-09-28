@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
@@ -18,8 +19,7 @@ class GlobalAuthBloc extends Bloc<GlobalAuthEvent, GlobalAuthState> {
   ) async* {
     if (event is AppStarted || event is CheckAuthStatus) {
       yield* _mapAppStartedtoState();
-    }
-    if (event is YieldAuthenticatedState) {
+    } else if (event is YieldAuthenticatedState) {
       yield* _mapYieldAuthenticatedStateToState(tokens: event.tokens);
     }
   }

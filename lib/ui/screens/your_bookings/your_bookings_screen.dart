@@ -60,7 +60,7 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
                   if (state is YourBookingsLoading) {
                     return SliverFillRemaining(
                       child: Center(
-                        child: CircularProgressIndicator(),
+                        child: loadingAnimation(),
                       ),
                     );
                   }
@@ -79,6 +79,7 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
                         : SliverList(
                             delegate: SliverChildBuilderDelegate((_, index) {
                               var booking = bookings[index];
+
                               var tile = YourBookingTile(
                                 status: booking.status,
                                 address: booking.store!.address!,
@@ -90,6 +91,7 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
                                 imageUrl: booking.store!.thumbnail!,
                                 bookedAt: booking.createdAt!,
                                 bookingId: booking.bookingId!,
+                                scheduledOn: booking.event!.startDateTime,
                               );
                               if (state is MoreYourBookingsLoading &&
                                   index == bookings.length - 1) {
@@ -111,7 +113,7 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
                   }
                   return SliverFillRemaining(
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: loadingAnimation(),
                     ),
                   );
                 },

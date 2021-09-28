@@ -12,7 +12,7 @@ import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store.dart';
-import 'package:themotorwash/data/models/vehicle_type.dart';
+import 'package:themotorwash/data/models/vehicle_model.dart';
 import 'package:themotorwash/data/repos/payment_repository.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/navigation/arguments.dart';
@@ -115,6 +115,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
             showDialog('Checking payment status..Please wait!');
           }
           if (state is FailedToCheckPaytmPaymentStatus) {
+            _dialog.hide();
             showSnackbar(context, 'Transaction Failed. ' + state.message);
           }
           if (state is CheckedPaytmPaymentStatus) {
@@ -167,7 +168,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                     'Review Order',
                     style: kStyle14SemiBold.copyWith(color: Colors.black),
                   )),
-              body: Center(child: CircularProgressIndicator()),
+              body: Center(child: loadingAnimation()),
             );
           },
         ));
@@ -188,7 +189,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
     );
   }
 
-  Widget _buildCarTypeDetails({required VehicleTypeModel vehicle}) {
+  Widget _buildCarTypeDetails({required VehicleModel vehicle}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -196,7 +197,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
         Text('CAR TYPE', style: kStyle12.copyWith(color: Colors.grey[700])),
         kverticalMargin8,
         Text(
-          '${vehicle.model} (${vehicle.wheel})',
+          '${vehicle.brand} (${vehicle.model})',
           style: kStyle14,
         ),
         kverticalMargin8,

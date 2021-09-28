@@ -15,7 +15,7 @@ class CheckingSavedVehicleType extends GlobalVehicleTypeState {
 }
 
 class GlobalVehicleTypeSelected extends GlobalVehicleTypeState {
-  final VehicleTypeModel vehicleTypeModel;
+  final VehicleModel vehicleTypeModel;
   GlobalVehicleTypeSelected({
     required this.vehicleTypeModel,
   });

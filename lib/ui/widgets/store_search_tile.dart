@@ -28,12 +28,13 @@ class StoreSearchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.of(context).pushNamed(StoreDetailScreen.route,
             arguments: StoreDetailArguments(storeSlug: storeSlug));
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -71,10 +72,8 @@ class StoreSearchTile extends StatelessWidget {
                   SizedBox(
                     height: 8,
                   ),
-                  RichText(
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    text: TextSpan(children: [
+                  Text.rich(
+                    TextSpan(children: [
                       TextSpan(
                         text: "$distance ",
                         style: TextStyle(
@@ -88,14 +87,14 @@ class StoreSearchTile extends StatelessWidget {
                         ),
                       ),
                     ]),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(
                     height: 8,
                   ),
-                  RichText(
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    text: TextSpan(children: [
+                  Text.rich(
+                    TextSpan(children: [
                       TextSpan(
                         text: "services start @ ",
                         style: TextStyle(
@@ -110,6 +109,8 @@ class StoreSearchTile extends StatelessWidget {
                             fontWeight: FontWeight.w500),
                       ),
                     ]),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

@@ -28,6 +28,7 @@ class StoreTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => Navigator.pushNamed(context, StoreDetailScreen.route,
           arguments: StoreDetailArguments(storeSlug: storeSlug)),
       child: Padding(
@@ -112,14 +113,25 @@ class StoreTile extends StatelessWidget {
                                       color: Colors.amber,
                                       size: 16,
                                     ),
-                                    Text(rating!),
+                                    Text(
+                                      rating!,
+                                      style: kStyle12.copyWith(
+                                          color: kGreyTextColor),
+                                    ),
                                     kHorizontalMargin4,
-                                    Text("•"),
+                                    Text(
+                                      "•",
+                                      style: kStyle12.copyWith(
+                                          color: kGreyTextColor),
+                                    ),
                                     kHorizontalMargin4,
                                   ],
                                 )
                               : Container(),
-                          Text('Starts from ₹$startingFrom')
+                          Text(
+                            'Starts from ₹$startingFrom',
+                            style: kStyle12.copyWith(color: kGreyTextColor),
+                          )
                         ],
                       ),
                     ],

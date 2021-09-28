@@ -23,7 +23,7 @@ CartEntity _$CartEntityFromJson(Map<String, dynamic> json) {
         .toList(),
     vehicleType: json['vehicle_type'] == null
         ? null
-        : VehicleTypeEntity.fromJson(
+        : VehicleModelEntity.fromJson(
             json['vehicle_type'] as Map<String, dynamic>),
   );
 }

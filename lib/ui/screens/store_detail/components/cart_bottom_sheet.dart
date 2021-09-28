@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/slot_select/slot_select_screen.dart';
+import 'package:themotorwash/utils.dart';
 
 class CartBottomSheet extends StatefulWidget {
   CartBottomSheet({Key? key}) : super(key: key);
@@ -95,7 +97,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                           children: [
                             Icon(
                               Icons.location_on_outlined,
-                              color: Colors.black,
+                              color: kPrimaryColor,
                             ),
                             SizedBox(
                               width: 8,
@@ -113,6 +115,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                       ),
                       ...(cart.itemsObj!.map((e) {
                         return CartItemTile(
+                            isLoading: state is CartFunctionLoading &&
+                                state.itemId.contains(e.id),
                             cartFunctionBloc: _cartFunctionBloc,
                             itemId: e.id,
                             price: e.price!.toString(),
@@ -153,67 +157,64 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                         ),
                       ),
                       SizedBox(
-                        height: 8,
+                        height: 24,
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Divider(
-                            height: 1,
-                            thickness: 1,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 16),
-                            child: Row(
+                      Container(
+                        decoration:
+                            BoxDecoration(color: Colors.white, boxShadow: [
+                          BoxShadow(
+                              blurRadius: 4,
+                              color: Color.fromRGBO(0, 0, 0, .08),
+                              offset: Offset(0, -2))
+                        ]),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 16),
+                        child: Row(
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Text('₹${cart.total}',
-                                        style: TextStyle(
-                                            fontSize: kfontSize16,
-                                            fontWeight: FontWeight.w500)),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      'T O T A L',
-                                      style: kStyle12.copyWith(
-                                          color: Colors.grey[700]),
-                                    ),
-                                  ],
+                                Text('₹${cart.total}',
+                                    style: TextStyle(
+                                        fontSize: kfontSize16,
+                                        fontWeight: FontWeight.w500)),
+                                SizedBox(
+                                  height: 4,
                                 ),
-                                Spacer(),
-                                TextButton(
-                                  child: Text('Select Slot',
-                                      style: TextStyle(color: Colors.white)),
-                                  onPressed: () {
-                                    _orderReviewBloc.add(SetCart(cart: cart));
-                                    Navigator.pushNamed(
-                                        context, SlotSelectScreen.route,
-                                        arguments: SlotSelectScreenArguments(
-                                            cartTotal: cart.total!,
-                                            cardId: cart.id!.toString()));
-                                  },
-                                  style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Theme.of(context).primaryColor)),
+                                Text(
+                                  'T O T A L',
+                                  style: kStyle12.copyWith(
+                                      color: Colors.grey[700]),
                                 ),
                               ],
                             ),
-                          )
-                        ],
-                      ),
+                            Spacer(),
+                            TextButton(
+                              child: Text('Select Slot',
+                                  style: TextStyle(color: Colors.white)),
+                              onPressed: () {
+                                _orderReviewBloc.add(SetCart(cart: cart));
+                                Navigator.pushNamed(
+                                    context, SlotSelectScreen.route,
+                                    arguments: SlotSelectScreenArguments(
+                                        cartTotal: cart.total!,
+                                        cardId: cart.id!.toString()));
+                              },
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).primaryColor)),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   );
           }
 
           return Container(
             child: Center(
-              child: CircularProgressIndicator(),
+              child: loadingAnimation(),
             ),
             height: 300,
           );
@@ -224,20 +225,21 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
 }
 
 class CartItemTile extends StatelessWidget {
-  const CartItemTile(
-      {Key? key,
-      required this.service,
-      required this.timeInterval,
-      required this.price,
-      required this.itemId,
-      required this.cartFunctionBloc})
-      : super(key: key);
-
   final String? service;
   final String? timeInterval;
   final String? price;
   final int? itemId;
+  final bool isLoading;
   final CartFunctionBloc cartFunctionBloc;
+  const CartItemTile({
+    Key? key,
+    this.service,
+    this.timeInterval,
+    this.price,
+    this.itemId,
+    required this.isLoading,
+    required this.cartFunctionBloc,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -287,10 +289,18 @@ class CartItemTile extends StatelessWidget {
                 onPressed: () {
                   cartFunctionBloc.add(DeleteItemFromCart(itemId: itemId!));
                 },
-                child: Text(
-                  'Remove',
-                  style: TextStyle(color: Color(0xffDC1313)),
-                ),
+                child: isLoading
+                    ? SizedBox(
+                        height: 25,
+                        width: 25,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        'Remove',
+                        style: TextStyle(color: Color(0xffDC1313)),
+                      ),
                 style: ButtonStyle(
                   side: MaterialStateProperty.all(
                     BorderSide(

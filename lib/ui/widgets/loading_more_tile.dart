@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/utils.dart';
 
 class LoadingMoreTile extends StatelessWidget {
   final Widget tile;
@@ -10,14 +11,23 @@ class LoadingMoreTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return tile;
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        tile,
-        kverticalMargin8,
-        CircularProgressIndicator(),
-        kverticalMargin8,
+        SizedBox(
+          child: tile,
+          width: double.infinity,
+        ),
+        kverticalMargin16,
+        SizedBox(
+          child: CircularProgressIndicator(),
+          height: 30,
+          width: 30,
+        ),
+        kverticalMargin16,
       ],
     );
-    ;
   }
 }

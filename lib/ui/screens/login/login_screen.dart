@@ -192,14 +192,7 @@ class PhoneTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      validator: (value) {
-        if (value != null) {
-          if (value.length == 10 && RegExp(r'^[0-9]+$').hasMatch(value)) {
-            return null;
-          }
-        }
-        return 'Enter a valid phone number';
-      },
+      validator: validatePhone,
       controller: phoneController,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(

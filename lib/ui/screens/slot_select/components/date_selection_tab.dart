@@ -57,6 +57,7 @@ class DateSelectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => onTap(tabIndex),
       child: Padding(
         padding: const EdgeInsets.all(4.0),

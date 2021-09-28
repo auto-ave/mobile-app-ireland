@@ -22,7 +22,16 @@ class StoreInfo extends StatelessWidget {
       children: [
         Row(
           children: [
-            SvgPicture.asset('assets/icons/location.svg'),
+            Container(
+              height: 24,
+              width: 24,
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/icons/location.svg',
+                  height: 20,
+                ),
+              ),
+            ),
             SizedBox(
               width: 8,
             ),
@@ -37,7 +46,16 @@ class StoreInfo extends StatelessWidget {
         kverticalMargin8,
         Row(
           children: [
-            SvgPicture.asset('assets/icons/time.svg'),
+            Container(
+              height: 24,
+              width: 24,
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/icons/time.svg',
+                  height: 20,
+                ),
+              ),
+            ),
             SizedBox(
               width: 8,
             ),
@@ -52,7 +70,16 @@ class StoreInfo extends StatelessWidget {
         kverticalMargin8,
         Row(
           children: [
-            SvgPicture.asset('assets/icons/calendar.svg'),
+            Container(
+              height: 24,
+              width: 24,
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/icons/calendar.svg',
+                  height: 20,
+                ),
+              ),
+            ),
             SizedBox(
               width: 8,
             ),
@@ -63,10 +90,8 @@ class StoreInfo extends StatelessWidget {
           ],
         ),
         kverticalMargin8,
-        RichText(
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          text: TextSpan(children: [
+        Text.rich(
+          TextSpan(children: [
             TextSpan(
               text: "services start @ ",
               style: TextStyle(
@@ -81,6 +106,8 @@ class StoreInfo extends StatelessWidget {
                   fontWeight: FontWeight.w500),
             ),
           ]),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+
 import 'package:themotorwash/theme_constants.dart';
 
 class StoreHeading extends StatelessWidget {
   final String name;
   final double? rating;
   final int numberOfRatings;
+  final Function onPressedRating;
   const StoreHeading({
     Key? key,
     required this.name,
-    required this.rating,
+    this.rating,
     required this.numberOfRatings,
+    required this.onPressedRating,
   }) : super(key: key);
 
   @override
@@ -23,29 +26,34 @@ class StoreHeading extends StatelessWidget {
           ),
         ),
         rating != null
-            ? Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.star,
-                        color: Colors.orange,
-                      ),
-                      Text(
-                        rating.toString(),
-                        style: TextStyle(
-                          fontSize: 14,
+            ? GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => onPressedRating(),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.star,
+                          color: Colors.amber,
                         ),
-                      )
-                    ],
-                  ),
-                  Text(
-                    "${numberOfRatings.toString()}+ ratings",
-                    style: TextStyle(
-                      fontSize: 12,
+                        kHorizontalMargin4,
+                        Text(
+                          rating.toString(),
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
+                    Text(
+                      "${numberOfRatings.toString()}+ ratings",
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    )
+                  ],
+                ),
               )
             : Container(),
       ],

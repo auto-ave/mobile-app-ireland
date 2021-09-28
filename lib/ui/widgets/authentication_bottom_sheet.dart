@@ -1,10 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
+import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/repos/auth_repository.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
@@ -39,7 +42,10 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
     super.initState();
     _phoneAuthBloc = PhoneAuthBloc(
         repository: RepositoryProvider.of<AuthRepository>(context),
-        globalAuthBloc: BlocProvider.of<GlobalAuthBloc>(context));
+        globalAuthBloc: BlocProvider.of<GlobalAuthBloc>(context),
+        localDataService: getIt.get<LocalDataService>(
+            instanceName: LocalDataService.getItInstanceName),
+        fcmInstance: FirebaseMessaging.instance);
   }
 
   @override
@@ -79,13 +85,13 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
         }
         if (state is SendingOTP) {
           return Container(
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(child: loadingAnimation()),
             height: MediaQuery.of(context).size.height * .3,
           );
         }
         if (state is CheckingOTP) {
           return Container(
-            child: Center(child: CircularProgressIndicator()),
+            child: Center(child: loadingAnimation()),
             height: MediaQuery.of(context).size.height * .3,
           );
         }
@@ -99,7 +105,7 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
 
   getSendOTPWidget() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -154,7 +160,7 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
 
   getEnterOTPWidget() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -167,12 +173,12 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(color: Colors.greenAccent),
           ),
-          kverticalMargin8,
+          kverticalMargin16,
           OTPFieldWidget(onChange: (string) {
             otpEntered = string;
             print('otp entered $otpEntered');
           }),
-          kverticalMargin8,
+          kverticalMargin16,
           Align(
             alignment: Alignment.center,
             child: Container(

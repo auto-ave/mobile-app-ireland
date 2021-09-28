@@ -5,7 +5,7 @@ abstract class VehicleTypeFunctionsEvent extends Equatable {
 }
 
 class SelectVehicleType extends VehicleTypeFunctionsEvent {
-  final VehicleTypeModel vehicleTypeModel;
+  final VehicleModel vehicleTypeModel;
   SelectVehicleType({
     required this.vehicleTypeModel,
   });

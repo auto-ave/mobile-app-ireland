@@ -22,3 +22,10 @@ class CheckOTP extends PhoneAuthEvent {
   // TODO: implement props
   List<Object?> get props => [otp, phoneNumber];
 }
+
+class LogOut extends PhoneAuthEvent {
+  LogOut();
+
+  @override
+  List<Object?> get props => [];
+}

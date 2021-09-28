@@ -6,6 +6,7 @@ const Color kPrimaryColor = Color(0xff3570B5);
 const double kfontSize18 = 18;
 const double kfontSize16 = 16;
 const double kfontSize12 = 12;
+const double kfontSize10 = 10;
 const double kfontSize20 = 20;
 const double kfontSize14 = 14;
 const double kfontSize24 = 24;
@@ -40,8 +41,10 @@ const TextStyle kStyle12PrimaryColor = const TextStyle(
     color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize12);
 const TextStyle kStyle12 =
     const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
+const TextStyle kStyle10 =
+    const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize10);
 const TextStyle kStyle14SemiBold =
-    const TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
+    const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize14);
 const TextStyle kStyle14 = const TextStyle(fontSize: kfontSize14);
 
 const TextStyle kStyle14PrimaryColor =
@@ -49,10 +52,10 @@ const TextStyle kStyle14PrimaryColor =
 const TextStyle kStyle14W500 =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize14);
 const TextStyle kStyle12SemiBold =
-    const TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
+    const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize12);
 
 const TextStyle kStyle16SemiBold =
-    const TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize16);
+    const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize16);
 const TextStyle kStyle16Bold =
     const TextStyle(fontWeight: FontWeight.w700, fontSize: kfontSize16);
 const TextStyle kStyle16 = const TextStyle(fontSize: kfontSize16);
@@ -66,11 +69,14 @@ const TextStyle kStyle24Bold =
 const TextStyle kStyle20Bold =
     const TextStyle(fontWeight: FontWeight.bold, fontSize: kfontSize20);
 const TextStyle kStyle20W500 =
-    const TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize20);
+    const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize20);
 
-TextStyle selectedTabTextStyle = kStyle16Bold.copyWith(color: kPrimaryColor);
-TextStyle unSelectedTabTextStyle = kStyle16;
+TextStyle selectedTabTextStyle =
+    kStyle16Bold.copyWith(color: kPrimaryColor, fontFamily: 'DM Sans');
+TextStyle unSelectedTabTextStyle = kStyle16.copyWith(fontFamily: 'DM Sans');
 
 Color? kShimmerBaseColor = Colors.grey[100];
 
 Color? kShimmerHighlightColor = Colors.grey[200];
+
+Color kGreyTextColor = Color(0xff696969);

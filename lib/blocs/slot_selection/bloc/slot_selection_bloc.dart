@@ -26,9 +26,11 @@ class SlotSelectionBloc extends Bloc<SlotSelectionEvent, SlotSelectionState> {
   Stream<SlotSelectionState> _mapGetSlotsToState(
       {required String date, required String cartId}) async* {
     try {
+      print('Loading FOR' + date.toString());
       yield LoadingSlots();
       List<Slot> slots =
           await _repository.createSlots(date: date, cartId: cartId);
+      print('SLOTS LOADED FOR' + date.toString());
       yield SlotsLoaded(slots: slots);
     } catch (e) {
       yield SlotSelectionError(message: e.toString());

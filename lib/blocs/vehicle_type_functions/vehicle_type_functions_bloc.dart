@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:themotorwash/blocs/global_vehicle_type/bloc/global_vehicle_type_bloc.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
-import 'package:themotorwash/data/models/vehicle_type.dart';
+import 'package:themotorwash/data/models/vehicle_model.dart';
 
 part 'vehicle_type_functions_event.dart';
 part 'vehicle_type_functions_state.dart';
@@ -31,7 +31,7 @@ class VehicleTypeFunctionsBloc
   }
 
   Stream<VehicleTypeFunctionsState> _mapSelectVehicleTypeToState(
-      {required VehicleTypeModel vehicleTypeModel}) async* {
+      {required VehicleModel vehicleTypeModel}) async* {
     try {
       yield SelectingVehicleType();
       await _localDataService.saveVehicleType(

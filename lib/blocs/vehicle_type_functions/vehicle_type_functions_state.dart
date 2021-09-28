@@ -10,7 +10,7 @@ class VehicleTypeFunctionsInitial extends VehicleTypeFunctionsState {
 }
 
 class VehicleTypeSelectedFunctionsState extends VehicleTypeFunctionsState {
-  final VehicleTypeModel vehicleTypeModel;
+  final VehicleModel vehicleTypeModel;
   VehicleTypeSelectedFunctionsState({
     required this.vehicleTypeModel,
   });

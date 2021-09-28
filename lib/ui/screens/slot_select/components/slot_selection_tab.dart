@@ -122,6 +122,7 @@ class SlotSelectionTabWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: _slotsAvailable == 0 ? () {} : () => onTap(tabIndex),
           child: Container(
             padding: const EdgeInsets.all(8.0),

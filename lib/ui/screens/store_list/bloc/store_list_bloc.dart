@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:meta/meta.dart';
 import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
 import 'package:themotorwash/data/models/location_model.dart';
@@ -61,7 +62,14 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
             stores: stores + moreStores,
             hasReachedMax: moreStores.length != 10); //Page limit 10
       } catch (e) {
+        print('HEllo there crashlytics');
+        // await FirebaseCrashlytics.instance.recordError(e, null);
         yield StoreListError(message: e.toString());
+      }
+      try {
+        throw Exception(['Hellloo error brother']);
+      } catch (e) {
+        await FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
       }
     }
   }

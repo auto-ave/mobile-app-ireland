@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/navigation/arguments.dart';
@@ -17,6 +18,7 @@ class YourBookingTile extends StatefulWidget {
   final DateTime bookedAt;
   final String bookingId;
   final BookingStatus status;
+  final DateTime scheduledOn;
   const YourBookingTile({
     Key? key,
     required this.storeName,
@@ -27,6 +29,7 @@ class YourBookingTile extends StatefulWidget {
     required this.bookedAt,
     required this.bookingId,
     required this.status,
+    required this.scheduledOn,
   }) : super(key: key);
 
   @override
@@ -34,11 +37,13 @@ class YourBookingTile extends StatefulWidget {
 }
 
 class _YourBookingTileState extends State<YourBookingTile> {
+  DateFormat formatter = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
         child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () {
             Navigator.pushNamed(context, BookingDetailScreen.route,
                 arguments: BookingDetailScreenArguments(
@@ -111,7 +116,9 @@ class _YourBookingTileState extends State<YourBookingTile> {
                       letterSpacing: 2.16, color: Color(0xff888888)),
                 ),
                 kverticalMargin8,
-                Text('24 Jun 2021 at 5:30pm'),
+                Text(formatter.format(widget.scheduledOn) +
+                    " at " +
+                    DateFormat.Hms().format(widget.scheduledOn)),
                 kverticalMargin8,
                 // Row(
                 //   children: <Widget>[

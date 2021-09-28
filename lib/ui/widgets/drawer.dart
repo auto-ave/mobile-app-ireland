@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
+import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
+import 'package:themotorwash/ui/screens/feedback/feedback_screen.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
 import 'package:themotorwash/ui/screens/profile/profile_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/your_bookings_screen.dart';
@@ -45,6 +47,14 @@ class AppDrawer extends StatelessWidget {
                 thickness: 1,
                 height: 0,
               ),
+              _createDrawerItem(
+                  context, FontAwesomeIcons.facebookMessenger, Text("Feedback"),
+                  () {
+                Navigator.pushNamed(
+                  context,
+                  FeedbackScreen.route,
+                );
+              }),
               Spacer(),
               Divider(),
               _createDrawerItem(
@@ -52,17 +62,9 @@ class AppDrawer extends StatelessWidget {
                 Icons.logout,
                 Text("Log out"),
                 () async {
-                  await LocalDataService().removeTokens();
-                  BlocProvider.of<GlobalAuthBloc>(context)
-                    ..add(CheckAuthStatus());
+                  BlocProvider.of<PhoneAuthBloc>(context)..add(LogOut());
                 },
               ),
-              // _logoutItem(),
-              // Divider(
-              //   thickness: .5,
-              // ),
-              // _createDrawerItem(context, FontAwesomeIcons.handsHelping,
-              //     Text("Share feedback"), FeedbackScreen.route),
             ],
           ));
         }
@@ -87,7 +89,15 @@ class AppDrawer extends StatelessWidget {
               border: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                   side: BorderSide(color: kPrimaryColor)),
-            )))
+            ))),
+            _createDrawerItem(
+                context, FontAwesomeIcons.facebookMessenger, Text("Feedback"),
+                () {
+              Navigator.pushNamed(
+                context,
+                FeedbackScreen.route,
+              );
+            }),
           ],
         ));
       },
@@ -100,26 +110,49 @@ class AppDrawer extends StatelessWidget {
     final totalHeight = MediaQuery.of(context).size.height;
     return Padding(
       padding: EdgeInsets.zero,
-      child: Container(
-        child: Center(
-          child: CircleAvatar(
-            child: FaIcon(FontAwesomeIcons.user),
-            backgroundColor: Colors.white,
-            radius: totalHeight * .05,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: MediaQuery.of(context).padding.top,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              gradient: LinearGradient(
+                end: Alignment.centerRight,
+                begin: Alignment.centerLeft,
+                colors: [
+                  Theme.of(context).primaryColor,
+                  Color(0xff24C6DC),
+                ],
+              ),
+            ),
           ),
-        ),
-        height: totalHeight * .2,
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          gradient: LinearGradient(
-            end: Alignment.centerRight,
-            begin: Alignment.centerLeft,
-            colors: [
-              Theme.of(context).primaryColor,
-              Color(0xff24C6DC),
-            ],
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: CircleAvatar(
+                  child: FaIcon(FontAwesomeIcons.user),
+                  backgroundColor: Colors.white,
+                  radius: totalHeight * .05,
+                ),
+              ),
+            ),
+            height: totalHeight * .2,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              gradient: LinearGradient(
+                end: Alignment.centerRight,
+                begin: Alignment.centerLeft,
+                colors: [
+                  Theme.of(context).primaryColor,
+                  Color(0xff24C6DC),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -133,17 +166,6 @@ class AppDrawer extends StatelessWidget {
         leading: FaIcon(icon),
         title: SizedBox(child: title),
         onTap: onTap,
-      ),
-    );
-  }
-
-  Widget _logoutItem() {
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
-      child: ListTile(
-        leading: FaIcon(FontAwesomeIcons.doorOpen),
-        title: SizedBox(child: Text("Logout")),
-        onTap: () {},
       ),
     );
   }

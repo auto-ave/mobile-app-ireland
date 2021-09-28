@@ -17,7 +17,7 @@ class SlotsLoaded extends SlotSelectionState {
   });
 
   @override
-  List<Object?> get props => [slots];
+  List<Object?> get props => [];
 }
 
 class LoadingSlots extends SlotSelectionState {

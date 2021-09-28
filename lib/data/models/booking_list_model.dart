@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
+import 'package:themotorwash/data/models/event.dart';
 
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/store.dart';
@@ -14,7 +15,7 @@ class BookingListModel {
   final BookingStatus status;
   final DateTime? statusChangedTime;
   final String? otp;
-  final int? event;
+  final EventModel? event;
   final String? vehicleType;
   final Store? store;
   final int? bookedBy;
@@ -43,7 +44,7 @@ class BookingListModel {
         bookedBy: e.bookedBy,
         bookingId: e.bookingId,
         createdAt: DateTime.parse(e.createdAt!),
-        event: e.event,
+        event: EventModel.fromEntity(e.event!),
         id: e.id,
         isRefunded: e.isRefunded,
         otp: e.otp,
@@ -82,7 +83,7 @@ class BookingListEntity {
   final String? statusChangedTime;
 
   final String? otp;
-  final int? event;
+  final EventEntity? event;
 
   @JsonKey(name: 'vehicle_type')
   final String? vehicleType;

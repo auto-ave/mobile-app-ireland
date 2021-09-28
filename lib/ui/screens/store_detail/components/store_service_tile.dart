@@ -6,6 +6,7 @@ import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/widgets/authentication_bottom_sheet.dart';
 import 'package:themotorwash/ui/widgets/badge.dart';
+import 'package:themotorwash/utils.dart';
 
 class StoreServiceTile extends StatelessWidget {
   final String description;
@@ -127,6 +128,7 @@ class StoreServiceTile extends StatelessWidget {
                                   height: 25,
                                   width: 25,
                                   child: CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
                                     strokeWidth: 2,
                                   ),
                                 )

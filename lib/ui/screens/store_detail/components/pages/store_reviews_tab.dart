@@ -9,6 +9,7 @@ import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_reviews/store_reviews_bloc.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
+import 'package:themotorwash/utils.dart';
 
 class StoreReviewsTab extends StatefulWidget {
   final BuildContext nestedScrollContext;
@@ -19,7 +20,8 @@ class StoreReviewsTab extends StatefulWidget {
   _StoreReviewsTabState createState() => _StoreReviewsTabState();
 }
 
-class _StoreReviewsTabState extends State<StoreReviewsTab> {
+class _StoreReviewsTabState extends State<StoreReviewsTab>
+    with AutomaticKeepAliveClientMixin {
   late StoreReviewsBloc _reviewsBloc;
   List<Review> reviews = [];
   @override
@@ -91,7 +93,7 @@ class _StoreReviewsTabState extends State<StoreReviewsTab> {
             if (state is StoreReviewsLoading) {
               return SliverFillRemaining(
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: loadingAnimation(),
                 ),
               );
             }
@@ -104,7 +106,7 @@ class _StoreReviewsTabState extends State<StoreReviewsTab> {
             }
             return SliverFillRemaining(
               child: Center(
-                child: CircularProgressIndicator(),
+                child: loadingAnimation(),
               ),
             );
           },
@@ -112,6 +114,9 @@ class _StoreReviewsTabState extends State<StoreReviewsTab> {
       ]),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class StoreReviewTile extends StatelessWidget {

@@ -1,9 +1,11 @@
 class LocationModel {
-  final String city;
+  final String cityCode;
+  final String cityName;
   final double lat;
   final double long;
   LocationModel({
-    required this.city,
+    required this.cityCode,
+    required this.cityName,
     required this.lat,
     required this.long,
   });

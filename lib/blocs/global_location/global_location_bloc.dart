@@ -3,14 +3,19 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/location_model.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 
 part 'global_location_event.dart';
 part 'global_location_state.dart';
 
 class GlobalLocationBloc
     extends Bloc<GlobalLocationEvent, GlobalLocationState> {
-  GlobalLocationBloc() : super(LocationUninitialized());
+  final Repository _repository;
+  GlobalLocationBloc({required Repository repository})
+      : _repository = repository,
+        super(LocationUninitialized());
 
   @override
   Stream<GlobalLocationState> mapEventToState(
@@ -20,6 +25,8 @@ class GlobalLocationBloc
       yield* _mapGetCurrentUserLocationToState();
     } else if (event is SetUserLocation) {
       yield* _mapSetUserLocationToState(location: event.location);
+    } else if (event is SkipUserLocation) {
+      yield* _mapSkipUserLocationToState();
     }
   }
 
@@ -46,10 +53,15 @@ class GlobalLocationBloc
 
         // When we reach here, permissions are granted and we can
         // continue accessing the position of the device.
-        Position location = await Geolocator.getCurrentPosition();
+        List responses = await Future.wait(
+            [Geolocator.getCurrentPosition(), _repository.getListOfCities()]);
+        Position location = responses[0];
+        List<City> cities = responses[1];
+        City city = cities[0];
         yield LocationSet(
             location: LocationModel(
-                city: '462001',
+                cityCode: city.code,
+                cityName: city.name,
                 lat: location.latitude,
                 long: location.longitude));
       }
@@ -61,5 +73,19 @@ class GlobalLocationBloc
   Stream<GlobalLocationState> _mapSetUserLocationToState(
       {required LocationModel location}) async* {
     yield LocationSet(location: location);
+  }
+
+  Stream<GlobalLocationState> _mapSkipUserLocationToState() async* {
+    try {
+      List<City> cities = await _repository.getListOfCities();
+      City city = cities[0];
+
+      yield LocationSet(
+          location: LocationModel(
+              cityCode: city.code,
+              cityName: city.name,
+              lat: double.parse(city.latitude),
+              long: double.parse(city.longitude)));
+    } catch (e) {}
   }
 }

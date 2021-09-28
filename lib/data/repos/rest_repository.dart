@@ -2,6 +2,7 @@ import 'package:themotorwash/data/api/api_methods.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
 import 'package:themotorwash/data/models/cart.dart';
+import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/location_model.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
@@ -11,7 +12,9 @@ import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/user_profile.dart';
-import 'package:themotorwash/data/models/vehicle_type.dart';
+import 'package:themotorwash/data/models/vehicle_brand.dart';
+import 'package:themotorwash/data/models/vehicle_model.dart';
+import 'package:themotorwash/data/models/vehicle_wheel.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 
 class RestRepository implements Repository {
@@ -29,7 +32,7 @@ class RestRepository implements Repository {
       {required LocationModel locationModel, required int offset}) async {
     List<StoreListEntity> entities =
         await _apiMethodsImp.getStoreListByLocation(
-            city: locationModel.city,
+            city: locationModel.cityCode,
             lat: locationModel.lat,
             long: locationModel.long,
             offset: offset);
@@ -108,12 +111,11 @@ class RestRepository implements Repository {
   }
 
   @override
-  Future<List<VehicleTypeModel>> getVehicleTypeList() async {
-    List<VehicleTypeEntity> entities =
+  Future<List<VehicleModel>> getVehicleTypeList() async {
+    List<VehicleModelEntity> entities =
         await _apiMethodsImp.getVehicleTypeList();
-    List<VehicleTypeModel> vehicleTypes = entities
-        .map<VehicleTypeModel>((e) => VehicleTypeModel.fromEntity(e))
-        .toList();
+    List<VehicleModel> vehicleTypes =
+        entities.map<VehicleModel>((e) => VehicleModel.fromEntity(e)).toList();
 
     return vehicleTypes;
   }
@@ -125,7 +127,7 @@ class RestRepository implements Repository {
       required int offset}) async {
     List<StoreListEntity> entities = await _apiMethodsImp.searchStores(
         query: query,
-        city: locationModel.city,
+        city: locationModel.cityCode,
         lat: locationModel.lat,
         long: locationModel.long,
         offset: offset);
@@ -172,5 +174,53 @@ class RestRepository implements Repository {
         userProfileEntity: userProfileEntity);
     UserProfile profileModel = UserProfile.fromEntity(entity: entity);
     return profileModel;
+  }
+
+  @override
+  Future<List<City>> getListOfCities() async {
+    List<CityEntity> entities = await _apiMethodsImp.getListOfCities();
+    List<City> citites = entities.map((e) => City.fromEntity(e)).toList();
+    return citites;
+  }
+
+  @override
+  Future<void> sendFeedback(
+      {required String email,
+      required String phoneNumber,
+      required String message}) async {
+    await _apiMethodsImp.sendFeedback(
+        email: email, phoneNumber: phoneNumber, message: message);
+  }
+
+  @override
+  Future<List<VehicleBrand>> getVehicleBrandlList(
+      {required String wheelCode}) async {
+    List<VehicleBrandEntity> entities =
+        await _apiMethodsImp.getVehicleBrandlList(wheelCode: wheelCode);
+
+    return entities
+        .map<VehicleBrand>((e) => VehicleBrand.fromEntity(e))
+        .toList();
+  }
+
+  @override
+  Future<List<VehicleModel>> getVehicleModelList(
+      {required String brand}) async {
+    List<VehicleModelEntity> entities =
+        await _apiMethodsImp.getVehicleModelList(brand: brand);
+
+    return entities
+        .map<VehicleModel>((e) => VehicleModel.fromEntity(e))
+        .toList();
+  }
+
+  @override
+  Future<List<VehicleWheel>> getVehicleWheelList() async {
+    List<VehicleWheelEntity> entities =
+        await _apiMethodsImp.getVehicleWheelList();
+
+    return entities
+        .map<VehicleWheel>((e) => VehicleWheel.fromEntity(e))
+        .toList();
   }
 }

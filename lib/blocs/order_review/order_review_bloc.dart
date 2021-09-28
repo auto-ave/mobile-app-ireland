@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store.dart';
-import 'package:themotorwash/data/models/vehicle_type.dart';
+import 'package:themotorwash/data/models/vehicle_model.dart';
 
 part 'order_review_event.dart';
 part 'order_review_state.dart';

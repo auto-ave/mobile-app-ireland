@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
-import 'package:themotorwash/data/models/vehicle_type.dart';
+import 'package:themotorwash/data/models/vehicle_model.dart';
 
 part 'cart.g.dart';
 
@@ -15,7 +15,7 @@ class CartModel {
   final int? consumer;
   final List<int>? items;
   final List<PriceTimeListModel>? itemsObj;
-  final VehicleTypeModel? vehicleType;
+  final VehicleModel? vehicleType;
 
   CartModel(
       {this.id,
@@ -44,7 +44,7 @@ class CartModel {
             .toList(),
         vehicleType: entity.vehicleType == null
             ? null
-            : VehicleTypeModel.fromEntity(entity.vehicleType!));
+            : VehicleModel.fromEntity(entity.vehicleType!));
   }
 }
 
@@ -63,7 +63,7 @@ class CartEntity {
   final int? consumer;
   final List<int>? items;
   @JsonKey(name: 'vehicle_type')
-  final VehicleTypeEntity? vehicleType;
+  final VehicleModelEntity? vehicleType;
   @JsonKey(name: 'item_objs')
   final List<PriceTimeListEntity>? itemsObj;
   CartEntity(

@@ -21,6 +21,8 @@ class DashedBookingBox extends StatelessWidget {
       TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
   final DateFormat formatter = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);
 
+  final DateFormat formatterTime = DateFormat('hh:mm a');
+
   @override
   Widget build(BuildContext context) {
     return DottedBorder(
@@ -35,6 +37,12 @@ class DashedBookingBox extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             getDetailsRow(
+                leftText: 'OTP',
+                rightText: bookingDetail.otp ?? 'N/A',
+                leftStyle: leftSideInfo,
+                rightStyle: rightSideInfoPrimaryColor),
+            kverticalMargin8,
+            getDetailsRow(
                 leftText: 'Booking Id',
                 rightText: bookingDetail.bookingId!,
                 leftStyle: leftSideInfo,
@@ -48,7 +56,7 @@ class DashedBookingBox extends StatelessWidget {
             kverticalMargin8,
             getDetailsRow(
                 leftText: 'Scheduled on',
-                rightText: formatter.format(bookingDetail.createdAt!),
+                rightText: formatter.format(bookingDetail.event!.startDateTime),
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
             kverticalMargin8,
@@ -56,7 +64,8 @@ class DashedBookingBox extends StatelessWidget {
             kverticalMargin8,
             getDetailsRow(
                 leftText: 'Time:',
-                rightText: '5:30pm to 6:30pm',
+                rightText:
+                    '${formatterTime.format(bookingDetail.event!.startDateTime)} to ${formatterTime.format(bookingDetail.event!.endDateTime)}',
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
             kverticalMargin8,

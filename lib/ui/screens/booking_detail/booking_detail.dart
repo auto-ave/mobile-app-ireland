@@ -1,4 +1,4 @@
-import 'package:add_2_calendar/add_2_calendar.dart';
+// import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
         builder: (context, state) {
           if (state is BookingSummaryLoading) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: loadingAnimation(),
             );
           }
           if (state is BookingSummaryLoaded) {
@@ -152,7 +152,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
             );
           }
           return Center(
-            child: CircularProgressIndicator(),
+            child: loadingAnimation(),
           );
         },
       ),
@@ -184,14 +184,14 @@ class AddToCalendarButton extends StatelessWidget {
           bookingDetail.services!.forEach((element) {
             description = description + ', ' + element.service.toString();
           });
-          final Event event = Event(
-            title: 'MotorWash booking for ${bookingDetail.vehicleType}',
-            description: 'Services : ${description.substring(1)}',
-            location: '${bookingDetail.store!.address}',
-            startDate: bookingDetail.event!.startDateTime,
-            endDate: bookingDetail.event!.endDateTime,
-          );
-          Add2Calendar.addEvent2Cal(event);
+          // final Event event = Event(
+          //   title: 'MotorWash booking for ${bookingDetail.vehicleType}',
+          //   description: 'Services : ${description.substring(1)}',
+          //   location: '${bookingDetail.store!.address}',
+          //   startDate: bookingDetail.event!.startDateTime,
+          //   endDate: bookingDetail.event!.endDateTime,
+          // );
+          // Add2Calendar.addEvent2Cal(event);
         } catch (e) {
           showSnackbar(context, 'No calendar app found');
         }
