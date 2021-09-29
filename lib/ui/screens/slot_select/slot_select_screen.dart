@@ -135,8 +135,13 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
               if (state is SlotSelectionError) {
                 return Center(
                   child: ErrorScreen(
-                    showCTA: false,
-                    isHome: false,
+                    ctaType: ErrorCTA.reload,
+                    onCTAPressed: () {
+                      _bloc.add(GetSlots(
+                          date: DateFormat('y-M-d')
+                              .format(calendarDays[currentSelectedDateIndex]),
+                          cartId: widget.cartId));
+                    },
                   ),
                 );
               }

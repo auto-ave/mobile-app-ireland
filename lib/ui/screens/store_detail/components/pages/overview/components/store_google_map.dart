@@ -5,19 +5,19 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MapSample extends StatefulWidget {
+class StoreGoogleMap extends StatefulWidget {
   final double latitute;
   final double longitute;
-  const MapSample({
+  const StoreGoogleMap({
     Key? key,
     required this.latitute,
     required this.longitute,
   }) : super(key: key);
   @override
-  State<MapSample> createState() => MapSampleState();
+  State<StoreGoogleMap> createState() => StoreGoogleMapState();
 }
 
-class MapSampleState extends State<MapSample> {
+class StoreGoogleMapState extends State<StoreGoogleMap> {
   Completer<GoogleMapController> _controller = Completer();
   @override
   void initState() {

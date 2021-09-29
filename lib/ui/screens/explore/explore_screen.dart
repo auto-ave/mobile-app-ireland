@@ -350,8 +350,8 @@ class _ExploreScreenState extends State<ExploreScreen>
                   if (state is StoreListError) {
                     return SliverFillRemaining(
                       child: ErrorScreen(
-                        isHome: true,
-                        onPressed: _onRefresh,
+                        ctaType: ErrorCTA.reload,
+                        onCTAPressed: _onRefresh,
                       ),
                     );
                   }

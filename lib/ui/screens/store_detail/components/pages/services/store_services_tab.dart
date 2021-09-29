@@ -12,8 +12,11 @@ import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_services/store_services_bloc.dart';
-import 'package:themotorwash/ui/screens/store_detail/components/store_service_tile.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/services/components/no_service_widget.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/services/components/store_service_tile.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/services/components/vehicle_selected_info.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
+import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 import 'package:themotorwash/ui/widgets/vehicle_dropdown.dart';
@@ -148,7 +151,7 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                   return services.isEmpty
                       ? SliverFillRemaining(
                           child: Center(
-                            child: Text("No services for selected vehicle"),
+                            child: NoServiceWidget(),
                           ),
                         )
                       : SliverList(
@@ -181,7 +184,17 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                 if (state is StoreServicesError) {
                   return SliverFillRemaining(
                     child: Center(
-                      child: Text("Failed To Load"),
+                      child: ErrorScreen(
+                        ctaType: ErrorCTA.reload,
+                        onCTAPressed: () {
+                          _servicesBloc.add(LoadStoreServices(
+                              slug: widget.storeSlug,
+                              vehicleType:
+                                  vehicleState.vehicleTypeModel.vehicleType,
+                              offset: 0,
+                              forLoadMore: false));
+                        },
+                      ),
                     ),
                   );
                 }
@@ -240,85 +253,4 @@ class _StoreServicesTabState extends State<StoreServicesTab>
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-}
-
-class VehicleSelectedInfo extends StatelessWidget {
-  final GlobalVehicleTypeSelected vehicleState;
-  final Function onChangePressed;
-  const VehicleSelectedInfo({
-    Key? key,
-    required this.vehicleState,
-    required this.onChangePressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: kPrimaryColor,
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-                blurRadius: 8,
-                offset: Offset(0, 0))
-          ],
-          borderRadius: BorderRadius.circular(5)),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'SELECTED VEHICLE',
-                style: kStyle12.copyWith(
-                    color: Color(0xff696969), letterSpacing: 1.8),
-              ),
-              kverticalMargin8,
-              Row(
-                children: [
-                  Text.rich(
-                    TextSpan(children: [
-                      TextSpan(
-                        text: vehicleState.vehicleTypeModel.brand,
-                        style: kStyle16.copyWith(color: Colors.black),
-                      ),
-                      TextSpan(
-                        text: ' ${vehicleState.vehicleTypeModel.model}',
-                        style: kStyle16PrimaryColor,
-                      ),
-                    ]),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  kHorizontalMargin8,
-                  CachedNetworkImage(
-                      placeholder: (_, __) {
-                        return ShimmerPlaceholder();
-                      },
-                      width: 65,
-                      imageUrl: vehicleState.vehicleTypeModel.image!),
-                ],
-              ),
-            ],
-          ),
-          Spacer(),
-          CommonTextButton(
-              onPressed: () => onChangePressed(),
-              child: FittedBox(
-                child: Text(
-                  'Change',
-                  style: kStyle12.copyWith(color: Colors.white),
-                ),
-              ),
-              backgroundColor: kPrimaryColor)
-        ],
-      ),
-    );
-  }
 }

@@ -165,7 +165,13 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
             }
             if (state is BookingSummaryError) {
               return Center(
-                child: ErrorScreen(isHome: false),
+                child: ErrorScreen(
+                  ctaType: ErrorCTA.home,
+                  // onCTAPressed: () {
+                  //   _bookingSummaryBloc
+                  //       .add(GetBookingSummary(bookingId: widget.bookingId));
+                  // },
+                ),
               );
             }
             return Center(

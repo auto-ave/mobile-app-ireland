@@ -4,10 +4,9 @@ import 'package:map_launcher/map_launcher.dart';
 
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/ui/screens/store_detail/components/google_map.dart';
-import 'package:themotorwash/ui/screens/store_detail/components/store_heading.dart';
-import 'package:themotorwash/ui/screens/store_detail/components/store_info.dart';
-import 'package:themotorwash/ui/screens/store_detail/components/store_map.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/components/store_google_map.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/components/store_heading.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/components/store_info.dart';
 
 class StoreOverviewTab extends StatefulWidget {
   final BuildContext nestedScrollContext;
@@ -110,7 +109,7 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             sliver: SliverToBoxAdapter(
-                child: MapSample(
+                child: StoreGoogleMap(
               latitute: widget.store.latitude!,
               longitute: widget.store.longitude!,
             )

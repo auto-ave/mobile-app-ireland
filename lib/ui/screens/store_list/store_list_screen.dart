@@ -9,6 +9,7 @@ import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_list/bloc/store_list_bloc.dart';
+import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
 import 'package:themotorwash/ui/widgets/search_bar.dart';
 import 'package:themotorwash/ui/widgets/store_search_tile.dart';
@@ -109,7 +110,13 @@ class _StoreListScreenState extends State<StoreListScreen> {
                 if (state is StoreListError) {
                   return SliverFillRemaining(
                     child: Center(
-                      child: Text("Failed to load"),
+                      child: ErrorScreen(
+                        ctaType: ErrorCTA.reload,
+                        onCTAPressed: () {
+                          _storeListBloc.add(LoadNearbyStoreList(
+                              offset: 0, forLoadMore: false));
+                        },
+                      ),
                     ),
                   );
                 }

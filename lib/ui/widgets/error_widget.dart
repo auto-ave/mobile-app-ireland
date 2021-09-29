@@ -6,15 +6,17 @@ import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 
 class ErrorScreen extends StatelessWidget {
-  final bool isHome;
-  final Function()? onPressed;
-  final bool showCTA;
-  const ErrorScreen({
-    Key? key,
-    required this.isHome,
-    this.onPressed,
-    this.showCTA = true,
-  }) : super(key: key);
+  ErrorCTA? ctaType;
+
+  Function()? onCTAPressed;
+
+  ErrorScreen({ErrorCTA? ctaType, Function()? onCTAPressed}) {
+    // if cta type is reload then onCtaPressed function must be provide
+    // if cta type is home then onCtaPressed is not needed
+    assert(!(ctaType == ErrorCTA.reload && onCTAPressed == null));
+    this.ctaType = ctaType;
+    this.onCTAPressed = onCTAPressed;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +30,15 @@ class ErrorScreen extends StatelessWidget {
           style: kStyle16PrimaryColor.copyWith(fontWeight: FontWeight.bold),
         ),
         kverticalMargin16,
-        showCTA
+        ctaType != null
             ? CommonTextButton(
-                onPressed: onPressed ??
+                onPressed: onCTAPressed ??
                     () {
                       Navigator.pushNamedAndRemoveUntil(
                           context, ExploreScreen.route, (route) => false);
                     },
                 child: Text(
-                  isHome ? 'Reload' : 'Home',
+                  ctaType == ErrorCTA.reload ? 'Reload' : 'Home',
                   style: kStyle16SemiBold,
                 ),
                 backgroundColor: kPrimaryColor)
@@ -45,3 +47,5 @@ class ErrorScreen extends StatelessWidget {
     );
   }
 }
+
+enum ErrorCTA { home, reload }

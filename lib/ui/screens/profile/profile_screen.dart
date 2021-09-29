@@ -126,7 +126,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }
                   if (state is FailedToLoadProfile) {
                     return Center(
-                      child: ErrorScreen(isHome: false),
+                      child: ErrorScreen(
+                        ctaType: ErrorCTA.reload,
+                        onCTAPressed: () {
+                          _profileBloc.add(GetProfile());
+                        },
+                      ),
                     );
                   }
                   if (state is ProfileLoaded ||

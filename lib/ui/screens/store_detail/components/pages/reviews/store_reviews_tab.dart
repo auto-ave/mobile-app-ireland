@@ -8,6 +8,8 @@ import 'package:themotorwash/data/repos/repository.dart';
 
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_reviews/store_reviews_bloc.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/reviews/components/no_review_widget.dart';
+import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
 import 'package:themotorwash/utils.dart';
 
@@ -86,7 +88,7 @@ class _StoreReviewsTabState extends State<StoreReviewsTab>
                     }, childCount: reviews.length))
                   : SliverFillRemaining(
                       child: Center(
-                        child: Text('No reviews'),
+                        child: NoReviewWidget(),
                       ),
                     );
             }
@@ -100,7 +102,15 @@ class _StoreReviewsTabState extends State<StoreReviewsTab>
             if (state is StoreReviewsError) {
               return SliverFillRemaining(
                 child: Center(
-                  child: Text('Failed to load'),
+                  child: ErrorScreen(
+                    ctaType: ErrorCTA.reload,
+                    onCTAPressed: () {
+                      _reviewsBloc.add(LoadStoreReviews(
+                          slug: widget.storeSlug,
+                          offset: 0,
+                          forLoadMore: false));
+                    },
+                  ),
                 ),
               );
             }

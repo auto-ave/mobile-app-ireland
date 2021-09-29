@@ -6,9 +6,9 @@ import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_detail_bloc.dart';
-import 'package:themotorwash/ui/screens/store_detail/components/pages/store_overview_tab.dart';
-import 'package:themotorwash/ui/screens/store_detail/components/pages/store_reviews_tab.dart';
-import 'package:themotorwash/ui/screens/store_detail/components/pages/store_services_tab.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/store_overview_tab.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/reviews/store_reviews_tab.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/services/store_services_tab.dart';
 import 'package:themotorwash/ui/widgets/bottom_cart_tile.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
@@ -206,7 +206,14 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
           }
           if (state is StoreDetailError) {
             return Center(
-              child: ErrorScreen(isHome: false),
+              child: ErrorScreen(
+                ctaType: ErrorCTA.reload,
+                onCTAPressed: () {
+                  _cartFunctionBloc.add(GetCart());
+                  _storeDetailBloc
+                      .add(LoadStoreDetail(storeSlug: widget.storeSlug));
+                },
+              ),
             );
           }
           return Center(

@@ -7,6 +7,7 @@ import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/bloc/your_bookings_bloc.dart';
 import 'package:themotorwash/ui/screens/your_bookings/components/your_bookings_tile.dart';
+import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
 import 'package:themotorwash/utils.dart';
 
@@ -105,8 +106,12 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
                   if (state is YourBookingsError) {
                     return SliverFillRemaining(
                       child: Center(
-                        child: Center(
-                          child: Text('Failed to load'),
+                        child: ErrorScreen(
+                          ctaType: ErrorCTA.reload,
+                          onCTAPressed: () {
+                            _bookingsBloc.add(
+                                GetYourBookings(offset: 0, forLoadMore: false));
+                          },
                         ),
                       ),
                     );
