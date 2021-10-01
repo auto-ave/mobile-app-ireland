@@ -8,6 +8,7 @@ import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/slot_select/slot_select_screen.dart';
+import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/utils.dart';
 
 class CartBottomSheet extends StatefulWidget {
@@ -190,21 +191,33 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                               ],
                             ),
                             Spacer(),
-                            TextButton(
-                              child: Text('Select Slot',
-                                  style: TextStyle(color: Colors.white)),
-                              onPressed: () {
-                                _orderReviewBloc.add(SetCart(cart: cart));
-                                Navigator.pushNamed(
-                                    context, SlotSelectScreen.route,
-                                    arguments: SlotSelectScreenArguments(
-                                        cartTotal: cart.total!,
-                                        cardId: cart.id!.toString()));
-                              },
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Theme.of(context).primaryColor)),
-                            ),
+                            CommonTextButton(
+                                onPressed: () {
+                                  _orderReviewBloc.add(SetCart(cart: cart));
+                                  Navigator.pushNamed(
+                                      context, SlotSelectScreen.route,
+                                      arguments: SlotSelectScreenArguments(
+                                          cartTotal: cart.total!,
+                                          cardId: cart.id!.toString()));
+                                },
+                                child: Text('Select Slot',
+                                    style: TextStyle(color: Colors.white)),
+                                backgroundColor: kPrimaryColor)
+                            // TextButton(
+                            //   child: Text('Select Slot',
+                            //       style: TextStyle(color: Colors.white)),
+                            //   onPressed: () {
+                            //     _orderReviewBloc.add(SetCart(cart: cart));
+                            //     Navigator.pushNamed(
+                            //         context, SlotSelectScreen.route,
+                            //         arguments: SlotSelectScreenArguments(
+                            //             cartTotal: cart.total!,
+                            //             cardId: cart.id!.toString()));
+                            //   },
+                            //   style: ButtonStyle(
+                            //       backgroundColor: MaterialStateProperty.all(
+                            //           Theme.of(context).primaryColor)),
+                            // ),
                           ],
                         ),
                       )

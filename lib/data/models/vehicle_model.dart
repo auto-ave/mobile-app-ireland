@@ -6,15 +6,15 @@ part 'vehicle_model.g.dart';
 @HiveType(typeId: 2)
 class VehicleModel extends HiveObject {
   @HiveField(0)
-  final String model;
+  final String? model;
   @HiveField(1)
-  final String vehicleType;
+  final String? vehicleType;
   @HiveField(2)
   final String? description;
   @HiveField(3)
   final String? image;
   @HiveField(4)
-  final String brand;
+  final String? brand;
   VehicleModel({
     required this.model,
     required this.vehicleType,
@@ -61,11 +61,11 @@ class VehicleModel extends HiveObject {
 
 @JsonSerializable()
 class VehicleModelEntity {
-  final String model;
+  final String? model;
   @JsonKey(name: 'vehicle_type')
-  final String vehicleType;
+  final String? vehicleType;
 
-  final String brand;
+  final String? brand;
   final String? description;
   final String? image;
   VehicleModelEntity({

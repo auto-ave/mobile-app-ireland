@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/slot_select/components/no_slots_widget.dart';
 
 class SlotSelectionTab extends StatelessWidget {
   final List<SlotSelectionTabItem> slots;
@@ -55,10 +56,7 @@ class SlotSelectionTab extends StatelessWidget {
     // );
 
     return slots.isEmpty
-        ? Expanded(
-            child: Center(
-            child: Text('Store remains closed this day.'),
-          ))
+        ? Center(child: NoSlotsWidget())
         : GridView.builder(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             itemBuilder: (_, index) {

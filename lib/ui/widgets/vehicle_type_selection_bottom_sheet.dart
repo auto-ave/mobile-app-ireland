@@ -436,7 +436,9 @@ class _VehicleModelSelectionPageState extends State<VehicleModelSelectionPage> {
               print('query ' + query);
               filteredModels = [];
               models.forEach((element) {
-                if (element.model.toLowerCase().contains(query.toLowerCase())) {
+                if (element.model!
+                    .toLowerCase()
+                    .contains(query.toLowerCase())) {
                   filteredModels.add(element);
                   print('brand found');
                 } else {
@@ -522,7 +524,7 @@ class VehicleModelWidget extends StatelessWidget {
                 height: 50,
               ),
               kverticalMargin8,
-              Text(vehicleModel.model)
+              Text(vehicleModel.model!)
             ],
           ),
         ));

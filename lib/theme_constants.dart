@@ -22,6 +22,10 @@ const SizedBox kverticalMargin16 = const SizedBox(
   height: 16,
 );
 
+const SizedBox kverticalMargin24 = const SizedBox(
+  height: 24,
+);
+
 const SizedBox kverticalMargin32 = const SizedBox(
   height: 32,
 );

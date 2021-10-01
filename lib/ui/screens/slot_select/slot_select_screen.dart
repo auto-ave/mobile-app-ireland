@@ -17,6 +17,7 @@ import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.d
 import 'package:themotorwash/ui/screens/order_review/order_review.dart';
 import 'package:themotorwash/ui/screens/slot_select/components/date_selection_tab.dart';
 import 'package:themotorwash/ui/screens/slot_select/components/slot_selection_tab.dart';
+import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/utils.dart';
 
@@ -156,57 +157,74 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
   }
 
   Widget buildBottom() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-      child: Row(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+    return Container(
+        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          BoxShadow(
+              blurRadius: 4,
+              color: Color.fromRGBO(0, 0, 0, .08),
+              offset: Offset(0, -2))
+        ]),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+          child: Row(
             children: <Widget>[
-              Text('₹${widget.cartTotal}',
-                  style: TextStyle(
-                      fontSize: kfontSize16, fontWeight: FontWeight.w500)),
-              SizedBox(
-                height: 4,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text('₹${widget.cartTotal}',
+                      style: TextStyle(
+                          fontSize: kfontSize16, fontWeight: FontWeight.w500)),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'T O T A L',
+                    style: TextStyle(
+                        fontSize: kfontSize12, color: Colors.grey[700]),
+                  ),
+                ],
               ),
-              Text(
-                'T O T A L',
-                style:
-                    TextStyle(fontSize: kfontSize12, color: Colors.grey[700]),
-              ),
+              Spacer(),
+              CommonTextButton(
+                  onPressed: () {
+                    SlotSelectionState state = _bloc.state;
+                    if (currentSelectedSlotIndex >= 0 &&
+                        state is SlotsLoaded &&
+                        currentSelectedDateIndex >= 0) {
+                      Slot slot = state.slots[currentSelectedSlotIndex];
+                      _orderReviewBloc.add(SetSlot(slot: slot));
+                      Navigator.pushNamed(context, OrderReviewScreen.route,
+                          arguments: OrderReviewScreenArguments(
+                              dateSelected:
+                                  calendarDays[currentSelectedDateIndex]));
+                    }
+                  },
+                  child: Text('Proceed', style: TextStyle(color: Colors.white)),
+                  backgroundColor: currentSelectedSlotIndex >= 0
+                      ? Colors.green
+                      : Colors.grey)
+              // TextButton(
+              //   child: Text('Proceed', style: TextStyle(color: Colors.white)),
+              //   onPressed: () {
+              //     SlotSelectionState state = _bloc.state;
+              //     if (currentSelectedSlotIndex >= 0 &&
+              //         state is SlotsLoaded &&
+              //         currentSelectedDateIndex >= 0) {
+              //       Slot slot = state.slots[currentSelectedSlotIndex];
+              //       _orderReviewBloc.add(SetSlot(slot: slot));
+              //       Navigator.pushNamed(context, OrderReviewScreen.route,
+              //           arguments: OrderReviewScreenArguments(
+              //               dateSelected: calendarDays[currentSelectedDateIndex]));
+
+              //     }
+              //   },
+              //   style: ButtonStyle(
+              //       backgroundColor: MaterialStateProperty.all(Colors.green)),
+              // ),
             ],
           ),
-          Spacer(),
-          TextButton(
-            child: Text('Proceed', style: TextStyle(color: Colors.white)),
-            onPressed: () {
-              SlotSelectionState state = _bloc.state;
-              if (currentSelectedSlotIndex >= 0 &&
-                  state is SlotsLoaded &&
-                  currentSelectedDateIndex >= 0) {
-                Slot slot = state.slots[currentSelectedSlotIndex];
-                _orderReviewBloc.add(SetSlot(slot: slot));
-                Navigator.pushNamed(context, OrderReviewScreen.route,
-                    arguments: OrderReviewScreenArguments(
-                        dateSelected: calendarDays[currentSelectedDateIndex]));
-                // _paytmPaymentBloc.add(
-                //   InitiatePaytmPaymentApi(
-                //     slotStart: slot.start!.format(context),
-                //     slotEnd: slot.end!.format(context),
-                //     bay: slot.bays![0],
-                //     date: DateFormat('y-M-d').format(
-                //       calendarDays[currentSelectedDateIndex],
-                //     ),
-                //   ),
-                // );
-              }
-            },
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.green)),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }

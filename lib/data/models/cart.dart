@@ -1,7 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/vehicle_model.dart';
+import 'package:themotorwash/data/models/vehicle_type.dart';
 
 part 'cart.g.dart';
 
@@ -15,19 +17,21 @@ class CartModel {
   final int? consumer;
   final List<int>? items;
   final List<PriceTimeListModel>? itemsObj;
-  final VehicleModel? vehicleType;
-
-  CartModel(
-      {this.id,
-      this.createdAt,
-      this.subTotal,
-      this.total,
-      this.completed,
-      this.store,
-      this.consumer,
-      this.items,
-      this.itemsObj,
-      this.vehicleType});
+  final VehicleModel? vehicleModel;
+  final VehicleTypeModel? vehicleType;
+  CartModel({
+    this.id,
+    this.createdAt,
+    this.subTotal,
+    this.total,
+    this.completed,
+    this.store,
+    this.consumer,
+    this.items,
+    this.itemsObj,
+    this.vehicleModel,
+    this.vehicleType,
+  });
 
   factory CartModel.fromEntity(CartEntity entity) {
     return CartModel(
@@ -42,9 +46,8 @@ class CartModel {
         itemsObj: entity.itemsObj!
             .map((e) => PriceTimeListModel.fromEntity(e))
             .toList(),
-        vehicleType: entity.vehicleType == null
-            ? null
-            : VehicleModel.fromEntity(entity.vehicleType!));
+        vehicleModel: VehicleModel.fromEntity(entity.vehicleModel!),
+        vehicleType: VehicleTypeModel.fromEntity(entity.vehicleType!));
   }
 }
 
@@ -62,21 +65,26 @@ class CartEntity {
   final StoreEntity? store;
   final int? consumer;
   final List<int>? items;
-  @JsonKey(name: 'vehicle_type')
-  final VehicleModelEntity? vehicleType;
+  @JsonKey(name: 'vehicle_model')
+  final VehicleModelEntity? vehicleModel;
   @JsonKey(name: 'item_objs')
   final List<PriceTimeListEntity>? itemsObj;
-  CartEntity(
-      {this.id,
-      this.createdAt,
-      this.subTotal,
-      this.total,
-      this.completed,
-      this.store,
-      this.consumer,
-      this.items,
-      this.itemsObj,
-      this.vehicleType});
+  @JsonKey(name: 'vehicle_type')
+  final VehicleTypeEntity? vehicleType;
+  CartEntity({
+    this.id,
+    this.createdAt,
+    this.subTotal,
+    this.total,
+    this.completed,
+    this.store,
+    this.consumer,
+    this.items,
+    this.itemsObj,
+    this.vehicleModel,
+    this.vehicleType,
+  });
+
   factory CartEntity.fromJson(Map<String, dynamic> data) =>
       _$CartEntityFromJson(data);
 

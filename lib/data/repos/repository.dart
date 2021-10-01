@@ -24,7 +24,8 @@ abstract class Repository {
   Future<List<PriceTimeListModel>> getStoreServicesBySlugAndVehicleType(
       {required String slug, required String vehicleType, required int offset});
 
-  Future<CartModel> postAddItemToCart({required int itemId});
+  Future<CartModel> postAddItemToCart(
+      {required int itemId, required String vehicleModel});
 
   Future<CartModel> postDeleteItemFromCart({required int itemId});
 

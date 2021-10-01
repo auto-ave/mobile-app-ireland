@@ -17,6 +17,7 @@ class StoreServiceTile extends StatelessWidget {
   final bool isAddedToCart;
   final CartFunctionBloc bloc;
   final String time;
+  final String vehicleModel;
 
   final GlobalKey<ScaffoldState> scaffoldState;
   final GlobalAuthBloc globalAuthBloc;
@@ -32,7 +33,8 @@ class StoreServiceTile extends StatelessWidget {
       required this.itemId,
       required this.scaffoldState,
       required this.time,
-      required this.globalAuthBloc})
+      required this.globalAuthBloc,
+      required this.vehicleModel})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -99,7 +101,9 @@ class StoreServiceTile extends StatelessWidget {
                           onPressed: () {
                             if (state is Authenticated) {
                               if (!isAddedToCart) {
-                                bloc.add(AddItemToCart(itemId: itemId));
+                                bloc.add(AddItemToCart(
+                                    itemId: itemId,
+                                    vehicleModel: vehicleModel));
                               } else {
                                 bloc.add(DeleteItemFromCart(itemId: itemId));
                               }
@@ -162,13 +166,16 @@ class StoreServiceTile extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8), topRight: Radius.circular(8))),
-        builder: (_) {
-          return AuthenticationBottomSheet(
-            ctx: ctx,
-            cartBloc: bloc,
-            event: !isAddedToCart
-                ? AddItemToCart(itemId: itemId)
-                : DeleteItemFromCart(itemId: itemId),
+        builder: (context) {
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: AuthenticationBottomSheet(
+              ctx: ctx,
+              cartBloc: bloc,
+              event: !isAddedToCart
+                  ? AddItemToCart(itemId: itemId, vehicleModel: vehicleModel)
+                  : DeleteItemFromCart(itemId: itemId),
+            ),
           );
         });
   }

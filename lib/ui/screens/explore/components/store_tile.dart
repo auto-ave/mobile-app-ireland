@@ -32,7 +32,7 @@ class StoreTile extends StatelessWidget {
       onTap: () => Navigator.pushNamed(context, StoreDetailScreen.route,
           arguments: StoreDetailArguments(storeSlug: storeSlug)),
       child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Container(
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(boxShadow: [
@@ -49,7 +49,7 @@ class StoreTile extends StatelessWidget {
                       placeholder: (_, __) {
                         return ShimmerPlaceholder();
                       },
-                      height: 200,
+                      height: MediaQuery.of(context).size.width * 9 / 16,
                       imageUrl: imageURL,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,

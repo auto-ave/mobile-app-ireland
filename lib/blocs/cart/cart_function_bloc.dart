@@ -24,7 +24,8 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
     CartFunctionEvent event,
   ) async* {
     if (event is AddItemToCart) {
-      yield* _mapAddItemToCartToState(itemId: event.itemId);
+      yield* _mapAddItemToCartToState(
+          itemId: event.itemId, vehicleModel: event.vehicleModel);
     } else if (event is DeleteItemFromCart) {
       yield* _mapDeleteItemFromCart(itemId: event.itemId);
     } else if (event is ClearCart) {
@@ -35,7 +36,7 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
   }
 
   Stream<CartFunctionState> _mapAddItemToCartToState(
-      {required int itemId}) async* {
+      {required int itemId, required String vehicleModel}) async* {
     try {
       if (state is CartFunctionLoading) {
         var previousItems = (state as CartFunctionLoading).itemId;
@@ -49,7 +50,8 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
         yield CartFunctionLoading(itemId: [itemId]);
       }
 
-      CartModel cart = await _repository.postAddItemToCart(itemId: itemId);
+      CartModel cart = await _repository.postAddItemToCart(
+          itemId: itemId, vehicleModel: vehicleModel);
       _orderReviewBloc.add(SetCart(cart: cart));
       yield CartItemAdded(cart: cart);
     } catch (e) {

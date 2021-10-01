@@ -8,11 +8,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class StoreGoogleMap extends StatefulWidget {
   final double latitute;
   final double longitute;
-  const StoreGoogleMap({
-    Key? key,
-    required this.latitute,
-    required this.longitute,
-  }) : super(key: key);
+  final String storeTitle;
+
+  const StoreGoogleMap(
+      {Key? key,
+      required this.latitute,
+      required this.longitute,
+      required this.storeTitle})
+      : super(key: key);
   @override
   State<StoreGoogleMap> createState() => StoreGoogleMapState();
 }
@@ -22,10 +25,11 @@ class StoreGoogleMapState extends State<StoreGoogleMap> {
   @override
   void initState() {
     super.initState();
-    _kGooglePlex = CameraPosition(
+    _kPinnedCamera = CameraPosition(
       target: LatLng(widget.latitute, widget.longitute),
       zoom: 14.4746,
     );
+
     _kLake = CameraPosition(
         bearing: 192.8334901395799,
         target: LatLng(widget.latitute, -122.08832357078792),
@@ -33,37 +37,59 @@ class StoreGoogleMapState extends State<StoreGoogleMap> {
         zoom: 19.151926040649414);
   }
 
-  late final CameraPosition _kGooglePlex;
+  // late final CameraPosition _kGooglePlex;
 
   late final CameraPosition _kLake;
+  late final CameraPosition _kPinnedCamera;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * .26,
-      child: GoogleMap(
-        gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-          new Factory<OneSequenceGestureRecognizer>(
-            () => new EagerGestureRecognizer(),
+    return Stack(
+      children: [
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * .26,
+          child: GoogleMap(
+            liteModeEnabled: false,
+            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+              new Factory<OneSequenceGestureRecognizer>(
+                () => new EagerGestureRecognizer(),
+              ),
+            ].toSet(),
+            mapType: MapType.normal,
+            initialCameraPosition: _kPinnedCamera,
+            markers: [
+              Marker(
+                  markerId: MarkerId('default'),
+                  position: LatLng(widget.latitute, widget.longitute),
+                  infoWindow: InfoWindow(title: widget.storeTitle)),
+            ].toSet(),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
           ),
-        ].toSet(),
-        mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
-        markers: [
-          Marker(
-              markerId: MarkerId('default'),
-              position: LatLng(widget.latitute, widget.longitute))
-        ].toSet(),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
+        ),
+        Positioned(
+          child: GestureDetector(
+            onTap: _goToPinned,
+            child: Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Icon(Icons.location_searching),
+            ),
+          ),
+          left: 8,
+          bottom: 8,
+        )
+      ],
     );
   }
 
-  Future<void> _goToTheLake() async {
+  Future<void> _goToPinned() async {
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    controller.animateCamera(CameraUpdate.newCameraPosition(_kPinnedCamera));
   }
 }

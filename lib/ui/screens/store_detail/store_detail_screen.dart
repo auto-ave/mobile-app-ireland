@@ -151,7 +151,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
                               },
                               imageUrl: i,
                               width: width,
-                              height: width * 3 / 5,
+                              height: width * 9 / 16,
                               fit: BoxFit.cover,
                             );
                           },

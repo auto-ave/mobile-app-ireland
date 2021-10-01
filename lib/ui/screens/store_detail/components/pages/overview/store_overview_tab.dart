@@ -70,7 +70,7 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
                 widget.nestedScrollContext),
           ),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 8),
             sliver: SliverToBoxAdapter(
                 child: StoreHeading(
               onPressedRating: widget.onPressedRating,
@@ -110,6 +110,7 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             sliver: SliverToBoxAdapter(
                 child: StoreGoogleMap(
+              storeTitle: widget.store.name!,
               latitute: widget.store.latitude!,
               longitute: widget.store.longitude!,
             )

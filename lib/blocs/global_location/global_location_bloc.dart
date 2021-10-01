@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:themotorwash/data/models/city.dart';
@@ -36,12 +37,12 @@ class GlobalLocationBloc
       bool serviceEnabled;
       LocationPermission permission;
 
-      // Test if location services are enabled.
+      // // Test if location services are enabled.
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        // Location services are not enabled don't continue
-        // accessing the position and request users of the
-        // App to enable the location services.
+        //   // Location services are not enabled don't continue
+        //   // accessing the position and request users of the
+        //   // App to enable the location services.
         yield LocationServiceNotEnabledError();
       } else {
         permission = await Geolocator.checkPermission();
@@ -57,6 +58,7 @@ class GlobalLocationBloc
             [Geolocator.getCurrentPosition(), _repository.getListOfCities()]);
         Position location = responses[0];
         List<City> cities = responses[1];
+
         City city = cities[0];
         yield LocationSet(
             location: LocationModel(
@@ -66,7 +68,7 @@ class GlobalLocationBloc
                 long: location.longitude));
       }
     } catch (e) {
-      GlobalLocationError(message: e.toString());
+      yield GlobalLocationError(message: e.toString());
     }
   }
 
@@ -77,6 +79,7 @@ class GlobalLocationBloc
 
   Stream<GlobalLocationState> _mapSkipUserLocationToState() async* {
     try {
+      yield RetrievingLocation();
       List<City> cities = await _repository.getListOfCities();
       City city = cities[0];
 
@@ -86,6 +89,8 @@ class GlobalLocationBloc
               cityName: city.name,
               lat: double.parse(city.latitude),
               long: double.parse(city.longitude)));
-    } catch (e) {}
+    } catch (e) {
+      yield GlobalLocationError(message: e.toString() + " SKIP NOT WORKING");
+    }
   }
 }

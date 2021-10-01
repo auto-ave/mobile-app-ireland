@@ -18,6 +18,7 @@ import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/services/components/vehicle_selected_info.dart';
 import 'package:themotorwash/utils.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
 
@@ -35,13 +36,15 @@ class OrderReviewScreen extends StatefulWidget {
 
 class _OrderReviewScreenState extends State<OrderReviewScreen> {
   final TextStyle rightSideInfoPrimaryColor = TextStyle(
-      color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize12);
+      color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize14);
   final TextStyle leftSideInfo =
-      const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
+      const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize14);
   final TextStyle leftSide14SemiBold =
       TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
-  final TextStyle rightSide12SemiBold =
-      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
+  final TextStyle rightSide14SemiBold =
+      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
+  final TextStyle headingTextStyle =
+      kStyle14SemiBold.copyWith(color: Colors.grey[700], letterSpacing: 1.8);
   late SlotSelectionBloc _bloc;
   late PaytmPaymentBloc _paytmPaymentBloc;
   late SimpleFontelicoProgressDialog _dialog;
@@ -148,11 +151,11 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildStoreDetails(store: state.cart.store!),
-                        kverticalMargin16,
-                        _buildCarTypeDetails(vehicle: state.cart.vehicleType!),
-                        kverticalMargin16,
+                        kverticalMargin24,
+                        _buildCarTypeDetails(vehicle: state.cart.vehicleModel!),
+                        kverticalMargin24,
                         _buildSlotTiming(slot: state.slot),
-                        kverticalMargin16,
+                        kverticalMargin24,
                         ..._buildServices(cart: state.cart),
                         ..._buildListPriceInfo(cart: state.cart),
                       ],
@@ -179,11 +182,11 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text('STORE', style: kStyle12.copyWith(color: Colors.grey[700])),
+        Text('STORE', style: headingTextStyle),
         kverticalMargin4,
         Text(
           '${store.name!}',
-          style: kStyle14.copyWith(color: kPrimaryColor),
+          style: kStyle16SemiBold.copyWith(color: kPrimaryColor),
         )
       ],
     );
@@ -194,21 +197,18 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text('CAR TYPE', style: kStyle12.copyWith(color: Colors.grey[700])),
+        Text('CAR TYPE', style: headingTextStyle),
         kverticalMargin8,
-        Text(
-          '${vehicle.brand} (${vehicle.model})',
-          style: kStyle14,
-        ),
+        SelectedVehicleWidget(vehicleModel: vehicle),
         kverticalMargin8,
-        Container(
-          padding: EdgeInsets.all(8),
-          child: Text(
-            'Selecting correct car type is important to give you best services and to avoid any further hassel. Please check the car type before continuing further.Problem selecting car type? Click here',
-            style: kStyle12.copyWith(color: Color(0xff621181)),
-          ),
-          decoration: BoxDecoration(color: Color(0xffFAEDFF)),
-        )
+        // Container(
+        //   padding: EdgeInsets.all(8),
+        //   child: Text(
+        //     'Selecting correct car type is important to give you best services and to avoid any further hassel. Please check the car type before continuing further.Problem selecting car type? Click here',
+        //     style: kStyle12.copyWith(color: Color(0xff621181)),
+        //   ),
+        //   decoration: BoxDecoration(color: Color(0xffFAEDFF)),
+        // )
       ],
     );
   }
@@ -218,7 +218,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text('SLOT TIMING', style: kStyle12.copyWith(color: Colors.grey[700])),
+        Text('SLOT TIMING', style: headingTextStyle),
         kverticalMargin8,
         Text(
           '${formatter.format(widget.dateSelected)}',
@@ -246,14 +246,13 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('SERVICES',
-                    style: kStyle12.copyWith(color: Colors.grey[700])),
+                Text('SERVICES', style: headingTextStyle),
                 kverticalMargin8,
                 getDetailsRow(
                     leftText: e.service,
                     rightText: '₹${e.price}',
                     leftStyle: leftSide14SemiBold,
-                    rightStyle: rightSide12SemiBold),
+                    rightStyle: rightSide14SemiBold),
                 kverticalMargin8
               ],
             ))
@@ -269,13 +268,13 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
           leftText: 'Item Total',
           rightText: '₹${cart.total}',
           leftStyle: leftSideInfo,
-          rightStyle: rightSide12SemiBold),
+          rightStyle: rightSide14SemiBold),
       kverticalMargin8,
       getDetailsRow(
           leftText: 'Taxes',
           rightText: '₹0',
           leftStyle: leftSideInfo,
-          rightStyle: rightSide12SemiBold),
+          rightStyle: rightSide14SemiBold),
       Divider(
         height: 16,
       ),
@@ -318,10 +317,12 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Divider(),
+          Divider(
+            thickness: 1,
+          ),
           TextButton(
             child: Text('Proceed to payment',
-                style: TextStyle(color: Colors.white)),
+                style: kStyle16SemiBold.copyWith(color: Colors.white)),
             onPressed: () {
               _paytmPaymentBloc.add(
                 InitiatePaytmPaymentApi(
@@ -335,6 +336,8 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
               );
             },
             style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(horizontal: 16)),
                 backgroundColor: MaterialStateProperty.all(Colors.green)),
           ),
         ],

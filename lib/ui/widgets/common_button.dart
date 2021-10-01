@@ -20,6 +20,8 @@ class CommonTextButton extends StatelessWidget {
       child: child,
       onPressed: onPressed,
       style: ButtonStyle(
+          padding:
+              MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 16)),
           backgroundColor: MaterialStateProperty.all(backgroundColor),
           shape: border != null ? MaterialStateProperty.all(border) : null),
     );

@@ -158,7 +158,9 @@ class _ExploreScreenState extends State<ExploreScreen>
                   forPermission: true,
                 );
               }
+              print('state is $state');
               return Center(
+                // child: Text('herllasdlas'),
                 child: loadingAnimation(),
               );
             }),
@@ -211,8 +213,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                       builder: (context, state) {
                         if (state is SearchServicesUninitialized) {
                           return Center(
-                            child: SvgPicture.asset(
-                                'assets/images/search_placeholder.svg'),
+                            child: Image.asset('assets/images/no_search.svg'),
                           );
                         }
                         return SearchOverlay(

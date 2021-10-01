@@ -70,8 +70,10 @@ class RestRepository implements Repository {
   }
 
   @override
-  Future<CartModel> postAddItemToCart({required int itemId}) async {
-    CartEntity entity = await _apiMethodsImp.postAddItemToCart(itemId: itemId);
+  Future<CartModel> postAddItemToCart(
+      {required int itemId, required String vehicleModel}) async {
+    CartEntity entity = await _apiMethodsImp.postAddItemToCart(
+        itemId: itemId, vehicleModel: vehicleModel);
     return CartModel.fromEntity(entity);
   }
 

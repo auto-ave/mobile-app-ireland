@@ -11,8 +11,7 @@ class LocalDataService {
   final String refreshTokenKey = 'refresh_token';
   final String vehicleKey = 'saved_vehicle';
   LocalDataService() {
-    Hive.registerAdapter<VehicleModel>(VehicleTypeModelAdapter(),
-        override: true);
+    Hive.registerAdapter<VehicleModel>(VehicleModelAdapter(), override: true);
   }
 
   Future storeAuthToken(AuthTokensModel tokens) async {

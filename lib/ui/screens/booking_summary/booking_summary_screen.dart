@@ -90,7 +90,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                           children: <Widget>[
                             Image.asset(widget.isTransactionSuccessful
                                 ? 'assets/images/bookingConfirmedHands.png'
-                                : 'assets/images/bookingFailedHands.png'),
+                                : 'assets/images/thumbs_down.png'),
                             SizedBox(
                               width: 16,
                             ),

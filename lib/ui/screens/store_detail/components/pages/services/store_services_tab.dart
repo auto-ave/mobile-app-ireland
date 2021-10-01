@@ -76,7 +76,7 @@ class _StoreServicesTabState extends State<StoreServicesTab>
         if (vehicleState is GlobalVehicleTypeSelected) {
           _servicesBloc.add(LoadStoreServices(
               slug: widget.storeSlug,
-              vehicleType: vehicleState.vehicleTypeModel.vehicleType,
+              vehicleType: vehicleState.vehicleTypeModel.vehicleType!,
               offset: 0,
               forLoadMore: false));
         }
@@ -100,7 +100,7 @@ class _StoreServicesTabState extends State<StoreServicesTab>
               if (_servicesBloc.state is StoreServicesLoaded) {
                 _servicesBloc.add(LoadStoreServices(
                     slug: widget.storeSlug,
-                    vehicleType: vehicleState.vehicleTypeModel.vehicleType,
+                    vehicleType: vehicleState.vehicleTypeModel.vehicleType!,
                     offset: services.length,
                     forLoadMore: true));
               }
@@ -158,6 +158,8 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                           delegate: SliverChildBuilderDelegate((_, index) {
                           var service = services[index];
                           var tile = StoreServiceTile(
+                              vehicleModel:
+                                  vehicleState.vehicleTypeModel.model!,
                               time: service.timeInterval.toString(),
                               scaffoldState: widget.scaffoldState,
                               itemId: service.id!,
@@ -190,7 +192,7 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                           _servicesBloc.add(LoadStoreServices(
                               slug: widget.storeSlug,
                               vehicleType:
-                                  vehicleState.vehicleTypeModel.vehicleType,
+                                  vehicleState.vehicleTypeModel.vehicleType!,
                               offset: 0,
                               forLoadMore: false));
                         },

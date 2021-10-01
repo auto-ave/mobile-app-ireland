@@ -31,7 +31,8 @@ abstract class ApiMethods {
   Future<List<PriceTimeListEntity>> getStoreServicesBySlugAndVehicleType(
       {required String slug, required String vehicleType, required int offset});
 
-  Future<CartEntity> postAddItemToCart({required int itemId});
+  Future<CartEntity> postAddItemToCart(
+      {required int itemId, required String vehicleModel});
 
   Future<CartEntity> postDeleteItemFromCart({required int itemId});
 

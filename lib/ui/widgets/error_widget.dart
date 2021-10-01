@@ -23,7 +23,7 @@ class ErrorScreen extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SvgPicture.asset('assets/images/error_illustration.svg'),
+        Image.asset('assets/images/error_illust.png'),
         kverticalMargin16,
         Text(
           'Oops! an error occured.',
@@ -39,7 +39,7 @@ class ErrorScreen extends StatelessWidget {
                     },
                 child: Text(
                   ctaType == ErrorCTA.reload ? 'Reload' : 'Home',
-                  style: kStyle16SemiBold,
+                  style: kStyle16SemiBold.copyWith(color: Colors.white),
                 ),
                 backgroundColor: kPrimaryColor)
             : Container()

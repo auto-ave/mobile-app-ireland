@@ -87,27 +87,27 @@ PreferredSizeWidget getAppBarLoginScreen(
 }
 
 Widget loadingAnimation() {
-  return SizedBox(
-    width: 300,
-    height: 300,
-    child: RiveAnimation.asset(
-      'assets/animations/clean_the_car.riv',
-    ),
-  );
-  // final spinkit = SpinKitThreeInOut(
-  //   itemBuilder: (BuildContext context, int index) {
-  //     return Padding(
-  //       padding: const EdgeInsets.all(6.0),
-  //       child: DecoratedBox(
-  //         decoration: BoxDecoration(
-  //           shape: BoxShape.circle,
-  //           color: index.isEven ? kPrimaryColor : Color(0xffbfdcff),
-  //         ),
-  //       ),
-  //     );
-  //   },
+  // return SizedBox(
+  //   width: 300,
+  //   height: 300,
+  //   child: RiveAnimation.asset(
+  //     'assets/animations/clean_the_car.riv',
+  //   ),
   // );
-  // return spinkit;
+  final spinkit = SpinKitThreeInOut(
+    itemBuilder: (BuildContext context, int index) {
+      return Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: index.isEven ? kPrimaryColor : Color(0xffbfdcff),
+          ),
+        ),
+      );
+    },
+  );
+  return spinkit;
 }
 
 String? validateEmail(String? email) {

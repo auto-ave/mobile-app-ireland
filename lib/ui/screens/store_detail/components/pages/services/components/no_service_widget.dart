@@ -8,7 +8,7 @@ class NoServiceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      SvgPicture.asset('assets/images/no_services.svg'),
+      Image.asset('assets/images/thumbs_down.png'),
       kverticalMargin16,
       Text(
         'Sorry we don’t have services your vehicle',

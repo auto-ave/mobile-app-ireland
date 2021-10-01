@@ -6,7 +6,7 @@ part of 'vehicle_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class VehicleTypeModelAdapter extends TypeAdapter<VehicleModel> {
+class VehicleModelAdapter extends TypeAdapter<VehicleModel> {
   @override
   final int typeId = 2;
 
@@ -17,11 +17,11 @@ class VehicleTypeModelAdapter extends TypeAdapter<VehicleModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return VehicleModel(
-      model: fields[0] as String,
-      vehicleType: fields[1] as String,
+      model: fields[0] as String?,
+      vehicleType: fields[1] as String?,
       description: fields[2] as String?,
       image: fields[3] as String?,
-      brand: fields[4] as String,
+      brand: fields[4] as String?,
     );
   }
 
@@ -47,7 +47,7 @@ class VehicleTypeModelAdapter extends TypeAdapter<VehicleModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is VehicleTypeModelAdapter &&
+      other is VehicleModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -58,9 +58,9 @@ class VehicleTypeModelAdapter extends TypeAdapter<VehicleModel> {
 
 VehicleModelEntity _$VehicleModelEntityFromJson(Map<String, dynamic> json) {
   return VehicleModelEntity(
-    model: json['model'] as String,
-    vehicleType: json['vehicle_type'] as String,
-    brand: json['brand'] as String,
+    model: json['model'] as String?,
+    vehicleType: json['vehicle_type'] as String?,
+    brand: json['brand'] as String?,
     description: json['description'] as String?,
     image: json['image'] as String?,
   );

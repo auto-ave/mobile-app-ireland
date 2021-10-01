@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/cart_bottom_sheet.dart';
+import 'package:themotorwash/ui/widgets/common_button.dart';
 
 class BottomCartTile extends StatelessWidget {
   final CartModel cart;
@@ -40,14 +41,20 @@ class BottomCartTile extends StatelessWidget {
                 ],
               ),
               Spacer(),
-              TextButton(
-                child: Text('View Cart', style: TextStyle(color: Colors.white)),
-                onPressed: () =>
-                    _showCartSheet(storeName: 'Store Name', context: context),
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).primaryColor)),
-              ),
+              CommonTextButton(
+                  onPressed: () =>
+                      _showCartSheet(storeName: 'Store Name', context: context),
+                  child:
+                      Text('View Cart', style: TextStyle(color: Colors.white)),
+                  backgroundColor: Theme.of(context).primaryColor)
+              // TextButton(
+              //   child: Text('View Cart', style: TextStyle(color: Colors.white)),
+              //   onPressed: () =>
+              //       _showCartSheet(storeName: 'Store Name', context: context),
+              //   style: ButtonStyle(
+              //       backgroundColor: MaterialStateProperty.all(
+              //           Theme.of(context).primaryColor)),
+              // ),
             ],
           ),
         )

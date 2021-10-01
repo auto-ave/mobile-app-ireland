@@ -112,13 +112,14 @@ class ApiService implements ApiMethods {
   }
 
   @override
-  Future<CartEntity> postAddItemToCart({required int itemId}) async {
+  Future<CartEntity> postAddItemToCart(
+      {required int itemId, required String vehicleModel}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postAddItemToCartEndpoint();
 
     Response res = await client.post(
       url,
-      data: {'item': itemId},
+      data: {'item': itemId, 'vehicle_model': vehicleModel},
     );
     print(res.toString() + "helloooo");
     dynamic cartData = jsonDecode(res.data);

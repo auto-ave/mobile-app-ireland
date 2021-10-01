@@ -8,10 +8,10 @@ class NoReviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
-      SvgPicture.asset('assets/images/no_services.svg'),
+      Image.asset('assets/images/no_reviews.png'),
       kverticalMargin16,
       Text(
-        'Sorry we don’t have services your vehicle',
+        'No reviews yet!',
         style: kStyle16.copyWith(color: kGreyTextColor),
       )
     ]);
