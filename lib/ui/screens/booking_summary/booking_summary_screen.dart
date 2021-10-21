@@ -38,9 +38,9 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
   //     color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize12);
   // final TextStyle leftSideInfo =
   //     const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
-  // final TextStyle leftSide14SemiBold =
+  // final TextStyle leftSide14W500 =
   //     TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
-  // final TextStyle rightSide12SemiBold =
+  // final TextStyle rightSide12W500 =
   //     TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
 
   late BookingSummaryBloc _bookingSummaryBloc;

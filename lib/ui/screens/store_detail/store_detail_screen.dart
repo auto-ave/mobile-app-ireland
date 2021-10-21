@@ -57,7 +57,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
               context: context,
               title: Text(
                 storeName!,
-                style: kStyle14SemiBold.copyWith(color: Colors.black),
+                style: kStyle14W500.copyWith(color: Colors.black),
               ))
           : null,
       key: _scaffoldState,

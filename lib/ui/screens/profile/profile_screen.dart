@@ -215,15 +215,17 @@ class CommonTextField extends StatelessWidget {
   final String? hintText;
   final TextEditingController fieldController;
   final String? Function(String?)? validator;
+  final bool filled;
   final int? maxLines;
-  const CommonTextField(
-      {Key? key,
-      this.fieldName,
-      this.hintText,
-      required this.fieldController,
-      this.validator,
-      this.maxLines})
-      : super(key: key);
+  const CommonTextField({
+    Key? key,
+    this.fieldName,
+    this.hintText,
+    required this.fieldController,
+    this.validator,
+    this.filled = true,
+    this.maxLines,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +235,7 @@ class CommonTextField extends StatelessWidget {
       style: kStyle14W500,
       maxLines: maxLines,
       decoration: InputDecoration(
-        filled: true,
+        filled: filled,
         fillColor: Color(0xffF2F8FF),
         labelText: fieldName,
         hintText: hintText,

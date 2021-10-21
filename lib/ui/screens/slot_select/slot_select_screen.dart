@@ -65,7 +65,7 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
           context: context,
           title: Text(
             'Select Slot',
-            style: kStyle14SemiBold.copyWith(color: Colors.black),
+            style: kStyle14W500.copyWith(color: Colors.black),
           )),
       backgroundColor: Colors.white,
       bottomNavigationBar: buildBottom(),

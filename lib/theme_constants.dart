@@ -47,19 +47,16 @@ const TextStyle kStyle12 =
     const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
 const TextStyle kStyle10 =
     const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize10);
-const TextStyle kStyle14SemiBold =
+const TextStyle kStyle14W500 =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize14);
 const TextStyle kStyle14 = const TextStyle(fontSize: kfontSize14);
 
 const TextStyle kStyle14PrimaryColor =
     const TextStyle(fontSize: kfontSize14, color: kPrimaryColor);
-const TextStyle kStyle14W500 =
-    const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize14);
-const TextStyle kStyle12SemiBold =
+
+const TextStyle kStyle12W500 =
     const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize12);
 
-const TextStyle kStyle16SemiBold =
-    const TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize16);
 const TextStyle kStyle16Bold =
     const TextStyle(fontWeight: FontWeight.w700, fontSize: kfontSize16);
 const TextStyle kStyle16 = const TextStyle(fontSize: kfontSize16);

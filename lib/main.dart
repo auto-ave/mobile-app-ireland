@@ -253,10 +253,12 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                     child: Center(
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        scale: 4,
-                      ),
+                      child: Builder(builder: (ctx) {
+                        return Image.asset(
+                          'assets/images/logo.png',
+                          scale: 4,
+                        );
+                      }),
                     ),
                   ),
                 );
@@ -378,7 +380,9 @@ class _MyAppState extends State<MyApp> {
             if (settings.name == FeedbackScreen.route) {
               return MaterialPageRoute(
                 builder: (context) {
-                  return FeedbackScreen();
+                  return FeedbackScreen(
+                    isFeedback: true,
+                  );
                 },
               );
             }

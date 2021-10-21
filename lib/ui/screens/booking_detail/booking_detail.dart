@@ -86,7 +86,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(bookingDetail.store!.name!,
-                                style: kStyle16SemiBold),
+                                style: kStyle16W500),
                             Text(
                               bookingDetail.store!.address!,
                               style:

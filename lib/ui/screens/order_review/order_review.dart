@@ -39,12 +39,12 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize14);
   final TextStyle leftSideInfo =
       const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize14);
-  final TextStyle leftSide14SemiBold =
+  final TextStyle leftSide14W500 =
       TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
-  final TextStyle rightSide14SemiBold =
+  final TextStyle rightSide14W500 =
       TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
   final TextStyle headingTextStyle =
-      kStyle14SemiBold.copyWith(color: Colors.grey[700], letterSpacing: 1.8);
+      kStyle14W500.copyWith(color: Colors.grey[700], letterSpacing: 1.8);
   late SlotSelectionBloc _bloc;
   late PaytmPaymentBloc _paytmPaymentBloc;
   late SimpleFontelicoProgressDialog _dialog;
@@ -141,7 +141,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                     context: context,
                     title: Text(
                       'Review Order',
-                      style: kStyle14SemiBold.copyWith(color: Colors.black),
+                      style: kStyle14W500.copyWith(color: Colors.black),
                     )),
                 bottomNavigationBar: buildBottom(slot: state.slot),
                 body: SingleChildScrollView(
@@ -169,7 +169,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                   context: context,
                   title: Text(
                     'Review Order',
-                    style: kStyle14SemiBold.copyWith(color: Colors.black),
+                    style: kStyle14W500.copyWith(color: Colors.black),
                   )),
               body: Center(child: loadingAnimation()),
             );
@@ -186,7 +186,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
         kverticalMargin4,
         Text(
           '${store.name!}',
-          style: kStyle16SemiBold.copyWith(color: kPrimaryColor),
+          style: kStyle16W500.copyWith(color: kPrimaryColor),
         )
       ],
     );
@@ -233,7 +233,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
           ),
           child: Text(
             '${getStringFromTime(slot.start!)} - ${getStringFromTime(slot.end!)}',
-            style: kStyle14SemiBold.copyWith(color: kPrimaryColor),
+            style: kStyle14W500.copyWith(color: kPrimaryColor),
           ),
         ),
       ],
@@ -251,8 +251,8 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                 getDetailsRow(
                     leftText: e.service,
                     rightText: '₹${e.price}',
-                    leftStyle: leftSide14SemiBold,
-                    rightStyle: rightSide14SemiBold),
+                    leftStyle: leftSide14W500,
+                    rightStyle: rightSide14W500),
                 kverticalMargin8
               ],
             ))
@@ -268,13 +268,13 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
           leftText: 'Item Total',
           rightText: '₹${cart.total}',
           leftStyle: leftSideInfo,
-          rightStyle: rightSide14SemiBold),
+          rightStyle: rightSide14W500),
       kverticalMargin8,
       getDetailsRow(
           leftText: 'Taxes',
           rightText: '₹0',
           leftStyle: leftSideInfo,
-          rightStyle: rightSide14SemiBold),
+          rightStyle: rightSide14W500),
       Divider(
         height: 16,
       ),
@@ -322,7 +322,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
           ),
           TextButton(
             child: Text('Proceed to payment',
-                style: kStyle16SemiBold.copyWith(color: Colors.white)),
+                style: kStyle16W500.copyWith(color: Colors.white)),
             onPressed: () {
               _paytmPaymentBloc.add(
                 InitiatePaytmPaymentApi(

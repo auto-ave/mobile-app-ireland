@@ -88,7 +88,7 @@ class StoreTile extends StatelessWidget {
                     children: [
                       Text(
                         storeName,
-                        style: kStyle14SemiBold,
+                        style: kStyle14W500,
                       ),
                       kverticalMargin4,
                       Text(

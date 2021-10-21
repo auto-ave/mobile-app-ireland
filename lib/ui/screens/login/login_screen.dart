@@ -132,7 +132,7 @@ class _LoginBottomState extends State<LoginBottom> {
                     children: [
                       Text(
                         'Enter your phone number',
-                        style: kStyle14SemiBold.copyWith(
+                        style: kStyle14W500.copyWith(
                             fontWeight: FontWeight.normal),
                       ),
                       kverticalMargin8,
@@ -209,7 +209,7 @@ class PhoneTextField extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               kHorizontalMargin16,
-              Text('+91', style: kStyle14SemiBold),
+              Text('+91', style: kStyle14W500),
               kHorizontalMargin8,
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),

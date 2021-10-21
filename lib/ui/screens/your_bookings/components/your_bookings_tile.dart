@@ -81,7 +81,7 @@ class _YourBookingTileState extends State<YourBookingTile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(widget.storeName, style: kStyle16SemiBold),
+                        Text(widget.storeName, style: kStyle16W500),
                         Text(
                           widget.address,
                           style: kStyle12.copyWith(color: Color(0xff888888)),
@@ -91,14 +91,14 @@ class _YourBookingTileState extends State<YourBookingTile> {
                       ],
                     ),
                   ),
-                  Text('₹${widget.total}', style: kStyle16SemiBold)
+                  Text('₹${widget.total}', style: kStyle16W500)
                 ]),
                 Divider(),
                 getBookingStatusTag(widget.status),
                 kverticalMargin8,
                 Text(
                   'I T E M S',
-                  style: kStyle12SemiBold.copyWith(color: Color(0xff888888)),
+                  style: kStyle12W500.copyWith(color: Color(0xff888888)),
                 ),
                 kverticalMargin4,
                 ...(widget.serviceNames.map((e) => getBulletText(e)).toList()),
@@ -112,7 +112,7 @@ class _YourBookingTileState extends State<YourBookingTile> {
                 kverticalMargin8,
                 Text(
                   'SCHEDULED ON',
-                  style: kStyle12SemiBold.copyWith(
+                  style: kStyle12W500.copyWith(
                       letterSpacing: 2.16, color: Color(0xff888888)),
                 ),
                 kverticalMargin8,

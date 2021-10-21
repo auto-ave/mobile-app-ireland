@@ -76,7 +76,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text('An OTP is sent to ${widget.phoneNumber}',
-                                style: kStyle16SemiBold.copyWith(
+                                style: kStyle16W500.copyWith(
                                     fontWeight: FontWeight.normal)),
                             kverticalMargin16,
                             Text.rich(

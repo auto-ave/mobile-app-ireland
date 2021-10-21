@@ -79,7 +79,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                       children: [
                         Text(
                           'Empty Cart',
-                          style: kStyle16SemiBold,
+                          style: kStyle16W500,
                         ),
                         kHorizontalMargin8,
                         Icon(

@@ -83,7 +83,7 @@ class DateSelectionWidget extends StatelessWidget {
               FittedBox(
                 child: Text(
                   getWeekdayText(date.weekday),
-                  style: kStyle16SemiBold.copyWith(
+                  style: kStyle16W500.copyWith(
                       color: isSelected ? Colors.white : Color(0xff8C8C8C),
                       fontWeight: FontWeight.w400),
                 ),

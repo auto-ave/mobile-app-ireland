@@ -113,7 +113,7 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
           kverticalMargin8,
           Text(
             'To continue further please sign in',
-            style: kStyle16SemiBold.copyWith(fontWeight: FontWeight.w500),
+            style: kStyle16W500.copyWith(fontWeight: FontWeight.w500),
           ),
           Divider(
             height: 32,

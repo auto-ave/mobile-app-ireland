@@ -15,9 +15,9 @@ class DashedBookingBox extends StatelessWidget {
       color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize12);
   final TextStyle leftSideInfo =
       const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
-  final TextStyle leftSide14SemiBold =
+  final TextStyle leftSide14W500 =
       TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
-  final TextStyle rightSide12SemiBold =
+  final TextStyle rightSide12W500 =
       TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
   final DateFormat formatter = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);
 
@@ -76,8 +76,8 @@ class DashedBookingBox extends StatelessWidget {
                         getDetailsRow(
                             leftText: e.service,
                             rightText: '₹${e.price}',
-                            leftStyle: leftSide14SemiBold,
-                            rightStyle: rightSide12SemiBold),
+                            leftStyle: leftSide14W500,
+                            rightStyle: rightSide12W500),
                         kverticalMargin8
                       ],
                     ))
@@ -99,19 +99,19 @@ class DashedBookingBox extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Payment Summary', style: leftSide14SemiBold),
+          Text('Payment Summary', style: leftSide14W500),
           kverticalMargin8,
           getDetailsRow(
               leftText: 'Item Total',
               rightText: '₹${bookingDetail.payment!.amount}',
               leftStyle: leftSideInfo,
-              rightStyle: rightSide12SemiBold),
+              rightStyle: rightSide12W500),
           kverticalMargin8,
           getDetailsRow(
               leftText: 'Taxes',
               rightText: '₹0',
               leftStyle: leftSideInfo,
-              rightStyle: rightSide12SemiBold),
+              rightStyle: rightSide12W500),
           kverticalMargin8,
           getDetailsRow(
               leftText: 'Grand Total',

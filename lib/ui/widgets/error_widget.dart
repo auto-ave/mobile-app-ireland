@@ -39,7 +39,7 @@ class ErrorScreen extends StatelessWidget {
                     },
                 child: Text(
                   ctaType == ErrorCTA.reload ? 'Reload' : 'Home',
-                  style: kStyle16SemiBold.copyWith(color: Colors.white),
+                  style: kStyle16W500.copyWith(color: Colors.white),
                 ),
                 backgroundColor: kPrimaryColor)
             : Container()
