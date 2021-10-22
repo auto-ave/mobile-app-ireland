@@ -20,13 +20,13 @@ class LoadingMoreTile extends StatelessWidget {
           child: tile,
           width: double.infinity,
         ),
-        kverticalMargin16,
+        SizeConfig.kverticalMargin16,
         SizedBox(
           child: CircularProgressIndicator(),
           height: 30,
           width: 30,
         ),
-        kverticalMargin16,
+        SizeConfig.kverticalMargin16,
       ],
     );
   }

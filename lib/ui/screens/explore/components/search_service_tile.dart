@@ -36,7 +36,7 @@ class SearchServiceTile extends StatelessWidget {
                   imageUrl: imageUrl,
                 ),
               ),
-              kverticalMargin8,
+              SizeConfig.kverticalMargin8,
               Text(
                 serviceName,
                 overflow: TextOverflow.ellipsis,

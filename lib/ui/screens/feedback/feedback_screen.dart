@@ -65,28 +65,29 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 //   fieldController: emailController,
                 //   validator: validateEmail,
                 // ),
-                // kverticalMargin16,
+                // SizeConfig.kverticalMargin16,
                 // CommonTextField(
                 //   fieldName: 'Phone',
                 //   fieldController: phoneController,
                 //   validator: validatePhone,
                 // ),
-                // kverticalMargin16,
+                // SizeConfig.kverticalMargin16,
                 Text(
                   'We did love to hear from you',
-                  style: kStyle16W500,
+                  style: SizeConfig.kStyle16W500,
                 ),
-                kverticalMargin8,
+                SizeConfig.kverticalMargin8,
                 Text(
                   'If you have any questions, feedback or any problems please contact us. We are happy to hear from you',
-                  style: kStyle12.copyWith(color: kGreyTextColor),
+                  style: SizeConfig.kStyle12
+                      .copyWith(color: SizeConfig.kGreyTextColor),
                 ),
-                kverticalMargin16,
+                SizeConfig.kverticalMargin16,
                 Text(
                   'Your message',
-                  style: kStyle12W500,
+                  style: SizeConfig.kStyle12W500,
                 ),
-                kverticalMargin8,
+                SizeConfig.kverticalMargin8,
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .2,
                   child: CommonTextField(
@@ -104,7 +105,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     filled: false,
                   ),
                 ),
-                kverticalMargin16,
+                SizeConfig.kverticalMargin16,
                 BlocBuilder<FeedbackBloc, FeedbackState>(
                   bloc: _feedbackBloc,
                   builder: (context, state) {
@@ -130,20 +131,20 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                 'Submit',
                                 style: TextStyle(color: Colors.white),
                               ),
-                        backgroundColor: kPrimaryColor);
+                        backgroundColor: SizeConfig.kPrimaryColor);
                   },
                 ),
-                kverticalMargin32,
+                SizeConfig.kverticalMargin32,
                 Row(
                   children: [
                     Expanded(child: Divider()),
-                    kHorizontalMargin8,
+                    SizeConfig.kHorizontalMargin8,
                     Text('OR'),
-                    kHorizontalMargin8,
+                    SizeConfig.kHorizontalMargin8,
                     Expanded(child: Divider()),
                   ],
                 ),
-                kverticalMargin32,
+                SizeConfig.kverticalMargin32,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

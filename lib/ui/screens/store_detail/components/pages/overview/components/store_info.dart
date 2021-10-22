@@ -38,12 +38,12 @@ class StoreInfo extends StatelessWidget {
             Expanded(
                 child: Text(
               address,
-              style: kStyle14,
+              style: SizeConfig.kStyle14,
               overflow: TextOverflow.ellipsis,
             ))
           ],
         ),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         Row(
           children: [
             Container(
@@ -61,13 +61,13 @@ class StoreInfo extends StatelessWidget {
             ),
             Text(
               "9am to 6pm test",
-              style: kStyle14,
+              style: SizeConfig.kStyle14,
             )
             // Text(
             //     "${openingTime.format(context)} to ${closingTime.format(context)}"),
           ],
         ),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         Row(
           children: [
             Container(
@@ -85,11 +85,11 @@ class StoreInfo extends StatelessWidget {
             ),
             Text(
               "Monday - Saturday",
-              style: kStyle14,
+              style: SizeConfig.kStyle14,
             )
           ],
         ),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         Text.rich(
           TextSpan(children: [
             TextSpan(
@@ -101,7 +101,7 @@ class StoreInfo extends StatelessWidget {
             TextSpan(
               text: '₹$serviceStartsAt ',
               style: TextStyle(
-                  color: kPrimaryColor,
+                  color: SizeConfig.kPrimaryColor,
                   fontSize: 16,
                   fontWeight: FontWeight.w500),
             ),

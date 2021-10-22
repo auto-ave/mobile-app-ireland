@@ -10,7 +10,9 @@ class Motto extends StatelessWidget {
       "Caring for your vehicle is our business.",
       textAlign: TextAlign.center,
       style: TextStyle(
-          fontWeight: FontWeight.w700, fontSize: 40, color: kPrimaryColor),
+          fontWeight: FontWeight.w700,
+          fontSize: 40,
+          color: SizeConfig.kPrimaryColor),
     );
   }
 }

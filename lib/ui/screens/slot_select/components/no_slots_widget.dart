@@ -10,10 +10,10 @@ class NoSlotsWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Image.asset('assets/images/no_slots.png'),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         Text(
           'The store is closed on the selected date',
-          style: kStyle16.copyWith(color: kGreyTextColor),
+          style: SizeConfig.kStyle16.copyWith(color: SizeConfig.kGreyTextColor),
         ),
       ],
     );

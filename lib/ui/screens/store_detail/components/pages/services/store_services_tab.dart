@@ -228,9 +228,9 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                   onPressed: () => _showVehicleBottomSheet(context),
                   child: Text(
                     'Select Vehicle Type',
-                    style: kStyle14.copyWith(color: Colors.white),
+                    style: SizeConfig.kStyle14.copyWith(color: Colors.white),
                   ),
-                  backgroundColor: kPrimaryColor)),
+                  backgroundColor: SizeConfig.kPrimaryColor)),
         )
       ],
     );

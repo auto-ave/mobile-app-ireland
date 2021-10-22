@@ -12,13 +12,15 @@ class DashedBookingBox extends StatelessWidget {
     required this.bookingDetail,
   }) : super(key: key);
   final TextStyle rightSideInfoPrimaryColor = TextStyle(
-      color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize12);
+      color: SizeConfig.kPrimaryColor,
+      fontWeight: FontWeight.w400,
+      fontSize: SizeConfig.kfontSize12);
   final TextStyle leftSideInfo =
-      const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
+      TextStyle(fontWeight: FontWeight.w400, fontSize: SizeConfig.kfontSize12);
   final TextStyle leftSide14W500 =
-      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
+      TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.kfontSize14);
   final TextStyle rightSide12W500 =
-      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
+      TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.kfontSize12);
   final DateFormat formatter = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);
 
   final DateFormat formatterTime = DateFormat('hh:mm a');
@@ -41,34 +43,34 @@ class DashedBookingBox extends StatelessWidget {
                 rightText: bookingDetail.otp ?? 'N/A',
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             getDetailsRow(
                 leftText: 'Booking Id',
                 rightText: bookingDetail.bookingId!,
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             getDetailsRow(
                 leftText: 'Car Model:',
                 rightText: 'BMW X4',
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             getDetailsRow(
                 leftText: 'Scheduled on',
                 rightText: formatter.format(bookingDetail.event!.startDateTime),
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             Divider(),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             getDetailsRow(
                 leftText: 'Time:',
                 rightText:
                     '${formatterTime.format(bookingDetail.event!.startDateTime)} to ${formatterTime.format(bookingDetail.event!.endDateTime)}',
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             ...(bookingDetail.services!
                 .map((e) => Column(
                       mainAxisSize: MainAxisSize.min,
@@ -78,16 +80,16 @@ class DashedBookingBox extends StatelessWidget {
                             rightText: '₹${e.price}',
                             leftStyle: leftSide14W500,
                             rightStyle: rightSide12W500),
-                        kverticalMargin8
+                        SizeConfig.kverticalMargin8
                       ],
                     ))
                 .toList()),
             Divider(),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             bookingDetail.payment != null
                 ? getPaymentSummary(bookingDetail)
                 : Container(),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
           ],
         ),
       ),
@@ -100,29 +102,29 @@ class DashedBookingBox extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Payment Summary', style: leftSide14W500),
-          kverticalMargin8,
+          SizeConfig.kverticalMargin8,
           getDetailsRow(
               leftText: 'Item Total',
               rightText: '₹${bookingDetail.payment!.amount}',
               leftStyle: leftSideInfo,
               rightStyle: rightSide12W500),
-          kverticalMargin8,
+          SizeConfig.kverticalMargin8,
           getDetailsRow(
               leftText: 'Taxes',
               rightText: '₹0',
               leftStyle: leftSideInfo,
               rightStyle: rightSide12W500),
-          kverticalMargin8,
+          SizeConfig.kverticalMargin8,
           getDetailsRow(
               leftText: 'Grand Total',
               rightText: '₹${bookingDetail.payment!.amount}',
               leftStyle: leftSideInfo.copyWith(
-                  color: kPrimaryColor,
-                  fontSize: kfontSize16,
+                  color: SizeConfig.kPrimaryColor,
+                  fontSize: SizeConfig.kfontSize16,
                   fontWeight: FontWeight.w600),
               rightStyle: rightSideInfoPrimaryColor.copyWith(
                   color: Colors.black,
-                  fontSize: kfontSize16,
+                  fontSize: SizeConfig.kfontSize16,
                   fontWeight: FontWeight.w600)),
         ]);
   }

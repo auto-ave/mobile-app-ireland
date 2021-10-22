@@ -76,50 +76,52 @@ class _YourBookingTileState extends State<YourBookingTile> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  kHorizontalMargin8,
+                  SizeConfig.kHorizontalMargin8,
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(widget.storeName, style: kStyle16W500),
+                        Text(widget.storeName, style: SizeConfig.kStyle16W500),
                         Text(
                           widget.address,
-                          style: kStyle12.copyWith(color: Color(0xff888888)),
+                          style: SizeConfig.kStyle12
+                              .copyWith(color: Color(0xff888888)),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         )
                       ],
                     ),
                   ),
-                  Text('₹${widget.total}', style: kStyle16W500)
+                  Text('₹${widget.total}', style: SizeConfig.kStyle16W500)
                 ]),
                 Divider(),
                 getBookingStatusTag(widget.status),
-                kverticalMargin8,
+                SizeConfig.kverticalMargin8,
                 Text(
                   'I T E M S',
-                  style: kStyle12W500.copyWith(color: Color(0xff888888)),
+                  style: SizeConfig.kStyle12W500
+                      .copyWith(color: Color(0xff888888)),
                 ),
-                kverticalMargin4,
+                SizeConfig.kverticalMargin4,
                 ...(widget.serviceNames.map((e) => getBulletText(e)).toList()),
-                kverticalMargin4,
+                SizeConfig.kverticalMargin4,
                 Text(
                   'More Info',
                   style: TextStyle(
                       color: Colors.blue, decoration: TextDecoration.underline),
                 ),
                 Divider(),
-                kverticalMargin8,
+                SizeConfig.kverticalMargin8,
                 Text(
                   'SCHEDULED ON',
-                  style: kStyle12W500.copyWith(
-                      letterSpacing: 2.16, color: Color(0xff888888)),
+                  style: SizeConfig.kStyle12W500
+                      .copyWith(letterSpacing: 2.16, color: Color(0xff888888)),
                 ),
-                kverticalMargin8,
+                SizeConfig.kverticalMargin8,
                 Text(formatter.format(widget.scheduledOn) +
                     " at " +
                     DateFormat.Hms().format(widget.scheduledOn)),
-                kverticalMargin8,
+                SizeConfig.kverticalMargin8,
                 // Row(
                 //   children: <Widget>[
                 //     getButton(
@@ -171,7 +173,7 @@ class _YourBookingTileState extends State<YourBookingTile> {
   Widget getBulletText(String text) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: [Text("\u2022 $text"), kverticalMargin4],
+      children: [Text("\u2022 $text"), SizeConfig.kverticalMargin4],
     );
   }
 }
@@ -183,7 +185,8 @@ Widget getBookingStatusTag(BookingStatus status) {
     padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
     child: Text(
       text,
-      style: kStyle14W500.copyWith(color: colors.textColor, letterSpacing: 1.2),
+      style: SizeConfig.kStyle14W500
+          .copyWith(color: colors.textColor, letterSpacing: 1.2),
     ),
     decoration: BoxDecoration(
         color: colors.backgroundColor, borderRadius: BorderRadius.circular(2)),

@@ -137,7 +137,8 @@ class SlotSelectionTabWidget extends StatelessWidget {
                 child: FittedBox(
               child: Text(
                 '$startTime - $endTime',
-                style: kStyle14W500.copyWith(color: getButtonTextColor()),
+                style: SizeConfig.kStyle14W500
+                    .copyWith(color: getButtonTextColor()),
               ),
             )),
           ),

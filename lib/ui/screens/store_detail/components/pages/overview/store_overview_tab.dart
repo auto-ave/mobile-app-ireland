@@ -53,11 +53,11 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
                   Color(0xff298ED7),
                 ],
               ),
-              color: kPrimaryColor,
+              color: SizeConfig.kPrimaryColor,
               borderRadius: BorderRadius.circular(56)),
           child: Text(
             'Book Service',
-            style: kStyle16Bold.copyWith(color: Colors.white),
+            style: SizeConfig.kStyle16Bold.copyWith(color: Colors.white),
           ),
         ),
       ),
@@ -95,7 +95,7 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
             sliver: SliverToBoxAdapter(
                 child: Text(
               'About',
-              style: kStyle20W500,
+              style: SizeConfig.kStyle20W500,
             )),
           ),
           SliverPadding(
@@ -103,7 +103,7 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
             sliver: SliverToBoxAdapter(
                 child: Text(
               widget.store.description!,
-              style: kStyle12,
+              style: SizeConfig.kStyle12,
             )),
           ),
           SliverPadding(
@@ -145,7 +145,7 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
                     ),
                     label: Text(
                       'Open in maps',
-                      style: kStyle16.copyWith(color: Colors.black),
+                      style: SizeConfig.kStyle16.copyWith(color: Colors.black),
                     )),
               ),
             ),

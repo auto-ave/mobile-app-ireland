@@ -35,13 +35,13 @@ class BookingSummaryScreen extends StatefulWidget {
 
 class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
   // final TextStyle rightSideInfoPrimaryColor = TextStyle(
-  //     color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize12);
+  //     color: SizeConfig.kPrimaryColor, fontWeight: FontWeight.w400, fontSize: SizeConfig.kfontSize12);
   // final TextStyle leftSideInfo =
-  //     const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
+  //     const TextStyle(fontWeight: FontWeight.w400, fontSize: SizeConfig.kfontSize12);
   // final TextStyle leftSide14W500 =
-  //     TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
+  //     TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.kfontSize14);
   // final TextStyle rightSide12W500 =
-  //     TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize12);
+  //     TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.kfontSize12);
 
   late BookingSummaryBloc _bookingSummaryBloc;
 
@@ -108,13 +108,14 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                                             ? Theme.of(context).primaryColor
                                             : Colors.red,
                                         fontWeight: FontWeight.w700,
-                                        fontSize: kfontSize20),
+                                        fontSize: SizeConfig.kfontSize20),
                                   ),
                                   Text(
                                       widget.isTransactionSuccessful
                                           ? 'We have sent a receipt on your number and email'
                                           : 'There was an error processing the payment. Any amount deducted will be refunded in 3-5 business days. Your order isn’t booked.',
-                                      style: TextStyle(fontSize: kfontSize12)),
+                                      style: TextStyle(
+                                          fontSize: SizeConfig.kfontSize12)),
                                 ],
                               ),
                             ),
@@ -124,22 +125,22 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                           height: 32,
                         ),
                         SizedBox(
-                          child:
-                              bookingDetail.status == BookingStatus.paymentDone
-                                  ? AddToCalendarButton(
-                                      bookingDetail: bookingDetail)
-                                  : CommonTextButton(
-                                      onPressed: () =>
-                                          Navigator.pushNamedAndRemoveUntil(
-                                              context,
-                                              ExploreScreen.route,
-                                              (route) => false),
-                                      child: Text(
-                                        'Back to home',
-                                        style: kStyle16W500.copyWith(
-                                            color: Colors.white),
-                                      ),
-                                      backgroundColor: kPrimaryColor),
+                          child: bookingDetail.status ==
+                                  BookingStatus.paymentDone
+                              ? AddToCalendarButton(
+                                  bookingDetail: bookingDetail)
+                              : CommonTextButton(
+                                  onPressed: () =>
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          ExploreScreen.route,
+                                          (route) => false),
+                                  child: Text(
+                                    'Back to home',
+                                    style: SizeConfig.kStyle16W500
+                                        .copyWith(color: Colors.white),
+                                  ),
+                                  backgroundColor: SizeConfig.kPrimaryColor),
                           width: MediaQuery.of(context).size.width,
                         ),
                         bookingDetail.status == BookingStatus.paymentDone
@@ -152,10 +153,10 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                         Text('Booking Details',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: kfontSize20)),
-                        kverticalMargin8,
+                                fontSize: SizeConfig.kfontSize20)),
+                        SizeConfig.kverticalMargin8,
                         DashedBookingBox(bookingDetail: bookingDetail),
-                        kverticalMargin16,
+                        SizeConfig.kverticalMargin16,
                         Divider(),
                       ],
                     ),
@@ -205,21 +206,23 @@ class StoreContactWidget extends StatelessWidget {
         Text.rich(TextSpan(children: [
           TextSpan(
               text: 'Person to contact: ',
-              style: kStyle14.copyWith(
+              style: SizeConfig.kStyle14.copyWith(
                 color: Colors.black,
               )),
           TextSpan(
               text: personToContact,
-              style: kStyle16Bold.copyWith(color: kPrimaryColor))
+              style: SizeConfig.kStyle16Bold
+                  .copyWith(color: SizeConfig.kPrimaryColor))
         ])),
-        kverticalMargin4,
+        SizeConfig.kverticalMargin4,
         Text.rich(TextSpan(children: [
           TextSpan(
               text: 'Contact number: ',
-              style: kStyle14.copyWith(color: Colors.black)),
+              style: SizeConfig.kStyle14.copyWith(color: Colors.black)),
           TextSpan(
               text: phoneNumber,
-              style: kStyle16Bold.copyWith(color: kPrimaryColor))
+              style: SizeConfig.kStyle16Bold
+                  .copyWith(color: SizeConfig.kPrimaryColor))
         ])),
         Divider(
           height: 16,
@@ -276,9 +279,9 @@ class _RateServiceWidgetState extends State<RateServiceWidget> {
           children: [
             Text(
               'Rate Service',
-              style: kStyle20W500,
+              style: SizeConfig.kStyle20W500,
             ),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             RatingBar(
               itemSize: 24,
               initialRating: 0,
@@ -299,12 +302,12 @@ class _RateServiceWidgetState extends State<RateServiceWidget> {
                 _rating = rating;
               },
             ),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             Text(
               'Add a review',
-              style: kStyle16,
+              style: SizeConfig.kStyle16,
             ),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             Container(
               height: MediaQuery.of(context).size.height * .2,
               child: TextField(
@@ -316,10 +319,12 @@ class _RateServiceWidgetState extends State<RateServiceWidget> {
                         EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
-                        borderSide: BorderSide(color: kPrimaryColor)),
+                        borderSide:
+                            BorderSide(color: SizeConfig.kPrimaryColor)),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
-                        borderSide: BorderSide(color: kPrimaryColor)),
+                        borderSide:
+                            BorderSide(color: SizeConfig.kPrimaryColor)),
                     hintText: "Write a review"),
               ),
             ),
@@ -377,9 +382,9 @@ class ReviewWidget extends StatelessWidget {
       children: [
         Text(
           'Your Review',
-          style: kStyle20W500,
+          style: SizeConfig.kStyle20W500,
         ),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         RatingBar(
           itemSize: 24,
           initialRating: rating,
@@ -401,10 +406,10 @@ class ReviewWidget extends StatelessWidget {
             print(rating);
           },
         ),
-        kverticalMargin16,
+        SizeConfig.kverticalMargin16,
         Text(
           review ?? "",
-          style: kStyle12,
+          style: SizeConfig.kStyle12,
         )
       ],
     );

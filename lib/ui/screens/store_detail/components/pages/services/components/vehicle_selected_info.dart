@@ -23,7 +23,7 @@ class VehicleSelectedInfo extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
-            color: kPrimaryColor,
+            color: SizeConfig.kPrimaryColor,
             width: 1,
           ),
           boxShadow: [
@@ -42,25 +42,25 @@ class VehicleSelectedInfo extends StatelessWidget {
               children: [
                 Text(
                   'SELECTED VEHICLE',
-                  style: kStyle12.copyWith(
-                      color: Color(0xff696969), letterSpacing: 1.8),
+                  style: SizeConfig.kStyle12
+                      .copyWith(color: Color(0xff696969), letterSpacing: 1.8),
                 ),
-                kverticalMargin8,
+                SizeConfig.kverticalMargin8,
                 SelectedVehicleWidget(
                     vehicleModel: vehicleState.vehicleTypeModel)
               ],
             ),
           ),
-          kHorizontalMargin16,
+          SizeConfig.kHorizontalMargin16,
           CommonTextButton(
               onPressed: () => onChangePressed(),
               child: FittedBox(
                 child: Text(
                   'Change',
-                  style: kStyle12.copyWith(color: Colors.white),
+                  style: SizeConfig.kStyle12.copyWith(color: Colors.white),
                 ),
               ),
-              backgroundColor: kPrimaryColor)
+              backgroundColor: SizeConfig.kPrimaryColor)
         ],
       ),
     );
@@ -84,18 +84,18 @@ class SelectedVehicleWidget extends StatelessWidget {
             TextSpan(children: [
               TextSpan(
                 text: vehicleModel.brand,
-                style: kStyle16.copyWith(color: Colors.black),
+                style: SizeConfig.kStyle16.copyWith(color: Colors.black),
               ),
               TextSpan(
                 text: ' ${vehicleModel.model}',
-                style: kStyle16PrimaryColor,
+                style: SizeConfig.kStyle16PrimaryColor,
               ),
             ]),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        kHorizontalMargin8,
+        SizeConfig.kHorizontalMargin8,
         CachedNetworkImage(
             placeholder: (_, __) {
               return ShimmerPlaceholder();

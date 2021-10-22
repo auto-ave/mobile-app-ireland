@@ -110,22 +110,23 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          kverticalMargin8,
+          SizeConfig.kverticalMargin8,
           Text(
             'To continue further please sign in',
-            style: kStyle16W500.copyWith(fontWeight: FontWeight.w500),
+            style:
+                SizeConfig.kStyle16W500.copyWith(fontWeight: FontWeight.w500),
           ),
           Divider(
             height: 32,
             thickness: 1,
           ),
           Text('Continue with number'),
-          kverticalMargin8,
+          SizeConfig.kverticalMargin8,
           Form(
             child: PhoneTextField(phoneController: phoneController),
             key: _formKey,
           ),
-          kverticalMargin16,
+          SizeConfig.kverticalMargin16,
           Align(
             alignment: Alignment.center,
             child: Container(
@@ -143,7 +144,8 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(kPrimaryColor),
+                  backgroundColor:
+                      MaterialStateProperty.all(SizeConfig.kPrimaryColor),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
@@ -168,17 +170,17 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
           Container(
             child: Text(
               'A One-Time-Password has been sent your phone number',
-              style: kStyle12,
+              style: SizeConfig.kStyle12,
             ),
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(color: Colors.greenAccent),
           ),
-          kverticalMargin16,
+          SizeConfig.kverticalMargin16,
           OTPFieldWidget(onChange: (string) {
             otpEntered = string;
             print('otp entered $otpEntered');
           }),
-          kverticalMargin16,
+          SizeConfig.kverticalMargin16,
           Align(
             alignment: Alignment.center,
             child: Container(
@@ -196,7 +198,8 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(kPrimaryColor),
+                  backgroundColor:
+                      MaterialStateProperty.all(SizeConfig.kPrimaryColor),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),

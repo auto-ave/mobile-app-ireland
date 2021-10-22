@@ -28,7 +28,7 @@ class PopularServiceTile extends StatelessWidget {
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: kPrimaryColor),
+                  color: SizeConfig.kPrimaryColor),
             ),
             SizedBox(
               height: 8,
@@ -44,7 +44,8 @@ class PopularServiceTile extends StatelessWidget {
             Text(
               "More info",
               style: TextStyle(
-                  decoration: TextDecoration.underline, color: kPrimaryColor),
+                  decoration: TextDecoration.underline,
+                  color: SizeConfig.kPrimaryColor),
             ),
             Row(
               children: <Widget>[
@@ -58,7 +59,7 @@ class PopularServiceTile extends StatelessWidget {
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25))),
                       backgroundColor:
-                          MaterialStateProperty.all(kPrimaryColor)),
+                          MaterialStateProperty.all(SizeConfig.kPrimaryColor)),
                   child: Text(
                     "View all services",
                     style: TextStyle(color: Colors.white),

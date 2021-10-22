@@ -23,7 +23,7 @@ class ContactOptionButton extends StatelessWidget {
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
               border: Border.all(
-                color: kPrimaryColor,
+                color: SizeConfig.kPrimaryColor,
               ),
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),
@@ -37,7 +37,7 @@ class ContactOptionButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SvgPicture.asset(svgAsset),
-              kverticalMargin8,
+              SizeConfig.kverticalMargin8,
               Text(text)
             ],
           ),

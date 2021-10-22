@@ -88,16 +88,17 @@ class StoreTile extends StatelessWidget {
                     children: [
                       Text(
                         storeName,
-                        style: kStyle14W500,
+                        style: SizeConfig.kStyle14W500,
                       ),
-                      kverticalMargin4,
+                      SizeConfig.kverticalMargin4,
                       Text(
                         address,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: kStyle12.copyWith(color: Color(0xff696969)),
+                        style: SizeConfig.kStyle12
+                            .copyWith(color: Color(0xff696969)),
                       ),
-                      kverticalMargin4,
+                      SizeConfig.kverticalMargin4,
                       Divider(
                         thickness: 1,
                         height: 8,
@@ -115,22 +116,23 @@ class StoreTile extends StatelessWidget {
                                     ),
                                     Text(
                                       rating!,
-                                      style: kStyle12.copyWith(
-                                          color: kGreyTextColor),
+                                      style: SizeConfig.kStyle12.copyWith(
+                                          color: SizeConfig.kGreyTextColor),
                                     ),
-                                    kHorizontalMargin4,
+                                    SizeConfig.kHorizontalMargin4,
                                     Text(
                                       "•",
-                                      style: kStyle12.copyWith(
-                                          color: kGreyTextColor),
+                                      style: SizeConfig.kStyle12.copyWith(
+                                          color: SizeConfig.kGreyTextColor),
                                     ),
-                                    kHorizontalMargin4,
+                                    SizeConfig.kHorizontalMargin4,
                                   ],
                                 )
                               : Container(),
                           Text(
                             'Starts from ₹$startingFrom',
-                            style: kStyle12.copyWith(color: kGreyTextColor),
+                            style: SizeConfig.kStyle12
+                                .copyWith(color: SizeConfig.kGreyTextColor),
                           )
                         ],
                       ),
@@ -244,7 +246,7 @@ class StoreTile extends StatelessWidget {
 //                           TextSpan(
 //                             text: startingFrom,
 //                             style: TextStyle(
-//                                 color: kPrimaryColor,
+//                                 color: SizeConfig.kPrimaryColor,
 //                                 fontSize: 16,
 //                                 fontWeight: FontWeight.w500),
 //                           ),

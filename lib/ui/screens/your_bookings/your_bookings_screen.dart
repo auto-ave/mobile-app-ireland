@@ -51,7 +51,7 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
                 sliver: SliverToBoxAdapter(
                   child: Text(
                     'Your Bookings',
-                    style: kStyle20W500,
+                    style: SizeConfig.kStyle20W500,
                   ),
                 ),
               ),

@@ -155,9 +155,9 @@ class _VehicleWheelSelectionPageState extends State<VehicleWheelSelectionPage> {
         children: [
           Text(
             'Select your vehicle type',
-            style: kStyle20W500,
+            style: SizeConfig.kStyle20W500,
           ),
-          kverticalMargin32,
+          SizeConfig.kverticalMargin32,
           Expanded(
               child: BlocBuilder<VehicleListBloc, VehicleListState>(
             bloc: vehicleListBloc,
@@ -212,7 +212,7 @@ class VehicleWheelWidget extends StatelessWidget {
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
             border: Border.all(
-              color: kPrimaryColor,
+              color: SizeConfig.kPrimaryColor,
             ),
             color: Colors.white,
             borderRadius: BorderRadius.circular(4),
@@ -230,7 +230,7 @@ class VehicleWheelWidget extends StatelessWidget {
               width: 80,
               height: 50,
             ),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             Text(wheel.name)
           ],
         ),
@@ -277,9 +277,9 @@ class _VehicleBrandSelectionPageState extends State<VehicleBrandSelectionPage> {
         children: [
           Text(
             'Select your vehicle brand',
-            style: kStyle20W500,
+            style: SizeConfig.kStyle20W500,
           ),
-          kverticalMargin32,
+          SizeConfig.kverticalMargin32,
           SearchBar(
             focusNode: focusNode,
             onChanged: (query) {
@@ -299,7 +299,7 @@ class _VehicleBrandSelectionPageState extends State<VehicleBrandSelectionPage> {
             textController: searchController,
             hintText: 'Search Brands',
           ),
-          kverticalMargin16,
+          SizeConfig.kverticalMargin16,
           Expanded(
               child: BlocBuilder<VehicleListBloc, VehicleListState>(
             // listener: (context, state) {
@@ -364,7 +364,7 @@ class VehicleBrandWidget extends StatelessWidget {
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
               border: Border.all(
-                color: kPrimaryColor,
+                color: SizeConfig.kPrimaryColor,
               ),
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),
@@ -382,7 +382,7 @@ class VehicleBrandWidget extends StatelessWidget {
                 width: 80,
                 height: 50,
               ),
-              kverticalMargin8,
+              SizeConfig.kverticalMargin8,
               Text(brand.name)
             ],
           ),
@@ -427,9 +427,9 @@ class _VehicleModelSelectionPageState extends State<VehicleModelSelectionPage> {
         children: [
           Text(
             'Select your vehicle model',
-            style: kStyle20W500,
+            style: SizeConfig.kStyle20W500,
           ),
-          kverticalMargin32,
+          SizeConfig.kverticalMargin32,
           SearchBar(
             focusNode: focusNode,
             onChanged: (query) {
@@ -451,7 +451,7 @@ class _VehicleModelSelectionPageState extends State<VehicleModelSelectionPage> {
             textController: searchController,
             hintText: 'Search Models',
           ),
-          kverticalMargin16,
+          SizeConfig.kverticalMargin16,
           Expanded(
               child: BlocBuilder<VehicleListBloc, VehicleListState>(
             bloc: vehicleListBloc,
@@ -505,7 +505,7 @@ class VehicleModelWidget extends StatelessWidget {
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
               border: Border.all(
-                color: kPrimaryColor,
+                color: SizeConfig.kPrimaryColor,
               ),
               color: Colors.white,
               borderRadius: BorderRadius.circular(4),
@@ -523,7 +523,7 @@ class VehicleModelWidget extends StatelessWidget {
                 width: 80,
                 height: 50,
               ),
-              kverticalMargin8,
+              SizeConfig.kverticalMargin8,
               Text(vehicleModel.model!)
             ],
           ),

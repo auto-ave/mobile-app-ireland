@@ -46,7 +46,8 @@ class _SearchOverlayState extends State<SearchOverlay> {
           sliver: SliverToBoxAdapter(
             child: Text(
               'Services',
-              style: kStyle14W500.copyWith(color: kPrimaryColor),
+              style: SizeConfig.kStyle14W500
+                  .copyWith(color: SizeConfig.kPrimaryColor),
             ),
           ),
         ),
@@ -65,7 +66,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[kHorizontalMargin16] +
+                            children: <Widget>[SizeConfig.kHorizontalMargin16] +
                                 state.searchedServices
                                     .map((e) => SearchServiceTile(
                                           imageUrl: e.thumbnail!,
@@ -93,7 +94,8 @@ class _SearchOverlayState extends State<SearchOverlay> {
           sliver: SliverToBoxAdapter(
               child: Text(
             'Stores',
-            style: kStyle14W500.copyWith(color: kPrimaryColor),
+            style: SizeConfig.kStyle14W500
+                .copyWith(color: SizeConfig.kPrimaryColor),
           )),
         ),
         BlocBuilder<SearchStoresBloc, SearchStoresState>(

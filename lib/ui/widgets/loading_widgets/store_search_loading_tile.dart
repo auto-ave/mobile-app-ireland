@@ -13,14 +13,14 @@ class StoreSearchLoadingTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Shimmer.fromColors(
-            baseColor: kShimmerBaseColor!,
-            highlightColor: kShimmerHighlightColor!,
+            baseColor: SizeConfig.kShimmerBaseColor!,
+            highlightColor: SizeConfig.kShimmerHighlightColor!,
             child: Container(
               height: 80,
               width: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                color: kShimmerBaseColor,
+                color: SizeConfig.kShimmerBaseColor,
               ),
             ),
           ),
@@ -32,48 +32,48 @@ class StoreSearchLoadingTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Shimmer.fromColors(
-                  baseColor: kShimmerBaseColor!,
-                  highlightColor: kShimmerHighlightColor!,
+                  baseColor: SizeConfig.kShimmerBaseColor!,
+                  highlightColor: SizeConfig.kShimmerHighlightColor!,
                   child: Container(
                     height: 20,
                     width: 150,
-                    color: kShimmerBaseColor,
+                    color: SizeConfig.kShimmerBaseColor,
                   ),
                 ),
                 SizedBox(
                   height: 8,
                 ),
                 Shimmer.fromColors(
-                  baseColor: kShimmerBaseColor!,
-                  highlightColor: kShimmerHighlightColor!,
+                  baseColor: SizeConfig.kShimmerBaseColor!,
+                  highlightColor: SizeConfig.kShimmerHighlightColor!,
                   child: Container(
                     height: 20,
                     width: 30,
-                    color: kShimmerBaseColor,
+                    color: SizeConfig.kShimmerBaseColor,
                   ),
                 ),
                 SizedBox(
                   height: 8,
                 ),
                 Shimmer.fromColors(
-                  baseColor: kShimmerBaseColor!,
-                  highlightColor: kShimmerHighlightColor!,
+                  baseColor: SizeConfig.kShimmerBaseColor!,
+                  highlightColor: SizeConfig.kShimmerHighlightColor!,
                   child: Container(
                     height: 20,
                     width: 100,
-                    color: kShimmerBaseColor,
+                    color: SizeConfig.kShimmerBaseColor,
                   ),
                 ),
               ],
             ),
           ),
           Shimmer.fromColors(
-            baseColor: kShimmerBaseColor!,
-            highlightColor: kShimmerHighlightColor!,
+            baseColor: SizeConfig.kShimmerBaseColor!,
+            highlightColor: SizeConfig.kShimmerHighlightColor!,
             child: Container(
               height: 20,
               width: 50,
-              color: kShimmerBaseColor,
+              color: SizeConfig.kShimmerBaseColor,
             ),
           ),
         ],

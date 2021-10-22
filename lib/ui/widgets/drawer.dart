@@ -83,12 +83,12 @@ class AppDrawer extends StatelessWidget {
               },
               child: Text(
                 'Login/Signup',
-                style: kStyle14PrimaryColor,
+                style: SizeConfig.kStyle14PrimaryColor,
               ),
               backgroundColor: Colors.white,
               border: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
-                  side: BorderSide(color: kPrimaryColor)),
+                  side: BorderSide(color: SizeConfig.kPrimaryColor)),
             ))),
             _createDrawerItem(
                 context, FontAwesomeIcons.facebookMessenger, Text("Feedback"),

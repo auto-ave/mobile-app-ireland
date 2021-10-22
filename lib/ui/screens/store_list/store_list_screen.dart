@@ -55,7 +55,7 @@ class _StoreListScreenState extends State<StoreListScreen> {
           context: context,
           title: Text(
             widget.title,
-            style: kStyle14W500.copyWith(color: Colors.black),
+            style: SizeConfig.kStyle14W500.copyWith(color: Colors.black),
           )),
       backgroundColor: Colors.white,
       body: LazyLoadScrollView(

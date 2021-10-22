@@ -68,13 +68,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 }
                               }
                             },
-                            backgroundColor: kPrimaryColor,
+                            backgroundColor: SizeConfig.kPrimaryColor,
                           )
                         ],
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.white,
-                iconTheme: IconThemeData(color: kPrimaryColor),
+                iconTheme: IconThemeData(color: SizeConfig.kPrimaryColor),
                 actions: widget.showSkip
                     ? [
                         // Spacer(),
@@ -89,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   (route) => false),
                               child: Text(
                                 'skip',
-                                style: kStyle16PrimaryColor,
+                                style: SizeConfig.kStyle16PrimaryColor,
                               ),
                             ),
                           ),
@@ -150,7 +150,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(50.0)),
                                       border: Border.all(
-                                          color: kPrimaryColor, width: 2)),
+                                          color: SizeConfig.kPrimaryColor,
+                                          width: 2)),
                                   child:
                                       Image.asset('assets/images/avatar.png'),
                                 ),
@@ -167,15 +168,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 //     ),
                                 //     decoration: BoxDecoration(
                                 //         borderRadius: BorderRadius.circular(4),
-                                //         color: kPrimaryColor),
+                                //         color: SizeConfig.kPrimaryColor),
                                 //   ),
                                 //   bottom: 0,
                                 //   right: 0,
                                 // )
                               ],
                             ),
-                            kverticalMargin16,
-                            kverticalMargin8,
+                            SizeConfig.kverticalMargin16,
+                            SizeConfig.kverticalMargin8,
                             Form(
                               key: _formKey,
                               child: Column(
@@ -184,11 +185,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   CommonTextField(
                                       fieldName: 'First Name',
                                       fieldController: firstNameController),
-                                  kverticalMargin16,
+                                  SizeConfig.kverticalMargin16,
                                   CommonTextField(
                                       fieldName: 'Last Name',
                                       fieldController: lastNameController),
-                                  kverticalMargin16,
+                                  SizeConfig.kverticalMargin16,
                                   CommonTextField(
                                       validator: validateEmail,
                                       fieldName: 'Email',
@@ -232,7 +233,7 @@ class CommonTextField extends StatelessWidget {
     return TextFormField(
       validator: validator,
       controller: fieldController,
-      style: kStyle14W500,
+      style: SizeConfig.kStyle14W500,
       maxLines: maxLines,
       decoration: InputDecoration(
         filled: filled,
@@ -241,14 +242,14 @@ class CommonTextField extends StatelessWidget {
         hintText: hintText,
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: kPrimaryColor)),
+            borderSide: BorderSide(color: SizeConfig.kPrimaryColor)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: kPrimaryColor)),
+            borderSide: BorderSide(color: SizeConfig.kPrimaryColor)),
         contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4),
-          borderSide: BorderSide(color: kPrimaryColor),
+          borderSide: BorderSide(color: SizeConfig.kPrimaryColor),
         ),
       ),
     );
