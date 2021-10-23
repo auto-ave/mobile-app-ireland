@@ -378,10 +378,12 @@ class _MyAppState extends State<MyApp> {
               );
             }
             if (settings.name == FeedbackScreen.route) {
+              final args = settings.arguments as FeedbackScreenArguments;
               return MaterialPageRoute(
                 builder: (context) {
                   return FeedbackScreen(
-                    isFeedback: true,
+                    isFeedback: args.isFeedback,
+                    orderNumber: args.orderNumber,
                   );
                 },
               );

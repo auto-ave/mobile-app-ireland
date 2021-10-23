@@ -23,82 +23,78 @@ class AppDrawer extends StatelessWidget {
       builder: (context, state) {
         if (state is Authenticated) {
           return Drawer(
-              child: Column(
-            children: <Widget>[
-              _createDrawerHeader(context),
-              Divider(
-                thickness: 1,
-                height: 0,
-              ),
-              _createDrawerItem(
-                  context, Icons.local_offer_outlined, Text("Your Orders"), () {
-                Navigator.pushNamed(context, YourBookingsScreen.route);
-              }),
-              Divider(
-                thickness: 1,
-                height: 0,
-              ),
-              _createDrawerItem(context, FontAwesomeIcons.user, Text("Profile"),
-                  () {
-                Navigator.pushNamed(context, ProfileScreen.route,
-                    arguments: ProfileScreenArguments(showSkip: false));
-              }),
-              Divider(
-                thickness: 1,
-                height: 0,
-              ),
-              _createDrawerItem(
-                  context, FontAwesomeIcons.facebookMessenger, Text("Feedback"),
-                  () {
-                Navigator.pushNamed(
+              child: Padding(
+            padding: const EdgeInsets.all(0.0),
+            child: Column(
+              children: <Widget>[
+                _createDrawerHeader(context),
+                Divider(
+                  thickness: 1,
+                  height: 0,
+                ),
+                _createDrawerItem(
+                    context, Icons.local_offer_outlined, Text("Your Orders"),
+                    () {
+                  Navigator.pushNamed(context, YourBookingsScreen.route);
+                }),
+                Divider(
+                  thickness: 1,
+                  height: 0,
+                ),
+                _createDrawerItem(
+                    context, FontAwesomeIcons.user, Text("Profile"), () {
+                  Navigator.pushNamed(context, ProfileScreen.route,
+                      arguments: ProfileScreenArguments(showSkip: false));
+                }),
+                Divider(
+                  thickness: 1,
+                  height: 0,
+                ),
+                _createDrawerItem(context, FontAwesomeIcons.facebookMessenger,
+                    Text("Feedback"), () {
+                  Navigator.pushNamed(context, FeedbackScreen.route,
+                      arguments: FeedbackScreenArguments(isFeedback: true));
+                }),
+                Spacer(),
+                Divider(),
+                _createDrawerItem(
                   context,
-                  FeedbackScreen.route,
-                );
-              }),
-              Spacer(),
-              Divider(),
-              _createDrawerItem(
-                context,
-                Icons.logout,
-                Text("Log out"),
-                () async {
-                  BlocProvider.of<PhoneAuthBloc>(context)..add(LogOut());
-                },
-              ),
-            ],
+                  Icons.logout,
+                  Text("Log out"),
+                  () async {
+                    BlocProvider.of<PhoneAuthBloc>(context)..add(LogOut());
+                  },
+                ),
+              ],
+            ),
           ));
         }
         return Drawer(
-            child: Column(
-          children: [
-            _createDrawerHeader(context),
-            Expanded(
-                child: Center(
-                    child: CommonTextButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  LoginScreen.route,
-                );
-              },
-              child: Text(
-                'Login/Signup',
-                style: kStyle14PrimaryColor,
-              ),
-              backgroundColor: Colors.white,
-              border: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  side: BorderSide(color: kPrimaryColor)),
-            ))),
-            _createDrawerItem(
-                context, FontAwesomeIcons.facebookMessenger, Text("Feedback"),
-                () {
-              Navigator.pushNamed(
-                context,
-                FeedbackScreen.route,
-              );
-            }),
-          ],
+            child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Column(
+            children: [
+              _createDrawerHeader(context),
+              Expanded(
+                  child: Center(
+                      child: CommonTextButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    LoginScreen.route,
+                  );
+                },
+                child: Text(
+                  'Login/Signup',
+                  style: kStyle14PrimaryColor,
+                ),
+                backgroundColor: Colors.white,
+                border: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    side: BorderSide(color: kPrimaryColor)),
+              ))),
+            ],
+          ),
         ));
       },
     );

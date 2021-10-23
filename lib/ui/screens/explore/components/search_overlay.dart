@@ -35,6 +35,8 @@ class _SearchOverlayState extends State<SearchOverlay> {
     super.initState();
   }
 
+  bool servicesEmpty = false;
+
   @override
   Widget build(BuildContext context) {
     // return SliverToBoxAdapter(child: Text('hello'));

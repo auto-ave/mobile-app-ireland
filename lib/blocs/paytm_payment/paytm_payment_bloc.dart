@@ -65,6 +65,7 @@ class PaytmPaymentBloc extends Bloc<PaytmPaymentEvent, PaytmPaymentState> {
   Stream<PaytmPaymentState> _mapCheckPaytmPaymentStatusToState(
       {required PaytmPaymentResponseModel paymentResponseModel}) async* {
     try {
+      print(paymentResponseModel.toString());
       PaytmPaymentResponseModel paymentResponse = await _paymentRepository
           .checkPaytmPaymentStatus(paymentResponseModel: paymentResponseModel);
 

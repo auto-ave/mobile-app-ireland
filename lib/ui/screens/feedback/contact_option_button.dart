@@ -20,7 +20,8 @@ class ContactOptionButton extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.symmetric(vertical: 16),
+          width: (MediaQuery.of(context).size.width - 40) / 2 - 20,
           decoration: BoxDecoration(
               border: Border.all(
                 color: kPrimaryColor,

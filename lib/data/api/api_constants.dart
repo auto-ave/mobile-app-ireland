@@ -28,7 +28,8 @@ class ApiConstants {
     return client;
   }
 
-  final String baseUrl = "motorwash.herokuapp.com";
+  // final String baseUrl = "motorwash.herokuapp.com";
+  final String baseUrl = "testapi.autoave.in";
   final int pageLimit = 10;
 
   String getStoreListEndPoint() {

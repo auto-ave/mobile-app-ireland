@@ -175,7 +175,12 @@ class _ExploreScreenState extends State<ExploreScreen>
       builder: (context, double value, child) {
         return Scaffold(
           appBar: _buildAppBar(locationState.location, value),
-          endDrawer: AppDrawer(),
+          endDrawer:
+              //  AnnotatedRegion<SystemUiOverlayStyle>(
+              //     value: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+              //     child:
+              AppDrawer(),
+          // ),
           body: child,
         );
       },
@@ -380,6 +385,9 @@ class _ExploreScreenState extends State<ExploreScreen>
     return PreferredSize(
       preferredSize: Size.fromHeight(height),
       child: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark),
         elevation: 0,
         actionsIconTheme: IconThemeData(color: kPrimaryColor),
         backgroundColor: Colors.transparent,

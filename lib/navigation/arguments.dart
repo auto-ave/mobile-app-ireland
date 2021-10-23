@@ -56,3 +56,12 @@ class ProfileScreenArguments {
     required this.showSkip,
   });
 }
+
+class FeedbackScreenArguments {
+  final bool isFeedback;
+  final String? orderNumber;
+  FeedbackScreenArguments({
+    required this.isFeedback,
+    this.orderNumber,
+  });
+}
