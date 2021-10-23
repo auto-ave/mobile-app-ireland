@@ -70,33 +70,6 @@ class AppDrawer extends StatelessWidget {
           ));
         }
         return Drawer(
-<<<<<<< HEAD
-            child: Padding(
-          padding: const EdgeInsets.all(0),
-          child: Column(
-            children: [
-              _createDrawerHeader(context),
-              Expanded(
-                  child: Center(
-                      child: CommonTextButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    LoginScreen.route,
-                  );
-                },
-                child: Text(
-                  'Login/Signup',
-                  style: kStyle14PrimaryColor,
-                ),
-                backgroundColor: Colors.white,
-                border: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                    side: BorderSide(color: kPrimaryColor)),
-              ))),
-            ],
-          ),
-=======
             child: Column(
           children: [
             _createDrawerHeader(context),
@@ -127,7 +100,6 @@ class AppDrawer extends StatelessWidget {
               );
             }),
           ],
->>>>>>> a081dae943d96d7fe596090036716240595c34fe
         ));
       },
     );
