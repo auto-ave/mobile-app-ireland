@@ -35,7 +35,7 @@ class LocationBar extends StatelessWidget {
               ),
               Icon(
                 Icons.location_on,
-                color: kPrimaryColor,
+                color: SizeConfig.kPrimaryColor,
               ),
               SizedBox(
                 width: 12,
@@ -62,7 +62,8 @@ class LocationBar extends StatelessWidget {
                     },
                     child: Text("Find"),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(kPrimaryColor),
+                      backgroundColor:
+                          MaterialStateProperty.all(SizeConfig.kPrimaryColor),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(

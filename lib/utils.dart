@@ -68,11 +68,11 @@ PreferredSizeWidget getAppBarLoginScreen(
                   children: [
                     Text(
                       'Skip',
-                      style: kStyle16PrimaryColor,
+                      style: SizeConfig.kStyle16PrimaryColor,
                     ),
                     Icon(
                       Icons.arrow_forward,
-                      color: kPrimaryColor,
+                      color: SizeConfig.kPrimaryColor,
                       size: 20,
                     )
                   ],
@@ -101,7 +101,7 @@ Widget loadingAnimation() {
         child: DecoratedBox(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: index.isEven ? kPrimaryColor : Color(0xffbfdcff),
+            color: index.isEven ? SizeConfig.kPrimaryColor : Color(0xffbfdcff),
           ),
         ),
       );

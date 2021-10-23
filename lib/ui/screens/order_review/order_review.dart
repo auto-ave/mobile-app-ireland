@@ -36,15 +36,17 @@ class OrderReviewScreen extends StatefulWidget {
 
 class _OrderReviewScreenState extends State<OrderReviewScreen> {
   final TextStyle rightSideInfoPrimaryColor = TextStyle(
-      color: kPrimaryColor, fontWeight: FontWeight.w400, fontSize: kfontSize14);
+      color: SizeConfig.kPrimaryColor,
+      fontWeight: FontWeight.w400,
+      fontSize: SizeConfig.kfontSize14);
   final TextStyle leftSideInfo =
-      const TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize14);
+      TextStyle(fontWeight: FontWeight.w400, fontSize: SizeConfig.kfontSize14);
   final TextStyle leftSide14W500 =
-      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
+      TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.kfontSize14);
   final TextStyle rightSide14W500 =
-      TextStyle(fontWeight: FontWeight.w600, fontSize: kfontSize14);
-  final TextStyle headingTextStyle =
-      kStyle14W500.copyWith(color: Colors.grey[700], letterSpacing: 1.8);
+      TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.kfontSize14);
+  final TextStyle headingTextStyle = SizeConfig.kStyle14W500
+      .copyWith(color: Colors.grey[700], letterSpacing: 1.8);
   late SlotSelectionBloc _bloc;
   late PaytmPaymentBloc _paytmPaymentBloc;
   late SimpleFontelicoProgressDialog _dialog;
@@ -141,7 +143,8 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                     context: context,
                     title: Text(
                       'Review Order',
-                      style: kStyle14W500.copyWith(color: Colors.black),
+                      style:
+                          SizeConfig.kStyle14W500.copyWith(color: Colors.black),
                     )),
                 bottomNavigationBar: buildBottom(slot: state.slot),
                 body: SingleChildScrollView(
@@ -151,11 +154,11 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildStoreDetails(store: state.cart.store!),
-                        kverticalMargin24,
+                        SizeConfig.kverticalMargin24,
                         _buildCarTypeDetails(vehicle: state.cart.vehicleModel!),
-                        kverticalMargin24,
+                        SizeConfig.kverticalMargin24,
                         _buildSlotTiming(slot: state.slot),
-                        kverticalMargin24,
+                        SizeConfig.kverticalMargin24,
                         ..._buildServices(cart: state.cart),
                         ..._buildListPriceInfo(cart: state.cart),
                       ],
@@ -169,7 +172,8 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                   context: context,
                   title: Text(
                     'Review Order',
-                    style: kStyle14W500.copyWith(color: Colors.black),
+                    style:
+                        SizeConfig.kStyle14W500.copyWith(color: Colors.black),
                   )),
               body: Center(child: loadingAnimation()),
             );
@@ -183,10 +187,11 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text('STORE', style: headingTextStyle),
-        kverticalMargin4,
+        SizeConfig.kverticalMargin4,
         Text(
           '${store.name!}',
-          style: kStyle16W500.copyWith(color: kPrimaryColor),
+          style:
+              SizeConfig.kStyle16W500.copyWith(color: SizeConfig.kPrimaryColor),
         )
       ],
     );
@@ -198,14 +203,14 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text('CAR TYPE', style: headingTextStyle),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         SelectedVehicleWidget(vehicleModel: vehicle),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         // Container(
         //   padding: EdgeInsets.all(8),
         //   child: Text(
         //     'Selecting correct car type is important to give you best services and to avoid any further hassel. Please check the car type before continuing further.Problem selecting car type? Click here',
-        //     style: kStyle12.copyWith(color: Color(0xff621181)),
+        //     style: SizeConfig.kStyle12.copyWith(color: Color(0xff621181)),
         //   ),
         //   decoration: BoxDecoration(color: Color(0xffFAEDFF)),
         // )
@@ -219,21 +224,22 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text('SLOT TIMING', style: headingTextStyle),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         Text(
           '${formatter.format(widget.dateSelected)}',
-          style: kStyle14,
+          style: SizeConfig.kStyle14,
         ),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         Container(
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-            border: Border.all(color: kPrimaryColor, width: 1),
+            border: Border.all(color: SizeConfig.kPrimaryColor, width: 1),
             borderRadius: BorderRadius.circular(5),
           ),
           child: Text(
             '${getStringFromTime(slot.start!)} - ${getStringFromTime(slot.end!)}',
-            style: kStyle14W500.copyWith(color: kPrimaryColor),
+            style: SizeConfig.kStyle14W500
+                .copyWith(color: SizeConfig.kPrimaryColor),
           ),
         ),
       ],
@@ -247,13 +253,13 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text('SERVICES', style: headingTextStyle),
-                kverticalMargin8,
+                SizeConfig.kverticalMargin8,
                 getDetailsRow(
                     leftText: e.service,
                     rightText: '₹${e.price}',
                     leftStyle: leftSide14W500,
                     rightStyle: rightSide14W500),
-                kverticalMargin8
+                SizeConfig.kverticalMargin8
               ],
             ))
         .toList());
@@ -269,7 +275,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
           rightText: '₹${cart.total}',
           leftStyle: leftSideInfo,
           rightStyle: rightSide14W500),
-      kverticalMargin8,
+      SizeConfig.kverticalMargin8,
       getDetailsRow(
           leftText: 'Taxes',
           rightText: '₹0',
@@ -283,13 +289,13 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
           rightText: '₹${cart.total}',
           leftStyle: leftSideInfo.copyWith(
               color: Theme.of(context).primaryColor,
-              fontSize: kfontSize16,
+              fontSize: SizeConfig.kfontSize16,
               fontWeight: FontWeight.w600),
           rightStyle: rightSideInfoPrimaryColor.copyWith(
               color: Colors.black,
-              fontSize: kfontSize16,
+              fontSize: SizeConfig.kfontSize16,
               fontWeight: FontWeight.w600)),
-      kverticalMargin8,
+      SizeConfig.kverticalMargin8,
     ];
   }
 
@@ -322,7 +328,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
           ),
           TextButton(
             child: Text('Proceed to payment',
-                style: kStyle16W500.copyWith(color: Colors.white)),
+                style: SizeConfig.kStyle16W500.copyWith(color: Colors.white)),
             onPressed: () {
               _paytmPaymentBloc.add(
                 InitiatePaytmPaymentApi(

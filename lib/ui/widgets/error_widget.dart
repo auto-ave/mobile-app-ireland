@@ -24,12 +24,13 @@ class ErrorScreen extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Image.asset('assets/images/error_illust.png'),
-        kverticalMargin16,
+        SizeConfig.kverticalMargin16,
         Text(
           'Oops! an error occured.',
-          style: kStyle16PrimaryColor.copyWith(fontWeight: FontWeight.bold),
+          style: SizeConfig.kStyle16PrimaryColor
+              .copyWith(fontWeight: FontWeight.bold),
         ),
-        kverticalMargin16,
+        SizeConfig.kverticalMargin16,
         ctaType != null
             ? CommonTextButton(
                 onPressed: onCTAPressed ??
@@ -39,9 +40,9 @@ class ErrorScreen extends StatelessWidget {
                     },
                 child: Text(
                   ctaType == ErrorCTA.reload ? 'Reload' : 'Home',
-                  style: kStyle16W500.copyWith(color: Colors.white),
+                  style: SizeConfig.kStyle16W500.copyWith(color: Colors.white),
                 ),
-                backgroundColor: kPrimaryColor)
+                backgroundColor: SizeConfig.kPrimaryColor)
             : Container()
       ],
     );

@@ -9,10 +9,10 @@ class NoReviewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Image.asset('assets/images/no_reviews.png'),
-      kverticalMargin16,
+      SizeConfig.kverticalMargin16,
       Text(
         'No reviews yet!',
-        style: kStyle16.copyWith(color: kGreyTextColor),
+        style: SizeConfig.kStyle16.copyWith(color: SizeConfig.kGreyTextColor),
       )
     ]);
   }

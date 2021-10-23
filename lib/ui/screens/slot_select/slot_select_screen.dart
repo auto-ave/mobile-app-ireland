@@ -65,14 +65,14 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
           context: context,
           title: Text(
             'Select Slot',
-            style: kStyle14W500.copyWith(color: Colors.black),
+            style: SizeConfig.kStyle14W500.copyWith(color: Colors.black),
           )),
       backgroundColor: Colors.white,
       bottomNavigationBar: buildBottom(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          kverticalMargin8,
+          SizeConfig.kverticalMargin8,
           DateSelectionTab(
               dates:
                   calendarDays.map((e) => DateSelectionItem(date: e)).toList(),
@@ -91,10 +91,10 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
                   padding: const EdgeInsets.only(left: 16.0, top: 16),
                   child: Text(
                       'Slots on  ${calendarDays[currentSelectedDateIndex].day}',
-                      style: kStyle20Bold),
+                      style: SizeConfig.kStyle20Bold),
                 )
               : Container(),
-          kverticalMargin16,
+          SizeConfig.kverticalMargin16,
           Expanded(
               child: BlocBuilder<SlotSelectionBloc, SlotSelectionState>(
             bloc: _bloc,
@@ -175,14 +175,16 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
                 children: <Widget>[
                   Text('₹${widget.cartTotal}',
                       style: TextStyle(
-                          fontSize: kfontSize16, fontWeight: FontWeight.w500)),
+                          fontSize: SizeConfig.kfontSize16,
+                          fontWeight: FontWeight.w500)),
                   SizedBox(
                     height: 4,
                   ),
                   Text(
                     'T O T A L',
                     style: TextStyle(
-                        fontSize: kfontSize12, color: Colors.grey[700]),
+                        fontSize: SizeConfig.kfontSize12,
+                        color: Colors.grey[700]),
                   ),
                 ],
               ),

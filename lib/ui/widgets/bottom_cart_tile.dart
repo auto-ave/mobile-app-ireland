@@ -31,13 +31,15 @@ class BottomCartTile extends StatelessWidget {
                 children: <Widget>[
                   Text('${cart.items!.length} items',
                       style: TextStyle(
-                          fontSize: kfontSize16, fontWeight: FontWeight.w500)),
+                          fontSize: SizeConfig.kfontSize16,
+                          fontWeight: FontWeight.w500)),
                   SizedBox(
                     height: 4,
                   ),
                   Text('₹${cart.total}',
                       style: TextStyle(
-                          fontSize: kfontSize16, fontWeight: FontWeight.w500)),
+                          fontSize: SizeConfig.kfontSize16,
+                          fontWeight: FontWeight.w500)),
                 ],
               ),
               Spacer(),

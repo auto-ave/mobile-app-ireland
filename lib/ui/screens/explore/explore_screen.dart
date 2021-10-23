@@ -266,7 +266,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               sliver: SliverToBoxAdapter(
                 child: Text(
                   'Services',
-                  style: kStyle20W500,
+                  style: SizeConfig.kStyle20W500,
                 ),
               ),
             ),
@@ -287,8 +287,8 @@ class _ExploreScreenState extends State<ExploreScreen>
                                 mainAxisSize: MainAxisSize
                                     .min, //TODO : 12 +4 padding check
                                 children: <Widget>[
-                                      kHorizontalMargin8,
-                                      kHorizontalMargin4
+                                      SizeConfig.kHorizontalMargin8,
+                                      SizeConfig.kHorizontalMargin4
                                     ] +
                                     state.searchedServices
                                         .map((e) => SearchServiceTile(
@@ -315,7 +315,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               sliver: SliverToBoxAdapter(
                   child: Text(
                 'Carwashes near you',
-                style: kStyle20W500,
+                style: SizeConfig.kStyle20W500,
               )),
             ),
             BlocConsumer<StoreListBloc, StoreListState>(
@@ -389,7 +389,7 @@ class _ExploreScreenState extends State<ExploreScreen>
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: Brightness.dark),
         elevation: 0,
-        actionsIconTheme: IconThemeData(color: kPrimaryColor),
+        actionsIconTheme: IconThemeData(color: SizeConfig.kPrimaryColor),
         backgroundColor: Colors.transparent,
         title: Center(
           child: Row(
@@ -403,14 +403,14 @@ class _ExploreScreenState extends State<ExploreScreen>
                   children: [
                     Icon(
                       Icons.location_on,
-                      color: kPrimaryColor,
+                      color: SizeConfig.kPrimaryColor,
                     ),
                     SizedBox(
                       width: 8,
                     ),
                     Text(
                       locationModel.cityName,
-                      style: kStyle16PrimaryColor,
+                      style: SizeConfig.kStyle16PrimaryColor,
                     ),
                   ],
                 ),
@@ -464,8 +464,8 @@ class _ExploreScreenState extends State<ExploreScreen>
                                           shape: BoxShape.circle),
                                       child: Text(
                                         count.toString(),
-                                        style: kStyle10.copyWith(
-                                            color: Colors.white),
+                                        style: SizeConfig.kStyle10
+                                            .copyWith(color: Colors.white),
                                       ));
                                 }
                                 return Container();

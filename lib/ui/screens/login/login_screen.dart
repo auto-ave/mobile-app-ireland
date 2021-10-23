@@ -63,7 +63,7 @@ class LoginScreen extends StatelessWidget {
         //         Spacer(),
         //         Text(
         //           'skip',
-        //           style: kStyle16PrimaryColor,
+        //           style: SizeConfig.kStyle16PrimaryColor,
         //         )
         //       ],
         //     ),
@@ -101,12 +101,12 @@ class _LoginBottomState extends State<LoginBottom> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            kverticalMargin16,
+            SizeConfig.kverticalMargin16,
             Text(
               'Lets get you started',
-              style: kStyle20Bold,
+              style: SizeConfig.kStyle20Bold,
             ),
-            kverticalMargin16,
+            SizeConfig.kverticalMargin16,
             BlocConsumer<PhoneAuthBloc, PhoneAuthState>(
               bloc: phoneAuthBloc,
               listener: (_, state) {
@@ -132,12 +132,12 @@ class _LoginBottomState extends State<LoginBottom> {
                     children: [
                       Text(
                         'Enter your phone number',
-                        style: kStyle14W500.copyWith(
-                            fontWeight: FontWeight.normal),
+                        style: SizeConfig.kStyle14W500
+                            .copyWith(fontWeight: FontWeight.normal),
                       ),
-                      kverticalMargin8,
+                      SizeConfig.kverticalMargin8,
                       PhoneTextField(phoneController: phoneController),
-                      kverticalMargin16,
+                      SizeConfig.kverticalMargin16,
                       Align(
                         alignment: Alignment.center,
                         child: Container(
@@ -161,7 +161,7 @@ class _LoginBottomState extends State<LoginBottom> {
                               backgroundColor: MaterialStateProperty.all(
                                   state is SendingOTP
                                       ? Colors.grey
-                                      : kPrimaryColor),
+                                      : SizeConfig.kPrimaryColor),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5),
@@ -171,7 +171,7 @@ class _LoginBottomState extends State<LoginBottom> {
                           ),
                         ),
                       ),
-                      kverticalMargin16,
+                      SizeConfig.kverticalMargin16,
                     ],
                   ),
                 );
@@ -198,19 +198,19 @@ class PhoneTextField extends StatelessWidget {
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: kPrimaryColor)),
+            borderSide: BorderSide(color: SizeConfig.kPrimaryColor)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: kPrimaryColor)),
+            borderSide: BorderSide(color: SizeConfig.kPrimaryColor)),
         prefixIcon: SizedBox(
           height: 50,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              kHorizontalMargin16,
-              Text('+91', style: kStyle14W500),
-              kHorizontalMargin8,
+              SizeConfig.kHorizontalMargin16,
+              Text('+91', style: SizeConfig.kStyle14W500),
+              SizeConfig.kHorizontalMargin8,
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: VerticalDivider(
@@ -223,7 +223,7 @@ class PhoneTextField extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4),
-          borderSide: BorderSide(color: kPrimaryColor),
+          borderSide: BorderSide(color: SizeConfig.kPrimaryColor),
         ),
       ),
     );

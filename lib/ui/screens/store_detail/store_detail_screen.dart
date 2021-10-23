@@ -57,7 +57,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
               context: context,
               title: Text(
                 storeName!,
-                style: kStyle14W500.copyWith(color: Colors.black),
+                style: SizeConfig.kStyle14W500.copyWith(color: Colors.black),
               ))
           : null,
       key: _scaffoldState,
@@ -172,10 +172,11 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
                                 _selectedTab = index;
                               });
                             },
-                            labelStyle: selectedTabTextStyle,
+                            labelStyle: SizeConfig.selectedTabTextStyle,
                             unselectedLabelColor: Colors.black,
-                            labelColor: kPrimaryColor,
-                            unselectedLabelStyle: unSelectedTabTextStyle,
+                            labelColor: SizeConfig.kPrimaryColor,
+                            unselectedLabelStyle:
+                                SizeConfig.unSelectedTabTextStyle,
                             tabs: [
                               new Tab(
                                 text: 'Overview',

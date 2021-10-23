@@ -67,9 +67,9 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                   children: [
                     Text(
                       'Order Details',
-                      style: kStyle20W500,
+                      style: SizeConfig.kStyle20W500,
                     ),
-                    kverticalMargin16,
+                    SizeConfig.kverticalMargin16,
                     Row(children: <Widget>[
                       Hero(
                         tag: widget.bookingId,
@@ -80,17 +80,17 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      kHorizontalMargin8,
+                      SizeConfig.kHorizontalMargin8,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(bookingDetail.store!.name!,
-                                style: kStyle16W500),
+                                style: SizeConfig.kStyle16W500),
                             Text(
                               bookingDetail.store!.address!,
-                              style:
-                                  kStyle12.copyWith(color: Color(0xff888888)),
+                              style: SizeConfig.kStyle12
+                                  .copyWith(color: Color(0xff888888)),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             )
@@ -98,9 +98,9 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                         ),
                       ),
                     ]),
-                    kverticalMargin16,
+                    SizeConfig.kverticalMargin16,
                     getBookingStatusTag(bookingDetail.status!),
-                    kverticalMargin16,
+                    SizeConfig.kverticalMargin16,
                     bookingDetail.status == BookingStatus.paymentDone
                         ? SizedBox(
                             child: AddToCalendarButton(
@@ -108,7 +108,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                             width: MediaQuery.of(context).size.width,
                           )
                         : Container(),
-                    kverticalMargin16,
+                    SizeConfig.kverticalMargin16,
                     bookingDetail.status == BookingStatus.paymentDone
                         ? StoreContactWidget(
                             personToContact:
@@ -119,10 +119,10 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                     Text('Booking Details',
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: kfontSize20)),
-                    kverticalMargin8,
+                            fontSize: SizeConfig.kfontSize20)),
+                    SizeConfig.kverticalMargin8,
                     DashedBookingBox(bookingDetail: bookingDetail),
-                    kverticalMargin16,
+                    SizeConfig.kverticalMargin16,
                     Divider(),
                     widget.status == BookingStatus.serviceCompleted
                         ? (_review != null || reviewState != null)

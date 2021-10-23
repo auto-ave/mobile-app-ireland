@@ -76,13 +76,14 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text('An OTP is sent to ${widget.phoneNumber}',
-                                style: kStyle16W500.copyWith(
-                                    fontWeight: FontWeight.normal)),
-                            kverticalMargin16,
+                                style: SizeConfig.kStyle16W500
+                                    .copyWith(fontWeight: FontWeight.normal)),
+                            SizeConfig.kverticalMargin16,
                             Text.rich(
                               TextSpan(
                                   text: 'Not your number? ',
-                                  style: kStyle12.copyWith(color: Colors.black),
+                                  style: SizeConfig.kStyle12
+                                      .copyWith(color: Colors.black),
                                   children: [
                                     TextSpan(
                                       recognizer: TapGestureRecognizer()
@@ -92,18 +93,21 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                                                 LoginScreen.route,
                                                 (route) => false),
                                       text: 'Change number',
-                                      style: kStyle12PrimaryColor.copyWith(
-                                          decoration: TextDecoration.underline),
+                                      style: SizeConfig.kStyle12PrimaryColor
+                                          .copyWith(
+                                              decoration:
+                                                  TextDecoration.underline),
                                     )
                                   ]),
                             ),
-                            kverticalMargin16,
+                            SizeConfig.kverticalMargin16,
                             OTPFieldWidget(onChange: onChanged),
-                            kverticalMargin16,
+                            SizeConfig.kverticalMargin16,
                             Text.rich(
                               TextSpan(
                                   text: 'Didn’t recive a Code? ',
-                                  style: kStyle12.copyWith(color: Colors.black),
+                                  style: SizeConfig.kStyle12
+                                      .copyWith(color: Colors.black),
                                   children: [
                                     TextSpan(
                                         text: 'Request again',
@@ -112,12 +116,13 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                                               SendOTP(
                                                   phoneNumber:
                                                       widget.phoneNumber)),
-                                        style: kStyle12PrimaryColor.copyWith(
-                                            decoration:
-                                                TextDecoration.underline))
+                                        style: SizeConfig.kStyle12PrimaryColor
+                                            .copyWith(
+                                                decoration:
+                                                    TextDecoration.underline))
                                   ]),
                             ),
-                            kverticalMargin16,
+                            SizeConfig.kverticalMargin16,
                           ],
                         ),
                       ),
@@ -145,7 +150,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                               backgroundColor: MaterialStateProperty.all(
                                   enteredOtp.length == 4 &&
                                           !(state is CheckingOTP)
-                                      ? kPrimaryColor
+                                      ? SizeConfig.kPrimaryColor
                                       : Colors.grey),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
@@ -157,7 +162,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                         },
                       ),
                     ),
-                    kverticalMargin32
+                    SizeConfig.kverticalMargin32
                   ],
                 ),
               ),
@@ -191,10 +196,10 @@ class OTPFieldWidget extends StatelessWidget {
           fieldHeight: 50,
           borderWidth: 1,
           shape: PinCodeFieldShape.box,
-          activeColor: kPrimaryColor,
-          disabledColor: kPrimaryColor,
-          selectedColor: kPrimaryColor,
-          inactiveColor: kPrimaryColor),
+          activeColor: SizeConfig.kPrimaryColor,
+          disabledColor: SizeConfig.kPrimaryColor,
+          selectedColor: SizeConfig.kPrimaryColor,
+          inactiveColor: SizeConfig.kPrimaryColor),
     );
   }
 }

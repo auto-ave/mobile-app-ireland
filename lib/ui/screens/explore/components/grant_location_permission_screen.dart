@@ -24,33 +24,33 @@ class GrantLocationPermissionScreen extends StatelessWidget {
         children: [
           Spacer(),
           SvgPicture.asset('assets/images/grant_location.svg'),
-          kverticalMargin8,
+          SizeConfig.kverticalMargin8,
           Text(
             'Hey there, Nice to see you!',
             textAlign: TextAlign.center,
-            style: kStyle20W500,
+            style: SizeConfig.kStyle20W500,
           ),
-          kverticalMargin8,
+          SizeConfig.kverticalMargin8,
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               forPermission
                   ? 'Would you please permit us to access your location to serve you in nearby places?'
                   : 'Would you please turn on your location service to serve you in nearby places?',
-              style: kStyle14.copyWith(
+              style: SizeConfig.kStyle14.copyWith(
                 color: Color(0xff696969),
               ),
               textAlign: TextAlign.center,
             ),
           ),
-          kverticalMargin16,
+          SizeConfig.kverticalMargin16,
           LocationButton(
               onPressed:
                   forPermission ? requestPermission : requestLocationService,
               text: forPermission
                   ? 'Grant location permission'
                   : 'Turn on location service'),
-          kverticalMargin8,
+          SizeConfig.kverticalMargin8,
           GestureDetector(
             behavior: HitTestBehavior.opaque,
 
@@ -61,11 +61,11 @@ class GrantLocationPermissionScreen extends StatelessWidget {
               children: [
                 Text(
                   'Skip for now',
-                  style: kStyle16PrimaryColor,
+                  style: SizeConfig.kStyle16PrimaryColor,
                 ),
                 Icon(
                   Icons.arrow_forward,
-                  color: kPrimaryColor,
+                  color: SizeConfig.kPrimaryColor,
                   size: 20,
                 )
               ],
@@ -77,7 +77,7 @@ class GrantLocationPermissionScreen extends StatelessWidget {
             child: Text(
               'We only access your location while you are using the app to improve your experience',
               textAlign: TextAlign.center,
-              style: kStyle14.copyWith(
+              style: SizeConfig.kStyle14.copyWith(
                 color: Color(0xff696969),
               ),
             ),
@@ -137,7 +137,7 @@ class LocationButton extends StatelessWidget {
         ),
       ),
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(kPrimaryColor),
+        backgroundColor: MaterialStateProperty.all(SizeConfig.kPrimaryColor),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),

@@ -54,7 +54,7 @@ class _StoreMapState extends State<StoreMap> {
         ],
       ),
       decoration: BoxDecoration(
-          border: Border.all(color: kPrimaryColor, width: 2),
+          border: Border.all(color: SizeConfig.kPrimaryColor, width: 2),
           borderRadius: BorderRadius.circular(5)),
     );
   }

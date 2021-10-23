@@ -22,7 +22,7 @@ class StoreHeading extends StatelessWidget {
         Expanded(
           child: Text(
             name,
-            style: kStyle20W500,
+            style: SizeConfig.kStyle20W500,
           ),
         ),
         rating != null
@@ -37,7 +37,7 @@ class StoreHeading extends StatelessWidget {
                           Icons.star,
                           color: Colors.amber,
                         ),
-                        kHorizontalMargin4,
+                        SizeConfig.kHorizontalMargin4,
                         Text(
                           rating.toString(),
                           style: TextStyle(

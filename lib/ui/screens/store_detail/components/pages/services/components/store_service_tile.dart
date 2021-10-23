@@ -65,7 +65,7 @@ class StoreServiceTile extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: kPrimaryColor),
+                      color: SizeConfig.kPrimaryColor),
                 ),
                 Spacer(),
                 BadgeWidget(text: '$time mins'),
@@ -85,7 +85,8 @@ class StoreServiceTile extends StatelessWidget {
             Text(
               "More info",
               style: TextStyle(
-                  decoration: TextDecoration.underline, color: kPrimaryColor),
+                  decoration: TextDecoration.underline,
+                  color: SizeConfig.kPrimaryColor),
             ),
             Row(
               children: <Widget>[
@@ -114,7 +115,7 @@ class StoreServiceTile extends StatelessWidget {
                           style: ButtonStyle(
                             side: MaterialStateProperty.all(BorderSide(
                                 color: !isAddedToCart
-                                    ? kPrimaryColor
+                                    ? SizeConfig.kPrimaryColor
                                     : Colors.red)),
                             padding: MaterialStateProperty.all(
                                 EdgeInsets.symmetric(
@@ -142,7 +143,7 @@ class StoreServiceTile extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         color: !isAddedToCart
-                                            ? kPrimaryColor
+                                            ? SizeConfig.kPrimaryColor
                                             : Colors.red),
                                   ),
                                 ),

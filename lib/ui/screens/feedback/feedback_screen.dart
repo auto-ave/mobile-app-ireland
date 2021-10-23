@@ -87,31 +87,32 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       //   fieldController: emailController,
                       //   validator: validateEmail,
                       // ),
-                      // kverticalMargin16,
+                      // SizeConfig.kverticalMargin16,
                       // CommonTextField(
                       //   fieldName: 'Phone',
                       //   fieldController: phoneController,
                       //   validator: validatePhone,
                       // ),
-                      // kverticalMargin16,
+                      // SizeConfig.kverticalMargin16,
                       widget.isFeedback
                           ? FeedbackTextWidget()
                           : OrderSupportTextWidget(),
-                      kverticalMargin8,
+                      SizeConfig.kverticalMargin8,
                       Text(
                         'If you have any questions, feedback or any problems please contact us. We are happy to hear from you',
-                        style: kStyle12.copyWith(color: kGreyTextColor),
+                        style: SizeConfig.kStyle12
+                            .copyWith(color: SizeConfig.kGreyTextColor),
                       ),
                       widget.isFeedback
                           ? Container()
                           : OrderSupportNumberWidget(
                               orderNumber: widget.orderNumber ?? 'NA'),
-                      kverticalMargin16,
+                      SizeConfig.kverticalMargin16,
                       Text(
                         'Your message',
-                        style: kStyle12W500,
+                        style: SizeConfig.kStyle12W500,
                       ),
-                      kverticalMargin8,
+                      SizeConfig.kverticalMargin8,
                       SizedBox(
                         height: MediaQuery.of(context).size.height * .2,
                         child: CommonTextField(
@@ -129,7 +130,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           filled: false,
                         ),
                       ),
-                      kverticalMargin16,
+                      SizeConfig.kverticalMargin16,
                       CommonTextButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
@@ -152,19 +153,19 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                   'Submit',
                                   style: TextStyle(color: Colors.white),
                                 ),
-                          backgroundColor: kPrimaryColor),
+                          backgroundColor: SizeConfig.kPrimaryColor),
 
-                      kverticalMargin24,
+                      SizeConfig.kverticalMargin24,
                       Row(
                         children: [
                           Expanded(child: Divider()),
-                          kHorizontalMargin8,
+                          SizeConfig.kHorizontalMargin8,
                           Text('OR'),
-                          kHorizontalMargin8,
+                          SizeConfig.kHorizontalMargin8,
                           Expanded(child: Divider()),
                         ],
                       ),
-                      kverticalMargin24,
+                      SizeConfig.kverticalMargin24,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -214,7 +215,7 @@ class FeedbackTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       'We did love to hear from you',
-      style: kStyle16W500,
+      style: SizeConfig.kStyle16W500,
     );
   }
 }
@@ -226,7 +227,7 @@ class OrderSupportTextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       'Having any problems regarding the order?',
-      style: kStyle16W500,
+      style: SizeConfig.kStyle16W500,
     );
   }
 }
@@ -243,17 +244,18 @@ class OrderSupportNumberWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         Divider(),
-        kverticalMargin8,
+        SizeConfig.kverticalMargin8,
         Text.rich(TextSpan(children: [
           TextSpan(
               text: 'ORDER NUMBER: ',
-              style: kStyle12W500.copyWith(
-                  letterSpacing: 1.8, color: kGreyTextColor)),
+              style: SizeConfig.kStyle12W500.copyWith(
+                  letterSpacing: 1.8, color: SizeConfig.kGreyTextColor)),
           TextSpan(
               text: orderNumber,
-              style: kStyle16PrimaryColor.copyWith(fontWeight: FontWeight.w500))
+              style: SizeConfig.kStyle16PrimaryColor
+                  .copyWith(fontWeight: FontWeight.w500))
         ])),
       ],
     );
@@ -279,15 +281,17 @@ class FeedbackSentWidget extends StatelessWidget {
                 children: [
                   Text(
                     'Feedback Sent',
-                    style: kStyle16W500,
+                    style: SizeConfig.kStyle16W500,
                   ),
                   Text(
                     'We have recieved your feedback.',
-                    style: kStyle12.copyWith(color: kGreyTextColor),
+                    style: SizeConfig.kStyle12
+                        .copyWith(color: SizeConfig.kGreyTextColor),
                   ),
                   Text(
                     'We will get back to you soon.',
-                    style: kStyle12.copyWith(color: kGreyTextColor),
+                    style: SizeConfig.kStyle12
+                        .copyWith(color: SizeConfig.kGreyTextColor),
                   ),
                 ],
               ),
@@ -310,10 +314,10 @@ class FeedbackSentWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Home',
-                  style: kStyle14.copyWith(color: Colors.white),
+                  style: SizeConfig.kStyle14.copyWith(color: Colors.white),
                 ),
               ),
-              backgroundColor: kPrimaryColor,
+              backgroundColor: SizeConfig.kPrimaryColor,
             ),
           ),
         ),

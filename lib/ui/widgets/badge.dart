@@ -23,7 +23,7 @@ class BadgeWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(2)),
       child: Text(
         text,
-        style: TextStyle(fontSize: 10, color: kPrimaryColor),
+        style: TextStyle(fontSize: 10, color: SizeConfig.kPrimaryColor),
       ),
     );
   }

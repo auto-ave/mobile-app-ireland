@@ -151,7 +151,7 @@ class StoreReviewTile extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-          border: Border.all(color: kPrimaryColor, width: 1),
+          border: Border.all(color: SizeConfig.kPrimaryColor, width: 1),
           borderRadius: BorderRadius.circular(5)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +170,8 @@ class StoreReviewTile extends StatelessWidget {
                 children: [
                   Text(
                     customerName,
-                    style: TextStyle(color: kPrimaryColor, fontSize: 14),
+                    style: TextStyle(
+                        color: SizeConfig.kPrimaryColor, fontSize: 14),
                   ),
                   SizedBox(
                     height: 4,
@@ -186,7 +187,7 @@ class StoreReviewTile extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(4),
             decoration: BoxDecoration(
-                border: Border.all(color: kPrimaryColor, width: 1),
+                border: Border.all(color: SizeConfig.kPrimaryColor, width: 1),
                 borderRadius: BorderRadius.circular(4)),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -196,7 +197,7 @@ class StoreReviewTile extends StatelessWidget {
                   color: Colors.amber,
                   size: 16,
                 ),
-                kHorizontalMargin4,
+                SizeConfig.kHorizontalMargin4,
                 Text(rating),
               ],
             ),

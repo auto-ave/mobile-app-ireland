@@ -104,7 +104,7 @@ class StoreSearchTile extends StatelessWidget {
                       TextSpan(
                         text: "₹$startingFrom",
                         style: TextStyle(
-                            color: kPrimaryColor,
+                            color: SizeConfig.kPrimaryColor,
                             fontSize: 16,
                             fontWeight: FontWeight.w500),
                       ),

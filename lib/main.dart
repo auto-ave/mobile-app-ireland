@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -124,6 +126,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    SizeConfig().init(context);
     precacheImage(AssetImage('assets/images/splash_background.png'), context);
     FcmHelper().onMessageFCM();
     _fcmInstance = FirebaseMessaging.instance;
@@ -155,6 +158,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark));
@@ -207,10 +211,12 @@ class _MyAppState extends State<MyApp> {
               BouncingScrollWrapper.builder(context, widget!),
               maxWidth: 1200,
               minWidth: 450,
-              defaultScale: true,
-              // mediaQueryData: MediaQueryData(textScaleFactor: 1),
+              defaultScale: false,
               breakpoints: [
-                ResponsiveBreakpoint.resize(450, name: MOBILE),
+                ResponsiveBreakpoint.resize(
+                  450,
+                  name: MOBILE,
+                ),
                 ResponsiveBreakpoint.autoScale(800, name: TABLET),
                 ResponsiveBreakpoint.autoScale(1000, name: TABLET),
                 ResponsiveBreakpoint.resize(1200, name: DESKTOP),
@@ -222,14 +228,15 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
-              appBarTheme: AppBarTheme(
-                systemOverlayStyle: SystemUiOverlayStyle(
-                    statusBarColor: Colors.white,
-                    statusBarBrightness: Brightness.dark),
-              ),
-              primaryColor: kPrimaryColor,
-              fontFamily: 'DM Sans',
-              scaffoldBackgroundColor: Colors.white),
+            appBarTheme: AppBarTheme(
+              systemOverlayStyle: SystemUiOverlayStyle(
+                  statusBarColor: Colors.white,
+                  statusBarBrightness: Brightness.dark),
+            ),
+            primaryColor: SizeConfig.kPrimaryColor,
+            fontFamily: 'DM Sans',
+            scaffoldBackgroundColor: Colors.white,
+          ),
           home: FutureBuilder<AuthTokensModel>(
               future: LocalDataService().getAuthTokens(),
               builder: (ctx, snapshot) {

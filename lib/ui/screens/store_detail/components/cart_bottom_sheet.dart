@@ -79,9 +79,9 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                       children: [
                         Text(
                           'Empty Cart',
-                          style: kStyle16W500,
+                          style: SizeConfig.kStyle16W500,
                         ),
-                        kHorizontalMargin8,
+                        SizeConfig.kHorizontalMargin8,
                         Icon(
                           Icons.shopping_cart_outlined,
                           color: Colors.black,
@@ -98,7 +98,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                           children: [
                             Icon(
                               Icons.location_on_outlined,
-                              color: kPrimaryColor,
+                              color: SizeConfig.kPrimaryColor,
                             ),
                             SizedBox(
                               width: 8,
@@ -106,7 +106,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                             Text(cart.store!.name!,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: kfontSize18))
+                                    fontSize: SizeConfig.kfontSize18))
                           ],
                         ),
                       ),
@@ -151,7 +151,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                 Text('View offers',
                                     style: TextStyle(
                                         color: Theme.of(context).primaryColor,
-                                        fontSize: kfontSize12))
+                                        fontSize: SizeConfig.kfontSize12))
                               ],
                             ),
                           ],
@@ -178,15 +178,15 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                               children: <Widget>[
                                 Text('₹${cart.total}',
                                     style: TextStyle(
-                                        fontSize: kfontSize16,
+                                        fontSize: SizeConfig.kfontSize16,
                                         fontWeight: FontWeight.w500)),
                                 SizedBox(
                                   height: 4,
                                 ),
                                 Text(
                                   'T O T A L',
-                                  style: kStyle12.copyWith(
-                                      color: Colors.grey[700]),
+                                  style: SizeConfig.kStyle12
+                                      .copyWith(color: Colors.grey[700]),
                                 ),
                               ],
                             ),
@@ -202,7 +202,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                 },
                                 child: Text('Select Slot',
                                     style: TextStyle(color: Colors.white)),
-                                backgroundColor: kPrimaryColor)
+                                backgroundColor: SizeConfig.kPrimaryColor)
                             // TextButton(
                             //   child: Text('Select Slot',
                             //       style: TextStyle(color: Colors.white)),
@@ -268,7 +268,7 @@ class CartItemTile extends StatelessWidget {
                   children: [
                     Text(
                       service!,
-                      style: TextStyle(fontSize: kfontSize16),
+                      style: TextStyle(fontSize: SizeConfig.kfontSize16),
                     ),
                     SizedBox(
                       height: 8,
@@ -293,7 +293,7 @@ class CartItemTile extends StatelessWidget {
                 '₹ $price',
                 style: TextStyle(
                     color: Theme.of(context).primaryColor,
-                    fontSize: kfontSize18),
+                    fontSize: SizeConfig.kfontSize18),
               ),
               SizedBox(
                 width: 16,
@@ -329,7 +329,7 @@ class CartItemTile extends StatelessWidget {
                 ),
               )
             ]),
-            kverticalMargin8,
+            SizeConfig.kverticalMargin8,
             Divider(
               height: 1,
               thickness: 1,
