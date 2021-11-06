@@ -30,16 +30,11 @@ class BottomCartTile extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text('${cart.items!.length} items',
-                      style: TextStyle(
-                          fontSize: SizeConfig.kfontSize16,
-                          fontWeight: FontWeight.w500)),
+                      style: SizeConfig.kStyle16),
                   SizedBox(
                     height: 4,
                   ),
-                  Text('₹${cart.total}',
-                      style: TextStyle(
-                          fontSize: SizeConfig.kfontSize16,
-                          fontWeight: FontWeight.w500)),
+                  Text('₹${cart.total}', style: SizeConfig.kStyle16),
                 ],
               ),
               Spacer(),

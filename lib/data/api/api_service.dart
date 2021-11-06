@@ -225,6 +225,12 @@ class ApiService implements ApiMethods {
       required String slotEnd}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postInitiatePaytmPaymentEndpoint();
+    print({
+      'date': date,
+      'bay': bay,
+      'slot_start': slotStart,
+      'slot_end': slotEnd
+    }.toString());
     Response res = await client.post(url, data: {
       'date': date,
       'bay': bay,

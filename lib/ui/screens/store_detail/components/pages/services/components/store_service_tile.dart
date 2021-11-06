@@ -133,8 +133,10 @@ class StoreServiceTile extends StatelessWidget {
                                   height: 25,
                                   width: 25,
                                   child: CircularProgressIndicator(
-                                    backgroundColor: Colors.white,
                                     strokeWidth: 2,
+                                    color: !isAddedToCart
+                                        ? SizeConfig.kPrimaryColor
+                                        : Colors.red,
                                   ),
                                 )
                               : FittedBox(

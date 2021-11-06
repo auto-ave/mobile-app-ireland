@@ -33,16 +33,15 @@ class AppDrawer extends StatelessWidget {
                   height: 0,
                 ),
                 _createDrawerItem(
-                    context, Icons.local_offer_outlined, Text("Your Orders"),
-                    () {
+                    context, 'orders_drawer.svg', Text("Your Orders"), () {
                   Navigator.pushNamed(context, YourBookingsScreen.route);
                 }),
                 Divider(
                   thickness: 1,
                   height: 0,
                 ),
-                _createDrawerItem(
-                    context, FontAwesomeIcons.user, Text("Profile"), () {
+                _createDrawerItem(context, 'user_drawer.svg', Text("Profile"),
+                    () {
                   Navigator.pushNamed(context, ProfileScreen.route,
                       arguments: ProfileScreenArguments(showSkip: false));
                 }),
@@ -50,8 +49,8 @@ class AppDrawer extends StatelessWidget {
                   thickness: 1,
                   height: 0,
                 ),
-                _createDrawerItem(context, FontAwesomeIcons.facebookMessenger,
-                    Text("Feedback"), () {
+                _createDrawerItem(
+                    context, 'feedback_drawer.svg', Text("Feedback"), () {
                   Navigator.pushNamed(context, FeedbackScreen.route,
                       arguments: FeedbackScreenArguments(isFeedback: true));
                 }),
@@ -59,7 +58,7 @@ class AppDrawer extends StatelessWidget {
                 Divider(),
                 _createDrawerItem(
                   context,
-                  Icons.logout,
+                  'log_out_drawer.svg',
                   Text("Log out"),
                   () async {
                     BlocProvider.of<PhoneAuthBloc>(context)..add(LogOut());
@@ -91,14 +90,6 @@ class AppDrawer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                   side: BorderSide(color: SizeConfig.kPrimaryColor)),
             ))),
-            _createDrawerItem(
-                context, FontAwesomeIcons.facebookMessenger, Text("Feedback"),
-                () {
-              Navigator.pushNamed(
-                context,
-                FeedbackScreen.route,
-              );
-            }),
           ],
         ));
       },
@@ -159,14 +150,17 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _createDrawerItem(
-      BuildContext context, IconData icon, Text title, Function() onTap) {
+      BuildContext context, String iconAddress, Text title, Function() onTap) {
     return Padding(
       padding: const EdgeInsets.all(0.0),
       child: ListTile(
         dense: true,
-        leading: FaIcon(icon),
+        leading: SvgPicture.asset('assets/icons/$iconAddress'),
         title: SizedBox(child: title),
-        onTap: onTap,
+        onTap: () {
+          Navigator.pop(context);
+          onTap();
+        },
       ),
     );
   }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:themotorwash/theme_constants.dart';
 
 class BadgeWidget extends StatelessWidget {
   final String text;
+  final TextStyle? textStyle;
   const BadgeWidget({
     Key? key,
     required this.text,
+    this.textStyle,
   }) : super(key: key);
 
   @override
@@ -19,11 +22,14 @@ class BadgeWidget extends StatelessWidget {
           //       blurRadius: 4,
           //       color: Color.fromRGBO(0, 0, 0, 0.25))
           // ],
-          color: Color.fromRGBO(218, 235, 255, 1),
+          color: SizeConfig.kBadgeColor,
           borderRadius: BorderRadius.circular(2)),
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 10, color: SizeConfig.kPrimaryColor),
+      child: Center(
+        child: Text(
+          text,
+          style: textStyle ??
+              TextStyle(fontSize: 10, color: SizeConfig.kPrimaryColor),
+        ),
       ),
     );
   }

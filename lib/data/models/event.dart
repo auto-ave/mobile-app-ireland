@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'event.g.dart';
 
 class EventModel {
@@ -28,6 +29,11 @@ class EventModel {
         endDateTime: DateTime.parse(e.endDateTime),
         bay: e.bay,
         createdAt: DateTime.parse(e.createdAt));
+  }
+
+  @override
+  String toString() {
+    return 'EventModel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, isBlocking: $isBlocking, startDateTime: $startDateTime, endDateTime: $endDateTime, bay: $bay)';
   }
 }
 

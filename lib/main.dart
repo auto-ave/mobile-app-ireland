@@ -70,6 +70,9 @@ void main() async {
 
   try {
     await Firebase.initializeApp();
+    await FirebaseMessaging.instance.getToken();
+    // await FirebaseMessaging.instance.subscribeToTopic('bang');
+
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
@@ -126,7 +129,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    SizeConfig().init(context);
+
     precacheImage(AssetImage('assets/images/splash_background.png'), context);
     FcmHelper().onMessageFCM();
     _fcmInstance = FirebaseMessaging.instance;
@@ -158,7 +161,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark));
@@ -210,11 +212,12 @@ class _MyAppState extends State<MyApp> {
           builder: (context, widget) => ResponsiveWrapper.builder(
               BouncingScrollWrapper.builder(context, widget!),
               maxWidth: 1200,
-              minWidth: 450,
-              defaultScale: false,
+              minWidth: 420,
+              defaultScale: true,
+              // mediaQueryData: MediaQueryData(textScaleFactor: 2),
               breakpoints: [
                 ResponsiveBreakpoint.resize(
-                  450,
+                  420,
                   name: MOBILE,
                 ),
                 ResponsiveBreakpoint.autoScale(800, name: TABLET),
@@ -240,6 +243,7 @@ class _MyAppState extends State<MyApp> {
           home: FutureBuilder<AuthTokensModel>(
               future: LocalDataService().getAuthTokens(),
               builder: (ctx, snapshot) {
+                SizeConfig().init(ctx);
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.authenticated) {

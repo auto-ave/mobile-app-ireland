@@ -49,7 +49,7 @@ class StoreTile extends StatelessWidget {
                       placeholder: (_, __) {
                         return ShimmerPlaceholder();
                       },
-                      height: MediaQuery.of(context).size.width * 9 / 16,
+                      height: MediaQuery.of(context).size.width * 1 / 2,
                       imageUrl: imageURL,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,

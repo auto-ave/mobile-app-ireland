@@ -1,4 +1,5 @@
 // import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,17 @@ import 'package:themotorwash/blocs/booking_summary/bloc/booking_summary_bloc.dar
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/repos/repository.dart';
+import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
+import 'package:themotorwash/ui/screens/feedback/feedback_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/components/your_bookings_tile.dart';
+import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/dashed_booking_box.dart';
+import 'package:themotorwash/ui/widgets/directions_button.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
+import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 import 'package:themotorwash/utils.dart';
 
 class BookingDetailScreen extends StatefulWidget {
@@ -45,7 +51,19 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBarWithBackButton(context: context),
+      appBar: getAppBarWithBackButton(context: context, actions: [
+        CommonTextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, FeedbackScreen.route,
+                  arguments: FeedbackScreenArguments(
+                      isFeedback: false, orderNumber: widget.bookingId));
+            },
+            child: Text(
+              'Support',
+              style: SizeConfig.kStyle16PrimaryColor,
+            ),
+            backgroundColor: Colors.white)
+      ]),
       body: BlocBuilder<BookingSummaryBloc, BookingSummaryState>(
         bloc: _bookingSummaryBloc,
         builder: (context, state) {
@@ -74,10 +92,25 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                       Hero(
                         tag: widget.bookingId,
                         child: CachedNetworkImage(
+                          placeholder: (_, __) {
+                            return Container(
+                              child: ShimmerPlaceholder(),
+                              width: 50,
+                              height: 50,
+                            );
+                          },
                           imageUrl: bookingDetail.store!.thumbnail!,
-                          height: 50,
-                          width: 50,
                           fit: BoxFit.cover,
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.0)),
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
                         ),
                       ),
                       SizeConfig.kHorizontalMargin8,
@@ -91,16 +124,22 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                               bookingDetail.store!.address!,
                               style: SizeConfig.kStyle12
                                   .copyWith(color: Color(0xff888888)),
-                              maxLines: 1,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             )
                           ],
                         ),
                       ),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: DirectionsButton(
+                            latitude: bookingDetail.store!.latitude!,
+                            longitude: bookingDetail.store!.longitude!),
+                      )
                     ]),
-                    SizeConfig.kverticalMargin16,
+                    SizeConfig.kverticalMargin24,
                     getBookingStatusTag(bookingDetail.status!),
-                    SizeConfig.kverticalMargin16,
+                    SizeConfig.kverticalMargin24,
                     bookingDetail.status == BookingStatus.paymentDone
                         ? SizedBox(
                             child: AddToCalendarButton(
@@ -108,7 +147,6 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                             width: MediaQuery.of(context).size.width,
                           )
                         : Container(),
-                    SizeConfig.kverticalMargin16,
                     bookingDetail.status == BookingStatus.paymentDone
                         ? StoreContactWidget(
                             personToContact:
@@ -191,21 +229,22 @@ class AddToCalendarButton extends StatelessWidget {
           bookingDetail.services!.forEach((element) {
             description = description + ', ' + element.service.toString();
           });
-          // final Event event = Event(
-          //   title: 'MotorWash booking for ${bookingDetail.vehicleType}',
-          //   description: 'Services : ${description.substring(1)}',
-          //   location: '${bookingDetail.store!.address}',
-          //   startDate: bookingDetail.event!.startDateTime,
-          //   endDate: bookingDetail.event!.endDateTime,
-          // );
-          // Add2Calendar.addEvent2Cal(event);
+          final Event event = Event(
+            title:
+                'MotorWash booking for ${bookingDetail.vehicleModel!.brand} ${bookingDetail.vehicleModel!.model}',
+            description: 'Services : ${description.substring(1)}',
+            location: '${bookingDetail.store!.address}',
+            startDate: bookingDetail.event!.startDateTime,
+            endDate: bookingDetail.event!.endDateTime,
+          );
+          Add2Calendar.addEvent2Cal(event);
         } catch (e) {
           showSnackbar(context, 'No calendar app found');
         }
       },
       icon: Icon(Icons.calendar_today_outlined, color: Colors.white),
       label: Text(
-        'Add to calendar',
+        'Add event to calendar',
         style: TextStyle(color: Colors.white),
       ),
       style: ButtonStyle(

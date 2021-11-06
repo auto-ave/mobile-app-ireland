@@ -66,11 +66,11 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
         // await FirebaseCrashlytics.instance.recordError(e, null);
         yield StoreListError(message: e.toString());
       }
-      try {
-        throw Exception(['Hellloo error brother']);
-      } catch (e) {
-        await FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
-      }
+      // try {
+      //   throw Exception(['Hellloo error brother']);
+      // } catch (e) {
+      //   await FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
+      // }
     }
   }
 

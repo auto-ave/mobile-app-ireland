@@ -20,7 +20,7 @@ class SearchServiceTile extends StatelessWidget {
             arguments: StoreListArguments(city: 'bpl', title: serviceName));
       },
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: SizedBox(
           width: 120,
           child: Column(
@@ -40,6 +40,8 @@ class SearchServiceTile extends StatelessWidget {
               Text(
                 serviceName,
                 overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                textAlign: TextAlign.center,
               )
             ],
           ),

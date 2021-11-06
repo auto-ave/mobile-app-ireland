@@ -143,8 +143,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                     context: context,
                     title: Text(
                       'Review Order',
-                      style:
-                          SizeConfig.kStyle14W500.copyWith(color: Colors.black),
+                      style: SizeConfig.kStyleAppBarTitle,
                     )),
                 bottomNavigationBar: buildBottom(slot: state.slot),
                 body: SingleChildScrollView(
@@ -172,8 +171,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                   context: context,
                   title: Text(
                     'Review Order',
-                    style:
-                        SizeConfig.kStyle14W500.copyWith(color: Colors.black),
+                    style: SizeConfig.kStyleAppBarTitle,
                   )),
               body: Center(child: loadingAnimation()),
             );
@@ -198,6 +196,10 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
   }
 
   Widget _buildCarTypeDetails({required VehicleModel vehicle}) {
+    return VehicleSelectedInfo(
+      vehicleModel: vehicle,
+      showChangeButton: false,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

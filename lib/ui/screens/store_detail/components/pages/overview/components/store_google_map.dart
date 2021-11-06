@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:themotorwash/theme_constants.dart';
 
 class StoreGoogleMap extends StatefulWidget {
   final double latitute;
@@ -41,34 +42,47 @@ class StoreGoogleMapState extends State<StoreGoogleMap> {
 
   late final CameraPosition _kLake;
   late final CameraPosition _kPinnedCamera;
-
+  bool isMapVisible = false;
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * .26,
-          child: GoogleMap(
-            liteModeEnabled: false,
-            gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-              new Factory<OneSequenceGestureRecognizer>(
-                () => new EagerGestureRecognizer(),
+        AnimatedOpacity(
+            curve: Curves.fastOutSlowIn,
+            opacity: isMapVisible ? 1.0 : 0,
+            duration: Duration(milliseconds: 600),
+            child: Container(
+              height: MediaQuery.of(context).size.height * .26,
+              child: GoogleMap(
+                liteModeEnabled: false,
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                  new Factory<OneSequenceGestureRecognizer>(
+                    () => new EagerGestureRecognizer(),
+                  ),
+                ].toSet(),
+                mapType: MapType.normal,
+                initialCameraPosition: _kPinnedCamera,
+                markers: [
+                  Marker(
+                      markerId: MarkerId('default'),
+                      position: LatLng(widget.latitute, widget.longitute),
+                      infoWindow: InfoWindow(title: widget.storeTitle)),
+                ].toSet(),
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                  Future.delayed(const Duration(milliseconds: 550), () {
+                    if (mounted) {
+                      setState(() {
+                        isMapVisible = true;
+                      });
+                    }
+                  });
+                },
               ),
-            ].toSet(),
-            mapType: MapType.normal,
-            initialCameraPosition: _kPinnedCamera,
-            markers: [
-              Marker(
-                  markerId: MarkerId('default'),
-                  position: LatLng(widget.latitute, widget.longitute),
-                  infoWindow: InfoWindow(title: widget.storeTitle)),
-            ].toSet(),
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
-        ),
+              decoration: BoxDecoration(
+                  border: Border.all(color: SizeConfig.kPrimaryColor, width: 2),
+                  borderRadius: BorderRadius.circular(5)),
+            )),
         Positioned(
           child: GestureDetector(
             onTap: _goToPinned,

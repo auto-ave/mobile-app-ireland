@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 
 import 'package:themotorwash/blocs/booking_summary/bloc/booking_summary_bloc.dart';
 import 'package:themotorwash/blocs/review/review_bloc.dart';
@@ -18,6 +19,7 @@ import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/dashed_booking_box.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/utils.dart';
+import 'dart:developer' as d;
 
 class BookingSummaryScreen extends StatefulWidget {
   final bool isTransactionSuccessful;
@@ -66,7 +68,12 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: getAppBarWithBackButton(context: context),
+        appBar: getAppBarWithBackButton(
+            context: context,
+            title: Text(
+              'Booking Summary',
+              style: SizeConfig.kStyleAppBarTitle,
+            )),
         body: BlocBuilder<BookingSummaryBloc, BookingSummaryState>(
           bloc: _bookingSummaryBloc,
           builder: (context, state) {
@@ -78,10 +85,11 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
             if (state is BookingSummaryLoaded) {
               var bookingDetail = state.booking;
               var reviewState = state.booking.review;
+              debugPrint(state.booking.toString().substring(1000));
               return Center(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -113,7 +121,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                                   Text(
                                       widget.isTransactionSuccessful
                                           ? 'We have sent a receipt on your number and email'
-                                          : 'There was an error processing the payment. Any amount deducted will be refunded in 3-5 business days. Your order isn’t booked.',
+                                          : 'There was an error processing the payment.\nAny amount deducted will be refunded in 3-5 business days.\nYour order isn’t booked.',
                                       style: TextStyle(
                                           fontSize: SizeConfig.kfontSize12)),
                                 ],
@@ -122,7 +130,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                           ],
                         ),
                         SizedBox(
-                          height: 32,
+                          height: 24,
                         ),
                         SizedBox(
                           child: bookingDetail.status ==
@@ -143,6 +151,11 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                                   backgroundColor: SizeConfig.kPrimaryColor),
                           width: MediaQuery.of(context).size.width,
                         ),
+                        bookingDetail.status != BookingStatus.paymentDone
+                            ? Divider(
+                                height: 48,
+                              )
+                            : Container(),
                         bookingDetail.status == BookingStatus.paymentDone
                             ? StoreContactWidget(
                                 personToContact:
@@ -154,7 +167,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                             style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: SizeConfig.kfontSize20)),
-                        SizeConfig.kverticalMargin8,
+                        SizeConfig.kverticalMargin16,
                         DashedBookingBox(bookingDetail: bookingDetail),
                         SizeConfig.kverticalMargin16,
                         Divider(),
@@ -201,7 +214,7 @@ class StoreContactWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Divider(
-          height: 16,
+          height: 48,
         ),
         Text.rich(TextSpan(children: [
           TextSpan(
@@ -225,7 +238,7 @@ class StoreContactWidget extends StatelessWidget {
                   .copyWith(color: SizeConfig.kPrimaryColor))
         ])),
         Divider(
-          height: 16,
+          height: 48,
         ),
       ],
     );

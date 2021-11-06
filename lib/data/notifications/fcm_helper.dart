@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:themotorwash/theme_constants.dart';
 
 class FcmHelper {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -26,39 +27,51 @@ class FcmHelper {
 
   onMessageFCM() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print('helllo fcm called');
+
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
 
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
-      }
-      final String bigPicturePath = await _downloadAndSaveFile(
-          message.notification!.android!.imageUrl!, 'bigPicture');
-      final BigPictureStyleInformation bigPictureStyleInformation =
-          BigPictureStyleInformation(FilePathAndroidBitmap(bigPicturePath),
-              hideExpandedLargeIcon: true,
-              contentTitle: 'overridden <b>big</b> content title',
-              htmlFormatContentTitle: true,
-              summaryText: 'summary <i>text</i>',
-              htmlFormatSummaryText: true);
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
+        BigPictureStyleInformation? bigPictureStyleInformation;
+        if (message.notification!.android!.imageUrl != null) {
+          final String bigPicturePath = await _downloadAndSaveFile(
+              message.notification!.android!.imageUrl!, 'bigPicture');
 
-      AndroidNotificationDetails androidPlatformChannelSpecifics =
-          AndroidNotificationDetails(
-              'channel_id_1', 'your channel name', 'your channel description',
-              importance: Importance.max,
-              priority: Priority.high,
-              showWhen: false,
-              sound: RawResourceAndroidNotificationSound('turbo'),
-              playSound: true,
-              icon: 'logo',
-              styleInformation: bigPictureStyleInformation);
-      NotificationDetails platformChannelSpecifics =
-          NotificationDetails(android: androidPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(1, message.notification!.title,
-          message.notification!.body, platformChannelSpecifics,
-          payload: 'item x');
+          bigPictureStyleInformation = BigPictureStyleInformation(
+              FilePathAndroidBitmap(bigPicturePath),
+              hideExpandedLargeIcon: true,
+              contentTitle: message.notification!.title,
+              htmlFormatContentTitle: true,
+              summaryText: message.notification!.body,
+              htmlFormatSummaryText: true);
+        }
+        FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+
+        AndroidNotificationDetails androidPlatformChannelSpecifics =
+            AndroidNotificationDetails(
+                'default_channel',
+                'AutoAve Foreground Channel',
+                'Foreground channel for all the notifications',
+                importance: Importance.max,
+                priority: Priority.high,
+                showWhen: false,
+                sound: RawResourceAndroidNotificationSound('turbo'),
+                playSound: true,
+                icon: 'notification_icon',
+                color: SizeConfig.kPrimaryColor,
+                styleInformation: bigPictureStyleInformation);
+        NotificationDetails platformChannelSpecifics =
+            NotificationDetails(android: androidPlatformChannelSpecifics);
+        await flutterLocalNotificationsPlugin.show(
+          1,
+          message.notification!.title,
+          message.notification!.body,
+          platformChannelSpecifics,
+        );
+      }
     });
   }
 }

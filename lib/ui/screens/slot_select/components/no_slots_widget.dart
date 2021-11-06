@@ -6,16 +6,21 @@ class NoSlotsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Image.asset('assets/images/no_slots.png'),
-        SizeConfig.kverticalMargin8,
-        Text(
-          'The store is closed on the selected date',
-          style: SizeConfig.kStyle16.copyWith(color: SizeConfig.kGreyTextColor),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset('assets/images/no_slots.png'),
+          SizeConfig.kverticalMargin8,
+          Text(
+            'The store is closed on the selected date',
+            textAlign: TextAlign.center,
+            style:
+                SizeConfig.kStyle16.copyWith(color: SizeConfig.kGreyTextColor),
+          ),
+        ],
+      ),
     );
   }
 }

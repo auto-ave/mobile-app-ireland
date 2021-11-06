@@ -82,18 +82,18 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
                               var booking = bookings[index];
 
                               var tile = YourBookingTile(
-                                status: booking.status,
-                                address: booking.store!.address!,
-                                serviceNames: booking.serviceNames!,
-                                storeName: booking.store!.name!,
-                                total: booking.amount != null
-                                    ? booking.amount!.toString()
-                                    : 'Amount',
-                                imageUrl: booking.store!.thumbnail!,
-                                bookedAt: booking.createdAt!,
-                                bookingId: booking.bookingId!,
-                                scheduledOn: booking.event!.startDateTime,
-                              );
+                                  status: booking.status,
+                                  address: booking.store!.address!,
+                                  serviceNames: booking.serviceNames!,
+                                  storeName: booking.store!.name!,
+                                  total: booking.amount != null
+                                      ? booking.amount!.toString()
+                                      : 'Amount',
+                                  imageUrl: booking.store!.thumbnail!,
+                                  bookedAt: booking.createdAt!,
+                                  bookingId: booking.bookingId!,
+                                  scheduledOn: booking.event!.startDateTime,
+                                  otp: booking.otp);
                               if (state is MoreYourBookingsLoading &&
                                   index == bookings.length - 1) {
                                 return LoadingMoreTile(tile: tile);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:themotorwash/blocs/feedback/bloc/feedback_bloc.dart';
@@ -46,7 +47,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           context: context,
           title: Text(
             'Feedback',
-            style: TextStyle(color: Colors.black),
+            style: SizeConfig.kStyleAppBarTitle,
           )),
       body: BlocConsumer<FeedbackBloc, FeedbackState>(
           bloc: _feedbackBloc,
@@ -309,7 +310,10 @@ class FeedbackSentWidget extends StatelessWidget {
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: CommonTextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, ExploreScreen.route, (route) => false);
+              },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(

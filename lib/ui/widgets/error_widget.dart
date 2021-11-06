@@ -23,12 +23,11 @@ class ErrorScreen extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset('assets/images/error_illust.png'),
+        Image.asset('assets/images/no_results.png'),
         SizeConfig.kverticalMargin16,
         Text(
-          'Oops! an error occured.',
-          style: SizeConfig.kStyle16PrimaryColor
-              .copyWith(fontWeight: FontWeight.bold),
+          'Something went wrong',
+          style: SizeConfig.kStyle16.copyWith(color: SizeConfig.kGreyTextColor),
         ),
         SizeConfig.kverticalMargin16,
         ctaType != null

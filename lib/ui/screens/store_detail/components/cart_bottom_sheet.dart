@@ -93,7 +93,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(20.0),
                         child: Row(
                           children: [
                             Icon(
@@ -104,9 +104,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                               width: 8,
                             ),
                             Text(cart.store!.name!,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: SizeConfig.kfontSize18))
+                                style: SizeConfig.kStyle16W500)
                           ],
                         ),
                       ),
@@ -194,6 +192,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                             CommonTextButton(
                                 onPressed: () {
                                   _orderReviewBloc.add(SetCart(cart: cart));
+                                  Navigator.pop(context);
                                   Navigator.pushNamed(
                                       context, SlotSelectScreen.route,
                                       arguments: SlotSelectScreenArguments(
@@ -256,19 +255,19 @@ class CartItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(children: <Widget>[
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+            child: Row(children: <Widget>[
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       service!,
-                      style: TextStyle(fontSize: SizeConfig.kfontSize16),
+                      style: SizeConfig.kStyle16,
                     ),
                     SizedBox(
                       height: 8,
@@ -293,48 +292,50 @@ class CartItemTile extends StatelessWidget {
                 '₹ $price',
                 style: TextStyle(
                     color: Theme.of(context).primaryColor,
-                    fontSize: SizeConfig.kfontSize18),
+                    fontSize: SizeConfig.kfontSize16),
               ),
               SizedBox(
                 width: 16,
               ),
-              TextButton(
-                onPressed: () {
-                  cartFunctionBloc.add(DeleteItemFromCart(itemId: itemId!));
-                },
-                child: isLoading
-                    ? SizedBox(
-                        height: 25,
-                        width: 25,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text(
-                        'Remove',
-                        style: TextStyle(color: Color(0xffDC1313)),
-                      ),
-                style: ButtonStyle(
-                  side: MaterialStateProperty.all(
-                    BorderSide(
+              SizedBox(
+                width: 80,
+                height: 40,
+                child: CommonTextButton(
+                  backgroundColor: Colors.white,
+                  border: RoundedRectangleBorder(
+                    side: BorderSide(
                       color: Color(0xffDC1313),
                       width: 1,
                     ),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
+                  onPressed: () {
+                    cartFunctionBloc.add(DeleteItemFromCart(itemId: itemId!));
+                  },
+                  child: isLoading
+                      ? SizedBox(
+                          width: 25,
+                          height: 25,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.red,
+                          ),
+                        )
+                      : FittedBox(
+                          child: Text(
+                            'Remove',
+                            style: TextStyle(color: Color(0xffDC1313)),
+                          ),
+                        ),
                 ),
               )
-            ]),
-            SizeConfig.kverticalMargin8,
-            Divider(
-              height: 1,
-              thickness: 1,
-            ),
-          ],
-        ));
+            ])),
+        SizeConfig.kverticalMargin8,
+        Divider(
+          height: 1,
+          thickness: 1,
+        ),
+      ],
+    );
   }
 }

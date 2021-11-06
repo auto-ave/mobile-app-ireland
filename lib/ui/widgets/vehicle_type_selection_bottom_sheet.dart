@@ -222,17 +222,22 @@ class VehicleWheelWidget extends StatelessWidget {
                   blurRadius: 16,
                   color: Color.fromRGBO(0, 0, 0, 0.16))
             ]),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CachedNetworkImage(
-              imageUrl: wheel.imageUrl,
-              width: 80,
-              height: 50,
-            ),
-            SizeConfig.kverticalMargin8,
-            Text(wheel.name)
-          ],
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              LayoutBuilder(builder: (context, constraints) {
+                return CachedNetworkImage(
+                  imageUrl: wheel.imageUrl,
+                  // width: 80,
+                  // height: 50,
+                  width: constraints.maxWidth * .6,
+                );
+              }),
+              SizeConfig.kverticalMargin8,
+              Text(wheel.name)
+            ],
+          ),
         ),
       ),
     );
@@ -377,12 +382,17 @@ class VehicleBrandWidget extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CachedNetworkImage(
-                imageUrl: brand.imageUrl,
-                width: 80,
-                height: 50,
-              ),
-              SizeConfig.kverticalMargin8,
+              LayoutBuilder(builder: (context, constraints) {
+                print('max height ${constraints.maxHeight}');
+                return CachedNetworkImage(
+                  imageUrl: brand.imageUrl,
+                  // width: 80,
+                  // height: 50,
+                  height: 58,
+                  // width: constraints.maxWidth * .6,
+                );
+              }),
+              // SizeConfig.kverticalMargin8,
               Text(brand.name)
             ],
           ),
@@ -521,9 +531,8 @@ class VehicleModelWidget extends StatelessWidget {
               CachedNetworkImage(
                 imageUrl: vehicleModel.image!,
                 width: 80,
-                height: 50,
+                height: 58,
               ),
-              SizeConfig.kverticalMargin8,
               Text(vehicleModel.model!)
             ],
           ),

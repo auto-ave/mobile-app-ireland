@@ -7,9 +7,11 @@ import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_detail/booking_detail.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
+import 'package:themotorwash/ui/widgets/badge.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 
 class YourBookingTile extends StatefulWidget {
+  final String? otp;
   final String storeName;
   final String address;
   final String total;
@@ -21,6 +23,7 @@ class YourBookingTile extends StatefulWidget {
   final DateTime scheduledOn;
   const YourBookingTile({
     Key? key,
+    this.otp,
     required this.storeName,
     required this.address,
     required this.total,
@@ -37,7 +40,8 @@ class YourBookingTile extends StatefulWidget {
 }
 
 class _YourBookingTileState extends State<YourBookingTile> {
-  DateFormat formatter = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);
+  DateFormat dateFormatter = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);
+  DateFormat timeFormatter = DateFormat('hh:mm a');
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -112,16 +116,48 @@ class _YourBookingTileState extends State<YourBookingTile> {
                 ),
                 Divider(),
                 SizeConfig.kverticalMargin8,
-                Text(
-                  'SCHEDULED ON',
-                  style: SizeConfig.kStyle12W500
-                      .copyWith(letterSpacing: 2.16, color: Color(0xff888888)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'SCHEDULED ON',
+                            style: SizeConfig.kStyle12W500.copyWith(
+                                letterSpacing: 2.16, color: Color(0xff888888)),
+                          ),
+                          SizeConfig.kverticalMargin8,
+                          Text(dateFormatter.format(widget.scheduledOn) +
+                              " at " +
+                              timeFormatter.format(widget.scheduledOn)),
+                          SizeConfig.kverticalMargin8,
+                        ],
+                      ),
+                    ),
+                    SizeConfig.kHorizontalMargin8,
+                    widget.otp != null
+                        ? Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'OTP',
+                                style: SizeConfig.kStyle12W500.copyWith(
+                                    letterSpacing: 2.16,
+                                    color: Color(0xff888888)),
+                              ),
+                              SizeConfig.kverticalMargin8,
+                              BadgeWidget(
+                                text: widget.otp!,
+                                textStyle: SizeConfig.kStyle12PrimaryColor,
+                              ),
+                              SizeConfig.kverticalMargin8,
+                            ],
+                          )
+                        : Container(),
+                  ],
                 ),
-                SizeConfig.kverticalMargin8,
-                Text(formatter.format(widget.scheduledOn) +
-                    " at " +
-                    DateFormat.Hms().format(widget.scheduledOn)),
-                SizeConfig.kverticalMargin8,
                 // Row(
                 //   children: <Widget>[
                 //     getButton(

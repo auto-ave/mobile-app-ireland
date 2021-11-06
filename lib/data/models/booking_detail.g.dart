@@ -22,7 +22,10 @@ BookingDetailEntity _$BookingDetailEntityFromJson(Map<String, dynamic> json) {
     event: json['event'] == null
         ? null
         : EventEntity.fromJson(json['event'] as Map<String, dynamic>),
-    vehicleType: json['vehicle_type'] as String?,
+    vehicleModel: json['vehicle_model'] == null
+        ? null
+        : VehicleModelEntity.fromJson(
+            json['vehicle_model'] as Map<String, dynamic>),
     store: json['store'] == null
         ? null
         : StoreEntity.fromJson(json['store'] as Map<String, dynamic>),
@@ -50,7 +53,7 @@ Map<String, dynamic> _$BookingDetailEntityToJson(
       'status_changed_time': instance.statusChangedTime,
       'otp': instance.otp,
       'event': instance.event?.toJson(),
-      'vehicle_type': instance.vehicleType,
+      'vehicle_model': instance.vehicleModel?.toJson(),
       'store': instance.store?.toJson(),
       'booked_by': instance.bookedBy,
       'is_refunded': instance.isRefunded,

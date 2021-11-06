@@ -116,7 +116,8 @@ class _StoreServicesTabState extends State<StoreServicesTab>
           padding: EdgeInsets.all(16),
           sliver: SliverToBoxAdapter(
               child: VehicleSelectedInfo(
-                  vehicleState: vehicleState,
+                  vehicleModel: vehicleState.vehicleTypeModel,
+                  showChangeButton: true,
                   onChangePressed: () => _showVehicleBottomSheet(context))),
         ),
         BlocBuilder<CartFunctionBloc, CartFunctionState>(

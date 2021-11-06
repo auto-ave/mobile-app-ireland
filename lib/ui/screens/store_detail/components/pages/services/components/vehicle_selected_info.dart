@@ -8,13 +8,15 @@ import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 
 class VehicleSelectedInfo extends StatelessWidget {
-  final GlobalVehicleTypeSelected vehicleState;
-  final Function onChangePressed;
-  const VehicleSelectedInfo({
-    Key? key,
-    required this.vehicleState,
-    required this.onChangePressed,
-  }) : super(key: key);
+  final VehicleModel vehicleModel;
+  final bool showChangeButton;
+  final Function? onChangePressed;
+  const VehicleSelectedInfo(
+      {Key? key,
+      required this.vehicleModel,
+      this.onChangePressed,
+      required this.showChangeButton})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,22 +47,23 @@ class VehicleSelectedInfo extends StatelessWidget {
                   style: SizeConfig.kStyle12
                       .copyWith(color: Color(0xff696969), letterSpacing: 1.8),
                 ),
-                SizeConfig.kverticalMargin8,
-                SelectedVehicleWidget(
-                    vehicleModel: vehicleState.vehicleTypeModel)
+                SizeConfig.kverticalMargin4,
+                SelectedVehicleWidget(vehicleModel: vehicleModel)
               ],
             ),
           ),
           SizeConfig.kHorizontalMargin16,
-          CommonTextButton(
-              onPressed: () => onChangePressed(),
-              child: FittedBox(
-                child: Text(
-                  'Change',
-                  style: SizeConfig.kStyle12.copyWith(color: Colors.white),
-                ),
-              ),
-              backgroundColor: SizeConfig.kPrimaryColor)
+          showChangeButton
+              ? CommonTextButton(
+                  onPressed: () => onChangePressed!(),
+                  child: FittedBox(
+                    child: Text(
+                      'Change',
+                      style: SizeConfig.kStyle12.copyWith(color: Colors.white),
+                    ),
+                  ),
+                  backgroundColor: SizeConfig.kPrimaryColor)
+              : Container()
         ],
       ),
     );

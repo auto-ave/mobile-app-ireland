@@ -23,7 +23,7 @@ class SearchServicesBloc
       TransitionFunction<SearchServicesEvent, SearchServicesState>
           transitionFn) {
     return events
-        .debounceTime(const Duration(milliseconds: 500))
+        .debounceTime(const Duration(milliseconds: 300))
         .switchMap(transitionFn);
   }
 

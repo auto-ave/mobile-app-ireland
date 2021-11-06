@@ -26,7 +26,7 @@ class SearchStoresBloc extends Bloc<SearchStoresEvent, SearchStoresState> {
       Stream<SearchStoresEvent> events,
       TransitionFunction<SearchStoresEvent, SearchStoresState> transitionFn) {
     return events
-        .debounceTime(const Duration(milliseconds: 500))
+        .debounceTime(const Duration(milliseconds: 300))
         .switchMap(transitionFn);
   }
 

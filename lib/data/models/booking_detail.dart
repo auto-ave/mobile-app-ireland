@@ -1,11 +1,12 @@
 // import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:themotorwash/data/models/event.dart';
 
+import 'package:themotorwash/data/models/event.dart';
 import 'package:themotorwash/data/models/payment.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/store.dart';
+import 'package:themotorwash/data/models/vehicle_model.dart';
 
 part 'booking_detail.g.dart';
 
@@ -17,7 +18,7 @@ class BookingDetailModel {
   final BookingStatus? status;
   final DateTime? statusChangedTime;
   final String? otp;
-  final String? vehicleType;
+  final VehicleModel? vehicleModel;
   final Store? store;
   final int? bookedBy;
   final bool? isRefunded;
@@ -36,7 +37,7 @@ class BookingDetailModel {
     this.statusChangedTime,
     this.otp,
     this.event,
-    this.vehicleType,
+    this.vehicleModel,
     this.store,
     this.bookedBy,
     this.isRefunded,
@@ -70,14 +71,16 @@ class BookingDetailModel {
           ? DateTime.parse(e.statusChangedTime!)
           : null,
       store: e.store != null ? Store.fromEntity(e.store!) : null,
-      vehicleType: e.vehicleType,
+      vehicleModel: e.vehicleModel != null
+          ? VehicleModel.fromEntity(e.vehicleModel!)
+          : null,
       review: e.review != null ? Review.fromEntity(e.review!) : null,
     );
   }
 
   @override
   String toString() {
-    return 'BookingDetailModel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, bookingId: $bookingId, status: $status, statusChangedTime: $statusChangedTime, otp: $otp, event: $event, vehicleType: $vehicleType, store: $store, bookedBy: $bookedBy, isRefunded: $isRefunded, services: $services, amount: $amount, payment: $payment)';
+    return 'BookingDetailModel(id: $id, createdAt: $createdAt, updatedAt: $updatedAt, bookingId: $bookingId, status: $status, statusChangedTime: $statusChangedTime, otp: $otp, vehicleModel: $vehicleModel, store: $store, bookedBy: $bookedBy, isRefunded: $isRefunded, services: $services, amount: $amount, payment: $payment, event: $event, review: $review)';
   }
 }
 
@@ -102,8 +105,8 @@ class BookingDetailEntity {
   final String? otp;
   final EventEntity? event;
 
-  @JsonKey(name: 'vehicle_type')
-  final String? vehicleType;
+  @JsonKey(name: 'vehicle_model')
+  final VehicleModelEntity? vehicleModel;
 
   final StoreEntity? store;
 
@@ -127,7 +130,7 @@ class BookingDetailEntity {
     this.statusChangedTime,
     this.otp,
     this.event,
-    this.vehicleType,
+    this.vehicleModel,
     this.store,
     this.bookedBy,
     this.isRefunded,

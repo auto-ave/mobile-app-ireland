@@ -52,7 +52,8 @@ class DashedBookingBox extends StatelessWidget {
             SizeConfig.kverticalMargin8,
             getDetailsRow(
                 leftText: 'Car Model:',
-                rightText: 'BMW X4',
+                rightText:
+                    '${bookingDetail.vehicleModel!.brand} ${bookingDetail.vehicleModel!.model}',
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
             SizeConfig.kverticalMargin8,

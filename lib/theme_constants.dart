@@ -59,6 +59,7 @@ class SizeConfig {
 
   static late TextStyle kStyle10;
   static late TextStyle kStyle14;
+  static late TextStyle kStyle14Bold;
 
   static late TextStyle kStyle14W500;
 
@@ -89,6 +90,10 @@ class SizeConfig {
   static Color? kShimmerHighlightColor = Colors.grey[200];
 
   static Color kGreyTextColor = Color(0xff696969);
+
+  static Color kBadgeColor = Color.fromRGBO(218, 235, 255, 1);
+
+  static late TextStyle kStyleAppBarTitle;
   void init(BuildContext context) {
     print('init called');
     _mediaQueryData = MediaQuery.of(context);
@@ -104,11 +109,17 @@ class SizeConfig {
         _mediaQueryData!.padding.top + _mediaQueryData!.padding.bottom;
     safeBlockHorizontal = (screenWidth! - _safeAreaHorizontal!) / 100;
     safeBlockVertical = (screenHeight! - _safeAreaVertical!) / 100;
-    print('Text Scale' + textScaleFactor.toString());
+    print('Text Scale' +
+        textScaleFactor.toString() +
+        " " +
+        screenWidth.toString() +
+        " " +
+        screenHeight.toString());
     kfontSize10 = 10 * textScaleFactor!;
     kfontSize12 = 12 * textScaleFactor!;
     kfontSize14 = 14 * textScaleFactor!;
     kfontSize16 = 16 * textScaleFactor!;
+    kfontSize18 = 18 * textScaleFactor!;
     kfontSize20 = 20 * textScaleFactor!;
     kfontSize24 = 24 * textScaleFactor!;
     kStyle12PrimaryColor = TextStyle(
@@ -117,7 +128,7 @@ class SizeConfig {
         fontSize: kfontSize12);
     kStyle12 = TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize12);
     kStyle14 = TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize14);
-
+    kStyle16 = TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize16);
     kStyle10 = TextStyle(fontWeight: FontWeight.w400, fontSize: kfontSize10);
 
     kStyle14W500 =
@@ -125,6 +136,10 @@ class SizeConfig {
 
     kStyle14PrimaryColor =
         TextStyle(fontSize: kfontSize14, color: kPrimaryColor);
+    kStyle14Bold = TextStyle(
+      fontWeight: FontWeight.w700,
+      fontSize: kfontSize14,
+    );
 
     kStyle12W500 =
         TextStyle(fontWeight: FontWeight.w500, fontSize: kfontSize12);
@@ -150,7 +165,10 @@ class SizeConfig {
     selectedTabTextStyle =
         kStyle16Bold.copyWith(color: kPrimaryColor, fontFamily: 'DM Sans');
     // kStyle16Bold.copyWith(color: kPrimaryColor, fontFamily: 'DM Sans');
-    unSelectedTabTextStyle = kStyle16.copyWith(fontFamily: 'DM Sans');
+    unSelectedTabTextStyle =
+        kStyle16.copyWith(fontFamily: 'DM Sans', color: kGreyTextColor);
+
+    kStyleAppBarTitle = kStyle14W500.copyWith(color: Colors.black);
   }
 }
 

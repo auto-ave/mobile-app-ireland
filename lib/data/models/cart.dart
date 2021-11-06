@@ -46,8 +46,12 @@ class CartModel {
         itemsObj: entity.itemsObj!
             .map((e) => PriceTimeListModel.fromEntity(e))
             .toList(),
-        vehicleModel: VehicleModel.fromEntity(entity.vehicleModel!),
-        vehicleType: VehicleTypeModel.fromEntity(entity.vehicleType!));
+        vehicleModel: entity.vehicleModel != null
+            ? VehicleModel.fromEntity(entity.vehicleModel!)
+            : null,
+        vehicleType: entity.vehicleType != null
+            ? VehicleTypeModel.fromEntity(entity.vehicleType!)
+            : null);
   }
 }
 

@@ -218,7 +218,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                       builder: (context, state) {
                         if (state is SearchServicesUninitialized) {
                           return Center(
-                            child: Image.asset('assets/images/no_search.svg'),
+                            child: Image.asset('assets/images/no_results.png'),
                           );
                         }
                         return SearchOverlay(
@@ -228,7 +228,28 @@ class _ExploreScreenState extends State<ExploreScreen>
                         );
                       },
                     )
-                  : _buidExploreSection())
+                  : BlocBuilder<StoreListBloc, StoreListState>(
+                      bloc: _storeListBloc,
+                      builder: (context, storeState) {
+                        return BlocBuilder<SearchServicesBloc,
+                            SearchServicesState>(
+                          bloc: _privateSearchServicesBloc,
+                          builder: (context, servicesState) {
+                            if (storeState is StoreListError ||
+                                servicesState is SearchedServicesError) {
+                              return Center(
+                                child: ErrorScreen(
+                                  ctaType: ErrorCTA.reload,
+                                  onCTAPressed: _onRefresh,
+                                ),
+                              );
+                              ;
+                            }
+                            return _buidExploreSection();
+                          },
+                        );
+                      },
+                    ))
         ],
       ),
     );
@@ -266,7 +287,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               sliver: SliverToBoxAdapter(
                 child: Text(
                   'Services',
-                  style: SizeConfig.kStyle20W500,
+                  style: SizeConfig.kStyle16W500,
                 ),
               ),
             ),
@@ -274,7 +295,10 @@ class _ExploreScreenState extends State<ExploreScreen>
               bloc: _privateSearchServicesBloc,
               builder: (context, state) {
                 if (state is LoadingSearchServicesResult) {
-                  return SliverToBoxAdapter(child: ScrollableServiceLoading());
+                  return SliverToBoxAdapter(
+                      child: ScrollableServiceLoading(
+                    showTitle: false,
+                  ));
                 }
                 if (state is SearchedServicesResult) {
                   return SliverToBoxAdapter(
@@ -284,8 +308,9 @@ class _ExploreScreenState extends State<ExploreScreen>
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
                               child: Row(
-                                mainAxisSize: MainAxisSize
-                                    .min, //TODO : 12 +4 padding check
+                                mainAxisSize: MainAxisSize.min,
+                                //TODO : 12 +4 padding check
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                       SizeConfig.kHorizontalMargin8,
                                       SizeConfig.kHorizontalMargin4
@@ -307,7 +332,13 @@ class _ExploreScreenState extends State<ExploreScreen>
                     child: Container(),
                   );
                 }
-                return SliverToBoxAdapter(child: ScrollableServiceLoading());
+                return SliverToBoxAdapter(
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: ScrollableServiceLoading(
+                    showTitle: false,
+                  ),
+                ));
               },
             ),
             SliverPadding(
@@ -315,7 +346,7 @@ class _ExploreScreenState extends State<ExploreScreen>
               sliver: SliverToBoxAdapter(
                   child: Text(
                 'Carwashes near you',
-                style: SizeConfig.kStyle20W500,
+                style: SizeConfig.kStyle16W500,
               )),
             ),
             BlocConsumer<StoreListBloc, StoreListState>(

@@ -8,6 +8,7 @@ import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/components/search_service_tile.dart';
+import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/scrollable_service_loading.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/service_search_loading_tile.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/store_search_loading_tile.dart';
@@ -33,108 +34,223 @@ class _SearchOverlayState extends State<SearchOverlay> {
   @override
   void initState() {
     super.initState();
+    // widget.searchServicesBloc.stream.listen((state) {
+    //   if (state is SearchedServicesResult && mounted) {
+    //     setState(() {
+    //       servicesEmpty = state.searchedServices.isEmpty;
+    //     });
+    //   }
+    //   if (state is LoadingSearchServicesResult && mounted) {
+    //     setState(() {
+    //       servicesEmpty = false;
+    //     });
+    //   }
+    // });
+    // widget.searchStoresBloc.stream.listen((state) {
+    //   if (state is SearchedStoresResult && mounted) {
+    //     setState(() {
+    //       storesEmpty = stores.isEmpty ? true : false;
+    //     });
+    //   }
+    // });
   }
 
   bool servicesEmpty = false;
+  bool storesEmpty = false;
 
   @override
   Widget build(BuildContext context) {
     // return SliverToBoxAdapter(child: Text('hello'));
-    return LazyLoadScrollView(
-      onEndOfPage: _loadMoreStores,
-      child: CustomScrollView(slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          sliver: SliverToBoxAdapter(
-            child: Text(
-              'Services',
-              style: SizeConfig.kStyle14W500
-                  .copyWith(color: SizeConfig.kPrimaryColor),
-            ),
-          ),
-        ),
-        BlocBuilder<SearchServicesBloc, SearchServicesState>(
-          bloc: widget.searchServicesBloc,
-          builder: (context, state) {
-            if (state is LoadingSearchServicesResult) {
-              return SliverToBoxAdapter(child: ScrollableServiceLoading());
-            }
-            if (state is SearchedServicesResult) {
-              return SliverToBoxAdapter(
-                child: state.searchedServices.isNotEmpty
-                    ? SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[SizeConfig.kHorizontalMargin16] +
-                                state.searchedServices
-                                    .map((e) => SearchServiceTile(
-                                          imageUrl: e.thumbnail!,
-                                          serviceName: e.name!,
-                                        ))
-                                    .toList(),
-                          ),
-                        ),
-                      )
-                    : Container(
-                        child: Center(
-                            child:
-                                Text('No services with the given query found')),
-                        width: double.infinity,
-                        height: 100,
-                      ),
-              );
-            }
-            if (state is SearchedServicesError) {}
-            return SliverToBoxAdapter(child: ScrollableServiceLoading());
-          },
-        ),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          sliver: SliverToBoxAdapter(
-              child: Text(
-            'Stores',
-            style: SizeConfig.kStyle14W500
-                .copyWith(color: SizeConfig.kPrimaryColor),
-          )),
-        ),
+    return
+        // servicesEmpty && storesEmpty
+        //     ? Center(
+        //         child: Padding(
+        //           padding: const EdgeInsets.all(20.0),
+        //           child: Column(
+        //             mainAxisSize: MainAxisSize.min,
+        //             children: [
+        //               Image.asset('assets/images/no_results.png'),
+        //               SizeConfig.kverticalMargin4,
+        //               Text(
+        //                 ' No results for ${widget.textController.text}.\nPlease check your search query',
+        //                 style: SizeConfig.kStyle16.copyWith(
+        //                   color: SizeConfig.kGreyTextColor,
+        //                 ),
+        //                 textAlign: TextAlign.center,
+        //               )
+        //             ],
+        //           ),
+        //         ),
+        //       )
+        //     :
         BlocBuilder<SearchStoresBloc, SearchStoresState>(
-          bloc: widget.searchStoresBloc,
-          builder: (context, state) {
-            if (state is LoadingSearchStoresResult) {
-              return SliverList(
-                delegate: SliverChildListDelegate(
-                  List.filled(4, StoreSearchLoadingTile()),
+      bloc: widget.searchStoresBloc,
+      builder: (context, storeState) {
+        return BlocBuilder<SearchServicesBloc, SearchServicesState>(
+          bloc: widget.searchServicesBloc,
+          builder: (context, servicesState) {
+            if (storeState is SearchedStoresResult &&
+                servicesState is SearchedServicesResult) {
+              stores = storeState.searchedStores;
+              if (stores.isEmpty && servicesState.searchedServices.isEmpty) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset('assets/images/no_results.png'),
+                        SizeConfig.kverticalMargin8,
+                        Text(
+                          ' No results for ${widget.textController.text}.\nPlease check your search query',
+                          style: SizeConfig.kStyle16.copyWith(
+                            color: SizeConfig.kGreyTextColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
+            }
+            return LazyLoadScrollView(
+              onEndOfPage: _loadMoreStores,
+              child: CustomScrollView(slivers: [
+                // SliverPadding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                //   sliver: SliverToBoxAdapter(
+                //     child: Text(
+                //       'Services',
+                //       style: SizeConfig.kStyle14W500
+                //           .copyWith(color: SizeConfig.kPrimaryColor),
+                //     ),
+                //   ),
+                // ),
+                BlocBuilder<SearchServicesBloc, SearchServicesState>(
+                  bloc: widget.searchServicesBloc,
+                  builder: (context, state) {
+                    if (state is LoadingSearchServicesResult) {
+                      return SliverToBoxAdapter(
+                          child: ScrollableServiceLoading(
+                        showTitle: true,
+                      ));
+                    }
+                    if (state is SearchedServicesResult) {
+                      return SliverToBoxAdapter(
+                        child: state.searchedServices.isNotEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 16),
+                                    child: Text(
+                                      'Services',
+                                      style: SizeConfig.kStyle14W500.copyWith(
+                                          color: SizeConfig.kPrimaryColor),
+                                    ),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child:
+                                        //  Padding(
+                                        //   padding:
+                                        //    const EdgeInsets.symmetric(vertical: 8),
+                                        //   child:
+                                        Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                            SizeConfig.kHorizontalMargin16
+                                          ] +
+                                          state.searchedServices
+                                              .map((e) => SearchServiceTile(
+                                                    imageUrl: e.thumbnail!,
+                                                    serviceName: e.name!,
+                                                  ))
+                                              .toList(),
+                                    ),
+                                    // ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox.shrink(),
+                      );
+                    }
+                    if (state is SearchedServicesError) {}
+                    return SliverToBoxAdapter(
+                        child: ScrollableServiceLoading(
+                      showTitle: true,
+                    ));
+                  },
                 ),
-              );
-            }
-            if (state is SearchedStoresResult) {
-              return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                (_, index) {
-                  var store = state.searchedStores[index];
-                  return StoreSearchTile(
-                      isNew: store.rating == null,
-                      distance: store.distance ?? 'dis',
-                      imageURL: store.thumbnail ?? 'thumb',
-                      rating: store.rating,
-                      storeName: store.name,
-                      startingFrom: store.servicesStart ?? 'serviceStarts',
-                      storeSlug: store.storeSlug ?? 'store-slug');
-                },
-                childCount: state.searchedStores.length,
-              ));
-            }
-            return SliverList(
-              delegate: SliverChildListDelegate(
-                List.filled(3, StoreSearchLoadingTile()),
-              ),
+                SliverPadding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  sliver: SliverToBoxAdapter(
+                      child: Text(
+                    'Stores',
+                    style: SizeConfig.kStyle14W500
+                        .copyWith(color: SizeConfig.kPrimaryColor),
+                  )),
+                ),
+                BlocBuilder<SearchStoresBloc, SearchStoresState>(
+                  bloc: widget.searchStoresBloc,
+                  builder: (context, state) {
+                    if (state is LoadingSearchStoresResult) {
+                      return SliverList(
+                        delegate: SliverChildListDelegate(
+                          List.filled(4, StoreSearchLoadingTile()),
+                        ),
+                      );
+                    }
+                    if (state is SearchedStoresResult ||
+                        state is LoadingMoreSearchStoresResult) {
+                      if (state is SearchedStoresResult) {
+                        stores = state.searchedStores;
+                      }
+                      return stores.isEmpty
+                          ? SliverFillRemaining(
+                              child: Center(
+                              child:
+                                  Image.asset('assets/images/no_results.png'),
+                            ))
+                          : SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                              (_, index) {
+                                final store = stores[index];
+                                var tile = StoreSearchTile(
+                                    isNew: store.rating == null,
+                                    distance: store.distance ?? 'dis',
+                                    imageURL: store.thumbnail ?? 'thumb',
+                                    rating: store.rating,
+                                    storeName: store.name,
+                                    startingFrom:
+                                        store.servicesStart ?? 'serviceStarts',
+                                    storeSlug: store.storeSlug ?? 'store-slug');
+                                if (state is LoadingMoreSearchStoresResult &&
+                                    index == stores.length - 1) {
+                                  return LoadingMoreTile(tile: tile);
+                                }
+                                return tile;
+                              },
+                              childCount: stores.length,
+                            ));
+                    }
+                    return SliverList(
+                      delegate: SliverChildListDelegate(
+                        List.filled(3, StoreSearchLoadingTile()),
+                      ),
+                    );
+                  },
+                )
+              ]),
             );
           },
-        )
-      ]),
+        );
+      },
     );
   }
 

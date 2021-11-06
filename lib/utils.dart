@@ -24,11 +24,12 @@ showSnackbar(BuildContext context, String text) {
 }
 
 PreferredSizeWidget getAppBarWithBackButton(
-    {required BuildContext context, Widget? title}) {
+    {required BuildContext context, Widget? title, List<Widget>? actions}) {
   return AppBar(
     systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.white, statusBarBrightness: Brightness.dark),
     title: title,
+    actions: actions,
     leading: IconButton(
       icon: Icon(Icons.arrow_back_outlined, color: Colors.black),
       onPressed: () => Navigator.maybePop(context),

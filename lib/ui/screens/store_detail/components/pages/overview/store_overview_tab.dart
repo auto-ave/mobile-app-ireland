@@ -7,13 +7,14 @@ import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/components/store_google_map.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/components/store_heading.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/components/store_info.dart';
+import 'package:themotorwash/ui/widgets/directions_button.dart';
 
 class StoreOverviewTab extends StatefulWidget {
   final BuildContext nestedScrollContext;
   final String storeSlug;
   final Store store;
-  final Function onPressedBook;
-  final Function onPressedRating;
+  final VoidCallback onPressedBook;
+  final VoidCallback onPressedRating;
   const StoreOverviewTab({
     Key? key,
     required this.nestedScrollContext,
@@ -33,33 +34,8 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: GestureDetector(
-        onTap: () => widget.onPressedBook(),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-          decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    offset: Offset(0, 4),
-                    color: Color.fromRGBO(17, 17, 17, .32),
-                    blurRadius: 32)
-              ],
-              gradient: LinearGradient(
-                begin: Alignment(0.0, 0.0),
-                end: Alignment(0.997, 0.082),
-                // transform: GradientRotation(1.5708),
-                colors: [
-                  Theme.of(context).primaryColor,
-                  Color(0xff298ED7),
-                ],
-              ),
-              color: SizeConfig.kPrimaryColor,
-              borderRadius: BorderRadius.circular(56)),
-          child: Text(
-            'Book Service',
-            style: SizeConfig.kStyle16Bold.copyWith(color: Colors.white),
-          ),
-        ),
+      floatingActionButton: BookServiceButton(
+        onPressed: widget.onPressedBook,
       ),
       body: CustomScrollView(
         slivers: [
@@ -124,30 +100,10 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
             sliver: SliverToBoxAdapter(
               child: Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton.icon(
-                    style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(1),
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.white)),
-                    onPressed: () async {
-                      final availableMaps = await MapLauncher.installedMaps;
-                      print(
-                          availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
-
-                      await availableMaps.first.showDirections(
-                          destination: Coords(
-                              widget.store.latitude!, widget.store.longitude!));
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/icons/map.svg',
-                      width: 24,
-                    ),
-                    label: Text(
-                      'Open in maps',
-                      style: SizeConfig.kStyle16.copyWith(color: Colors.black),
-                    )),
-              ),
+                  alignment: Alignment.centerLeft,
+                  child: DirectionsButton(
+                      latitude: widget.store.latitude!,
+                      longitude: widget.store.longitude!)),
             ),
           ),
           SliverToBoxAdapter(
@@ -163,4 +119,48 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+}
+
+class BookServiceButton extends StatelessWidget {
+  const BookServiceButton({
+    Key? key,
+    required this.onPressed,
+  }) : super(key: key);
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, 4),
+                  color: Color.fromRGBO(17, 17, 17, .32),
+                  blurRadius: 32)
+            ],
+            gradient: LinearGradient(
+              // begin: Alignment(0.0, 0.0),
+              // end: Alignment(0.997, 0.082),
+              begin: Alignment(0.0, 0.0),
+              end: Alignment(0.999, 0.046),
+              // transform: GradientRotation(1.5708),
+              colors: [
+                Theme.of(context).primaryColor,
+                Color(0xff98CFF8),
+              ],
+            ),
+            color: SizeConfig.kPrimaryColor,
+            borderRadius: BorderRadius.circular(8)),
+        child: Text(
+          'BOOK SERVICE',
+          style: SizeConfig.kStyle14Bold
+              .copyWith(color: Colors.white, letterSpacing: 5),
+        ),
+      ),
+    );
+  }
 }
