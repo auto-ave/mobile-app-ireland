@@ -20,7 +20,7 @@ import 'package:themotorwash/ui/widgets/dashed_booking_box.dart';
 import 'package:themotorwash/ui/widgets/directions_button.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class BookingDetailScreen extends StatefulWidget {
   final BookingStatus status;

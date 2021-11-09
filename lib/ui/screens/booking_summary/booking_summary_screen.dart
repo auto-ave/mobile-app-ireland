@@ -18,7 +18,7 @@ import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/dashed_booking_box.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 import 'dart:developer' as d;
 
 class BookingSummaryScreen extends StatefulWidget {

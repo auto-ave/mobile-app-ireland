@@ -32,7 +32,7 @@ class StoreTile extends StatelessWidget {
       onTap: () => Navigator.pushNamed(context, StoreDetailScreen.route,
           arguments: StoreDetailArguments(storeSlug: storeSlug)),
       child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           child: Container(
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(boxShadow: [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 part 'slot.g.dart';
 

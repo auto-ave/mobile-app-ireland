@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class LoadingMoreTile extends StatelessWidget {
   final Widget tile;

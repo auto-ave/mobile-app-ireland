@@ -267,10 +267,10 @@ class ApiService implements ApiMethods {
 
   @override
   Future<List<ServiceEntity>> searchServices(
-      {required String query, required int offset}) async {
+      {required String query, required int offset, int? pageLimit}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.getServicesBySearchQueryEndPoint(
-        query: query, offset: offset);
+        query: query, offset: offset, pageLim: pageLimit);
     Response res = await client.get(url);
 
     dynamic data = jsonDecode(res.data);

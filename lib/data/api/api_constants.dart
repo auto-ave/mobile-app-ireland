@@ -153,11 +153,11 @@ class ApiConstants {
   }
 
   String getServicesBySearchQueryEndPoint(
-      {required String query, required int offset}) {
+      {required String query, required int offset, int? pageLim}) {
     Map<String, dynamic> params = {
       'search': query,
       'offset': offset.toString(),
-      'limit': pageLimit.toString()
+      'limit': pageLim != null ? pageLim.toString() : pageLimit.toString()
     };
     var uri = Uri.https(baseUrl, "/service/list/", params);
     return uri.toString();

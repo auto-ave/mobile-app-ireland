@@ -19,7 +19,7 @@ import 'package:themotorwash/ui/screens/slot_select/components/date_selection_ta
 import 'package:themotorwash/ui/screens/slot_select/components/slot_selection_tab.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class SlotSelectScreen extends StatefulWidget {
   SlotSelectScreen({Key? key, required this.cartTotal, required this.cartId})

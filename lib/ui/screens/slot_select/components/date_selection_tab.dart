@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:themotorwash/theme_constants.dart';
 
 class DateSelectionTab extends StatelessWidget {
@@ -62,33 +63,48 @@ class DateSelectionWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
-          padding: const EdgeInsets.all(16.0),
-          width: 70,
+          padding: const EdgeInsets.all(8.0),
+          width: 80,
+          height: 104,
           decoration: BoxDecoration(
               color: isSelected ? Theme.of(context).primaryColor : Colors.white,
               borderRadius: BorderRadius.all(
                 Radius.circular(12),
               ),
               border: Border.all(color: Theme.of(context).primaryColor)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FittedBox(
-                child: Text(
-                  '${date.day}',
-                  style: SizeConfig.kStyle24Bold.copyWith(
-                      color: isSelected ? Colors.white : Color(0xff8C8C8C)),
+          child: Center(
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: FittedBox(
+                    child: Text(
+                      '${date.day}',
+                      textScaleFactor: 1,
+                      style: SizeConfig.kStyle24Bold.copyWith(
+                        color: isSelected ? Colors.white : Color(0xff8C8C8C),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              FittedBox(
-                child: Text(
-                  getWeekdayText(date.weekday),
-                  style: SizeConfig.kStyle16W500.copyWith(
-                      color: isSelected ? Colors.white : Color(0xff8C8C8C),
-                      fontWeight: FontWeight.w400),
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      getWeekdayText(date.weekday),
+                      textScaleFactor: 1,
+                      style: GoogleFonts.roboto(
+                        textStyle: SizeConfig.kStyle16W500.copyWith(
+                          color: isSelected ? Colors.white : Color(0xff8C8C8C),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),

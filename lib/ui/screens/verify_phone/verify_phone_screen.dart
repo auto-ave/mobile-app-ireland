@@ -9,7 +9,7 @@ import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/home/home_screen.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class VerifyPhoneScreen extends StatefulWidget {
   const VerifyPhoneScreen({Key? key, required this.phoneNumber})

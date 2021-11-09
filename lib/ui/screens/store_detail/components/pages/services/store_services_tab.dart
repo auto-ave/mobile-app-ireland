@@ -21,7 +21,7 @@ import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 import 'package:themotorwash/ui/widgets/vehicle_dropdown.dart';
 import 'package:themotorwash/ui/widgets/vehicle_type_selection_bottom_sheet.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class StoreServicesTab extends StatefulWidget {
   final BuildContext nestedScrollContext;
@@ -94,7 +94,7 @@ class _StoreServicesTabState extends State<StoreServicesTab>
 
   _buildServicesList(GlobalVehicleTypeSelected vehicleState) {
     return LazyLoadScrollView(
-      onEndOfPage: _servicesBloc.state is StoreServicesLoaded
+      onEndOfPage: _servicesBloc.hasReachedMax(_servicesBloc.state, true)
           ? () {}
           : () {
               if (_servicesBloc.state is StoreServicesLoaded) {
@@ -132,8 +132,12 @@ class _StoreServicesTabState extends State<StoreServicesTab>
             if (cartFunctionState is CartLoaded) {
               cartItems = cartFunctionState.cart.items!;
             }
-            return BlocBuilder<StoreServicesBloc, StoreServicesState>(
+            return BlocConsumer<StoreServicesBloc, StoreServicesState>(
               bloc: _servicesBloc,
+              listener: (_, state) {
+                setState(
+                    () {}); //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
+              },
               builder: (context, state) {
                 if (state is StoreServicesLoading) {
                   return SliverFillRemaining(

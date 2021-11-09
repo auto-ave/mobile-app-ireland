@@ -19,7 +19,7 @@ import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/services/components/vehicle_selected_info.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
 
 class OrderReviewScreen extends StatefulWidget {
@@ -200,24 +200,6 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       vehicleModel: vehicle,
       showChangeButton: false,
     );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text('CAR TYPE', style: headingTextStyle),
-        SizeConfig.kverticalMargin8,
-        SelectedVehicleWidget(vehicleModel: vehicle),
-        SizeConfig.kverticalMargin8,
-        // Container(
-        //   padding: EdgeInsets.all(8),
-        //   child: Text(
-        //     'Selecting correct car type is important to give you best services and to avoid any further hassel. Please check the car type before continuing further.Problem selecting car type? Click here',
-        //     style: SizeConfig.kStyle12.copyWith(color: Color(0xff621181)),
-        //   ),
-        //   decoration: BoxDecoration(color: Color(0xffFAEDFF)),
-        // )
-      ],
-    );
   }
 
   Widget _buildSlotTiming({required Slot slot}) {
@@ -249,22 +231,24 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
   }
 
   List<Widget> _buildServices({required CartModel cart}) {
-    return (cart.itemsObj!
-        .map((e) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('SERVICES', style: headingTextStyle),
-                SizeConfig.kverticalMargin8,
-                getDetailsRow(
-                    leftText: e.service,
-                    rightText: '₹${e.price}',
-                    leftStyle: leftSide14W500,
-                    rightStyle: rightSide14W500),
-                SizeConfig.kverticalMargin8
-              ],
-            ))
-        .toList());
+    return [
+      Text('SERVICES', style: headingTextStyle),
+      ...(cart.itemsObj!
+          .map((e) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizeConfig.kverticalMargin8,
+                  getDetailsRow(
+                      leftText: e.service,
+                      rightText: '₹${e.price}',
+                      leftStyle: leftSide14W500,
+                      rightStyle: rightSide14W500),
+                  SizeConfig.kverticalMargin8
+                ],
+              ))
+          .toList())
+    ];
   }
 
   List<Widget> _buildListPriceInfo({required CartModel cart}) {

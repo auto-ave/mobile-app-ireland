@@ -21,10 +21,15 @@ import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_featured/explore_featured_carousel.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_services/explore_services_grid.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_services/explore_services_tile.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_stores/explore_stores_list.dart';
 import 'package:themotorwash/ui/screens/explore/components/grant_location_permission_screen.dart';
+import 'package:themotorwash/ui/screens/explore/components/initial_search_screen/initial_search_screen.dart';
 import 'package:themotorwash/ui/screens/explore/components/search_overlay.dart';
 import 'package:themotorwash/ui/screens/explore/components/search_service_tile.dart';
-import 'package:themotorwash/ui/screens/explore/components/store_tile.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_stores/store_tile.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/cart_bottom_sheet.dart';
 import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/screens/store_list/bloc/store_list_bloc.dart';
@@ -32,11 +37,13 @@ import 'package:themotorwash/ui/widgets/bottom_cart_tile.dart';
 import 'package:themotorwash/ui/widgets/drawer.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_services/loading_widgets/explore_services_loading.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_stores/loading_widgets/explore_stores_loading_list.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/scrollable_service_loading.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/service_search_loading_tile.dart';
-import 'package:themotorwash/ui/widgets/loading_widgets/store_loading_tile.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_stores/loading_widgets/store_loading_tile.dart';
 import 'package:themotorwash/ui/widgets/search_bar.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({Key? key}) : super(key: key);
@@ -78,8 +85,8 @@ class _ExploreScreenState extends State<ExploreScreen>
     _globalLocationBloc.add(GetCurrentUserLocation());
     _searchServicesBloc = SearchServicesBloc(repository: repository);
     _privateSearchServicesBloc = SearchServicesBloc(repository: repository);
-    _privateSearchServicesBloc
-        .add(SearchServices(query: '', forLoadMore: false, offset: 0));
+    _privateSearchServicesBloc.add(
+        SearchServices(query: '', forLoadMore: false, offset: 0, pageLimit: 6));
     _searchStoresBloc = SearchStoresBloc(
         repository: repository, globalLocationBloc: _globalLocationBloc);
     // _animationController = AnimationController(
@@ -217,6 +224,40 @@ class _ExploreScreenState extends State<ExploreScreen>
                       bloc: _searchServicesBloc,
                       builder: (context, state) {
                         if (state is SearchServicesUninitialized) {
+                          return InitialSearchScreen();
+                          return CustomScrollView(
+                            slivers: [
+                              BlocBuilder<SearchServicesBloc,
+                                  SearchServicesState>(
+                                bloc: _privateSearchServicesBloc,
+                                builder: (context, state) {
+                                  if (state is LoadingSearchServicesResult) {
+                                    return ExploreServicesGridLoading();
+                                  }
+                                  if (state is SearchedServicesResult) {
+                                    return state.searchedServices.isNotEmpty
+                                        ? ExploreServicesGrid(
+                                            items: state.searchedServices
+                                                .map((e) => ExploreServiceTile(
+                                                      imageUrl: e.thumbnail!,
+                                                      serviceName: e.name!,
+                                                    ))
+                                                .toList(),
+                                          )
+                                        : SliverToBoxAdapter(
+                                            child: Container());
+                                  }
+                                  if (state is SearchedServicesError) {
+                                    return SliverToBoxAdapter(
+                                      child: Container(),
+                                    );
+                                  }
+
+                                  return ExploreServicesGridLoading();
+                                },
+                              ),
+                            ],
+                          );
                           return Center(
                             child: Image.asset('assets/images/no_results.png'),
                           );
@@ -258,8 +299,8 @@ class _ExploreScreenState extends State<ExploreScreen>
   void _onRefresh() async {
     if (_globalLocationBloc.state is LocationSet) {
       _storeListBloc.add(LoadNearbyStoreList(offset: 0, forLoadMore: false));
-      _privateSearchServicesBloc
-          .add(SearchServices(query: '', forLoadMore: false, offset: 0));
+      _privateSearchServicesBloc.add(SearchServices(
+          query: '', forLoadMore: false, offset: 0, pageLimit: 6));
     }
   }
 
@@ -269,7 +310,6 @@ class _ExploreScreenState extends State<ExploreScreen>
         child: SmartRefresher(
           enablePullDown: true,
           enablePullUp: false,
-
           header: ClassicHeader(
             completeText: '',
             completeIcon: null,
@@ -280,78 +320,51 @@ class _ExploreScreenState extends State<ExploreScreen>
           ),
           controller: _refreshController,
           onRefresh: _onRefresh,
-          // onLoading: _onLoading,
           child: CustomScrollView(slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  'Services',
-                  style: SizeConfig.kStyle16W500,
-                ),
-              ),
+            ExploreFeaturedCarousel(),
+            SliverToBoxAdapter(
+              child: SizeConfig.kverticalMargin16,
             ),
             BlocBuilder<SearchServicesBloc, SearchServicesState>(
               bloc: _privateSearchServicesBloc,
               builder: (context, state) {
                 if (state is LoadingSearchServicesResult) {
-                  return SliverToBoxAdapter(
-                      child: ScrollableServiceLoading(
-                    showTitle: false,
-                  ));
+                  return ExploreServicesGridLoading();
                 }
                 if (state is SearchedServicesResult) {
-                  return SliverToBoxAdapter(
-                    child: state.searchedServices.isNotEmpty
-                        ? SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                //TODO : 12 +4 padding check
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                      SizeConfig.kHorizontalMargin8,
-                                      SizeConfig.kHorizontalMargin4
-                                    ] +
-                                    state.searchedServices
-                                        .map((e) => SearchServiceTile(
-                                              imageUrl: e.thumbnail!,
-                                              serviceName: e.name!,
-                                            ))
-                                        .toList(),
-                              ),
-                            ),
-                          )
-                        : Container(),
-                  );
+                  return state.searchedServices.isNotEmpty
+                      ? ExploreServicesGrid(
+                          items: state.searchedServices
+                              .map((e) => ExploreServiceTile(
+                                    imageUrl: e.thumbnail!,
+                                    serviceName: e.name!,
+                                  ))
+                              .toList(),
+                        )
+                      : SliverToBoxAdapter(child: Container());
                 }
                 if (state is SearchedServicesError) {
                   return SliverToBoxAdapter(
                     child: Container(),
                   );
                 }
-                return SliverToBoxAdapter(
-                    child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: ScrollableServiceLoading(
-                    showTitle: false,
-                  ),
-                ));
+
+                return ExploreServicesGridLoading();
               },
             ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              sliver: SliverToBoxAdapter(
-                  child: Text(
-                'Carwashes near you',
-                style: SizeConfig.kStyle16W500,
-              )),
-            ),
+            // SliverPadding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            //   sliver: SliverToBoxAdapter(
+            //       child: Text(
+            //     'Carwashes near you',
+            //     style: SizeConfig.kStyle16W500,
+            //   )),
+            // ),
             BlocConsumer<StoreListBloc, StoreListState>(
                 listener: (_, state) {
                   if (state is StoreListLoaded) {
+                    setState(
+                        () {}); //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
                     _refreshController.refreshCompleted();
                   }
                 },
@@ -362,27 +375,28 @@ class _ExploreScreenState extends State<ExploreScreen>
                     if (state is StoreListLoaded) {
                       stores = state.stores;
                     }
-                    return SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                      (_, index) {
-                        var store = stores[index];
-                        var tile = StoreTile(
-                          address: store.address!,
-                          distance: store.distance!,
-                          imageURL: store.thumbnail!,
-                          rating: store.rating,
-                          storeName: store.name,
-                          startingFrom: store.servicesStart!,
-                          storeSlug: store.storeSlug!,
-                        );
-                        if (state is MoreStoreListLoading &&
-                            index == stores.length - 1) {
-                          return LoadingMoreTile(tile: tile);
-                        }
-                        return tile;
-                      },
-                      childCount: stores.length,
-                    ));
+                    return ExploreStoresList(state: state, stores: stores);
+                    // return SliverList(
+                    //     delegate: SliverChildBuilderDelegate(
+                    //   (_, index) {
+                    //     var store = stores[index];
+                    //     var tile = StoreTile(
+                    //       address: store.address!,
+                    //       distance: store.distance!,
+                    //       imageURL: store.thumbnail!,
+                    //       rating: store.rating,
+                    //       storeName: store.name,
+                    //       startingFrom: store.servicesStart!,
+                    //       storeSlug: store.storeSlug!,
+                    //     );
+                    //     if (state is MoreStoreListLoading &&
+                    //         index == stores.length - 1) {
+                    //       return LoadingMoreTile(tile: tile);
+                    //     }
+                    //     return tile;
+                    //   },
+                    //   childCount: stores.length,
+                    // ));
                   }
                   if (state is StoreListError) {
                     return SliverFillRemaining(
@@ -392,11 +406,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                       ),
                     );
                   }
-                  return SliverList(
-                    delegate: SliverChildListDelegate(
-                      List.filled(4, StoreLoadingTile()),
-                    ),
-                  );
+                  return ExploreStoresLoadingList();
                 })
           ]),
         ));

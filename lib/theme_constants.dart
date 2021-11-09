@@ -97,7 +97,8 @@ class SizeConfig {
   void init(BuildContext context) {
     print('init called');
     _mediaQueryData = MediaQuery.of(context);
-    textScaleFactor = Platform.isIOS ? 1.5 : _mediaQueryData!.textScaleFactor;
+    // textScaleFactor = Platform.isIOS ? 1.5 : _mediaQueryData!.textScaleFactor;
+    textScaleFactor = _mediaQueryData!.textScaleFactor < 1 ? 1 : _mediaQueryData!.textScaleFactor;
 
     screenWidth = _mediaQueryData!.size.width;
     screenHeight = _mediaQueryData!.size.height;

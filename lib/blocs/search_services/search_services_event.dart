@@ -8,8 +8,12 @@ class SearchServices extends SearchServicesEvent {
   final String query;
   final bool forLoadMore;
   final int offset;
+  final int? pageLimit;
   SearchServices(
-      {required this.query, required this.forLoadMore, required this.offset});
+      {required this.query,
+      required this.forLoadMore,
+      required this.offset,
+      this.pageLimit});
   @override
   List<Object> get props => [query, forLoadMore, offset];
 }

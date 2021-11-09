@@ -12,7 +12,7 @@ import 'package:themotorwash/ui/screens/store_detail/components/pages/services/s
 import 'package:themotorwash/ui/widgets/bottom_cart_tile.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class StoreDetailScreen extends StatefulWidget {
   final String storeSlug;

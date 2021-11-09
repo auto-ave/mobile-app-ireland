@@ -9,7 +9,7 @@ import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/slot_select/slot_select_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class CartBottomSheet extends StatefulWidget {
   CartBottomSheet({Key? key}) : super(key: key);

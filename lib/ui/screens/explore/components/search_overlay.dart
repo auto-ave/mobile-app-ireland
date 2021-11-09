@@ -196,8 +196,12 @@ class _SearchOverlayState extends State<SearchOverlay> {
                         .copyWith(color: SizeConfig.kPrimaryColor),
                   )),
                 ),
-                BlocBuilder<SearchStoresBloc, SearchStoresState>(
+                BlocConsumer<SearchStoresBloc, SearchStoresState>(
                   bloc: widget.searchStoresBloc,
+                  listener: (_, state) {
+                    setState(
+                        () {}); //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
+                  },
                   builder: (context, state) {
                     if (state is LoadingSearchStoresResult) {
                       return SliverList(

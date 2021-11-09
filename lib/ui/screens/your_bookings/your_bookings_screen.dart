@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
@@ -9,7 +10,7 @@ import 'package:themotorwash/ui/screens/your_bookings/bloc/your_bookings_bloc.da
 import 'package:themotorwash/ui/screens/your_bookings/components/your_bookings_tile.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class YourBookingsScreen extends StatefulWidget {
   static final String route = '/yourBookingsScreen';
@@ -26,7 +27,8 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _bookingsBloc = BlocProvider.of<YourBookingsBloc>(context);
+    _bookingsBloc = YourBookingsBloc(
+        repository: RepositoryProvider.of<Repository>(context));
     _bookingsBloc.add(GetYourBookings(offset: 0, forLoadMore: false));
   }
 
@@ -36,9 +38,13 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
       child: Scaffold(
         appBar: getAppBarWithBackButton(context: context),
         body: LazyLoadScrollView(
+          // isLoading: _bookingsBloc.state is YourBookingsLoading,
           onEndOfPage: _bookingsBloc.hasReachedMax(_bookingsBloc.state, true)
-              ? () {}
+              ? () {
+                  print('triiggg1');
+                }
               : () {
+                  print('triiggg2');
                   if (_bookingsBloc.state is YourBookingsLoaded) {
                     _bookingsBloc.add(GetYourBookings(
                         offset: bookings.length, forLoadMore: true));
@@ -55,7 +61,10 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
                   ),
                 ),
               ),
-              BlocBuilder<YourBookingsBloc, YourBookingsState>(
+              BlocConsumer<YourBookingsBloc, YourBookingsState>(
+                listener: (_, state) {
+                  setState(() {});
+                },
                 bloc: _bookingsBloc,
                 builder: (context, state) {
                   if (state is YourBookingsLoading) {

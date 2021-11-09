@@ -140,9 +140,9 @@ class RestRepository implements Repository {
 
   @override
   Future<List<ServiceModel>> searchServices(
-      {required String query, required int offset}) async {
-    List<ServiceEntity> entities =
-        await _apiMethodsImp.searchServices(query: query, offset: offset);
+      {required String query, required int offset, int? pageLimit}) async {
+    List<ServiceEntity> entities = await _apiMethodsImp.searchServices(
+        query: query, offset: offset, pageLimit: pageLimit);
     List<ServiceModel> services =
         entities.map<ServiceModel>((e) => ServiceModel.fromEntity(e)).toList();
     return services;

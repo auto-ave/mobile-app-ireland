@@ -74,7 +74,7 @@ class SlotSelectionTab extends StatelessWidget {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 // childAspectRatio: MediaQuery.of(context).size.width < 400 ? 2.5 : 1.8,
                 mainAxisExtent: 70,
-                crossAxisCount: MediaQuery.of(context).size.width < 400 ? 2 : 3,
+                crossAxisCount: 3,
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8),
           );

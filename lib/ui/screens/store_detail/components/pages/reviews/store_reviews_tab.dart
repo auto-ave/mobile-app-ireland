@@ -11,7 +11,7 @@ import 'package:themotorwash/ui/screens/store_detail/blocs/store_reviews/store_r
 import 'package:themotorwash/ui/screens/store_detail/components/pages/reviews/components/no_review_widget.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class StoreReviewsTab extends StatefulWidget {
   final BuildContext nestedScrollContext;
@@ -56,8 +56,12 @@ class _StoreReviewsTabState extends State<StoreReviewsTab>
           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
               widget.nestedScrollContext),
         ),
-        BlocBuilder<StoreReviewsBloc, StoreReviewsState>(
+        BlocConsumer<StoreReviewsBloc, StoreReviewsState>(
           bloc: _reviewsBloc,
+          listener: (_, state) {
+            setState(
+                () {}); //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
+          },
           builder: (context, state) {
             if (state is StoreReviewsLoaded ||
                 state is MoreStoreReviewsLoading) {

@@ -14,7 +14,7 @@ import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/widgets/search_bar.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class VehicleTypeSelectionBottomSheet extends StatefulWidget {
   final PageController pageController;

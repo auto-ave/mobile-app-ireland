@@ -67,7 +67,7 @@ abstract class ApiMethods {
       required int offset});
 
   Future<List<ServiceEntity>> searchServices(
-      {required String query, required int offset});
+      {required String query, required int offset, int? pageLimit});
 
   Future<ReviewEntity> addReview({required ReviewEntity review});
   Future<ReviewEntity> getReview({required String bookingId});

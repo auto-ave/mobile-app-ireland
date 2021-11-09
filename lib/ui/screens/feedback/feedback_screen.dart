@@ -10,7 +10,7 @@ import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/feedback/contact_option_button.dart';
 import 'package:themotorwash/ui/screens/profile/profile_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class FeedbackScreen extends StatefulWidget {
   final bool isFeedback;

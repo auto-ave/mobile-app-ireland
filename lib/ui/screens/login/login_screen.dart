@@ -7,7 +7,7 @@ import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class LoginScreen extends StatelessWidget {
   static final String route = '/loginScreen';

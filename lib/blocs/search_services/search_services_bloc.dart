@@ -35,7 +35,8 @@ class SearchServicesBloc
       yield* _mapSearchServiceToState(
           forLoadMore: event.forLoadMore,
           query: event.query,
-          offset: event.offset);
+          offset: event.offset,
+          pageLimit: event.pageLimit);
     }
     if (event is YieldUninitializedState) {
       yield* _mapYieldUninitializedStateToState();
@@ -48,7 +49,8 @@ class SearchServicesBloc
   Stream<SearchServicesState> _mapSearchServiceToState(
       {required String query,
       required bool forLoadMore,
-      required int offset}) async* {
+      required int offset,
+      int? pageLimit}) async* {
     if (!_hasReachedMax(state, forLoadMore)) {
       try {
         List<ServiceModel> services = [];
@@ -58,8 +60,8 @@ class SearchServicesBloc
         } else {
           yield LoadingSearchServicesResult();
         }
-        List<ServiceModel> moreServices =
-            await _repository.searchServices(query: query, offset: offset);
+        List<ServiceModel> moreServices = await _repository.searchServices(
+            query: query, offset: offset, pageLimit: pageLimit);
         yield SearchedServicesResult(
             searchedServices: services + moreServices,
             hasReachedMax: moreServices.length != 10);

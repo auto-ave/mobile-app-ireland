@@ -11,7 +11,7 @@ import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
-import 'package:themotorwash/utils.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class AuthenticationBottomSheet extends StatefulWidget {
   final CartFunctionEvent event;

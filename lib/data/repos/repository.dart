@@ -44,7 +44,7 @@ abstract class Repository {
       required int offset});
 
   Future<List<ServiceModel>> searchServices(
-      {required String query, required int offset});
+      {required String query, required int offset, int? pageLimit});
 
   Future<Review> getReview({required String bookingId});
   Future<Review> addReview({required ReviewEntity review});
