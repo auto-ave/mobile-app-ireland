@@ -72,7 +72,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
             }
             return cart.items!.isEmpty
                 ? Container(
-                    height: MediaQuery.of(context).size.height * .3,
+                    height: 30.h,
                     child: Center(
                         child: Row(
                       mainAxisSize: MainAxisSize.min,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/home/components/location_bar.dart';
 import 'package:themotorwash/ui/screens/home/components/motto.dart';
 
@@ -8,7 +9,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    final height = 100.h;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -27,14 +28,14 @@ class HomeScreen extends StatelessWidget {
               children: [
                 SizedBox(
                     height: (height -
-                            MediaQuery.of(context).padding.bottom -
-                            MediaQuery.of(context).padding.top) *
+                            SizeConfig.mediaQueryData.padding.bottom -
+                            SizeConfig.mediaQueryData.padding.top) *
                         .26),
                 Motto(),
                 SizedBox(
                     height: (height -
-                            MediaQuery.of(context).padding.bottom -
-                            MediaQuery.of(context).padding.top) *
+                            SizeConfig.mediaQueryData.padding.bottom -
+                            SizeConfig.mediaQueryData.padding.top) *
                         .06),
                 LocationBar(),
               ],

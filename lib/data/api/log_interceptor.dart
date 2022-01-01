@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 class Logging extends Interceptor {
   @override
@@ -23,6 +24,7 @@ class Logging extends Interceptor {
   Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
     await FirebaseCrashlytics.instance
         .recordError(err, StackTrace.current, reason: 'DIO error');
+    Clipboard.setData(ClipboardData(text: err.response?.toString()));
     print(
       'ERROR[${err.response?.toString()}] => PATH: ${err.requestOptions.path}',
     );

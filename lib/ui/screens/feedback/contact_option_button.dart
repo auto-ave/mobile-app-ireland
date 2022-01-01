@@ -21,7 +21,7 @@ class ContactOptionButton extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 16),
-          width: (MediaQuery.of(context).size.width - 40) / 2 - 20,
+          width: (100.w - 40) / 2 - 20,
           decoration: BoxDecoration(
               border: Border.all(
                 color: SizeConfig.kPrimaryColor,

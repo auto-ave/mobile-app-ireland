@@ -235,9 +235,13 @@ BookingStatusTagColors getBookingStatusTagColor(BookingStatus status) {
   final BookingStatusTagColors greenShade = BookingStatusTagColors(
       textColor: Color(0xff35B559), backgroundColor: Color(0xffD6FFE1));
   switch (status) {
-    case BookingStatus.notPaid:
+    case BookingStatus.cancellationRequestApproved:
+      return greenShade;
+    case BookingStatus.cancellationRequestRejected:
       return redShade;
-    case BookingStatus.paymentDone:
+    case BookingStatus.cancellationRequestSubmitted:
+      return greenShade;
+    case BookingStatus.paymentSuccess:
       return greenShade;
     case BookingStatus.paymentFailed:
       return redShade;
@@ -247,6 +251,8 @@ BookingStatusTagColors getBookingStatusTagColor(BookingStatus status) {
       return greenShade;
     case BookingStatus.serviceCompleted:
       return greenShade;
+    case BookingStatus.initiated:
+      return greenShade;
     default:
       return redShade;
   }
@@ -254,9 +260,13 @@ BookingStatusTagColors getBookingStatusTagColor(BookingStatus status) {
 
 String getBookingStatusTagText(BookingStatus status) {
   switch (status) {
-    case BookingStatus.notPaid:
-      return 'NOT PAID';
-    case BookingStatus.paymentDone:
+    case BookingStatus.cancellationRequestApproved:
+      return 'CANCELLATION APPROVED';
+    case BookingStatus.cancellationRequestRejected:
+      return 'CANCELLATION REJECTED';
+    case BookingStatus.cancellationRequestSubmitted:
+      return 'CANCELLATION REQUESTED';
+    case BookingStatus.paymentSuccess:
       return 'PAYMENT DONE';
     case BookingStatus.paymentFailed:
       return 'PAYMENT FAILED';
@@ -266,6 +276,9 @@ String getBookingStatusTagText(BookingStatus status) {
       return 'SERVICE STARTED';
     case BookingStatus.serviceCompleted:
       return 'COMPLETED';
+    case BookingStatus
+        .initiated: //TODO: Need to eliminate this status becuase it is of no use to the user
+      return 'INITIATED';
     default:
       return 'STATUS UNAVAILABLE';
   }

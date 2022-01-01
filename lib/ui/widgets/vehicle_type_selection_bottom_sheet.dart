@@ -57,9 +57,14 @@ class _VehicleTypeSelectionBottomSheetState
     print(MediaQuery.of(context).padding.top);
     return WillPopScope(
       onWillPop: () async {
+        int? pageIndex = widget.pageController.page != null
+            ? widget.pageController.page!.toInt()
+            : null;
         if (widget.pageController.page != 0) {
-          widget.pageController.animateToPage(0,
-              duration: Duration(milliseconds: 300), curve: Curves.linear);
+          widget.pageController.animateToPage(
+              pageIndex != null && pageIndex != 0 ? pageIndex - 1 : 0,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.linear);
           return false;
         } else {
           return true;
@@ -104,6 +109,11 @@ class _VehicleTypeSelectionBottomSheetState
                                 curve: Curves.linear);
                           },
                           selectedWheel: selectedWheel,
+                          onBackPressed: () {
+                            widget.pageController.animateToPage(0,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.linear);
+                          },
                         );
                       } else {
                         return VehicleModelSelectionPage(
@@ -113,6 +123,11 @@ class _VehicleTypeSelectionBottomSheetState
                             Navigator.pop(context);
                           },
                           selectedBrand: selectedBrand,
+                          onBackPressed: () {
+                            widget.pageController.animateToPage(1,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.linear);
+                          },
                         );
                       }
                     },
@@ -247,11 +262,13 @@ class VehicleWheelWidget extends StatelessWidget {
 class VehicleBrandSelectionPage extends StatefulWidget {
   final VehicleWheel selectedWheel;
   final Function(VehicleBrand brand) onBrandTapped;
-  const VehicleBrandSelectionPage({
-    Key? key,
-    required this.selectedWheel,
-    required this.onBrandTapped,
-  }) : super(key: key);
+  final VoidCallback onBackPressed;
+  const VehicleBrandSelectionPage(
+      {Key? key,
+      required this.selectedWheel,
+      required this.onBrandTapped,
+      required this.onBackPressed})
+      : super(key: key);
 
   @override
   _VehicleBrandSelectionPageState createState() =>
@@ -264,6 +281,7 @@ class _VehicleBrandSelectionPageState extends State<VehicleBrandSelectionPage> {
   final TextEditingController searchController = TextEditingController();
   List<VehicleBrand> brands = [];
   List<VehicleBrand> filteredBrands = [];
+
   @override
   void initState() {
     super.initState();
@@ -280,9 +298,21 @@ class _VehicleBrandSelectionPageState extends State<VehicleBrandSelectionPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Select your vehicle brand',
-            style: SizeConfig.kStyle20W500,
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back_rounded),
+                onPressed: widget.onBackPressed,
+              ),
+              SizeConfig.kHorizontalMargin8,
+              Expanded(
+                child: Text(
+                  'Select your vehicle brand',
+                  style: SizeConfig.kStyle20W500,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
           SizeConfig.kverticalMargin32,
           SearchBar(
@@ -403,11 +433,13 @@ class VehicleBrandWidget extends StatelessWidget {
 class VehicleModelSelectionPage extends StatefulWidget {
   final Function(VehicleModel vehicleModel) onVehicleModelTapped;
   final VehicleBrand selectedBrand;
-  const VehicleModelSelectionPage({
-    Key? key,
-    required this.onVehicleModelTapped,
-    required this.selectedBrand,
-  }) : super(key: key);
+  final VoidCallback onBackPressed;
+  const VehicleModelSelectionPage(
+      {Key? key,
+      required this.onVehicleModelTapped,
+      required this.selectedBrand,
+      required this.onBackPressed})
+      : super(key: key);
 
   @override
   _VehicleModelSelectionPageState createState() =>
@@ -435,9 +467,21 @@ class _VehicleModelSelectionPageState extends State<VehicleModelSelectionPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Select your vehicle model',
-            style: SizeConfig.kStyle20W500,
+          Row(
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back_rounded),
+                onPressed: widget.onBackPressed,
+              ),
+              SizeConfig.kHorizontalMargin8,
+              Expanded(
+                child: Text(
+                  'Select your vehicle model',
+                  style: SizeConfig.kStyle20W500,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
           SizeConfig.kverticalMargin32,
           SearchBar(

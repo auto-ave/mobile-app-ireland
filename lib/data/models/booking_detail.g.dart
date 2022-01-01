@@ -15,7 +15,7 @@ BookingDetailEntity _$BookingDetailEntityFromJson(Map<String, dynamic> json) {
         : PaymentEntity.fromJson(json['payment'] as Map<String, dynamic>),
     createdAt: json['created_at'] as String?,
     updatedAt: json['updated_at'] as String?,
-    status: json['status'] as int?,
+    status: json['booking_status'] as String?,
     amount: json['amount'] as String?,
     statusChangedTime: json['status_changed_time'] as String?,
     otp: json['otp'] as String?,
@@ -37,6 +37,7 @@ BookingDetailEntity _$BookingDetailEntityFromJson(Map<String, dynamic> json) {
     review: json['review'] == null
         ? null
         : ReviewEntity.fromJson(json['review'] as Map<String, dynamic>),
+    remainingAmount: json['remaining_amount'] as String?,
   );
 }
 
@@ -48,8 +49,9 @@ Map<String, dynamic> _$BookingDetailEntityToJson(
       'payment': instance.payment?.toJson(),
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
-      'status': instance.status,
+      'booking_status': instance.status,
       'amount': instance.amount,
+      'remaining_amount': instance.remainingAmount,
       'status_changed_time': instance.statusChangedTime,
       'otp': instance.otp,
       'event': instance.event?.toJson(),

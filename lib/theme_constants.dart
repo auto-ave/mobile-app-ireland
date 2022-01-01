@@ -4,9 +4,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class SizeConfig {
-  static MediaQueryData? _mediaQueryData;
-  static double? screenWidth;
-  static double? screenHeight;
+  static late MediaQueryData mediaQueryData;
+  static late double screenWidth;
+  static late double screenHeight;
   static double? blockSizeHorizontal;
   static double? blockSizeVertical;
   static double? _safeAreaHorizontal;
@@ -96,20 +96,21 @@ class SizeConfig {
   static late TextStyle kStyleAppBarTitle;
   void init(BuildContext context) {
     print('init called');
-    _mediaQueryData = MediaQuery.of(context);
+    mediaQueryData = MediaQuery.of(context);
     // textScaleFactor = Platform.isIOS ? 1.5 : _mediaQueryData!.textScaleFactor;
-    textScaleFactor = _mediaQueryData!.textScaleFactor < 1 ? 1 : _mediaQueryData!.textScaleFactor;
+    textScaleFactor =
+        mediaQueryData.textScaleFactor < 1 ? 1 : mediaQueryData.textScaleFactor;
 
-    screenWidth = _mediaQueryData!.size.width;
-    screenHeight = _mediaQueryData!.size.height;
-    blockSizeHorizontal = screenWidth! / 100;
-    blockSizeVertical = screenHeight! / 100;
+    screenWidth = mediaQueryData.size.width;
+    screenHeight = mediaQueryData.size.height;
+    blockSizeHorizontal = screenWidth / 100;
+    blockSizeVertical = screenHeight / 100;
     _safeAreaHorizontal =
-        _mediaQueryData!.padding.left + _mediaQueryData!.padding.right;
+        mediaQueryData.padding.left + mediaQueryData.padding.right;
     _safeAreaVertical =
-        _mediaQueryData!.padding.top + _mediaQueryData!.padding.bottom;
-    safeBlockHorizontal = (screenWidth! - _safeAreaHorizontal!) / 100;
-    safeBlockVertical = (screenHeight! - _safeAreaVertical!) / 100;
+        mediaQueryData.padding.top + mediaQueryData.padding.bottom;
+    safeBlockHorizontal = (screenWidth - _safeAreaHorizontal!) / 100;
+    safeBlockVertical = (screenHeight - _safeAreaVertical!) / 100;
     print('Text Scale' +
         textScaleFactor.toString() +
         " " +
@@ -170,7 +171,18 @@ class SizeConfig {
         kStyle16.copyWith(fontFamily: 'DM Sans', color: kGreyTextColor);
 
     kStyleAppBarTitle = kStyle14W500.copyWith(color: Colors.black);
+    print("Screen Width : $screenWidth, Screen Height: $screenHeight");
   }
+}
+
+extension MediaQuerySizesNum on num {
+  double get h => (this / 100) * SizeConfig.screenHeight;
+  double get w => (this / 100) * SizeConfig.screenWidth;
+}
+
+extension MediaQuerySizesInt on int {
+  double get h => (this / 100) * SizeConfig.screenHeight;
+  double get w => (this / 100) * SizeConfig.screenWidth;
 }
 
 // const Color kPrimaryColor = Color(0xff3570B5);

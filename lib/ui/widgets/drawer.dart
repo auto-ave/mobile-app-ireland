@@ -99,14 +99,14 @@ class AppDrawer extends StatelessWidget {
   Widget _createDrawerHeader(
     BuildContext context,
   ) {
-    final totalHeight = MediaQuery.of(context).size.height;
+    final totalHeight = 100.h;
     return Padding(
       padding: EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            height: MediaQuery.of(context).padding.top,
+            height: SizeConfig.mediaQueryData.padding.top,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
               gradient: LinearGradient(

@@ -133,7 +133,7 @@ class ApiConstants {
   }
 
   String postGetSlotsByCartDateEndpoint() {
-    var uri = Uri.https(baseUrl, "/slots/create");
+    var uri = Uri.https(baseUrl, "/slots/create/");
     return uri.toString();
   }
 
@@ -229,6 +229,21 @@ class ApiConstants {
   String getVehicleModelListEndpoint({required String brand}) {
     Map<String, dynamic> params = {'brand': brand.toString()};
     var uri = Uri.https(baseUrl, "/vehicle/model/list/", params);
+    return uri.toString();
+  }
+
+  String getPaymentChoicesEndpoint() {
+    var uri = Uri.https(baseUrl, "/payment/choices/");
+    return uri.toString();
+  }
+
+  String getCancelBookingDataEndpoint({required String bookingId}) {
+    var uri = Uri.https(baseUrl, "/booking/cancel/data/$bookingId");
+    return uri.toString();
+  }
+
+  String postCancelBookingEndpoint({required String bookingId}) {
+    var uri = Uri.https(baseUrl, "/booking/cancel/$bookingId/");
     return uri.toString();
   }
 }

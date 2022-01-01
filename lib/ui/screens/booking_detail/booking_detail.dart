@@ -11,7 +11,9 @@ import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/booking_detail/components/store_detail_tile.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
+import 'package:themotorwash/ui/screens/cancel_order/cancel_order.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/feedback/feedback_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/components/your_bookings_tile.dart';
@@ -88,71 +90,25 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                       style: SizeConfig.kStyle20W500,
                     ),
                     SizeConfig.kverticalMargin16,
-                    Row(children: <Widget>[
-                      Hero(
-                        tag: widget.bookingId,
-                        child: CachedNetworkImage(
-                          placeholder: (_, __) {
-                            return Container(
-                              child: ShimmerPlaceholder(),
-                              width: 50,
-                              height: 50,
-                            );
-                          },
-                          imageUrl: bookingDetail.store!.thumbnail!,
-                          fit: BoxFit.cover,
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0)),
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.cover),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizeConfig.kHorizontalMargin8,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(bookingDetail.store!.name!,
-                                style: SizeConfig.kStyle16W500),
-                            Text(
-                              bookingDetail.store!.address!,
-                              style: SizeConfig.kStyle12
-                                  .copyWith(color: Color(0xff888888)),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          ],
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: DirectionsButton(
-                            latitude: bookingDetail.store!.latitude!,
-                            longitude: bookingDetail.store!.longitude!),
-                      )
-                    ]),
+                    StoreDetailTile(bookingDetail: bookingDetail),
                     SizeConfig.kverticalMargin24,
                     getBookingStatusTag(bookingDetail.status!),
                     SizeConfig.kverticalMargin24,
-                    bookingDetail.status == BookingStatus.paymentDone
+                    bookingDetail.status == BookingStatus.paymentSuccess
                         ? SizedBox(
                             child: AddToCalendarButton(
                                 bookingDetail: bookingDetail),
-                            width: MediaQuery.of(context).size.width,
+                            width: 100.w,
                           )
                         : Container(),
-                    bookingDetail.status == BookingStatus.paymentDone
+                    bookingDetail.status == BookingStatus.paymentSuccess
                         ? StoreContactWidget(
                             personToContact:
                                 bookingDetail.store!.contactPersonName!,
                             phoneNumber:
-                                bookingDetail.store!.contactPersonNumber!)
+                                bookingDetail.store!.contactPersonNumber!,
+                            otp: bookingDetail.otp!,
+                          )
                         : Container(),
                     Text('Booking Details',
                         style: TextStyle(
@@ -180,6 +136,34 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                                 store: state.booking.store!,
                               )
                         : Container(),
+                    widget.status == BookingStatus.paymentSuccess
+                        ? CommonTextButton(
+                            onPressed: () {
+                              showCancelDialog(bookingDetail);
+                              // Navigator.of(context).pushNamed(
+                              //     CancelOrderScreen.route,
+                              //     arguments: CancelOrderScreenArguments(
+                              //         bookingId: bookingDetail.bookingId!));
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+                                SizeConfig.kHorizontalMargin4,
+                                Text(
+                                  'Cancel Order',
+                                  style: SizeConfig.kStyle14
+                                      .copyWith(color: Colors.red),
+                                )
+                              ],
+                            ),
+                            backgroundColor: Colors.white,
+                          )
+                        : Container(),
+                    Divider(),
                   ],
                 ),
               ),
@@ -209,6 +193,64 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
       return review1;
     }
     return review2;
+  }
+
+  showCancelDialog(BookingDetailModel bookingDetail) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) {
+          return AlertDialog(
+            actions: [
+              CommonTextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).pushNamed(CancelOrderScreen.route,
+                      arguments: CancelOrderScreenArguments(
+                          bookingId: bookingDetail.bookingId!));
+                },
+                child: Text(
+                  'proceed',
+                  style: SizeConfig.kStyle14W500.copyWith(color: Colors.red),
+                ),
+                backgroundColor: Colors.white,
+                border: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                    side: BorderSide(color: Colors.red)),
+              ),
+              CommonTextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'back',
+                  style: SizeConfig.kStyle14W500.copyWith(color: Colors.white),
+                ),
+                backgroundColor: SizeConfig.kPrimaryColor,
+                border: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              )
+            ],
+            title: Text(
+              'Confirm cancellation',
+              style: SizeConfig.kStyle16Bold,
+            ),
+            content: Text(
+              'Are you sure you want to cancel your order?',
+              style: SizeConfig.kStyle14
+                  .copyWith(color: SizeConfig.kGreyTextColor),
+            ),
+          );
+        });
+  }
+
+  bool isCancellable(DateTime time) {
+    if (time.difference(DateTime.now()) > Duration(hours: 12)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

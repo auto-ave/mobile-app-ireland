@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
             Flexible(
               child: Image.asset(
                 'assets/images/oreti.png',
-                width: MediaQuery.of(context).size.width,
+                width: 100.w,
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -141,7 +141,7 @@ class _LoginBottomState extends State<LoginBottom> {
                       Align(
                         alignment: Alignment.center,
                         child: Container(
-                          width: MediaQuery.of(context).size.width,
+                          width: 100.w,
                           height: 50,
                           child: TextButton(
                             onPressed: state is SendingOTP

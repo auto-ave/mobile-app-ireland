@@ -22,16 +22,18 @@ class ExploreFeaturedCarousel extends StatelessWidget {
       SliverToBoxAdapter(
         child: Container(
           // color: Colors.amber,
+
           child: CarouselSlider(
               options: CarouselOptions(
-                  onPageChanged: (index, _) {
-                    // setState(() {
-                    //   carouselPageNumber = index + 1;
-                    // });
-                  },
-                  enableInfiniteScroll: false,
-                  aspectRatio: 16 / 8,
-                  viewportFraction: .9),
+                onPageChanged: (index, _) {
+                  // setState(() {
+                  //   carouselPageNumber = index + 1;
+                  // });
+                },
+                enableInfiniteScroll: false,
+                aspectRatio: 16 / 8,
+                viewportFraction: .9,
+              ),
               items: List.filled(
                   5,
                   Padding(

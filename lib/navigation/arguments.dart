@@ -1,4 +1,5 @@
 import 'package:themotorwash/data/models/booking_detail.dart';
+import 'package:themotorwash/data/models/slot.dart';
 
 class StoreDetailArguments {
   final String storeSlug;
@@ -63,5 +64,21 @@ class FeedbackScreenArguments {
   FeedbackScreenArguments({
     required this.isFeedback,
     this.orderNumber,
+  });
+}
+
+class PaymentChoiceScreenArguments {
+  final Slot slot;
+  final DateTime dateSelected;
+  PaymentChoiceScreenArguments({
+    required this.slot,
+    required this.dateSelected,
+  });
+}
+
+class CancelOrderScreenArguments {
+  final String bookingId;
+  CancelOrderScreenArguments({
+    required this.bookingId,
   });
 }

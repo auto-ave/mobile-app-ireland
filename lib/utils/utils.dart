@@ -49,7 +49,7 @@ PreferredSizeWidget getAppBarLoginScreen(
     backgroundColor: Colors.white,
     actions: [
       SizedBox(
-        width: MediaQuery.of(context).size.width,
+        width: 100.w,
         child: Padding(
           padding:
               const EdgeInsets.only(right: 16.0, left: 8, top: 8, bottom: 8),
@@ -57,7 +57,7 @@ PreferredSizeWidget getAppBarLoginScreen(
             children: [
               Image.asset(
                 'assets/images/logo.png',
-                width: MediaQuery.of(context).size.width * .3,
+                width: 30.w,
               ),
               Spacer(),
               GestureDetector(

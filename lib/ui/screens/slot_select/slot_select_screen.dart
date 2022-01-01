@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,7 +41,7 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
   late SlotSelectionBloc _bloc;
 
   late OrderReviewBloc _orderReviewBloc;
-
+  final _cancelToken = CancelToken();
   @override
   void initState() {
     // TODO: implement initState
@@ -55,7 +56,8 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
     _bloc.add(GetSlots(
         date:
             DateFormat('y-M-d').format(calendarDays[currentSelectedDateIndex]),
-        cartId: widget.cartId));
+        cartId: widget.cartId,
+        cancelToken: _cancelToken));
   }
 
   @override
@@ -84,7 +86,8 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
                 });
                 _bloc.add(GetSlots(
                     date: DateFormat('y-M-d').format(calendarDays[index]),
-                    cartId: widget.cartId));
+                    cartId: widget.cartId,
+                    cancelToken: _cancelToken));
               }),
           currentSelectedDateIndex >= 0
               ? Padding(
@@ -141,7 +144,8 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
                       _bloc.add(GetSlots(
                           date: DateFormat('y-M-d')
                               .format(calendarDays[currentSelectedDateIndex]),
-                          cartId: widget.cartId));
+                          cartId: widget.cartId,
+                          cancelToken: _cancelToken));
                     },
                   ),
                 );
@@ -207,24 +211,6 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
                   backgroundColor: currentSelectedSlotIndex >= 0
                       ? Colors.green
                       : Colors.grey)
-              // TextButton(
-              //   child: Text('Proceed', style: TextStyle(color: Colors.white)),
-              //   onPressed: () {
-              //     SlotSelectionState state = _bloc.state;
-              //     if (currentSelectedSlotIndex >= 0 &&
-              //         state is SlotsLoaded &&
-              //         currentSelectedDateIndex >= 0) {
-              //       Slot slot = state.slots[currentSelectedSlotIndex];
-              //       _orderReviewBloc.add(SetSlot(slot: slot));
-              //       Navigator.pushNamed(context, OrderReviewScreen.route,
-              //           arguments: OrderReviewScreenArguments(
-              //               dateSelected: calendarDays[currentSelectedDateIndex]));
-
-              //     }
-              //   },
-              //   style: ButtonStyle(
-              //       backgroundColor: MaterialStateProperty.all(Colors.green)),
-              // ),
             ],
           ),
         ));

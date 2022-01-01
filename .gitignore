@@ -1,3 +1,4 @@
+
 # Miscellaneous
 *.class
 *.log
@@ -30,6 +31,7 @@
 .pub-cache/
 .pub/
 /build/
+/pubspec.lock
 pubspec.lock
 
 # Web related

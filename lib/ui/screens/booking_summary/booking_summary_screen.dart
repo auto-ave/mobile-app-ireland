@@ -14,7 +14,9 @@ import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_detail/booking_detail.dart';
+import 'package:themotorwash/ui/screens/booking_detail/components/store_detail_tile.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
+import 'package:themotorwash/ui/widgets/badge.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/dashed_booking_box.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
@@ -134,7 +136,7 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                         ),
                         SizedBox(
                           child: bookingDetail.status ==
-                                  BookingStatus.paymentDone
+                                  BookingStatus.paymentSuccess
                               ? AddToCalendarButton(
                                   bookingDetail: bookingDetail)
                               : CommonTextButton(
@@ -149,19 +151,28 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                                         .copyWith(color: Colors.white),
                                   ),
                                   backgroundColor: SizeConfig.kPrimaryColor),
-                          width: MediaQuery.of(context).size.width,
+                          width: 100.w,
                         ),
-                        bookingDetail.status != BookingStatus.paymentDone
+                        SizedBox(
+                          height: 16,
+                        ),
+                        bookingDetail.status != BookingStatus.paymentSuccess
                             ? Divider(
                                 height: 48,
                               )
                             : Container(),
-                        bookingDetail.status == BookingStatus.paymentDone
+                        SizedBox(
+                          height: 16,
+                        ),
+                        StoreDetailTile(bookingDetail: bookingDetail),
+                        bookingDetail.status == BookingStatus.paymentSuccess
                             ? StoreContactWidget(
                                 personToContact:
                                     bookingDetail.store!.contactPersonName!,
                                 phoneNumber:
-                                    bookingDetail.store!.contactPersonNumber!)
+                                    bookingDetail.store!.contactPersonNumber!,
+                                otp: bookingDetail.otp!,
+                              )
                             : Container(),
                         Text('Booking Details',
                             style: TextStyle(
@@ -201,11 +212,13 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
 class StoreContactWidget extends StatelessWidget {
   final String personToContact;
   final String phoneNumber;
-  const StoreContactWidget({
-    Key? key,
-    required this.personToContact,
-    required this.phoneNumber,
-  }) : super(key: key);
+  final String otp;
+  const StoreContactWidget(
+      {Key? key,
+      required this.personToContact,
+      required this.phoneNumber,
+      required this.otp})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -216,27 +229,46 @@ class StoreContactWidget extends StatelessWidget {
         Divider(
           height: 48,
         ),
-        Text.rich(TextSpan(children: [
-          TextSpan(
-              text: 'Person to contact: ',
-              style: SizeConfig.kStyle14.copyWith(
-                color: Colors.black,
-              )),
-          TextSpan(
-              text: personToContact,
-              style: SizeConfig.kStyle16Bold
-                  .copyWith(color: SizeConfig.kPrimaryColor))
-        ])),
+        Row(
+          children: [
+            Text('OTP',
+                style: SizeConfig.kStyle14.copyWith(
+                  color: Colors.black,
+                )),
+            Spacer(),
+            BadgeWidget(
+              text: otp,
+              textStyle: SizeConfig.kStyle16Bold.copyWith(color: Colors.white),
+              backgroundColor: SizeConfig.kPrimaryColor,
+            )
+          ],
+        ),
         SizeConfig.kverticalMargin4,
-        Text.rich(TextSpan(children: [
-          TextSpan(
-              text: 'Contact number: ',
-              style: SizeConfig.kStyle14.copyWith(color: Colors.black)),
-          TextSpan(
-              text: phoneNumber,
-              style: SizeConfig.kStyle16Bold
-                  .copyWith(color: SizeConfig.kPrimaryColor))
-        ])),
+        Row(
+          children: [
+            Text('Person to contact: ',
+                style: SizeConfig.kStyle14.copyWith(
+                  color: Colors.black,
+                )),
+            Spacer(),
+            Text(personToContact,
+                style: SizeConfig.kStyle16Bold
+                    .copyWith(color: SizeConfig.kPrimaryColor))
+          ],
+        ),
+        SizeConfig.kverticalMargin4,
+        Row(
+          children: [
+            Text('Contact Number: ',
+                style: SizeConfig.kStyle14.copyWith(
+                  color: Colors.black,
+                )),
+            Spacer(),
+            Text(phoneNumber,
+                style: SizeConfig.kStyle16Bold
+                    .copyWith(color: SizeConfig.kPrimaryColor))
+          ],
+        ),
         Divider(
           height: 48,
         ),
@@ -322,7 +354,7 @@ class _RateServiceWidgetState extends State<RateServiceWidget> {
             ),
             SizeConfig.kverticalMargin8,
             Container(
-              height: MediaQuery.of(context).size.height * .2,
+              height: 20.h,
               child: TextField(
                 controller: reviewDescriptionController,
                 style: TextStyle(fontSize: 18),

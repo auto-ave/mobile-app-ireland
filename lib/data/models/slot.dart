@@ -8,6 +8,8 @@ part 'slot.g.dart';
 class Slot {
   final TimeOfDay? start;
   final TimeOfDay? end;
+  final String? startString;
+  final String? endString;
   final int? count;
   final int? key;
   final List<int>? bays;
@@ -17,7 +19,9 @@ class Slot {
       required this.end,
       required this.count,
       required this.key,
-      required this.bays});
+      required this.bays,
+      required this.endString,
+      required this.startString});
 
   factory Slot.fromEntity(SlotEntity e) {
     return Slot(
@@ -25,7 +29,9 @@ class Slot {
         end: e.end != null ? getTimeOfDayFromString(e.end!) : null,
         count: e.bays!.length,
         key: e.key,
-        bays: e.bays);
+        bays: e.bays,
+        endString: e.end,
+        startString: e.start);
   }
 
   @override

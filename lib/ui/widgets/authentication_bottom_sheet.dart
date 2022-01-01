@@ -86,13 +86,13 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
         if (state is SendingOTP) {
           return Container(
             child: Center(child: loadingAnimation()),
-            height: MediaQuery.of(context).size.height * .3,
+            height: 30.h,
           );
         }
         if (state is CheckingOTP) {
           return Container(
             child: Center(child: loadingAnimation()),
-            height: MediaQuery.of(context).size.height * .3,
+            height: 30.h,
           );
         }
         if (state is FailedToSendOTP) {
@@ -130,7 +130,7 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
           Align(
             alignment: Alignment.center,
             child: Container(
-              width: MediaQuery.of(context).size.width,
+              width: 100.w,
               height: 50,
               child: TextButton(
                 onPressed: () {
@@ -184,7 +184,7 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
           Align(
             alignment: Alignment.center,
             child: Container(
-              width: MediaQuery.of(context).size.width,
+              width: 100.w,
               height: 50,
               child: TextButton(
                 onPressed: () {

@@ -128,7 +128,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: 100.w,
                       height: 50,
                       child: BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
                         bloc: phoneAuthBloc,

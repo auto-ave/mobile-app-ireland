@@ -47,9 +47,6 @@ class _StoreListScreenState extends State<StoreListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final height = mediaQuery.size.height;
-    final width = mediaQuery.size.width;
     return Scaffold(
       appBar: getAppBarWithBackButton(
           context: context,

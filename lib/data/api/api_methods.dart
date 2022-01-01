@@ -1,11 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
+import 'package:themotorwash/data/models/cancel_booking_data.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/fcm_topic.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
@@ -20,6 +23,8 @@ import 'package:themotorwash/data/models/vehicle_model.dart';
 import 'package:themotorwash/data/models/vehicle_wheel.dart';
 
 abstract class ApiMethods {
+  CancelToken get getSlotsCancelToken;
+  set getSlotsCancelToken(CancelToken createSlotsCancelToken);
   Future<List<StoreListEntity>> getStoreListByLocation(
       {required String city,
       required double lat,
@@ -93,4 +98,9 @@ abstract class ApiMethods {
       {required String wheelCode});
 
   Future<List<VehicleModelEntity>> getVehicleModelList({required String brand});
+  Future<List<PaymentChoiceEntity>> getPaymentChoices();
+  Future<CancelBookingDataEntity> getCancelBookingData(
+      {required String bookingId});
+  Future<void> cancelBooking(
+      {required String bookingId, required String reason});
 }

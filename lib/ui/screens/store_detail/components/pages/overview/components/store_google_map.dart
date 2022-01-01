@@ -52,7 +52,7 @@ class StoreGoogleMapState extends State<StoreGoogleMap> {
             opacity: isMapVisible ? 1.0 : 0,
             duration: Duration(milliseconds: 600),
             child: Container(
-              height: MediaQuery.of(context).size.height * .26,
+              height: 26.h,
               child: GoogleMap(
                 liteModeEnabled: false,
                 gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[

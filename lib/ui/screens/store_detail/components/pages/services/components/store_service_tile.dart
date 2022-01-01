@@ -38,12 +38,12 @@ class StoreServiceTile extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print(isLoading.toString() + "loading");
+    // print(isLoading.toString() + "loading");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
       child: Container(
         padding: const EdgeInsets.all(16),
-        width: MediaQuery.of(context).size.width * .8,
+        width: 80.w,
         // height: MediaQuery.of(context).size.height * .27,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(5)),

@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -34,11 +35,13 @@ import 'package:themotorwash/simple_bloc_observer.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_detail/booking_detail.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
+import 'package:themotorwash/ui/screens/cancel_order/cancel_order.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/feedback/feedback_screen.dart';
 import 'package:themotorwash/ui/screens/home/home_screen.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
 import 'package:themotorwash/ui/screens/order_review/order_review.dart';
+import 'package:themotorwash/ui/screens/payment_choice/payment_choice.dart';
 import 'package:themotorwash/ui/screens/profile/profile_screen.dart';
 import 'package:themotorwash/ui/screens/slot_select/slot_select_screen.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_detail_bloc.dart';
@@ -52,6 +55,7 @@ import 'package:themotorwash/ui/screens/your_bookings/bloc/your_bookings_bloc.da
 import 'package:themotorwash/ui/screens/your_bookings/your_bookings_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
 
@@ -66,16 +70,32 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } on Exception catch (e) {
+    print("helllo" + e.toString());
+  }
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  try {
+    await FlutterDisplayMode.setHighRefreshRate();
+  } catch (e) {}
 
   try {
-    await Firebase.initializeApp();
     await FirebaseMessaging.instance.getToken();
-    // await FirebaseMessaging.instance.subscribeToTopic('bang');
-
+  } catch (e) {}
+  try {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-
+  } catch (e) {
+    print(e.toString() + "helll");
+  }
+  try {
+    await Hive.initFlutter();
+  } catch (e) {}
+  try {
     //TODO : Implement FCM and Local Notification for iOS
     channel = const AndroidNotificationChannel(
       'default_channel', // id
@@ -92,10 +112,6 @@ void main() async {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
-
-    // await FirebaseMessaging.instance.subscribeToTopic('hello');
-
-    await Hive.initFlutter();
   } on Exception catch (e) {
     print(e.toString());
   }
@@ -141,7 +157,7 @@ class _MyAppState extends State<MyApp> {
     getIt.registerSingleton<LocalDataService>(LocalDataService(),
         instanceName: LocalDataService.getItInstanceName);
     ApiMethods _apiMethodsImp =
-        getIt.get<ApiMethods>(instanceName: 'ApiService');
+        getIt.get<ApiMethods>(instanceName: ApiService.getItInstanceName);
     _localDataService = getIt.get<LocalDataService>(
         instanceName: LocalDataService.getItInstanceName);
 
@@ -229,7 +245,7 @@ class _MyAppState extends State<MyApp> {
 
           initialRoute: '/',
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'Autoave',
           theme: ThemeData(
             appBarTheme: AppBarTheme(
               systemOverlayStyle: SystemUiOverlayStyle(
@@ -248,6 +264,8 @@ class _MyAppState extends State<MyApp> {
                   if (snapshot.hasData) {
                     if (snapshot.data!.authenticated) {
                       // return BookingSummaryScreen(bookingId: '8D6D98');
+                      // return CancelOrderScreen();
+
                       return ExploreScreen();
                     } else {
                       return LoginScreen();
@@ -395,6 +413,29 @@ class _MyAppState extends State<MyApp> {
                   return FeedbackScreen(
                     isFeedback: args.isFeedback,
                     orderNumber: args.orderNumber,
+                  );
+                },
+              );
+            }
+            if (settings.name == PaymentChoiceScreen.route) {
+              final args = settings.arguments as PaymentChoiceScreenArguments;
+
+              return MaterialPageRoute(
+                builder: (context) {
+                  return PaymentChoiceScreen(
+                    dateSelected: args.dateSelected,
+                    slot: args.slot,
+                  );
+                },
+              );
+            }
+            if (settings.name == CancelOrderScreen.route) {
+              final args = settings.arguments as CancelOrderScreenArguments;
+
+              return MaterialPageRoute(
+                builder: (context) {
+                  return CancelOrderScreen(
+                    bookingId: args.bookingId,
                   );
                 },
               );

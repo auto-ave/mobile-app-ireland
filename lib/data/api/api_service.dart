@@ -8,10 +8,12 @@ import 'package:themotorwash/data/api/api_methods.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
+import 'package:themotorwash/data/models/cancel_booking_data.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/fcm_topic.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
@@ -27,6 +29,7 @@ import 'package:themotorwash/data/models/vehicle_wheel.dart';
 
 class ApiService implements ApiMethods {
   static final getItInstanceName = 'ApiService';
+  CancelToken createSlotsCancelToken = CancelToken();
   final ApiConstants _apiConstants;
   ApiService({required ApiConstants apiConstants})
       : _apiConstants = apiConstants;
@@ -116,7 +119,7 @@ class ApiService implements ApiMethods {
       {required int itemId, required String vehicleModel}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postAddItemToCartEndpoint();
-
+    print("ADDED CAR MODEL" + vehicleModel);
     Response res = await client.post(
       url,
       data: {'item': itemId, 'vehicle_model': vehicleModel},
@@ -131,6 +134,7 @@ class ApiService implements ApiMethods {
   Future<CartEntity> postDeleteItemFromCart({required int itemId}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postDeleteItemFromCartEndpoint();
+    print("DELETED CAR MODEL" + itemId.toString());
     Response res = await client.post(url, data: {'item': itemId});
     dynamic cartData = jsonDecode(res.data);
     return CartEntity.fromJson(cartData);
@@ -209,7 +213,8 @@ class ApiService implements ApiMethods {
       {required String date, required String cartId}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postGetSlotsByCartDateEndpoint();
-    Response res = await client.post(url, data: {'date': date});
+    Response res = await client.post(url,
+        data: {'date': date}, cancelToken: createSlotsCancelToken);
     List<dynamic> data = jsonDecode(res.data);
 
     List<SlotEntity> slots =
@@ -454,5 +459,49 @@ class ApiService implements ApiMethods {
         .map<VehicleModelEntity>((e) => VehicleModelEntity.fromJson(e))
         .toList();
     return vehicleModels;
+  }
+
+  @override
+  // TODO: implement getSlotCancelToken
+  CancelToken get getSlotsCancelToken => createSlotsCancelToken;
+
+  @override
+  set getSlotsCancelToken(CancelToken createSlotsCancelToken) {
+    this.createSlotsCancelToken = createSlotsCancelToken;
+  }
+
+  @override
+  Future<List<PaymentChoiceEntity>> getPaymentChoices() async {
+    // TODO: implement getPaymentChoices
+    String url = _apiConstants.getPaymentChoicesEndpoint();
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.get(url);
+
+    List<dynamic> data = jsonDecode(res.data);
+    List<PaymentChoiceEntity> paymentChoices = data
+        .map<PaymentChoiceEntity>((e) => PaymentChoiceEntity.fromJson(e))
+        .toList();
+    return paymentChoices;
+  }
+
+  @override
+  Future<CancelBookingDataEntity> getCancelBookingData(
+      {required String bookingId}) async {
+    String url =
+        _apiConstants.getCancelBookingDataEndpoint(bookingId: bookingId);
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.get(url);
+
+    Map<String, dynamic> data = jsonDecode(res.data);
+    CancelBookingDataEntity entity = CancelBookingDataEntity.fromJson(data);
+    return entity;
+  }
+
+  @override
+  Future<void> cancelBooking(
+      {required String bookingId, required String reason}) async {
+    String url = _apiConstants.postCancelBookingEndpoint(bookingId: bookingId);
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.post(url, data: {'reason': reason});
   }
 }

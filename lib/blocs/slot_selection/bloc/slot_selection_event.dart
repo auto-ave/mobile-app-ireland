@@ -7,7 +7,9 @@ abstract class SlotSelectionEvent extends Equatable {
 class GetSlots extends SlotSelectionEvent {
   final String date;
   final String cartId;
-  GetSlots({required this.date, required this.cartId});
+  final CancelToken cancelToken;
+  GetSlots(
+      {required this.date, required this.cartId, required this.cancelToken});
 
   @override
   List<Object?> get props => [date];

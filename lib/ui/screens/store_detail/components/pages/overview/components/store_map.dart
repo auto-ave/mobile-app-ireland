@@ -23,7 +23,7 @@ class _StoreMapState extends State<StoreMap> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * .26,
+      height: 26.h,
       child: FlutterMap(
         mapController: _mapController,
         children: [

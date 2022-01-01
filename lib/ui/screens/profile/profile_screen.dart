@@ -113,9 +113,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       showSnackbar(context, 'Profile Updated');
                     }
 
-                    firstNameController.text = userProfile!.firstName;
-                    lastNameController.text = userProfile.lastName;
-                    emailController.text = userProfile.email;
+                    firstNameController.text = userProfile!.firstName ?? "";
+                    lastNameController.text = userProfile.lastName ?? "";
+                    emailController.text = userProfile.email ?? "";
                   }
                 },
                 builder: (context, state) {

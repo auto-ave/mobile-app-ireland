@@ -8,9 +8,9 @@ part of 'user_profile.dart';
 
 UserProfileEntity _$UserProfileEntityFromJson(Map<String, dynamic> json) {
   return UserProfileEntity(
-    firstName: json['first_name'] as String,
-    lastName: json['last_name'] as String,
-    email: json['email'] as String,
+    firstName: json['first_name'] as String?,
+    lastName: json['last_name'] as String?,
+    email: json['email'] as String?,
   );
 }
 

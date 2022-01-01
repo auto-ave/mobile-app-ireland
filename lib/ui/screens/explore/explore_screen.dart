@@ -225,42 +225,42 @@ class _ExploreScreenState extends State<ExploreScreen>
                       builder: (context, state) {
                         if (state is SearchServicesUninitialized) {
                           return InitialSearchScreen();
-                          return CustomScrollView(
-                            slivers: [
-                              BlocBuilder<SearchServicesBloc,
-                                  SearchServicesState>(
-                                bloc: _privateSearchServicesBloc,
-                                builder: (context, state) {
-                                  if (state is LoadingSearchServicesResult) {
-                                    return ExploreServicesGridLoading();
-                                  }
-                                  if (state is SearchedServicesResult) {
-                                    return state.searchedServices.isNotEmpty
-                                        ? ExploreServicesGrid(
-                                            items: state.searchedServices
-                                                .map((e) => ExploreServiceTile(
-                                                      imageUrl: e.thumbnail!,
-                                                      serviceName: e.name!,
-                                                    ))
-                                                .toList(),
-                                          )
-                                        : SliverToBoxAdapter(
-                                            child: Container());
-                                  }
-                                  if (state is SearchedServicesError) {
-                                    return SliverToBoxAdapter(
-                                      child: Container(),
-                                    );
-                                  }
+                          // return CustomScrollView(
+                          //   slivers: [
+                          //     BlocBuilder<SearchServicesBloc,
+                          //         SearchServicesState>(
+                          //       bloc: _privateSearchServicesBloc,
+                          //       builder: (context, state) {
+                          //         if (state is LoadingSearchServicesResult) {
+                          //           return ExploreServicesGridLoading();
+                          //         }
+                          //         if (state is SearchedServicesResult) {
+                          //           return state.searchedServices.isNotEmpty
+                          //               ? ExploreServicesGrid(
+                          //                   items: state.searchedServices
+                          //                       .map((e) => ExploreServiceTile(
+                          //                             imageUrl: e.thumbnail!,
+                          //                             serviceName: e.name!,
+                          //                           ))
+                          //                       .toList(),
+                          //                 )
+                          //               : SliverToBoxAdapter(
+                          //                   child: Container());
+                          //         }
+                          //         if (state is SearchedServicesError) {
+                          //           return SliverToBoxAdapter(
+                          //             child: Container(),
+                          //           );
+                          //         }
 
-                                  return ExploreServicesGridLoading();
-                                },
-                              ),
-                            ],
-                          );
-                          return Center(
-                            child: Image.asset('assets/images/no_results.png'),
-                          );
+                          //         return ExploreServicesGridLoading();
+                          //       },
+                          //     ),
+                          //   ],
+                          // );
+                          // return Center(
+                          //   child: Image.asset('assets/images/no_results.png'),
+                          // );
                         }
                         return SearchOverlay(
                           textController: textController,

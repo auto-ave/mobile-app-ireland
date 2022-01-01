@@ -21,7 +21,7 @@ class StoreLoadingTile extends StatelessWidget {
                 highlightColor: SizeConfig.kShimmerHighlightColor!,
                 child: Container(
                   height: 200,
-                  width: MediaQuery.of(context).size.width,
+                  width: 100.w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     color: Colors.grey[300],

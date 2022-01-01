@@ -1,9 +1,11 @@
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
+import 'package:themotorwash/data/models/cancel_booking_data.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/location_model.dart';
+import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/service.dart';
@@ -62,4 +64,8 @@ abstract class Repository {
   Future<List<VehicleWheel>> getVehicleWheelList();
   Future<List<VehicleBrand>> getVehicleBrandlList({required String wheelCode});
   Future<List<VehicleModel>> getVehicleModelList({required String brand});
+  Future<List<PaymentChoice>> getPaymentChoices();
+  Future<CancelBookingData> getCancelBookingData({required String bookingId});
+  Future<void> cancelBooking(
+      {required String bookingId, required String reason});
 }

@@ -15,7 +15,7 @@ class SimpleBlocObserver extends BlocObserver {
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    print("$error BLOC");
+    print("$error BLOC" + bloc.toString());
     super.onError(bloc, error, stackTrace);
   }
 }

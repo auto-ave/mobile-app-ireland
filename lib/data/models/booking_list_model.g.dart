@@ -12,7 +12,7 @@ BookingListEntity _$BookingListEntityFromJson(Map<String, dynamic> json) {
     createdAt: json['created_at'] as String?,
     updatedAt: json['updated_at'] as String?,
     bookingId: json['booking_id'] as String?,
-    status: json['status'] as int?,
+    status: json['booking_status'] as String?,
     statusChangedTime: json['status_changed_time'] as String?,
     otp: json['otp'] as String?,
     event: json['event'] == null
@@ -40,7 +40,7 @@ Map<String, dynamic> _$BookingListEntityToJson(BookingListEntity instance) =>
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
       'booking_id': instance.bookingId,
-      'status': instance.status,
+      'booking_status': instance.status,
       'status_changed_time': instance.statusChangedTime,
       'otp': instance.otp,
       'event': instance.event?.toJson(),

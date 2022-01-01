@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
+import 'package:themotorwash/ui/widgets/or_divider_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:themotorwash/blocs/feedback/bloc/feedback_bloc.dart';
@@ -70,7 +71,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             if (state is FeedbackSent) {
               return SizedBox(
                 child: FeedbackSentWidget(),
-                width: MediaQuery.of(context).size.width,
+                width: 100.w,
               );
             }
             return Form(
@@ -115,7 +116,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       ),
                       SizeConfig.kverticalMargin8,
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * .2,
+                        height: 20.h,
                         child: CommonTextField(
                           fieldController: messageController,
                           validator: (string) {
@@ -157,15 +158,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           backgroundColor: SizeConfig.kPrimaryColor),
 
                       SizeConfig.kverticalMargin24,
-                      Row(
-                        children: [
-                          Expanded(child: Divider()),
-                          SizeConfig.kHorizontalMargin8,
-                          Text('OR'),
-                          SizeConfig.kHorizontalMargin8,
-                          Expanded(child: Divider()),
-                        ],
-                      ),
+                      ORWithDividerWidget(),
                       SizeConfig.kverticalMargin24,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -277,7 +270,7 @@ class FeedbackSentWidget extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width,
+              width: 100.w,
               child: Column(
                 children: [
                   Text(
@@ -308,7 +301,7 @@ class FeedbackSentWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(
-            width: MediaQuery.of(context).size.width,
+            width: 100.w,
             child: CommonTextButton(
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(

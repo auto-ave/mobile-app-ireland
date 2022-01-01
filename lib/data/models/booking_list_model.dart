@@ -52,7 +52,9 @@ class BookingListModel {
         status: e.status != null
             ? getBookingStatusFromCode(e.status!)
             : BookingStatus.notDefined,
-        statusChangedTime: DateTime.parse(e.statusChangedTime!),
+        statusChangedTime: e.statusChangedTime != null
+            ? DateTime.parse(e.statusChangedTime!)
+            : null,
         store: Store.fromEntity(e.store!),
         updatedAt: DateTime.parse(e.updatedAt!),
         vehicleType: e.vehicleType);
@@ -77,7 +79,8 @@ class BookingListEntity {
   @JsonKey(name: 'booking_id')
   final String? bookingId;
 
-  final int? status;
+  @JsonKey(name: 'booking_status')
+  final String? status;
 
   @JsonKey(name: 'status_changed_time')
   final String? statusChangedTime;

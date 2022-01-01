@@ -105,20 +105,20 @@ class DashedBookingBox extends StatelessWidget {
           Text('Payment Summary', style: leftSide14W500),
           SizeConfig.kverticalMargin8,
           getDetailsRow(
-              leftText: 'Item Total',
+              leftText: 'Token amount paid',
               rightText: '₹${bookingDetail.payment!.amount}',
               leftStyle: leftSideInfo,
               rightStyle: rightSide12W500),
           SizeConfig.kverticalMargin8,
+          // getDetailsRow(
+          //     leftText: 'Taxes',
+          //     rightText: '₹0',
+          //     leftStyle: leftSideInfo,
+          //     rightStyle: rightSide12W500),
+          // SizeConfig.kverticalMargin8,
           getDetailsRow(
-              leftText: 'Taxes',
-              rightText: '₹0',
-              leftStyle: leftSideInfo,
-              rightStyle: rightSide12W500),
-          SizeConfig.kverticalMargin8,
-          getDetailsRow(
-              leftText: 'Grand Total',
-              rightText: '₹${bookingDetail.payment!.amount}',
+              leftText: 'Amount to be paid at store',
+              rightText: '₹${bookingDetail.remainingAmount}',
               leftStyle: leftSideInfo.copyWith(
                   color: SizeConfig.kPrimaryColor,
                   fontSize: SizeConfig.kfontSize16,
@@ -126,7 +126,7 @@ class DashedBookingBox extends StatelessWidget {
               rightStyle: rightSideInfoPrimaryColor.copyWith(
                   color: Colors.black,
                   fontSize: SizeConfig.kfontSize16,
-                  fontWeight: FontWeight.w600)),
+                  fontWeight: FontWeight.w700)),
         ]);
   }
 

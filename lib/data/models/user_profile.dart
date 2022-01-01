@@ -3,9 +3,9 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_profile.g.dart';
 
 class UserProfile {
-  final String firstName;
-  final String lastName;
-  final String email;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
   UserProfile({
     required this.firstName,
     required this.lastName,
@@ -27,11 +27,11 @@ class UserProfile {
 @JsonSerializable()
 class UserProfileEntity {
   @JsonKey(name: 'first_name')
-  final String firstName;
+  final String? firstName;
   @JsonKey(name: 'last_name')
-  final String lastName;
+  final String? lastName;
   @JsonKey(name: 'email')
-  final String email;
+  final String? email;
   UserProfileEntity({
     required this.firstName,
     required this.lastName,

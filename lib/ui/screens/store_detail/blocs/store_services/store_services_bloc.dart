@@ -52,7 +52,7 @@ class StoreServicesBloc extends Bloc<StoreServicesEvent, StoreServicesState> {
             vehicleType: vehicleType,
             services: services + moreServices,
             hasReachedMax: moreServices.length !=
-                4); // Page Limit set in apiconstants is 10. Therefore if services retured are less than 10, then hasReachedMax is true
+                10); // Page Limit set in apiconstants is 10. Therefore if services retured are less than 10, then hasReachedMax is true
       } catch (e) {
         yield StoreServicesError(message: e.toString());
       }

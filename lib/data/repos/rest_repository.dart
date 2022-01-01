@@ -1,10 +1,12 @@
 import 'package:themotorwash/data/api/api_methods.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
+import 'package:themotorwash/data/models/cancel_booking_data.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/location_model.dart';
+import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
@@ -224,5 +226,29 @@ class RestRepository implements Repository {
     return entities
         .map<VehicleWheel>((e) => VehicleWheel.fromEntity(e))
         .toList();
+  }
+
+  @override
+  Future<List<PaymentChoice>> getPaymentChoices() async {
+    List<PaymentChoiceEntity> paymentChoices =
+        await _apiMethodsImp.getPaymentChoices();
+
+    return paymentChoices
+        .map<PaymentChoice>((e) => PaymentChoice.fromEntity(e))
+        .toList();
+  }
+
+  @override
+  Future<void> cancelBooking(
+      {required String bookingId, required String reason}) async {
+    await _apiMethodsImp.cancelBooking(bookingId: bookingId, reason: reason);
+  }
+
+  @override
+  Future<CancelBookingData> getCancelBookingData(
+      {required String bookingId}) async {
+    CancelBookingDataEntity entity =
+        await _apiMethodsImp.getCancelBookingData(bookingId: bookingId);
+    return CancelBookingData.fromEntity(entity);
   }
 }
