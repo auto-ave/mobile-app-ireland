@@ -173,12 +173,26 @@ class _VehicleWheelSelectionPageState extends State<VehicleWheelSelectionPage> {
             style: SizeConfig.kStyle20W500,
           ),
           SizeConfig.kverticalMargin32,
-          Expanded(
-              child: BlocBuilder<VehicleListBloc, VehicleListState>(
+          BlocBuilder<VehicleListBloc, VehicleListState>(
             bloc: vehicleListBloc,
             builder: (context, state) {
               if (state is VehicleWheelListLoaded) {
                 var wheels = state.wheels;
+                return Align(
+                    alignment: Alignment.topCenter,
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        alignment: WrapAlignment.spaceBetween,
+                        // runAlignment: WrapAlignment.spaceAround,
+                        // crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 16,
+                        runSpacing: 16,
+                        children: wheels
+                            .map((e) => VehicleWheelWidget(
+                                wheel: e, onTap: widget.onWheelTapped))
+                            .toList(),
+                      ),
+                    ));
                 return GridView.builder(
                   itemCount: wheels.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -205,7 +219,7 @@ class _VehicleWheelSelectionPageState extends State<VehicleWheelSelectionPage> {
                 child: loadingAnimation(),
               );
             },
-          )),
+          ),
         ],
       ),
     );
@@ -224,6 +238,7 @@ class VehicleWheelWidget extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () => onTap(wheel),
       child: Container(
+        width: SizeConfig.screenWidth * .4, // height: 150,
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
             border: Border.all(
@@ -240,17 +255,25 @@ class VehicleWheelWidget extends StatelessWidget {
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              LayoutBuilder(builder: (context, constraints) {
-                return CachedNetworkImage(
+              Container(
+                // color: Colors.amber,
+                child: CachedNetworkImage(
                   imageUrl: wheel.imageUrl,
                   // width: 80,
                   // height: 50,
-                  width: constraints.maxWidth * .6,
-                );
-              }),
-              SizeConfig.kverticalMargin8,
-              Text(wheel.name)
+                  width: 80,
+                  height: 80,
+                  // height: 80,
+                ),
+              ),
+
+              // SizeConfig.kverticalMargin8,
+              Text(
+                wheel.name,
+                maxLines: 1,
+              )
             ],
           ),
         ),
@@ -351,6 +374,23 @@ class _VehicleBrandSelectionPageState extends State<VehicleBrandSelectionPage> {
                 if (searchController.text.isEmpty) {
                   filteredBrands = brands;
                 }
+
+                return Align(
+                  alignment: Alignment.topCenter,
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      // runAlignment: WrapAlignment.spaceAround,
+                      // crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: filteredBrands
+                          .map((e) => VehicleBrandWidget(
+                              brand: e, onTap: widget.onBrandTapped))
+                          .toList(),
+                    ),
+                  ),
+                );
                 return GridView.builder(
                   itemCount: filteredBrands.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -396,6 +436,7 @@ class VehicleBrandWidget extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         onTap: () => onTap(brand),
         child: Container(
+          width: SizeConfig.screenWidth * .4,
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
               border: Border.all(
@@ -418,12 +459,15 @@ class VehicleBrandWidget extends StatelessWidget {
                   imageUrl: brand.imageUrl,
                   // width: 80,
                   // height: 50,
-                  height: 58,
+                  height: 80,
                   // width: constraints.maxWidth * .6,
                 );
               }),
               // SizeConfig.kverticalMargin8,
-              Text(brand.name)
+              Text(
+                brand.name,
+                maxLines: 1,
+              )
             ],
           ),
         ));
@@ -507,34 +551,53 @@ class _VehicleModelSelectionPageState extends State<VehicleModelSelectionPage> {
           ),
           SizeConfig.kverticalMargin16,
           Expanded(
-              child: BlocBuilder<VehicleListBloc, VehicleListState>(
-            bloc: vehicleListBloc,
-            builder: (context, state) {
-              if (state is VehicleModelListLoaded) {
-                models = state.vehicles;
-                if (searchController.text.isEmpty) {
-                  filteredModels = models;
+            child: BlocBuilder<VehicleListBloc, VehicleListState>(
+              bloc: vehicleListBloc,
+              builder: (context, state) {
+                if (state is VehicleModelListLoaded) {
+                  models = state.vehicles;
+                  if (searchController.text.isEmpty) {
+                    filteredModels = models;
+                  }
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        // alignment: WrapAlignment.end,
+                        // runAlignment: WrapAlignment.end,
+                        // crossAxisAlignment: WrapCrossAlignment.end,
+
+                        spacing: 16,
+                        runSpacing: 16,
+                        children: filteredModels
+                            .map((e) => VehicleModelWidget(
+                                vehicleModel: e,
+                                onTap: widget.onVehicleModelTapped))
+                            .toList(),
+                      ),
+                    ),
+                  );
+                  return GridView.builder(
+                    itemCount: filteredModels.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        mainAxisExtent: 100),
+                    itemBuilder: (ctx, index) {
+                      VehicleModel vehicle = filteredModels[index];
+                      return VehicleModelWidget(
+                          vehicleModel: vehicle,
+                          onTap: widget.onVehicleModelTapped);
+                    },
+                  );
                 }
-                return GridView.builder(
-                  itemCount: filteredModels.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      mainAxisExtent: 100),
-                  itemBuilder: (ctx, index) {
-                    VehicleModel vehicle = filteredModels[index];
-                    return VehicleModelWidget(
-                        vehicleModel: vehicle,
-                        onTap: widget.onVehicleModelTapped);
-                  },
+                return Center(
+                  child: loadingAnimation(),
                 );
-              }
-              return Center(
-                child: loadingAnimation(),
-              );
-            },
-          )),
+              },
+            ),
+          )
         ],
       ),
     );
@@ -557,6 +620,7 @@ class VehicleModelWidget extends StatelessWidget {
         onTap: () => onTap(vehicleModel),
         child: Container(
           padding: EdgeInsets.all(8),
+          width: SizeConfig.screenWidth * .4,
           decoration: BoxDecoration(
               border: Border.all(
                 color: SizeConfig.kPrimaryColor,
@@ -574,10 +638,13 @@ class VehicleModelWidget extends StatelessWidget {
             children: [
               CachedNetworkImage(
                 imageUrl: vehicleModel.image!,
-                width: 80,
-                height: 58,
+                // width: 80,
+                height: 80,
               ),
-              Text(vehicleModel.model!)
+              Text(
+                vehicleModel.model!,
+                maxLines: 1,
+              )
             ],
           ),
         ));

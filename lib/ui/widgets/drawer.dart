@@ -21,6 +21,7 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GlobalAuthBloc, GlobalAuthState>(
       builder: (context, state) {
+        print('Satatebi' + state.toString());
         if (state is Authenticated) {
           return Drawer(
               child: Padding(
@@ -34,7 +35,9 @@ class AppDrawer extends StatelessWidget {
                 ),
                 _createDrawerItem(
                     context, 'orders_drawer.svg', Text("Your Orders"), () {
-                  Navigator.pushNamed(context, YourBookingsScreen.route);
+                  Navigator.pushNamed(context, YourBookingsScreen.route,
+                      arguments: YourBookingsScreenArguments(
+                          fromBookingSummary: false));
                 }),
                 Divider(
                   thickness: 1,

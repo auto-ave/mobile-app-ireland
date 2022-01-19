@@ -40,12 +40,14 @@ import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/feedback/feedback_screen.dart';
 import 'package:themotorwash/ui/screens/home/home_screen.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
+import 'package:themotorwash/ui/screens/offer_selection/offer_selection.dart';
 import 'package:themotorwash/ui/screens/order_review/order_review.dart';
 import 'package:themotorwash/ui/screens/payment_choice/payment_choice.dart';
 import 'package:themotorwash/ui/screens/profile/profile_screen.dart';
 import 'package:themotorwash/ui/screens/slot_select/slot_select_screen.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_detail_bloc.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_reviews/store_reviews_bloc.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/gallery/gallery_view.dart';
 import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/screens/store_list/bloc/store_list_bloc.dart';
 import 'package:themotorwash/ui/screens/store_list/store_list_screen.dart';
@@ -70,10 +72,23 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // try {
+  //   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  //   NotificationSettings settings = await messaging.requestPermission(
+  //     alert: true,
+  //     announcement: false,
+  //     badge: true,
+  //     carPlay: false,
+  //     criticalAlert: false,
+  //     provisional: false,
+  //     sound: true,
+  //   );
+  // } catch (e) {
+  //   print(e.toString() + "permission noti");
+  // }
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp();
   } on Exception catch (e) {
     print("helllo" + e.toString());
   }
@@ -95,25 +110,39 @@ void main() async {
   try {
     await Hive.initFlutter();
   } catch (e) {}
-  try {
-    //TODO : Implement FCM and Local Notification for iOS
-    channel = const AndroidNotificationChannel(
-      'default_channel', // id
-      'High Importance Notifications', // title
-      'This channel is used for important notifications.', // description
-      importance: Importance.high,
-      playSound: true,
+  if (Platform.isAndroid) {
+    try {
+      //TODO : Implement FCM and Local Notification for iOS
+      channel = const AndroidNotificationChannel(
+        'default_channel', // id
+        'High Importance Notifications', // title
+        'This channel is used for important notifications.', // description
+        importance: Importance.high,
+        playSound: true,
 
-      sound: RawResourceAndroidNotificationSound('turbo'),
+        sound: RawResourceAndroidNotificationSound('turbo'),
+      );
+
+      flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
+    } on Exception catch (e) {
+      print(e.toString());
+    }
+  } else if (Platform.isIOS) {
+    /// Update the iOS foreground notification presentation options to allow
+    /// heads up notifications.
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
     );
-
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
-  } on Exception catch (e) {
-    print(e.toString());
+  }
+  if (Platform.isIOS) {
+    FirebaseMessaging.instance.requestPermission();
   }
   Bloc.observer = SimpleBlocObserver();
 
@@ -145,7 +174,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
     precacheImage(AssetImage('assets/images/splash_background.png'), context);
     FcmHelper().onMessageFCM();
     _fcmInstance = FirebaseMessaging.instance;
@@ -263,6 +291,7 @@ class _MyAppState extends State<MyApp> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     if (snapshot.data!.authenticated) {
+                      // return OfferSelectionScreen();
                       // return BookingSummaryScreen(bookingId: '8D6D98');
                       // return CancelOrderScreen();
 
@@ -301,6 +330,7 @@ class _MyAppState extends State<MyApp> {
                   return StoreListScreen(
                     city: args.city,
                     title: args.title,
+                    serviceTag: args.serviceTag,
                   );
                 },
               );
@@ -389,9 +419,12 @@ class _MyAppState extends State<MyApp> {
               );
             }
             if (settings.name == YourBookingsScreen.route) {
+              final args = settings.arguments as YourBookingsScreenArguments;
               return MaterialPageRoute(
                 builder: (context) {
-                  return YourBookingsScreen();
+                  return YourBookingsScreen(
+                    fromBookingSummary: args.fromBookingSummary,
+                  );
                 },
               );
             }
@@ -436,6 +469,26 @@ class _MyAppState extends State<MyApp> {
                 builder: (context) {
                   return CancelOrderScreen(
                     bookingId: args.bookingId,
+                  );
+                },
+              );
+            }
+            if (settings.name == OfferSelectionScreen.route) {
+              final args = settings.arguments as OfferSelectionScreenArgs;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return OfferSelectionScreen(
+                    offerApplyBloc: args.offerApplyBloc,
+                  );
+                },
+              );
+            }
+            if (settings.name == StoreGalleryViewScreen.route) {
+              final args = settings.arguments as StoreGalleryViewArguments;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return StoreGalleryViewScreen(
+                    images: args.images,
                   );
                 },
               );

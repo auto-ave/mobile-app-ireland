@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
 
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
+import 'package:themotorwash/data/api/api_service.dart';
 import 'package:themotorwash/data/api/auth_interceptor.dart';
 import 'package:themotorwash/data/api/log_interceptor.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
+import 'package:themotorwash/data/repos/auth_repository.dart';
+import 'package:themotorwash/data/repos/auth_rest_repository.dart';
 
 class ApiConstants {
   final GlobalAuthBloc _globalAuthBloc;
@@ -23,13 +26,17 @@ class ApiConstants {
         headers: headers);
     Dio client = Dio(options);
     client.interceptors.add(Logging());
-    client.interceptors.add(AuthInterceptor(globalAuthBloc: _globalAuthBloc));
+    client.interceptors.add(AuthInterceptor(
+      globalAuthBloc: _globalAuthBloc,
+    ));
 
     return client;
   }
 
   // final String baseUrl = "motorwash.herokuapp.com";
-  final String baseUrl = "testapi.autoave.in";
+  final String baseUrl = "api.autoave.in";
+
+  // final String baseUrl = "testapi.autoave.in";
   final int pageLimit = 10;
 
   String getStoreListEndPoint() {
@@ -40,13 +47,17 @@ class ApiConstants {
       {required String city,
       required double lat,
       required double long,
-      required int offset}) {
+      required int offset,
+      String? tag}) {
     Map<String, dynamic> params = {
       'offset': offset.toString(),
       'limit': pageLimit.toString(),
       'latitude': lat.toString(),
       'longitude': long.toString()
     };
+    if (tag != null) {
+      params.addAll({'tag': tag});
+    }
     var uri = Uri.https(baseUrl, "/store/list/$city", params);
     return uri.toString();
   }
@@ -159,7 +170,7 @@ class ApiConstants {
       'offset': offset.toString(),
       'limit': pageLim != null ? pageLim.toString() : pageLimit.toString()
     };
-    var uri = Uri.https(baseUrl, "/service/list/", params);
+    var uri = Uri.https(baseUrl, "/service/tag/list/", params);
     return uri.toString();
   }
 
@@ -244,6 +255,21 @@ class ApiConstants {
 
   String postCancelBookingEndpoint({required String bookingId}) {
     var uri = Uri.https(baseUrl, "/booking/cancel/$bookingId/");
+    return uri.toString();
+  }
+
+  String getOfferListEndpoint() {
+    var uri = Uri.https(baseUrl, "/offer/list/");
+    return uri.toString();
+  }
+
+  String getOfferBannersEndpoint() {
+    var uri = Uri.https(baseUrl, "/offer/banner/");
+    return uri.toString();
+  }
+
+  String postOfferApplyEndpoint() {
+    var uri = Uri.https(baseUrl, "/offer/apply/");
     return uri.toString();
   }
 }

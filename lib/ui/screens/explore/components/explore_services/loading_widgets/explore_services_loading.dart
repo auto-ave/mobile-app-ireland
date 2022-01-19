@@ -32,14 +32,25 @@ class ExploreServicesGridLoading extends StatelessWidget {
             ),
           ),
         ),
-        SliverGrid.count(
-          crossAxisCount: 3,
-          children: List.filled(6, ExploreServicesLoadingTile()),
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 0,
+        Center(
+          child: Wrap(
+            spacing: 16,
+            runSpacing: 32,
+            // alignment: WrapAlignment.spaceAround,
+            // crossAxisAlignment: WrapCrossAlignment.start,
 
-          // childAspectRatio: 1.5,
+            children: List.filled(6, ExploreServicesLoadingTile()),
+          ),
         ),
+        SizeConfig.kverticalMargin16,
+        // SliverGrid.count(
+        //   crossAxisCount: 3,
+        //   children: List.filled(6, ExploreServicesLoadingTile()),
+        //   mainAxisSpacing: 8,
+        //   crossAxisSpacing: 0,
+
+        //   // childAspectRatio: 1.5,
+        // ),
       ],
     );
   }

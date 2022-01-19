@@ -18,71 +18,73 @@ class GrantLocationPermissionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Spacer(),
-          SvgPicture.asset('assets/images/grant_location.svg'),
-          SizeConfig.kverticalMargin8,
-          Text(
-            'Hey there, Nice to see you!',
-            textAlign: TextAlign.center,
-            style: SizeConfig.kStyle20W500,
-          ),
-          SizeConfig.kverticalMargin8,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              forPermission
-                  ? 'Would you please permit us to access your location to serve you in nearby places?'
-                  : 'Would you please turn on your location service to serve you in nearby places?',
-              style: SizeConfig.kStyle14.copyWith(
-                color: Color(0xff696969),
-              ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Spacer(),
+            SvgPicture.asset('assets/images/grant_location.svg'),
+            SizeConfig.kverticalMargin8,
+            Text(
+              'Hey there, Nice to see you!',
               textAlign: TextAlign.center,
+              style: SizeConfig.kStyle20W500,
             ),
-          ),
-          SizeConfig.kverticalMargin16,
-          LocationButton(
-              onPressed:
-                  forPermission ? requestPermission : requestLocationService,
-              text: forPermission
-                  ? 'Grant location permission'
-                  : 'Turn on location service'),
-          SizeConfig.kverticalMargin8,
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-
-            onTap: () => globalLocationBloc
-                .add(SkipUserLocation()), //TODO : Get lat long for banglore
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Skip for now',
-                  style: SizeConfig.kStyle16PrimaryColor,
+            SizeConfig.kverticalMargin8,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Text(
+                forPermission
+                    ? 'Would you please permit us to access your location to serve you in nearby places?'
+                    : 'Would you please turn on your location service to serve you in nearby places?',
+                style: SizeConfig.kStyle14.copyWith(
+                  color: Color(0xff696969),
                 ),
-                Icon(
-                  Icons.arrow_forward,
-                  color: SizeConfig.kPrimaryColor,
-                  size: 20,
-                )
-              ],
-            ),
-          ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              'We only access your location while you are using the app to improve your experience',
-              textAlign: TextAlign.center,
-              style: SizeConfig.kStyle14.copyWith(
-                color: Color(0xff696969),
+                textAlign: TextAlign.center,
               ),
             ),
-          ),
-        ],
+            SizeConfig.kverticalMargin16,
+            LocationButton(
+                onPressed:
+                    forPermission ? requestPermission : requestLocationService,
+                text: forPermission
+                    ? 'Grant location permission'
+                    : 'Turn on location service'),
+            SizeConfig.kverticalMargin8,
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+
+              onTap: () => globalLocationBloc
+                  .add(SkipUserLocation()), //TODO : Get lat long for banglore
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Skip for now',
+                    style: SizeConfig.kStyle16PrimaryColor,
+                  ),
+                  Icon(
+                    Icons.arrow_forward,
+                    color: SizeConfig.kPrimaryColor,
+                    size: 20,
+                  )
+                ],
+              ),
+            ),
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Text(
+                'We only access your location while you are using the app to improve your experience',
+                textAlign: TextAlign.center,
+                style: SizeConfig.kStyle14.copyWith(
+                  color: Color(0xff696969),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

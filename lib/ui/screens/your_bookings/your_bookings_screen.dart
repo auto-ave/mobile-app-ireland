@@ -6,6 +6,7 @@ import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
+import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/bloc/your_bookings_bloc.dart';
 import 'package:themotorwash/ui/screens/your_bookings/components/your_bookings_tile.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
@@ -13,8 +14,10 @@ import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
 import 'package:themotorwash/utils/utils.dart';
 
 class YourBookingsScreen extends StatefulWidget {
+  final bool fromBookingSummary;
   static final String route = '/yourBookingsScreen';
-  YourBookingsScreen({Key? key}) : super(key: key);
+  YourBookingsScreen({Key? key, required this.fromBookingSummary})
+      : super(key: key);
 
   @override
   _YourBookingsScreenState createState() => _YourBookingsScreenState();
@@ -34,7 +37,15 @@ class _YourBookingsScreenState extends State<YourBookingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return WillPopScope(
+      onWillPop: () async {
+        if (widget.fromBookingSummary) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, ExploreScreen.route, (route) => false);
+          return false;
+        }
+        return true;
+      },
       child: Scaffold(
         appBar: getAppBarWithBackButton(context: context),
         body: LazyLoadScrollView(

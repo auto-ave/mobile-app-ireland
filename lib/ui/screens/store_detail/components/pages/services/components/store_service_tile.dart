@@ -7,6 +7,7 @@ import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/widgets/authentication_bottom_sheet.dart';
 import 'package:themotorwash/ui/widgets/badge.dart';
 import 'package:themotorwash/utils/utils.dart';
+import 'package:expandable_text/expandable_text.dart';
 
 class StoreServiceTile extends StatelessWidget {
   final String description;
@@ -60,37 +61,59 @@ class StoreServiceTile extends StatelessWidget {
           children: <Widget>[
             Row(
               children: [
-                Text(
-                  service,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: SizeConfig.kPrimaryColor),
+                Expanded(
+                  child: Text(
+                    service,
+                    maxLines: 10,
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: SizeConfig.kPrimaryColor,
+                        overflow: TextOverflow.ellipsis),
+                  ),
                 ),
-                Spacer(),
-                BadgeWidget(text: '$time mins'),
+                BadgeWidget(
+                  text: '$time mins',
+                  textStyle: SizeConfig.kStyle14Bold
+                      .copyWith(color: SizeConfig.kPrimaryColor),
+                ),
               ],
             ),
             SizedBox(
               height: 8,
             ),
-            Text(
+            ExpandableText(
               description,
-              maxLines: 8,
-              overflow: TextOverflow.ellipsis,
+              expandText: 'show more',
+              collapseText: 'show less',
+              maxLines: 3,
+              linkColor: Colors.blue,
+
+              linkStyle: SizeConfig.kStyle16Bold,
+
+              // textAlign: TextAlign.left,
+              // prefixStyle: ,
             ),
+            // Text(
+            //   description,
+            //   maxLines: 8,
+            //   overflow: TextOverflow.ellipsis,
+            // ),
             SizedBox(
               height: 8,
             ),
-            Text(
-              "More info",
-              style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: SizeConfig.kPrimaryColor),
-            ),
+            // Text(
+            //   "More info",
+            //   style: TextStyle(
+            //       decoration: TextDecoration.underline,
+            //       color: SizeConfig.kPrimaryColor),
+            // ),
             Row(
               children: <Widget>[
-                Text("₹ $price"),
+                Text(
+                  "₹ $price",
+                  style: SizeConfig.kStyle16W500,
+                ),
                 Spacer(),
                 BlocBuilder<GlobalAuthBloc, GlobalAuthState>(
                   bloc: globalAuthBloc,

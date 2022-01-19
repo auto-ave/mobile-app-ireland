@@ -40,37 +40,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         bloc: _profileBloc,
         builder: (context, state) {
           return Scaffold(
-              persistentFooterButtons:
-                  state is LoadingProfile || state is FailedToLoadProfile
-                      ? null
-                      : [
-                          CommonTextButton(
-                            child: state is UpdatingProfile
-                                ? SizedBox(
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      backgroundColor: Colors.white,
-                                    ),
-                                    width: 25,
-                                    height: 25,
-                                  )
-                                : Text('Save',
-                                    style: TextStyle(color: Colors.white)),
-                            onPressed: () {
-                              if (!(state is LoadingProfile ||
-                                  state is UpdatingProfile)) {
-                                if (_formKey.currentState!.validate()) {
-                                  _profileBloc.add(UpdateProfile(
-                                      userProfileEntity: UserProfileEntity(
-                                          email: emailController.text,
-                                          firstName: firstNameController.text,
-                                          lastName: lastNameController.text)));
-                                }
-                              }
-                            },
-                            backgroundColor: SizeConfig.kPrimaryColor,
-                          )
-                        ],
+              // persistentFooterButtons:
+
               appBar: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.white,
@@ -138,68 +109,121 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       state is ProfileUpdated ||
                       state is UpdatingProfile ||
                       state is FailedToUpdateProfile) {
-                    return SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          children: [
-                            Stack(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(50.0)),
-                                      border: Border.all(
-                                          color: SizeConfig.kPrimaryColor,
-                                          width: 2)),
-                                  child:
-                                      Image.asset('assets/images/avatar.png'),
-                                ),
-                                // Positioned(
-                                //   child: Container(
-                                //     height: 24,
-                                //     width: 24,
-                                //     child: Center(
-                                //       child: Icon(
-                                //         Icons.edit,
-                                //         color: Colors.white,
-                                //         size: 12,
-                                //       ),
-                                //     ),
-                                //     decoration: BoxDecoration(
-                                //         borderRadius: BorderRadius.circular(4),
-                                //         color: SizeConfig.kPrimaryColor),
-                                //   ),
-                                //   bottom: 0,
-                                //   right: 0,
-                                // )
-                              ],
-                            ),
-                            SizeConfig.kverticalMargin16,
-                            SizeConfig.kverticalMargin8,
-                            Form(
-                              key: _formKey,
+                    return Stack(
+                      children: [
+                        Positioned.fill(
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Column(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CommonTextField(
-                                      fieldName: 'First Name',
-                                      fieldController: firstNameController),
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50.0)),
+                                            border: Border.all(
+                                                color: SizeConfig.kPrimaryColor,
+                                                width: 2)),
+                                        child: Image.asset(
+                                            'assets/images/avatar.png'),
+                                      ),
+                                      // Positioned(
+                                      //   child: Container(
+                                      //     height: 24,
+                                      //     width: 24,
+                                      //     child: Center(
+                                      //       child: Icon(
+                                      //         Icons.edit,
+                                      //         color: Colors.white,
+                                      //         size: 12,
+                                      //       ),
+                                      //     ),
+                                      //     decoration: BoxDecoration(
+                                      //         borderRadius: BorderRadius.circular(4),
+                                      //         color: SizeConfig.kPrimaryColor),
+                                      //   ),
+                                      //   bottom: 0,
+                                      //   right: 0,
+                                      // )
+                                    ],
+                                  ),
                                   SizeConfig.kverticalMargin16,
-                                  CommonTextField(
-                                      fieldName: 'Last Name',
-                                      fieldController: lastNameController),
-                                  SizeConfig.kverticalMargin16,
-                                  CommonTextField(
-                                      validator: validateEmail,
-                                      fieldName: 'Email',
-                                      fieldController: emailController),
+                                  SizeConfig.kverticalMargin8,
+                                  Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        CommonTextField(
+                                          fieldName: 'First Name',
+                                          fieldController: firstNameController,
+                                          maxLines: 1,
+                                        ),
+                                        SizeConfig.kverticalMargin16,
+                                        CommonTextField(
+                                          fieldName: 'Last Name',
+                                          fieldController: lastNameController,
+                                          maxLines: 1,
+                                        ),
+                                        SizeConfig.kverticalMargin16,
+                                        CommonTextField(
+                                          validator: validateEmail,
+                                          fieldName: 'Email',
+                                          fieldController: emailController,
+                                          maxLines: 1,
+                                        ),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
-                            )
-                          ],
+                            ),
+                          ),
                         ),
-                      ),
+                        Positioned(
+                            bottom: 0,
+                            right: 0,
+                            left: 0,
+                            child: state is LoadingProfile ||
+                                    state is FailedToLoadProfile
+                                ? SizedBox.shrink()
+                                : CommonTextButton(
+                                    child: state is UpdatingProfile
+                                        ? SizedBox(
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              backgroundColor: Colors.white,
+                                            ),
+                                            width: 25,
+                                            height: 25,
+                                          )
+                                        : Text('Save',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                    onPressed: () {
+                                      if (!(state is LoadingProfile ||
+                                          state is UpdatingProfile)) {
+                                        if (_formKey.currentState!.validate()) {
+                                          _profileBloc.add(UpdateProfile(
+                                              userProfileEntity:
+                                                  UserProfileEntity(
+                                                      email:
+                                                          emailController.text,
+                                                      firstName:
+                                                          firstNameController
+                                                              .text,
+                                                      lastName:
+                                                          lastNameController
+                                                              .text)));
+                                        }
+                                      }
+                                    },
+                                    backgroundColor: SizeConfig.kPrimaryColor,
+                                  ))
+                      ],
                     );
                   }
                   return Center(

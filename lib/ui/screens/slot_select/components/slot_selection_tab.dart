@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/slot_select/components/no_slots_widget.dart';
@@ -66,7 +67,10 @@ class SlotSelectionTab extends StatelessWidget {
                 endTime: item.endTime,
                 isSelected: currentSelectedTabIndex == index,
                 slotsAvailable: item.slotsAvailable,
-                onTap: (tabIndex) => onTap(tabIndex),
+                onTap: (tabIndex) {
+                  onTap(tabIndex);
+                  HapticFeedback.selectionClick();
+                },
                 tabIndex: index,
               );
             },

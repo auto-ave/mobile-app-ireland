@@ -7,13 +7,20 @@ class NoServiceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: [
-      Image.asset('assets/images/no_services.png'),
-      SizeConfig.kverticalMargin16,
-      Text(
-        'Sorry we don’t have services your vehicle',
-        style: SizeConfig.kStyle16.copyWith(color: SizeConfig.kGreyTextColor),
-      )
-    ]);
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          SvgPicture.asset('assets/images/no_services.svg'),
+          SizeConfig.kverticalMargin16,
+          Text(
+            'Sorry we don’t have services your vehicle',
+            textAlign: TextAlign.center,
+            style:
+                SizeConfig.kStyle16.copyWith(color: SizeConfig.kGreyTextColor),
+          )
+        ]),
+      ),
+    );
   }
 }

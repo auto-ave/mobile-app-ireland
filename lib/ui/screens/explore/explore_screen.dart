@@ -14,6 +14,7 @@ import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
 import 'package:themotorwash/blocs/location_functions/bloc/location_functions_bloc.dart';
+import 'package:themotorwash/blocs/offer_banners/offer_banners_bloc.dart';
 import 'package:themotorwash/blocs/search_services/search_services_bloc.dart';
 import 'package:themotorwash/blocs/search_stores/search_stores_bloc.dart';
 import 'package:themotorwash/data/models/location_model.dart';
@@ -30,6 +31,7 @@ import 'package:themotorwash/ui/screens/explore/components/initial_search_screen
 import 'package:themotorwash/ui/screens/explore/components/search_overlay.dart';
 import 'package:themotorwash/ui/screens/explore/components/search_service_tile.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_stores/store_tile.dart';
+import 'package:themotorwash/ui/screens/login/login_screen.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/cart_bottom_sheet.dart';
 import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/screens/store_list/bloc/store_list_bloc.dart';
@@ -69,6 +71,7 @@ class _ExploreScreenState extends State<ExploreScreen>
       RefreshController(initialRefresh: false);
   late CartFunctionBloc _cartFunctionBloc;
   late GlobalAuthBloc _globalAuthBloc;
+  late final OfferBannersBloc _bannersBloc;
   // late final AnimationController _animationController;
   // late final Animation _appBarAnimation;
   double begin = 0;
@@ -111,6 +114,8 @@ class _ExploreScreenState extends State<ExploreScreen>
     // });
     // _animationController.forward();
     _cartFunctionBloc = BlocProvider.of<CartFunctionBloc>(context);
+    _bannersBloc = OfferBannersBloc(
+        repository: RepositoryProvider.of<Repository>(context));
     if (_globalAuthBloc.state is Authenticated) {
       print('if called');
       _cartFunctionBloc.add(GetCart());
@@ -120,6 +125,10 @@ class _ExploreScreenState extends State<ExploreScreen>
   @override
   Widget build(BuildContext context) {
     // print(_appBarAnimation.value.toString() + " value ");
+    // Future.delayed(Duration(seconds: 1)).then((value) =>
+    //     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
     print("helofrom" + MediaQuery.of(context).padding.top.toString());
     return WillPopScope(
       onWillPop: () async {
@@ -131,46 +140,55 @@ class _ExploreScreenState extends State<ExploreScreen>
         }
       },
       child: Scaffold(
-        body: BlocConsumer<GlobalLocationBloc, GlobalLocationState>(
-            bloc: _globalLocationBloc,
-            listener: (context, state) {
-              if (state is LocationSet) {
-                _storeListBloc
-                    .add(LoadNearbyStoreList(offset: 0, forLoadMore: false));
-              }
-              if (state is GlobalLocationError) {
-                showSnackbar(
-                    context, 'Failed to set location. Please try againg later');
-              }
-            },
-            builder: (_, state) {
-              if (state is LocationSet) {
-                return _buildScreen(state);
-              }
-              if (state is LocationPermissionError) {
-                return GrantLocationPermissionScreen(
-                  globalLocationBloc: _globalLocationBloc,
-                  forPermission: true,
+        body: BlocListener<GlobalAuthBloc, GlobalAuthState>(
+          listener: (context, state) {
+            if (state is Unauthenticated) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, LoginScreen.route, (route) => false);
+            }
+          },
+          child: BlocConsumer<GlobalLocationBloc, GlobalLocationState>(
+              bloc: _globalLocationBloc,
+              listener: (context, state) {
+                if (state is LocationSet) {
+                  print('Location Set');
+                  _storeListBloc
+                      .add(LoadNearbyStoreList(offset: 0, forLoadMore: false));
+                }
+                if (state is GlobalLocationError) {
+                  showSnackbar(context,
+                      'Failed to set location. Please try againg later');
+                }
+              },
+              builder: (_, state) {
+                if (state is LocationSet) {
+                  return _buildScreen(state);
+                }
+                if (state is LocationPermissionError) {
+                  return GrantLocationPermissionScreen(
+                    globalLocationBloc: _globalLocationBloc,
+                    forPermission: true,
+                  );
+                }
+                if (state is LocationServiceNotEnabledError) {
+                  return GrantLocationPermissionScreen(
+                    globalLocationBloc: _globalLocationBloc,
+                    forPermission: false,
+                  );
+                }
+                if (state is GlobalLocationError) {
+                  return GrantLocationPermissionScreen(
+                    globalLocationBloc: _globalLocationBloc,
+                    forPermission: true,
+                  );
+                }
+                print('state is $state');
+                return Center(
+                  // child: Text('herllasdlas'),
+                  child: loadingAnimation(),
                 );
-              }
-              if (state is LocationServiceNotEnabledError) {
-                return GrantLocationPermissionScreen(
-                  globalLocationBloc: _globalLocationBloc,
-                  forPermission: false,
-                );
-              }
-              if (state is GlobalLocationError) {
-                return GrantLocationPermissionScreen(
-                  globalLocationBloc: _globalLocationBloc,
-                  forPermission: true,
-                );
-              }
-              print('state is $state');
-              return Center(
-                // child: Text('herllasdlas'),
-                child: loadingAnimation(),
-              );
-            }),
+              }),
+        ),
       ),
     );
   }
@@ -180,15 +198,24 @@ class _ExploreScreenState extends State<ExploreScreen>
       duration: Duration(milliseconds: 200),
       tween: Tween<double>(begin: begin, end: end),
       builder: (context, double value, child) {
-        return Scaffold(
-          appBar: _buildAppBar(locationState.location, value),
-          endDrawer:
-              //  AnnotatedRegion<SystemUiOverlayStyle>(
-              //     value: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-              //     child:
-              AppDrawer(),
-          // ),
-          body: child,
+        return BlocListener<GlobalAuthBloc, GlobalAuthState>(
+          listener: (context, state) {
+            // TODO: implement listenerprint('Satate' + state.toString());
+            if (state is Unauthenticated) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, LoginScreen.route, (route) => false);
+            }
+          },
+          child: Scaffold(
+            appBar: _buildAppBar(locationState.location, value),
+            endDrawer:
+                //  AnnotatedRegion<SystemUiOverlayStyle>(
+                //     value: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+                //     child:
+                AppDrawer(),
+            // ),
+            body: child,
+          ),
         );
       },
       child: Column(
@@ -301,6 +328,7 @@ class _ExploreScreenState extends State<ExploreScreen>
       _storeListBloc.add(LoadNearbyStoreList(offset: 0, forLoadMore: false));
       _privateSearchServicesBloc.add(SearchServices(
           query: '', forLoadMore: false, offset: 0, pageLimit: 6));
+      _bannersBloc.add(GetOffersBanners());
     }
   }
 
@@ -321,7 +349,9 @@ class _ExploreScreenState extends State<ExploreScreen>
           controller: _refreshController,
           onRefresh: _onRefresh,
           child: CustomScrollView(slivers: [
-            ExploreFeaturedCarousel(),
+            ExploreFeaturedCarousel(
+              bannersBloc: _bannersBloc,
+            ),
             SliverToBoxAdapter(
               child: SizeConfig.kverticalMargin16,
             ),
@@ -338,6 +368,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                               .map((e) => ExploreServiceTile(
                                     imageUrl: e.thumbnail!,
                                     serviceName: e.name!,
+                                    serviceTag: e.slug,
                                   ))
                               .toList(),
                         )
@@ -363,9 +394,9 @@ class _ExploreScreenState extends State<ExploreScreen>
             BlocConsumer<StoreListBloc, StoreListState>(
                 listener: (_, state) {
                   if (state is StoreListLoaded) {
-                    setState(
-                        () {}); //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
+                    //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
                     _refreshController.refreshCompleted();
+                    setState(() {});
                   }
                 },
                 bloc: _storeListBloc,

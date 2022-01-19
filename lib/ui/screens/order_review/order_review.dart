@@ -20,6 +20,7 @@ import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
 import 'package:themotorwash/ui/screens/payment_choice/payment_choice.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/services/components/vehicle_selected_info.dart';
+import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/utils/utils.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
 
@@ -222,40 +223,56 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       required TextStyle rightStyle}) {
     return Row(
       children: <Widget>[
-        Text(
-          leftText,
-          style: leftStyle,
+        Expanded(
+          child: Text(
+            leftText,
+            style: leftStyle,
+          ),
         ),
-        Spacer(),
+        SizedBox(
+          width: 8,
+        ),
         Text(rightText, style: rightStyle),
       ],
     );
   }
 
   Widget buildBottom({required Slot slot}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: <Widget>[
-          Divider(
-            thickness: 1,
-          ),
-          TextButton(
-            child: Text('Proceed to payment',
-                style: SizeConfig.kStyle16W500.copyWith(color: Colors.white)),
-            onPressed: () {
-              Navigator.of(context).pushNamed(PaymentChoiceScreen.route,
-                  arguments: PaymentChoiceScreenArguments(
-                      slot: slot, dateSelected: widget.dateSelected));
-            },
-            style: ButtonStyle(
-                padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(horizontal: 16)),
-                backgroundColor: MaterialStateProperty.all(Colors.green)),
-          ),
-        ],
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Divider(
+              thickness: 1,
+            ),
+            Container(
+              width: SizeConfig.screenWidth,
+              child: CommonTextButton(
+                child: Text(
+                  'Proceed to payment',
+                  style: SizeConfig.kStyle14W500.copyWith(
+                    color: Colors.white,
+                  ),
+                  textScaleFactor: 1,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(PaymentChoiceScreen.route,
+                      arguments: PaymentChoiceScreenArguments(
+                          slot: slot, dateSelected: widget.dateSelected));
+                },
+                backgroundColor: Colors.green,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                // style: ButtonStyle(
+                //     padding: MaterialStateProperty.all(
+                //         EdgeInsets.symmetric(horizontal: 16)),
+                //     backgroundColor: MaterialStateProperty.all(Colors.green)),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

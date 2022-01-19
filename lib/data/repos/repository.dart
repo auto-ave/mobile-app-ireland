@@ -5,6 +5,7 @@ import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/location_model.dart';
+import 'package:themotorwash/data/models/offer.dart';
 import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/review.dart';
@@ -19,7 +20,7 @@ import 'package:themotorwash/data/models/vehicle_wheel.dart';
 
 abstract class Repository {
   Future<List<StoreListModel>> getStoreListByLocation(
-      {required LocationModel locationModel, required int offset});
+      {required LocationModel locationModel, required int offset, String? tag});
   Future<Store> getStoreDetailBySlug({required String slug});
   Future<List<Review>> getStoreReviewsBySlug(
       {required String slug, required int offset});
@@ -68,4 +69,7 @@ abstract class Repository {
   Future<CancelBookingData> getCancelBookingData({required String bookingId});
   Future<void> cancelBooking(
       {required String bookingId, required String reason});
+  Future<List<OfferModel>> getOfferList();
+  Future<List<OfferModel>> getOfferBanners();
+  Future<CartModel> applyOffer(String code);
 }

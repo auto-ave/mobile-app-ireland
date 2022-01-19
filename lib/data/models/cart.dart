@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:themotorwash/data/models/offer.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/vehicle_model.dart';
@@ -19,19 +20,22 @@ class CartModel {
   final List<PriceTimeListModel>? itemsObj;
   final VehicleModel? vehicleModel;
   final VehicleTypeModel? vehicleType;
-  CartModel({
-    this.id,
-    this.createdAt,
-    this.subTotal,
-    this.total,
-    this.completed,
-    this.store,
-    this.consumer,
-    this.items,
-    this.itemsObj,
-    this.vehicleModel,
-    this.vehicleType,
-  });
+  final OfferModel? offer;
+  final String? discount;
+  CartModel(
+      {this.id,
+      this.createdAt,
+      this.subTotal,
+      this.total,
+      this.completed,
+      this.store,
+      this.consumer,
+      this.items,
+      this.itemsObj,
+      this.vehicleModel,
+      this.vehicleType,
+      this.discount,
+      this.offer});
 
   factory CartModel.fromEntity(CartEntity entity) {
     return CartModel(
@@ -51,7 +55,15 @@ class CartModel {
             : null,
         vehicleType: entity.vehicleType != null
             ? VehicleTypeModel.fromEntity(entity.vehicleType!)
-            : null);
+            : null,
+        offer:
+            entity.offer != null ? OfferModel.fromEntity(entity.offer!) : null,
+        discount: entity.discount);
+  }
+
+  @override
+  String toString() {
+    return 'CartModel(id: $id, createdAt: $createdAt, subTotal: $subTotal, total: $total, completed: $completed, store: $store, consumer: $consumer, items: $items, itemsObj: $itemsObj, vehicleModel: $vehicleModel, vehicleType: $vehicleType, offer: $offer)';
   }
 }
 
@@ -75,19 +87,23 @@ class CartEntity {
   final List<PriceTimeListEntity>? itemsObj;
   @JsonKey(name: 'vehicle_type')
   final VehicleTypeEntity? vehicleType;
-  CartEntity({
-    this.id,
-    this.createdAt,
-    this.subTotal,
-    this.total,
-    this.completed,
-    this.store,
-    this.consumer,
-    this.items,
-    this.itemsObj,
-    this.vehicleModel,
-    this.vehicleType,
-  });
+
+  final String? discount;
+  final OfferEntity? offer;
+  CartEntity(
+      {this.id,
+      this.createdAt,
+      this.subTotal,
+      this.total,
+      this.completed,
+      this.store,
+      this.consumer,
+      this.items,
+      this.itemsObj,
+      this.vehicleModel,
+      this.vehicleType,
+      this.discount,
+      this.offer});
 
   factory CartEntity.fromJson(Map<String, dynamic> data) =>
       _$CartEntityFromJson(data);

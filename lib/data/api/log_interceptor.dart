@@ -22,8 +22,8 @@ class Logging extends Interceptor {
 
   @override
   Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
-    await FirebaseCrashlytics.instance
-        .recordError(err, StackTrace.current, reason: 'DIO error');
+    await FirebaseCrashlytics.instance.recordError(err, StackTrace.current,
+        reason: 'DIO error' + err.response.toString());
     Clipboard.setData(ClipboardData(text: err.response?.toString()));
     print(
       'ERROR[${err.response?.toString()}] => PATH: ${err.requestOptions.path}',

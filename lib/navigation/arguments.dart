@@ -1,3 +1,4 @@
+import 'package:themotorwash/blocs/offer_apply/bloc/offer_apply_bloc.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/slot.dart';
 
@@ -9,10 +10,9 @@ class StoreDetailArguments {
 class StoreListArguments {
   final String city;
   final String title;
-  StoreListArguments({
-    required this.city,
-    required this.title,
-  });
+  final String? serviceTag;
+  StoreListArguments(
+      {required this.city, required this.title, this.serviceTag});
 }
 
 class BookingSummaryScreenArguments {
@@ -80,5 +80,26 @@ class CancelOrderScreenArguments {
   final String bookingId;
   CancelOrderScreenArguments({
     required this.bookingId,
+  });
+}
+
+class YourBookingsScreenArguments {
+  final bool fromBookingSummary;
+  YourBookingsScreenArguments({
+    required this.fromBookingSummary,
+  });
+}
+
+class StoreGalleryViewArguments {
+  final List<String> images;
+  StoreGalleryViewArguments({
+    required this.images,
+  });
+}
+
+class OfferSelectionScreenArgs {
+  final OfferApplyBloc offerApplyBloc;
+  OfferSelectionScreenArgs({
+    required this.offerApplyBloc,
   });
 }

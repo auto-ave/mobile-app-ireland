@@ -33,7 +33,7 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
     } else if (event is LoadStoreListByService) {
       yield* _mapLoadStoreListByServiceToState(
           offset: event.offset,
-          service: event.service,
+          serviceTag: event.serviceTag,
           forLoadMore: event.forLoadMore);
     }
   }
@@ -76,26 +76,38 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
 
   Stream<StoreListState> _mapLoadStoreListByServiceToState(
       {required int offset,
-      required String service,
+      required String serviceTag,
       required bool forLoadMore}) async* {
-//  if (!_hasReachedMax(state)) {
-//       try {
-//         if (state is StoreListLoaded) {
-//           yield StoreListLoading();
-//         }
-//         List<StoreListModel> stores =
-//             state is StoreListLoaded ? (state as StoreListLoaded).stores : [];
+    if (!hasReachedMax(state, forLoadMore)) {
+      try {
+        var locationState = _globalLocationBloc.state as LocationSet;
 
-//         List<StoreListModel> moreStores =
-//             await _repository.getStoreListByLocation(
-//                 locationModel:
-//                     LocationModel(city: '462001', lat: 7.123, long: 23.123),
-//                 offset: offset);
-//         yield StoreListLoaded(
-//             stores: stores + moreStores, hasReachedMax: moreStores.isEmpty);
-//       } catch (e) {
-//         yield StoreListError(message: e.toString());
-//       }
-//     }
+        List<StoreListModel> stores = [];
+        if (state is StoreListLoaded && forLoadMore) {
+          yield MoreStoreListLoading();
+          stores = (state as StoreListLoaded).stores;
+        } else {
+          yield StoreListLoading();
+        }
+
+        List<StoreListModel> moreStores =
+            await _repository.getStoreListByLocation(
+                locationModel: locationState.location,
+                offset: offset,
+                tag: serviceTag);
+        yield StoreListLoaded(
+            stores: stores + moreStores,
+            hasReachedMax: moreStores.length != 10); //Page limit 10
+      } catch (e) {
+        print('HEllo there crashlytics');
+        // await FirebaseCrashlytics.instance.recordError(e, null);
+        yield StoreListError(message: e.toString());
+      }
+      // try {
+      //   throw Exception(['Hellloo error brother']);
+      // } catch (e) {
+      //   await FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
+      // }
+    }
   }
 }

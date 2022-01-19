@@ -29,6 +29,10 @@ CartEntity _$CartEntityFromJson(Map<String, dynamic> json) {
         ? null
         : VehicleTypeEntity.fromJson(
             json['vehicle_type'] as Map<String, dynamic>),
+    discount: json['discount'] as String?,
+    offer: json['offer'] == null
+        ? null
+        : OfferEntity.fromJson(json['offer'] as Map<String, dynamic>),
   );
 }
 
@@ -45,4 +49,6 @@ Map<String, dynamic> _$CartEntityToJson(CartEntity instance) =>
       'vehicle_model': instance.vehicleModel?.toJson(),
       'item_objs': instance.itemsObj?.map((e) => e.toJson()).toList(),
       'vehicle_type': instance.vehicleType?.toJson(),
+      'discount': instance.discount,
+      'offer': instance.offer?.toJson(),
     };

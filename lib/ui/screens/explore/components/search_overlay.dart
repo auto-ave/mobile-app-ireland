@@ -169,6 +169,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
                                               .map((e) => SearchServiceTile(
                                                     imageUrl: e.thumbnail!,
                                                     serviceName: e.name!,
+                                                    serviceTag: e.slug,
                                                   ))
                                               .toList(),
                                     ),

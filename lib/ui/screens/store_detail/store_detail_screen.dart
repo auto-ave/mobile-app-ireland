@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/data/models/store.dart';
+import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_detail_bloc.dart';
+import 'package:themotorwash/ui/screens/store_detail/components/pages/gallery/gallery_view.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/store_overview_tab.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/reviews/store_reviews_tab.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/services/store_services_tab.dart';
@@ -156,14 +158,39 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
                         iconTheme: IconThemeData(color: Colors.black),
                         // collapsedHeight: SizeConfig.mediaQueryData.padding.top,
                         // toolbarHeight: SizeConfig.mediaQueryData.padding.top,
+                        automaticallyImplyLeading: false,
+                        actions: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: MaterialButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              color: Colors.white,
+                              textColor: Colors.grey,
+                              child: Icon(
+                                Icons.chevron_left,
+                                size: 30,
+                              ),
+                              shape: CircleBorder(),
+                              minWidth: 38,
+                            ),
+                          ),
+                          Spacer(),
+                        ],
 
                         flexibleSpace: FlexibleSpaceBar(
                           title: FlexibleTitleVisibilityController(
                             child: Text(
                               storeName ?? "",
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
+                              textScaleFactor: 1,
                             ),
                           ),
+                          centerTitle: false,
                           background: Stack(
                             children: [
                               CarouselSlider(
@@ -177,16 +204,24 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
                                 items: store.images!.map<Widget>((i) {
                                   return Builder(
                                     builder: (BuildContext context) {
-                                      return Container(
-                                        color: Colors.amber,
-                                        child: CachedNetworkImage(
-                                          placeholder: (_, __) {
-                                            return ShimmerPlaceholder();
-                                          },
-                                          imageUrl: i,
-                                          width: 100.w,
-                                          height: 100.w * 9 / 16,
-                                          fit: BoxFit.cover,
+                                      return GestureDetector(
+                                        onTap: () => Navigator.pushNamed(
+                                            context,
+                                            StoreGalleryViewScreen.route,
+                                            arguments:
+                                                StoreGalleryViewArguments(
+                                                    images: store.images!)),
+                                        child: Container(
+                                          color: Colors.amber,
+                                          child: CachedNetworkImage(
+                                            placeholder: (_, __) {
+                                              return ShimmerPlaceholder();
+                                            },
+                                            imageUrl: i,
+                                            width: 100.w,
+                                            height: 100.w * 9 / 16,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       );
                                     },

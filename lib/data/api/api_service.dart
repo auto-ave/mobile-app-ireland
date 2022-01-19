@@ -13,6 +13,7 @@ import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/fcm_topic.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/offer.dart';
 import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
@@ -53,10 +54,11 @@ class ApiService implements ApiMethods {
       {required String city,
       required double lat,
       required double long,
-      required int offset}) async {
+      required int offset,
+      String? tag}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.getStoreListByLocationEndPoint(
-        city: city, lat: lat, long: long, offset: offset);
+        city: city, lat: lat, long: long, offset: offset, tag: tag);
 
     Response res = await client.get(url);
 
@@ -251,6 +253,7 @@ class ApiService implements ApiMethods {
       {required PaytmPaymentResponseEntity paymentResponseEntity}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postCheckPaytmPaymentStatusEndpoint();
+    print("jjjj" + paymentResponseEntity.toJson().toString());
     Response res = await client.post(url, data: paymentResponseEntity.toJson());
     print(res.toString() + "response");
     dynamic data = jsonDecode(res.data);
@@ -503,5 +506,39 @@ class ApiService implements ApiMethods {
     String url = _apiConstants.postCancelBookingEndpoint(bookingId: bookingId);
     Dio client = _apiConstants.dioClient();
     Response res = await client.post(url, data: {'reason': reason});
+  }
+
+  @override
+  Future<List<OfferEntity>> getOfferList() async {
+    String url = _apiConstants.getOfferListEndpoint();
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.get(url);
+    Map<dynamic, dynamic> data = jsonDecode(res.data);
+    List<OfferEntity> offers = data['results']
+        .map<OfferEntity>((e) => OfferEntity.fromJson(e))
+        .toList();
+    return offers;
+  }
+
+  @override
+  Future<List<OfferEntity>> getOfferBanners() async {
+    String url = _apiConstants.getOfferBannersEndpoint();
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.get(url);
+    Map<dynamic, dynamic> data = jsonDecode(res.data);
+    List<OfferEntity> offers = data['results']
+        .map<OfferEntity>((e) => OfferEntity.fromJson(e))
+        .toList();
+    return offers;
+  }
+
+  @override
+  Future<CartEntity> applyOffer(String code) async {
+    String url = _apiConstants.postOfferApplyEndpoint();
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.post(url, data: {"code": code});
+    dynamic data = jsonDecode(res.data);
+    CartEntity cart = CartEntity.fromJson(data['cart']);
+    return cart;
   }
 }

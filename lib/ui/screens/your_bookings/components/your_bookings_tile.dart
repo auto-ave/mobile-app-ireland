@@ -75,8 +75,18 @@ class _YourBookingTileState extends State<YourBookingTile> {
                         return ShimmerPlaceholder();
                       },
                       imageUrl: widget.imageUrl,
-                      height: 50,
-                      width: 50,
+                      imageBuilder: (ctx, imageProvider) {
+                        return Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              )),
+                        );
+                      },
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -96,6 +106,7 @@ class _YourBookingTileState extends State<YourBookingTile> {
                       ],
                     ),
                   ),
+                  SizeConfig.kHorizontalMargin8,
                   Text('₹${widget.total}', style: SizeConfig.kStyle16W500)
                 ]),
                 Divider(),
@@ -137,7 +148,7 @@ class _YourBookingTileState extends State<YourBookingTile> {
                       ),
                     ),
                     SizeConfig.kHorizontalMargin8,
-                    widget.otp != null
+                    widget.status == BookingStatus.paymentSuccess
                         ? Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -150,7 +161,9 @@ class _YourBookingTileState extends State<YourBookingTile> {
                               SizeConfig.kverticalMargin8,
                               BadgeWidget(
                                 text: widget.otp!,
-                                textStyle: SizeConfig.kStyle12PrimaryColor,
+                                textStyle: SizeConfig.kStyle12.copyWith(
+                                    color: SizeConfig.kPrimaryColor,
+                                    fontWeight: FontWeight.bold),
                               ),
                               SizeConfig.kverticalMargin8,
                             ],

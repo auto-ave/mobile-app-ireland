@@ -19,10 +19,12 @@ import 'package:themotorwash/utils/utils.dart';
 class StoreListScreen extends StatefulWidget {
   final String city;
   final String title;
+  final String? serviceTag;
   const StoreListScreen({
     Key? key,
     required this.city,
     required this.title,
+    this.serviceTag,
   }) : super(key: key);
   static final String route = "/storeList";
   @override
@@ -42,7 +44,11 @@ class _StoreListScreenState extends State<StoreListScreen> {
     _storeListBloc = StoreListBloc(
         repository: RepositoryProvider.of<Repository>(context),
         globalLocationBloc: _globalLocationBloc);
-    _storeListBloc.add(LoadNearbyStoreList(offset: 0, forLoadMore: false));
+    widget.serviceTag != null
+        ? _storeListBloc.add(LoadStoreListByService(
+            offset: 0, serviceTag: widget.serviceTag!, forLoadMore: false))
+        : _storeListBloc
+            .add(LoadNearbyStoreList(offset: 0, forLoadMore: false));
   }
 
   @override
@@ -86,27 +92,33 @@ class _StoreListScreenState extends State<StoreListScreen> {
                   if (state is StoreListLoaded) {
                     stores = state.stores;
                   }
-                  return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                    (BuildContext _, int index) {
-                      final store = stores[index];
-                      var tile = StoreSearchTile(
-                        isNew: store.rating == null,
-                        distance: store.distance!,
-                        imageURL: store.thumbnail!,
-                        rating: store.rating ?? 'unrated',
-                        storeName: store.name,
-                        startingFrom: store.servicesStart!,
-                        storeSlug: store.storeSlug!,
-                      );
-                      if (state is MoreStoreListLoading &&
-                          index == stores.length - 1) {
-                        return LoadingMoreTile(tile: tile);
-                      }
-                      return tile;
-                    },
-                    childCount: stores.length,
-                  ));
+                  return stores.isEmpty
+                      ? SliverFillRemaining(
+                          child: Center(
+                            child: Text('No nearby store found'),
+                          ),
+                        )
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                          (BuildContext _, int index) {
+                            final store = stores[index];
+                            var tile = StoreSearchTile(
+                              isNew: store.rating == null,
+                              distance: store.distance!,
+                              imageURL: store.thumbnail!,
+                              rating: store.rating ?? 'unrated',
+                              storeName: store.name,
+                              startingFrom: store.servicesStart!,
+                              storeSlug: store.storeSlug!,
+                            );
+                            if (state is MoreStoreListLoading &&
+                                index == stores.length - 1) {
+                              return LoadingMoreTile(tile: tile);
+                            }
+                            return tile;
+                          },
+                          childCount: stores.length,
+                        ));
                 }
                 if (state is StoreListError) {
                   return SliverFillRemaining(
@@ -138,8 +150,13 @@ class _StoreListScreenState extends State<StoreListScreen> {
     StoreListState currentState = _storeListBloc.state;
     if (!_storeListBloc.hasReachedMax(currentState, true)) {
       if (currentState is StoreListLoaded) {
-        _storeListBloc
-            .add(LoadNearbyStoreList(offset: stores.length, forLoadMore: true));
+        widget.serviceTag != null
+            ? _storeListBloc.add(LoadStoreListByService(
+                offset: stores.length,
+                forLoadMore: true,
+                serviceTag: widget.serviceTag!))
+            : _storeListBloc.add(
+                LoadNearbyStoreList(offset: stores.length, forLoadMore: true));
       }
     }
   }

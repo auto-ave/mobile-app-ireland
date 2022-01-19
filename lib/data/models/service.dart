@@ -12,6 +12,7 @@ class ServiceModel {
   final String? description;
   final String? thumbnail;
   final List<String>? images;
+  final String slug;
   ServiceModel(
       {required this.id,
       required this.createdAt,
@@ -19,7 +20,8 @@ class ServiceModel {
       this.name,
       this.description,
       this.images,
-      this.thumbnail});
+      this.thumbnail,
+      required this.slug});
   factory ServiceModel.fromEntity(ServiceEntity e) {
     return ServiceModel(
         id: e.id,
@@ -28,7 +30,8 @@ class ServiceModel {
         description: e.description,
         images: e.images,
         name: e.name,
-        thumbnail: e.thumbnail);
+        thumbnail: e.thumbnail,
+        slug: e.slug);
   }
 
   @override
@@ -50,6 +53,8 @@ class ServiceEntity {
   final String? description;
   final List<String>? images;
   final String? thumbnail;
+  final String slug;
+
   ServiceEntity(
       {required this.id,
       required this.createdAt,
@@ -57,7 +62,8 @@ class ServiceEntity {
       this.name,
       this.description,
       this.images,
-      this.thumbnail});
+      this.thumbnail,
+      required this.slug});
   factory ServiceEntity.fromJson(Map<String, dynamic> data) =>
       _$ServiceEntityFromJson(data);
 

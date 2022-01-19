@@ -296,7 +296,7 @@ class CancelDescription extends StatelessWidget {
                 )),
           ]))
         : Text(
-            'You will be charged the token amount because the cancellation is after 24 hours of the orignal slot timing');
+            'You will be charged the token amount because the cancellation is after 12 hours of the orignal slot timing');
   }
 }
 

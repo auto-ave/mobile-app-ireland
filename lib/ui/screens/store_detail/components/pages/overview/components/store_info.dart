@@ -5,16 +5,18 @@ import 'package:themotorwash/theme_constants.dart';
 
 class StoreInfo extends StatelessWidget {
   final String address;
-  // final TimeOfDay openingTime;
-  // final TimeOfDay closingTime;
+  final String? displayOpenClosingTime;
+  final String? displayDaysOpen;
   final String serviceStartsAt;
-  const StoreInfo({
-    Key? key,
-    required this.address,
-    // required this.openingTime,
-    // required this.closingTime,
-    required this.serviceStartsAt,
-  }) : super(key: key);
+  const StoreInfo(
+      {Key? key,
+      required this.address,
+      // required this.openingTime,
+      // required this.closingTime,
+      required this.serviceStartsAt,
+      required this.displayDaysOpen,
+      required this.displayOpenClosingTime})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,55 +42,66 @@ class StoreInfo extends StatelessWidget {
               address,
               style: SizeConfig.kStyle14,
               overflow: TextOverflow.ellipsis,
+              maxLines: 3,
             ))
           ],
         ),
         SizeConfig.kverticalMargin8,
-        Row(
-          children: [
-            Container(
-              height: 24,
-              width: 24,
-              child: Center(
-                child: SvgPicture.asset(
-                  'assets/icons/time.svg',
-                  height: 20,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Text(
-              "9am to 6pm test",
-              style: SizeConfig.kStyle14,
-            )
-            // Text(
-            //     "${openingTime.format(context)} to ${closingTime.format(context)}"),
-          ],
-        ),
+        displayOpenClosingTime != null
+            ? Row(
+                children: [
+                  Container(
+                    height: 24,
+                    width: 24,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/time.svg',
+                        height: 20,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: Text(
+                      displayOpenClosingTime!,
+                      style: SizeConfig.kStyle14,
+                      maxLines: 3,
+                    ),
+                  )
+                  // Text(
+                  //     "${openingTime.format(context)} to ${closingTime.format(context)}"),
+                ],
+              )
+            : SizedBox.shrink(),
         SizeConfig.kverticalMargin8,
-        Row(
-          children: [
-            Container(
-              height: 24,
-              width: 24,
-              child: Center(
-                child: SvgPicture.asset(
-                  'assets/icons/calendar.svg',
-                  height: 20,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Text(
-              "Monday - Saturday",
-              style: SizeConfig.kStyle14,
-            )
-          ],
-        ),
+        displayDaysOpen != null
+            ? Row(
+                children: [
+                  Container(
+                    height: 24,
+                    width: 24,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/calendar.svg',
+                        height: 20,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: Text(
+                      displayDaysOpen!,
+                      style: SizeConfig.kStyle14,
+                      maxLines: 3,
+                    ),
+                  )
+                ],
+              )
+            : SizedBox.shrink(),
         SizeConfig.kverticalMargin8,
         Text.rich(
           TextSpan(children: [

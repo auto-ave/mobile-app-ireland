@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class SizeConfig {
   static late MediaQueryData mediaQueryData;
@@ -98,9 +100,9 @@ class SizeConfig {
     print('init called');
     mediaQueryData = MediaQuery.of(context);
     // textScaleFactor = Platform.isIOS ? 1.5 : _mediaQueryData!.textScaleFactor;
-    textScaleFactor =
-        mediaQueryData.textScaleFactor < 1 ? 1 : mediaQueryData.textScaleFactor;
+    textScaleFactor = getTextScaleFactor(mediaQueryData.textScaleFactor);
 
+    // textScaleFactor = 1.1;
     screenWidth = mediaQueryData.size.width;
     screenHeight = mediaQueryData.size.height;
     blockSizeHorizontal = screenWidth / 100;
@@ -172,6 +174,24 @@ class SizeConfig {
 
     kStyleAppBarTitle = kStyle14W500.copyWith(color: Colors.black);
     print("Screen Width : $screenWidth, Screen Height: $screenHeight");
+  }
+
+  double getTextScaleFactor(double original) {
+    var logger = Logger();
+    logger.d(original.toString() + "hellowwwww");
+    // return 1.5;
+    //  var min(a, b)
+    if (original <= 1) {
+      return 1;
+    } else if (original >= 1.05) {
+      return 1.05;
+    } else {
+      return original;
+    }
+// var textScaleFactor =
+//         original < 1 ? 1 : mediaQueryData.textScaleFactor;
+//         textScaleFactor =
+//         original > 1.1 ? 1 : mediaQueryData.textScaleFactor;
   }
 }
 

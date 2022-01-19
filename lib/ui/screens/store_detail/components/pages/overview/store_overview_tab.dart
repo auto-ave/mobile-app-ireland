@@ -32,10 +32,14 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    print(MediaQuery.of(context).viewInsets.bottom.toString() + "hasdhhasdh");
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: BookServiceButton(
-        onPressed: widget.onPressedBook,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: 16),
+        child: BookServiceButton(
+          onPressed: widget.onPressedBook,
+        ),
       ),
       body: CustomScrollView(
         slivers: [
@@ -60,6 +64,8 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
             sliver: SliverToBoxAdapter(
                 child: StoreInfo(
               address: widget.store.address!,
+              displayDaysOpen: widget.store.displayDaysOpen,
+              displayOpenClosingTime: widget.store.displayOpeningClosingTime,
               // closingTime: store.storeClosingTime!,
               // openingTime: store.storeOpeningTime!,
               serviceStartsAt:
@@ -134,7 +140,7 @@ class BookServiceButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -142,17 +148,17 @@ class BookServiceButton extends StatelessWidget {
                   color: Color.fromRGBO(17, 17, 17, .32),
                   blurRadius: 32)
             ],
-            gradient: LinearGradient(
-              // begin: Alignment(0.0, 0.0),
-              // end: Alignment(0.997, 0.082),
-              begin: Alignment(0.0, 0.0),
-              end: Alignment(0.999, 0.046),
-              // transform: GradientRotation(1.5708),
-              colors: [
-                Theme.of(context).primaryColor,
-                Color(0xff98CFF8),
-              ],
-            ),
+            // gradient: LinearGradient(
+            //   // begin: Alignment(0.0, 0.0),
+            //   // end: Alignment(0.997, 0.082),
+            //   begin: Alignment(0.0, 0.0),
+            //   end: Alignment(0.999, 0.046),
+            //   // transform: GradientRotation(1.5708),
+            //   colors: [
+            //     Theme.of(context).primaryColor,
+            //     Color(0xff98CFF8),
+            //   ],
+            // ),
             color: SizeConfig.kPrimaryColor,
             borderRadius: BorderRadius.circular(8)),
         child: Text(

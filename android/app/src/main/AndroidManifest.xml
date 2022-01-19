@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.org.themotorwash">
    <application
-        android:label="Autoave"
+        android:label="autoave"
         android:icon="@mipmap/ic_launcher">
         
         <activity
@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
          <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyAA-X4S0MrnI_N4zP16LL6pTFumfaSMm80"/>
+               android:value="AIzaSyD4s5qQirdCwk8ehEL_A1gTU-NAW6L9SYw"/>
                <meta-data
                android:name="com.google.firebase.messaging.default_notification_icon"
               android:resource="@drawable/notification_icon" />
@@ -58,6 +58,7 @@
   <!-- If your app opens https URLs -->
  
   <!-- If your app makes calls -->
+ 
   <intent>
     <action android:name="android.intent.action.DIAL" />
     <data android:scheme="tel" />

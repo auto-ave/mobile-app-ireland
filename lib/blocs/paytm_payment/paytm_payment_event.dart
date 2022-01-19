@@ -2,9 +2,6 @@ part of 'paytm_payment_bloc.dart';
 
 abstract class PaytmPaymentEvent extends Equatable {
   const PaytmPaymentEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class InitiatePaytmPaymentApi extends PaytmPaymentEvent {
@@ -18,6 +15,8 @@ class InitiatePaytmPaymentApi extends PaytmPaymentEvent {
     required this.bay,
     required this.date,
   });
+  @override
+  List<Object> get props => [];
 }
 
 class CheckPaytmPaymentStatus extends PaytmPaymentEvent {
@@ -25,9 +24,13 @@ class CheckPaytmPaymentStatus extends PaytmPaymentEvent {
   CheckPaytmPaymentStatus({
     required this.paymentResponseModel,
   });
+  @override
+  List<Object> get props => [paymentResponseModel];
 }
 
 class StartPaytmTransaction extends PaytmPaymentEvent {
   final InitiatePaymentModel initiatedPayment;
   StartPaytmTransaction({required this.initiatedPayment});
+  @override
+  List<Object> get props => [initiatedPayment];
 }

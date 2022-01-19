@@ -47,18 +47,25 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       appBar: getAppBarWithBackButton(
           context: context,
           title: Text(
-            'Feedback',
+            widget.isFeedback ? 'Feedback' : 'Cancellation Request',
             style: SizeConfig.kStyleAppBarTitle,
           )),
       body: BlocConsumer<FeedbackBloc, FeedbackState>(
           bloc: _feedbackBloc,
           listener: (context, state) {
             if (state is FeedbackSent) {
-              showSnackbar(context, 'Thank you for your valuable feedback.');
+              showSnackbar(
+                  context,
+                  widget.isFeedback
+                      ? 'Thank you for your valuable feedback.'
+                      : 'We have received your request.');
             }
             if (state is FeedbackError) {
               showSnackbar(
-                  context, 'Error sending feedback. Please try again later');
+                  context,
+                  widget.isFeedback
+                      ? 'Error sending feedback. Please try again later'
+                      : 'Error sending request. Please try again later');
             }
           },
           builder: (context, state) {
@@ -70,7 +77,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             // );
             if (state is FeedbackSent) {
               return SizedBox(
-                child: FeedbackSentWidget(),
+                child: FeedbackSentWidget(
+                  isFeedback: widget.isFeedback,
+                ),
                 width: 100.w,
               );
             }
@@ -257,7 +266,9 @@ class OrderSupportNumberWidget extends StatelessWidget {
 }
 
 class FeedbackSentWidget extends StatelessWidget {
-  const FeedbackSentWidget({Key? key}) : super(key: key);
+  final bool isFeedback;
+  const FeedbackSentWidget({Key? key, required this.isFeedback})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -274,17 +285,20 @@ class FeedbackSentWidget extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Feedback Sent',
-                    style: SizeConfig.kStyle16W500,
+                    isFeedback ? 'Feedback Sent' : 'Request Sent',
+                    style: SizeConfig.kStyle20W500,
                   ),
+                  SizeConfig.kverticalMargin4,
                   Text(
-                    'We have recieved your feedback.',
-                    style: SizeConfig.kStyle12
+                    isFeedback
+                        ? 'We have recieved your feedback.'
+                        : 'We have recieved your request.',
+                    style: SizeConfig.kStyle14
                         .copyWith(color: SizeConfig.kGreyTextColor),
                   ),
                   Text(
                     'We will get back to you soon.',
-                    style: SizeConfig.kStyle12
+                    style: SizeConfig.kStyle14
                         .copyWith(color: SizeConfig.kGreyTextColor),
                   ),
                 ],
@@ -298,23 +312,25 @@ class FeedbackSentWidget extends StatelessWidget {
           ],
         ),
         Spacer(),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SizedBox(
-            width: 100.w,
-            child: CommonTextButton(
-              onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, ExploreScreen.route, (route) => false);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Home',
-                  style: SizeConfig.kStyle14.copyWith(color: Colors.white),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              width: 100.w,
+              child: CommonTextButton(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, ExploreScreen.route, (route) => false);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Home',
+                    style: SizeConfig.kStyle14.copyWith(color: Colors.white),
+                  ),
                 ),
+                backgroundColor: SizeConfig.kPrimaryColor,
               ),
-              backgroundColor: SizeConfig.kPrimaryColor,
             ),
           ),
         ),

@@ -22,52 +22,62 @@ class VerifyPhoneScreen extends StatefulWidget {
   _VerifyPhoneScreenState createState() => _VerifyPhoneScreenState();
 }
 
-class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
+class _VerifyPhoneScreenState extends State<VerifyPhoneScreen>
+    with SingleTickerProviderStateMixin {
   late PhoneAuthBloc phoneAuthBloc;
   String enteredOtp = "";
+  late AnimationController _animController;
 
   @override
   void initState() {
     super.initState();
     phoneAuthBloc = BlocProvider.of<PhoneAuthBloc>(context);
+
+    _animController = AnimationController(
+        vsync: this,
+        lowerBound: 0,
+        upperBound: 30,
+        duration: Duration(seconds: 30));
+    _animController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          appBar: getAppBarLoginScreen(context: context),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: BlocListener<GlobalAuthBloc, GlobalAuthState>(
-              listener: (context, state) {
-                if (state is Authenticated) {
-                  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, ExploreScreen.route, (route) => false);
+    return Scaffold(
+        appBar: AppBarLoginScreen(),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: BlocListener<GlobalAuthBloc, GlobalAuthState>(
+            listener: (context, state) {
+              if (state is Authenticated) {
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, ExploreScreen.route, (route) => false);
+              }
+            },
+            child: BlocListener<PhoneAuthBloc, PhoneAuthState>(
+              bloc: phoneAuthBloc,
+              listener: (_, state) {
+                if (state is SendingOTP) {
+                  showSnackbar(context, 'Resending OTP...');
+                }
+                if (state is FailedToSendOTP) {
+                  _animController.reset();
+                  showSnackbar(context, 'Failed to send OTP.');
+                }
+                if (state is OTPSent) {
+                  showSnackbar(context, 'OTP Sent..');
+                }
+                if (state is CheckingOTP) {
+                  // showSnackbar(context, 'Verifying OTP..');
+                }
+                if (state is OTPCheckedPassed) {}
+
+                if (state is OTPCheckFailed) {
+                  showSnackbar(context, 'Wrong OTP entered');
                 }
               },
-              child: BlocListener<PhoneAuthBloc, PhoneAuthState>(
-                bloc: phoneAuthBloc,
-                listener: (_, state) {
-                  if (state is SendingOTP) {
-                    showSnackbar(context, 'Resending OTP...');
-                  }
-                  if (state is FailedToSendOTP) {
-                    showSnackbar(context, 'Failed to send OTP.');
-                  }
-                  if (state is OTPSent) {
-                    showSnackbar(context, 'OTP Sent..');
-                  }
-                  if (state is CheckingOTP) {
-                    // showSnackbar(context, 'Verifying OTP..');
-                  }
-                  if (state is OTPCheckedPassed) {}
-
-                  if (state is OTPCheckFailed) {
-                    showSnackbar(context, 'Wrong OTP entered');
-                  }
-                },
+              child: SafeArea(
                 child: Column(
                   children: [
                     Expanded(
@@ -103,63 +113,85 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                             SizeConfig.kverticalMargin16,
                             OTPFieldWidget(onChange: onChanged),
                             SizeConfig.kverticalMargin16,
-                            Text.rich(
-                              TextSpan(
-                                  text: 'Didn’t recive a Code? ',
-                                  style: SizeConfig.kStyle12
-                                      .copyWith(color: Colors.black),
-                                  children: [
-                                    TextSpan(
-                                        text: 'Request again',
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () => phoneAuthBloc.add(
-                                              SendOTP(
-                                                  phoneNumber:
-                                                      widget.phoneNumber)),
-                                        style: SizeConfig.kStyle12PrimaryColor
-                                            .copyWith(
-                                                decoration:
-                                                    TextDecoration.underline))
-                                  ]),
+                            AnimatedBuilder(
+                              animation: _animController,
+                              builder: (context, child) {
+                                return Text.rich(
+                                  TextSpan(
+                                      text: 'Didn’t recive a Code? ',
+                                      style: SizeConfig.kStyle12
+                                          .copyWith(color: Colors.black),
+                                      children: [
+                                        TextSpan(
+                                            text: _animController.isAnimating
+                                                ? 'Request again (${(30 - _animController.value).ceil()})'
+                                                : 'Request Again',
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                                if (!_animController
+                                                    .isAnimating) {
+                                                  _animController.reset();
+                                                  _animController.forward();
+                                                  phoneAuthBloc.add(SendOTP(
+                                                      phoneNumber:
+                                                          widget.phoneNumber));
+                                                }
+                                              },
+                                            style: SizeConfig
+                                                .kStyle12PrimaryColor
+                                                .copyWith(
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    color: _animController
+                                                            .isAnimating
+                                                        ? SizeConfig
+                                                            .kGreyTextColor
+                                                        : SizeConfig
+                                                            .kPrimaryColor))
+                                      ]),
+                                );
+                              },
                             ),
                             SizeConfig.kverticalMargin16,
                           ],
                         ),
                       ),
                     ),
-                    Container(
-                      width: 100.w,
-                      height: 50,
-                      child: BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
-                        bloc: phoneAuthBloc,
-                        builder: (context, state) {
-                          return TextButton(
-                            onPressed: enteredOtp.length == 4 &&
-                                    !(state is CheckingOTP)
-                                ? () {
-                                    phoneAuthBloc.add(CheckOTP(
-                                        otp: enteredOtp,
-                                        phoneNumber: widget.phoneNumber));
-                                  }
-                                : null,
-                            child: Text(
-                              'Verify',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  enteredOtp.length == 4 &&
-                                          !(state is CheckingOTP)
-                                      ? SizeConfig.kPrimaryColor
-                                      : Colors.grey),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
+                    SafeArea(
+                      child: Container(
+                        width: 100.w,
+                        height: 50,
+                        child: BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
+                          bloc: phoneAuthBloc,
+                          builder: (context, state) {
+                            return TextButton(
+                              onPressed: enteredOtp.length == 4 &&
+                                      !(state is CheckingOTP)
+                                  ? () {
+                                      phoneAuthBloc.add(CheckOTP(
+                                          otp: enteredOtp,
+                                          phoneNumber: widget.phoneNumber));
+                                    }
+                                  : null,
+                              child: Text(
+                                'Verify',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    enteredOtp.length == 4 &&
+                                            !(state is CheckingOTP)
+                                        ? SizeConfig.kPrimaryColor
+                                        : Colors.grey),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                     SizeConfig.kverticalMargin32
@@ -167,8 +199,8 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen> {
                 ),
               ),
             ),
-          )),
-    );
+          ),
+        ));
   }
 
   onChanged(String pin) {

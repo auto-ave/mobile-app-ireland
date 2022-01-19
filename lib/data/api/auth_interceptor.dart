@@ -1,9 +1,17 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
+import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
+import 'package:themotorwash/data/api/api_constants.dart';
+import 'package:themotorwash/data/api/api_service.dart';
 
 import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
+import 'package:themotorwash/data/repos/auth_repository.dart';
+import 'package:themotorwash/data/repos/auth_rest_repository.dart';
+import 'package:themotorwash/data/repos/repository.dart';
+import 'package:themotorwash/data/repos/rest_repository.dart';
 
 class AuthInterceptor extends Interceptor {
   final GlobalAuthBloc _globalAuthBloc;
@@ -37,7 +45,8 @@ class AuthInterceptor extends Interceptor {
     if (err.response?.statusCode == 401 && state is Authenticated) {
       try {
         print('on error called2');
-        await client.post("https://testapi.autoave.in/account/token/refresh",
+        await client.post(
+            "https://${ApiConstants(globalAuthBloc: _globalAuthBloc).baseUrl}/account/token/refresh",
             data: {"refresh": state.tokens.refreshToken}).then((value) async {
           print('then called' +
               value.statusCode.toString() +
@@ -71,12 +80,25 @@ class AuthInterceptor extends Interceptor {
                 queryParameters: err.requestOptions.queryParameters);
 
             return handler.resolve(cloneReq);
-          }
+          } else {}
           return super.onError(err, handler);
-        }).onError(
-            (error, stackTrace) => print(error.toString() + "refresh error"));
+        }).onError((error, stackTrace) {
+          if (true) {
+            print('on erro called 45');
+            PhoneAuthBloc _phoneAuthBloc = PhoneAuthBloc(
+                repository: AuthRestRepository(
+                    apiMethodsImp: ApiService(
+                        apiConstants:
+                            ApiConstants(globalAuthBloc: _globalAuthBloc))),
+                globalAuthBloc: _globalAuthBloc,
+                fcmInstance: FirebaseMessaging.instance,
+                localDataService: localDataService);
+            _phoneAuthBloc.add(LogOut());
+          }
+          print("refresh error" + error.toString() + "refresh error");
+        });
       } catch (e, st) {
-        print(e.toString());
+        print("refresh error2" + e.toString() + "refresh error");
       }
     }
     print(

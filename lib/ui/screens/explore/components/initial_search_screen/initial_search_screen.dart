@@ -46,6 +46,7 @@ class _InitialSearchScreenState extends State<InitialSearchScreen> {
                           .map((e) => ExploreServiceTile(
                                 imageUrl: e.thumbnail!,
                                 serviceName: e.name!,
+                                serviceTag: e.slug,
                               ))
                           .toList(),
                     )
@@ -95,13 +96,29 @@ class InitialSearchServicesGrid extends StatelessWidget {
       // //       mainAxisSpacing: 16,
       // //       crossAxisCount: 3,
       // //     ))
-      SliverGrid.count(
-        crossAxisCount: 3,
-        children: items,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 0,
-        childAspectRatio: 1,
+      // SliverGrid.count(
+      //   crossAxisCount: 3,
+      //   children: items,
+      //   mainAxisSpacing: 8,
+      //   crossAxisSpacing: 0,
+      //   childAspectRatio: 1,
+      // ),
+      Center(
+        child: Wrap(
+          spacing: 16,
+          runSpacing: 32,
+          // alignment: WrapAlignment.spaceAround,
+          // crossAxisAlignment: WrapCrossAlignment.start,
+
+          children: items
+              .map((e) => Padding(
+                    padding: EdgeInsets.all(0),
+                    child: e,
+                  ))
+              .toList(),
+        ),
       ),
+      SizeConfig.kverticalMargin16,
     ]);
   }
 }

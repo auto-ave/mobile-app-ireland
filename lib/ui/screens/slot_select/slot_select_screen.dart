@@ -169,49 +169,52 @@ class _SlotSelectScreenState extends State<SlotSelectScreen> {
               offset: Offset(0, -2))
         ]),
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-          child: Row(
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text('₹${widget.cartTotal}',
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+            child: Row(
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('₹${widget.cartTotal}',
+                        style: TextStyle(
+                            fontSize: SizeConfig.kfontSize16,
+                            fontWeight: FontWeight.w500)),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      'T O T A L',
                       style: TextStyle(
-                          fontSize: SizeConfig.kfontSize16,
-                          fontWeight: FontWeight.w500)),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    'T O T A L',
-                    style: TextStyle(
-                        fontSize: SizeConfig.kfontSize12,
-                        color: Colors.grey[700]),
-                  ),
-                ],
-              ),
-              Spacer(),
-              CommonTextButton(
-                  onPressed: () {
-                    SlotSelectionState state = _bloc.state;
-                    if (currentSelectedSlotIndex >= 0 &&
-                        state is SlotsLoaded &&
-                        currentSelectedDateIndex >= 0) {
-                      Slot slot = state.slots[currentSelectedSlotIndex];
-                      _orderReviewBloc.add(SetSlot(slot: slot));
-                      Navigator.pushNamed(context, OrderReviewScreen.route,
-                          arguments: OrderReviewScreenArguments(
-                              dateSelected:
-                                  calendarDays[currentSelectedDateIndex]));
-                    }
-                  },
-                  child: Text('Proceed', style: TextStyle(color: Colors.white)),
-                  backgroundColor: currentSelectedSlotIndex >= 0
-                      ? Colors.green
-                      : Colors.grey)
-            ],
+                          fontSize: SizeConfig.kfontSize12,
+                          color: Colors.grey[700]),
+                    ),
+                  ],
+                ),
+                Spacer(),
+                CommonTextButton(
+                    onPressed: () {
+                      SlotSelectionState state = _bloc.state;
+                      if (currentSelectedSlotIndex >= 0 &&
+                          state is SlotsLoaded &&
+                          currentSelectedDateIndex >= 0) {
+                        Slot slot = state.slots[currentSelectedSlotIndex];
+                        _orderReviewBloc.add(SetSlot(slot: slot));
+                        Navigator.pushNamed(context, OrderReviewScreen.route,
+                            arguments: OrderReviewScreenArguments(
+                                dateSelected:
+                                    calendarDays[currentSelectedDateIndex]));
+                      }
+                    },
+                    child:
+                        Text('Proceed', style: TextStyle(color: Colors.white)),
+                    backgroundColor: currentSelectedSlotIndex >= 0
+                        ? Colors.green
+                        : Colors.grey)
+              ],
+            ),
           ),
         ));
   }

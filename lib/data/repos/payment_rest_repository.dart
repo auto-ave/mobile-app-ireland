@@ -24,6 +24,8 @@ class PaymentRestRepository implements PaymentRepository {
   @override
   Future<PaytmPaymentResponseModel> startPaytmTransaction(
       {required InitiatePaymentModel initiatedPayment}) async {
+    print('INITIATED PAYMENT' + initiatedPayment.toString());
+
     Map<dynamic, dynamic>? result = await AllInOneSdk.startTransaction(
         initiatedPayment.mid,
         initiatedPayment.orderId,
@@ -32,13 +34,30 @@ class PaymentRestRepository implements PaymentRepository {
         'https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=${initiatedPayment.orderId}',
         true,
         false);
-    print(result.toString() + " hello");
-    print(jsonEncode(result) + "json");
+    print(" hello" + result.toString());
+    print("json" + jsonEncode(result));
     dynamic data = jsonDecode(jsonEncode(result));
     PaytmPaymentResponseEntity response =
         PaytmPaymentResponseEntity.fromJson(data);
 
     return PaytmPaymentResponseModel.fromEntity(response);
+
+    // return PaytmPaymentResponseModel(
+    //     currency: '',
+    //     gatewayName: '',
+    //     responseMessage: '',
+    //     bankName: '',
+    //     paymentMode: '',
+    //     mid: '',
+    //     responseCode: '',
+    //     transactionAmount: '',
+    //     transactionId: 'transactionId',
+    //     orderId: '',
+    //     bankTransactionId: '',
+    //     status: '',
+    //     transactionDate: DateTime.now(),
+    //     checksumHash: ' checksumHash',
+    //     transactionDateString: 'transactionDateString');
   }
 
   @override

@@ -3,10 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
+import 'package:themotorwash/blocs/offer_apply/bloc/offer_apply_bloc.dart';
 import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
 import 'package:themotorwash/data/models/cart.dart';
+import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
+import 'package:themotorwash/ui/screens/offer_selection/offer_selection.dart';
 import 'package:themotorwash/ui/screens/slot_select/slot_select_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/utils/utils.dart';
@@ -22,213 +26,306 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
   late CartFunctionBloc _cartFunctionBloc;
   late CartModel cart;
   late OrderReviewBloc _orderReviewBloc;
-
+  late final OfferApplyBloc _offerApplyBloc;
   @override
   void initState() {
     super.initState();
     _orderReviewBloc = BlocProvider.of<OrderReviewBloc>(context, listen: false);
     _cartFunctionBloc = BlocProvider.of<CartFunctionBloc>(context);
+    _offerApplyBloc =
+        OfferApplyBloc(repository: RepositoryProvider.of<Repository>(context));
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: BlocConsumer<CartFunctionBloc, CartFunctionState>(
-        bloc: _cartFunctionBloc,
-        listener: (_, state) {
-          if (state is CartItemAdded ||
-              state is CartItemDeleted ||
-              state is CartLoaded) {
-            if (state is CartItemAdded) {
-              if (state.cart.items!.isEmpty) {
-                Navigator.pop(context);
-              }
-            }
-            if (state is CartItemDeleted) {
-              if (state.cart.items!.isEmpty) {
-                Navigator.pop(context);
-              }
-            }
-            if (state is CartLoaded) {
-              if (state.cart.items!.isEmpty) {
-                Navigator.pop(context);
-              }
-            }
+      child: BlocConsumer<OfferApplyBloc, OfferApplyState>(
+        bloc: _offerApplyBloc,
+        listener: (context, state) {
+          // TODO: implement listener
+          if (state is OfferApplySuccess) {
+            Navigator.pop(context);
+            showSnackbar(context, 'Offer appyle hua');
           }
         },
-        builder: (context, state) {
-          if (state is CartItemAdded ||
-              state is CartItemDeleted ||
-              state is CartLoaded ||
-              state is CartFunctionLoading) {
-            if (state is CartItemAdded) {
-              cart = state.cart;
-            }
-            if (state is CartItemDeleted) {
-              cart = state.cart;
-            }
-            if (state is CartLoaded) {
-              cart = state.cart;
-            }
-            return cart.items!.isEmpty
-                ? Container(
-                    height: 30.h,
-                    child: Center(
-                        child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Empty Cart',
-                          style: SizeConfig.kStyle16W500,
-                        ),
-                        SizeConfig.kHorizontalMargin8,
-                        Icon(
-                          Icons.shopping_cart_outlined,
-                          color: Colors.black,
-                        )
-                      ],
-                    )),
-                  )
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Row(
+        builder: (context, offerState) {
+          print('1st');
+
+          return BlocConsumer<CartFunctionBloc, CartFunctionState>(
+            bloc: _cartFunctionBloc,
+            listener: (_, state) {
+              if (state is CartItemAdded ||
+                  state is CartItemDeleted ||
+                  state is CartLoaded) {
+                if (state is CartItemAdded) {
+                  if (state.cart.items!.isEmpty) {
+                    Navigator.pop(context);
+                  }
+                }
+                if (state is CartItemDeleted) {
+                  if (state.cart.items!.isEmpty) {
+                    Navigator.pop(context);
+                  }
+                }
+                if (state is CartLoaded) {
+                  if (state.cart.items!.isEmpty) {
+                    Navigator.pop(context);
+                  }
+                }
+              }
+            },
+            builder: (context, state) {
+              if (state is CartItemAdded ||
+                  state is CartItemDeleted ||
+                  state is CartLoaded ||
+                  state is CartFunctionLoading) {
+                if (state is CartItemAdded) {
+                  cart = state.cart;
+                }
+                if (state is CartItemDeleted) {
+                  cart = state.cart;
+                }
+                if (state is CartLoaded) {
+                  cart = state.cart;
+                }
+                if (offerState is OfferApplySuccess) {
+                  cart = offerState.cart;
+                  print('2nd');
+                  print(cart.offer.toString() + "asdasd" + cart.toString());
+                }
+                return cart.items!.isEmpty
+                    ? Container(
+                        height: 30.h,
+                        child: Center(
+                            child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              Icons.location_on_outlined,
-                              color: SizeConfig.kPrimaryColor,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(cart.store!.name!,
-                                style: SizeConfig.kStyle16W500)
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        height: 1,
-                        thickness: 1,
-                      ),
-                      ...(cart.itemsObj!.map((e) {
-                        return CartItemTile(
-                            isLoading: state is CartFunctionLoading &&
-                                state.itemId.contains(e.id),
-                            cartFunctionBloc: _cartFunctionBloc,
-                            itemId: e.id,
-                            price: e.price!.toString(),
-                            service: e.service!,
-                            timeInterval: e.timeInterval!.toString());
-                      }).toList()),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
                             Text(
-                              'Offers',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              'Empty Cart',
+                              style: SizeConfig.kStyle16W500,
                             ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Row(
+                            SizeConfig.kHorizontalMargin8,
+                            Icon(
+                              Icons.shopping_cart_outlined,
+                              color: Colors.black,
+                            )
+                          ],
+                        )),
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
                               children: [
-                                FaIcon(
-                                  FontAwesomeIcons.moneyBillAlt,
-                                  color: Colors.green,
+                                Icon(
+                                  Icons.location_on_outlined,
+                                  color: SizeConfig.kPrimaryColor,
                                 ),
                                 SizedBox(
                                   width: 8,
                                 ),
-                                Text('Select a promo code'),
-                                Spacer(),
-                                Text('View offers',
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: SizeConfig.kfontSize12))
+                                Expanded(
+                                  child: Text(cart.store!.name!,
+                                      style: SizeConfig.kStyle16W500),
+                                )
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      Container(
-                        decoration:
-                            BoxDecoration(color: Colors.white, boxShadow: [
-                          BoxShadow(
-                              blurRadius: 4,
-                              color: Color.fromRGBO(0, 0, 0, .08),
-                              offset: Offset(0, -2))
-                        ]),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 16),
-                        child: Row(
-                          children: <Widget>[
-                            Column(
+                          ),
+                          Divider(
+                            height: 1,
+                            thickness: 1,
+                          ),
+                          ...(cart.itemsObj!.map((e) {
+                            return CartItemTile(
+                                isLoading: state is CartFunctionLoading &&
+                                    state.itemId.contains(e.id),
+                                cartFunctionBloc: _cartFunctionBloc,
+                                itemId: e.id,
+                                price: e.price!.toString(),
+                                service: e.service!,
+                                timeInterval: e.timeInterval!.toString());
+                          }).toList()),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Text('₹${cart.total}',
-                                    style: TextStyle(
-                                        fontSize: SizeConfig.kfontSize16,
-                                        fontWeight: FontWeight.w500)),
-                                SizedBox(
-                                  height: 4,
-                                ),
                                 Text(
-                                  'T O T A L',
-                                  style: SizeConfig.kStyle12
-                                      .copyWith(color: Colors.grey[700]),
+                                  'Offers',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  children: [
+                                    FaIcon(
+                                      FontAwesomeIcons.moneyBillAlt,
+                                      color: Colors.green,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Expanded(
+                                        child: GestureDetector(
+                                            onTap: () => Navigator.pushNamed(
+                                                context,
+                                                OfferSelectionScreen.route,
+                                                arguments:
+                                                    OfferSelectionScreenArgs(
+                                                        offerApplyBloc:
+                                                            _offerApplyBloc)),
+                                            child: cart.offer != null
+                                                ? Text(
+                                                    '${cart.offer!.code} (appilied)',
+                                                    style: SizeConfig
+                                                        .kStyle14Bold
+                                                        .copyWith(
+                                                            color: Colors
+                                                                .deepPurple),
+                                                  )
+                                                : Text('Select a promo code'))),
+                                    SizeConfig.kHorizontalMargin8,
+                                    GestureDetector(
+                                      onTap: () => Navigator.pushNamed(
+                                          context, OfferSelectionScreen.route,
+                                          arguments: OfferSelectionScreenArgs(
+                                              offerApplyBloc: _offerApplyBloc)),
+                                      child: Text('View offers',
+                                          style:
+                                              SizeConfig.kStyle14PrimaryColor),
+                                    )
+                                  ],
                                 ),
                               ],
                             ),
-                            Spacer(),
-                            CommonTextButton(
-                                onPressed: () {
-                                  _orderReviewBloc.add(SetCart(cart: cart));
-                                  Navigator.pop(context);
-                                  Navigator.pushNamed(
-                                      context, SlotSelectScreen.route,
-                                      arguments: SlotSelectScreenArguments(
-                                          cartTotal: cart.total!,
-                                          cardId: cart.id!.toString()));
-                                },
-                                child: Text('Select Slot',
-                                    style: TextStyle(color: Colors.white)),
-                                backgroundColor: SizeConfig.kPrimaryColor)
-                            // TextButton(
-                            //   child: Text('Select Slot',
-                            //       style: TextStyle(color: Colors.white)),
-                            //   onPressed: () {
-                            //     _orderReviewBloc.add(SetCart(cart: cart));
-                            //     Navigator.pushNamed(
-                            //         context, SlotSelectScreen.route,
-                            //         arguments: SlotSelectScreenArguments(
-                            //             cartTotal: cart.total!,
-                            //             cardId: cart.id!.toString()));
-                            //   },
-                            //   style: ButtonStyle(
-                            //       backgroundColor: MaterialStateProperty.all(
-                            //           Theme.of(context).primaryColor)),
-                            // ),
-                          ],
-                        ),
-                      )
-                    ],
-                  );
-          }
+                          ),
+                          SizedBox(
+                            height: 24,
+                          ),
+                          cart.offer != null
+                              ? Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 16),
+                                  decoration:
+                                      BoxDecoration(color: Color(0xffF3F8FF)),
+                                  child: Column(
+                                    children: [
+                                      DetailsRowWidget(
+                                          leftText: 'Item total',
+                                          rightText: cart.subTotal!,
+                                          leftStyle: SizeConfig.kStyle14
+                                              .copyWith(
+                                                  color: Color(0xff888888)),
+                                          rightStyle: SizeConfig.kStyle14W500),
+                                      SizeConfig.kverticalMargin8,
+                                      DetailsRowWidget(
+                                          leftWidget: RichText(
+                                              text: TextSpan(children: [
+                                            TextSpan(
+                                                text: 'Promocode discount ',
+                                                style: SizeConfig.kStyle14
+                                                    .copyWith(
+                                                        color:
+                                                            Color(0xff888888))),
+                                            TextSpan(
+                                                text: '(${cart.offer!.code!})',
+                                                style: SizeConfig.kStyle14
+                                                    .copyWith(
+                                                        color:
+                                                            Color(0xff6326C7)))
+                                          ])),
+                                          rightText:
+                                              '- ${cart.discount!.rupees()}',
+                                          rightStyle: SizeConfig.kStyle14W500
+                                              .copyWith(
+                                                  color: Color(0xff35B549))),
+                                    ],
+                                  ))
+                              : SizedBox.shrink(),
+                          Container(
+                            decoration:
+                                BoxDecoration(color: Colors.white, boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 4,
+                                  color: Color.fromRGBO(0, 0, 0, .08),
+                                  offset: Offset(0, -2))
+                            ]),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16),
+                            child: SafeArea(
+                              child: Row(
+                                children: <Widget>[
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Text('₹${cart.total}',
+                                          style: TextStyle(
+                                              fontSize: SizeConfig.kfontSize16,
+                                              fontWeight: FontWeight.w500)),
+                                      SizedBox(
+                                        height: 4,
+                                      ),
+                                      Text(
+                                        'T O T A L',
+                                        style: SizeConfig.kStyle12
+                                            .copyWith(color: Colors.grey[700]),
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  CommonTextButton(
+                                      onPressed: () {
+                                        _orderReviewBloc
+                                            .add(SetCart(cart: cart));
+                                        Navigator.pop(context);
+                                        Navigator.pushNamed(
+                                            context, SlotSelectScreen.route,
+                                            arguments:
+                                                SlotSelectScreenArguments(
+                                                    cartTotal: cart.total!,
+                                                    cardId:
+                                                        cart.id!.toString()));
+                                      },
+                                      child: Text('Select Slot',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      backgroundColor: SizeConfig.kPrimaryColor)
+                                  // TextButton(
+                                  //   child: Text('Select Slot',
+                                  //       style: TextStyle(color: Colors.white)),
+                                  //   onPressed: () {
+                                  //     _orderReviewBloc.add(SetCart(cart: cart));
+                                  //     Navigator.pushNamed(
+                                  //         context, SlotSelectScreen.route,
+                                  //         arguments: SlotSelectScreenArguments(
+                                  //             cartTotal: cart.total!,
+                                  //             cardId: cart.id!.toString()));
+                                  //   },
+                                  //   style: ButtonStyle(
+                                  //       backgroundColor: MaterialStateProperty.all(
+                                  //           Theme.of(context).primaryColor)),
+                                  // ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      );
+              }
 
-          return Container(
-            child: Center(
-              child: loadingAnimation(),
-            ),
-            height: 300,
+              return Container(
+                child: Center(
+                  child: loadingAnimation(),
+                ),
+                height: 300,
+              );
+            },
           );
         },
       ),
@@ -301,6 +398,7 @@ class CartItemTile extends StatelessWidget {
                 width: 80,
                 height: 40,
                 child: CommonTextButton(
+                  padding: EdgeInsets.zero,
                   backgroundColor: Colors.white,
                   border: RoundedRectangleBorder(
                     side: BorderSide(

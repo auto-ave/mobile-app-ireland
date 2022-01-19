@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 import 'package:themotorwash/blocs/payment_choice/payment_choice_bloc.dart';
 import 'package:themotorwash/blocs/paytm_payment/paytm_payment_bloc.dart';
@@ -104,8 +105,17 @@ class _PaymentChoiceScreenState extends State<PaymentChoiceScreen> {
                 _dialog.hide();
                 showSnackbar(context,
                     "Error processing your payment. Please try again.");
+                print('errr process');
               } else {
-                print(jsonDecode(
+                var logger = Logger();
+
+                logger.d("lolz" +
+                    jsonDecode(
+                      jsonEncode(state.e!.details),
+                    ).toString() +
+                    "lolz");
+                print("lolz" +
+                    jsonDecode(
                       jsonEncode(state.e!.details),
                     ).toString() +
                     "lolz");
@@ -118,6 +128,13 @@ class _PaymentChoiceScreenState extends State<PaymentChoiceScreen> {
                     ),
                   ),
                 ));
+                // print(PaytmPaymentResponseModel.fromEntity(
+                //   PaytmPaymentResponseEntity.fromJson(
+                //     jsonDecode(
+                //       jsonEncode(state.e!.details),
+                //     ),
+                //   ),
+                // ).toEntity().toJson());
               }
             }
             if (state is CheckingPaytmPaymentStatus) {
@@ -170,7 +187,7 @@ class _PaymentChoiceScreenState extends State<PaymentChoiceScreen> {
                               Text(state.paymentChoices[0].description),
                           isSelected: currentSelectedIndex == 0,
                           paymentChoice: state.paymentChoices[0].title,
-                          primaryColor: Color(0xff6326C7),
+                          primaryColor: Colors.grey,
                           isActive: state.paymentChoices[0].active,
                           onTap: (index) {
                             if (state.paymentChoices[0].active) {
@@ -210,8 +227,8 @@ class _PaymentChoiceScreenState extends State<PaymentChoiceScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 24, horizontal: 4),
                         child: TermsCancellation(terms: [
-                          'In case of cancelling of order before 24 hours of the slot whole refund will be provided.',
-                          'In case of cancelling of order after 24 hours of the slot token amount will be charged.'
+                          'In case of cancelling of order before 12 hours of the slot whole refund will be provided.',
+                          'In case of cancelling of order after 12 hours of the slot token amount will be charged.'
                         ]),
                       )
                     ],
@@ -251,22 +268,24 @@ class BottomButton extends StatelessWidget {
               offset: Offset(0, -2))
         ]),
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-          child: Row(
-            children: <Widget>[
-              Spacer(),
-              CommonTextButton(
-                  onPressed: onTap,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 8),
-                    child: Text(title,
-                        style: SizeConfig.kStyle14W500
-                            .copyWith(color: Colors.white)),
-                  ),
-                  backgroundColor: SizeConfig.kPrimaryColor)
-            ],
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+            child: Row(
+              children: <Widget>[
+                Spacer(),
+                CommonTextButton(
+                    onPressed: onTap,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 8),
+                      child: Text(title,
+                          style: SizeConfig.kStyle14W500
+                              .copyWith(color: Colors.white)),
+                    ),
+                    backgroundColor: SizeConfig.kPrimaryColor)
+              ],
+            ),
           ),
         ));
   }
@@ -326,6 +345,7 @@ class PaymentChoiceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+          // color: isActive ? Colors.white : Colors.grey.withOpacity(.2),
           color: Colors.white,
           boxShadow: isSelected
               ? [
@@ -334,8 +354,9 @@ class PaymentChoiceTile extends StatelessWidget {
                       blurRadius: 24,
                       color: Color.fromRGBO(0, 0, 0, .16))
                 ]
-              : []),
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+              : [],
+          borderRadius: BorderRadius.circular(5)),
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -369,9 +390,11 @@ class PaymentChoiceTile extends StatelessWidget {
                 color: isActive
                     ? (isSelected ? primaryColor : Colors.white)
                     : Colors.grey[300],
-                border: Border.all(
-                  color: primaryColor,
-                ),
+                border: isActive
+                    ? Border.all(
+                        color: primaryColor,
+                      )
+                    : null,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),

@@ -8,6 +8,7 @@ import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/fcm_topic.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/offer.dart';
 import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/review.dart';
@@ -29,7 +30,8 @@ abstract class ApiMethods {
       {required String city,
       required double lat,
       required double long,
-      required int offset});
+      required int offset,
+      String? tag});
   Future<StoreEntity> getStoreDetailBySlug({required String slug});
   Future<List<ReviewEntity>> getStoreReviewsBySlug(
       {required String slug, required int offset});
@@ -103,4 +105,7 @@ abstract class ApiMethods {
       {required String bookingId});
   Future<void> cancelBooking(
       {required String bookingId, required String reason});
+  Future<List<OfferEntity>> getOfferList();
+  Future<List<OfferEntity>> getOfferBanners();
+  Future<CartEntity> applyOffer(String code);
 }

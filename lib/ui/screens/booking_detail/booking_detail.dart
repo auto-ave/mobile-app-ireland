@@ -101,6 +101,12 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                             width: 100.w,
                           )
                         : Container(),
+                    Divider(
+                      height: 32,
+                    ),
+                    bookingDetail.payment != null
+                        ? PaymentSummaryWidget(bookingDetail: bookingDetail)
+                        : Container(),
                     bookingDetail.status == BookingStatus.paymentSuccess
                         ? StoreContactWidget(
                             personToContact:
@@ -115,7 +121,10 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                             fontWeight: FontWeight.w600,
                             fontSize: SizeConfig.kfontSize20)),
                     SizeConfig.kverticalMargin8,
-                    DashedBookingBox(bookingDetail: bookingDetail),
+                    DashedBookingBox(
+                      bookingDetail: bookingDetail,
+                      backgroundColor: Colors.white,
+                    ),
                     SizeConfig.kverticalMargin16,
                     Divider(),
                     widget.status == BookingStatus.serviceCompleted

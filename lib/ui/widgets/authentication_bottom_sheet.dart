@@ -11,6 +11,7 @@ import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
+import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/utils/utils.dart';
 
 class AuthenticationBottomSheet extends StatefulWidget {
@@ -129,27 +130,21 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
           SizeConfig.kverticalMargin16,
           Align(
             alignment: Alignment.center,
-            child: Container(
-              width: 100.w,
-              height: 50,
-              child: TextButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _phoneAuthBloc.add(
-                        SendOTP(phoneNumber: '+91${phoneController.text}'));
-                  }
-                },
-                child: Text(
-                  'Send OTP',
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(SizeConfig.kPrimaryColor),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+            child: SafeArea(
+              child: Container(
+                width: 100.w,
+                height: 50,
+                child: CommonTextButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _phoneAuthBloc.add(
+                          SendOTP(phoneNumber: '+91${phoneController.text}'));
+                    }
+                  },
+                  backgroundColor: SizeConfig.kPrimaryColor,
+                  child: Text(
+                    'Send OTP',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -183,28 +178,22 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
           SizeConfig.kverticalMargin16,
           Align(
             alignment: Alignment.center,
-            child: Container(
-              width: 100.w,
-              height: 50,
-              child: TextButton(
-                onPressed: () {
-                  print(otpEntered);
-                  _phoneAuthBloc.add(CheckOTP(
-                      otp: otpEntered,
-                      phoneNumber: '+91${phoneController.text}'));
-                },
-                child: Text(
-                  'Enter OTP',
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(SizeConfig.kPrimaryColor),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+            child: SafeArea(
+              child: Container(
+                width: 100.w,
+                height: 50,
+                child: CommonTextButton(
+                  onPressed: () {
+                    print(otpEntered);
+                    _phoneAuthBloc.add(CheckOTP(
+                        otp: otpEntered,
+                        phoneNumber: '+91${phoneController.text}'));
+                  },
+                  child: Text(
+                    'Enter OTP',
+                    style: TextStyle(color: Colors.white),
                   ),
+                  backgroundColor: SizeConfig.kPrimaryColor,
                 ),
               ),
             ),

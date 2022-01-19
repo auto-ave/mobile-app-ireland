@@ -41,6 +41,8 @@ StoreEntity _$StoreEntityFromJson(Map<String, dynamic> json) {
     images:
         (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
     servicesStart: json['services_start'] as int?,
+    displayDaysOpen: json['display_days_open'] as String?,
+    displayOpeningClosingTime: json['display_opening_closing_time'] as String?,
   );
 }
 
@@ -58,6 +60,8 @@ Map<String, dynamic> _$StoreEntityToJson(StoreEntity instance) =>
       'emails': instance.emails,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'display_opening_closing_time': instance.displayOpeningClosingTime,
+      'display_days_open': instance.displayDaysOpen,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
       'is_active': instance.isActive,

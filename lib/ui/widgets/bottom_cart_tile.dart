@@ -14,48 +14,50 @@ class BottomCartTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Divider(
-          height: 1,
-          thickness: 1,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-          child: Row(
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text('${cart.items!.length} items',
-                      style: SizeConfig.kStyle16),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text('₹${cart.total}', style: SizeConfig.kStyle16),
-                ],
-              ),
-              Spacer(),
-              CommonTextButton(
-                  onPressed: () =>
-                      _showCartSheet(storeName: 'Store Name', context: context),
-                  child:
-                      Text('View Cart', style: TextStyle(color: Colors.white)),
-                  backgroundColor: Theme.of(context).primaryColor)
-              // TextButton(
-              //   child: Text('View Cart', style: TextStyle(color: Colors.white)),
-              //   onPressed: () =>
-              //       _showCartSheet(storeName: 'Store Name', context: context),
-              //   style: ButtonStyle(
-              //       backgroundColor: MaterialStateProperty.all(
-              //           Theme.of(context).primaryColor)),
-              // ),
-            ],
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Divider(
+            height: 1,
+            thickness: 1,
           ),
-        )
-      ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+            child: Row(
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('${cart.items!.length} items',
+                        style: SizeConfig.kStyle16),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Text('₹${cart.total}', style: SizeConfig.kStyle16),
+                  ],
+                ),
+                Spacer(),
+                CommonTextButton(
+                    onPressed: () => _showCartSheet(
+                        storeName: 'Store Name', context: context),
+                    child: Text('View Cart',
+                        style: TextStyle(color: Colors.white)),
+                    backgroundColor: Theme.of(context).primaryColor)
+                // TextButton(
+                //   child: Text('View Cart', style: TextStyle(color: Colors.white)),
+                //   onPressed: () =>
+                //       _showCartSheet(storeName: 'Store Name', context: context),
+                //   style: ButtonStyle(
+                //       backgroundColor: MaterialStateProperty.all(
+                //           Theme.of(context).primaryColor)),
+                // ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -63,6 +65,7 @@ class BottomCartTile extends StatelessWidget {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
+        constraints: BoxConstraints(maxHeight: 80.h),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8), topRight: Radius.circular(8))),

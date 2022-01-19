@@ -4,13 +4,14 @@ import 'package:intl/intl.dart';
 
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
 
 class DashedBookingBox extends StatelessWidget {
   final BookingDetailModel bookingDetail;
-  DashedBookingBox({
-    Key? key,
-    required this.bookingDetail,
-  }) : super(key: key);
+  final Color? backgroundColor;
+  DashedBookingBox(
+      {Key? key, required this.bookingDetail, this.backgroundColor})
+      : super(key: key);
   final TextStyle rightSideInfoPrimaryColor = TextStyle(
       color: SizeConfig.kPrimaryColor,
       fontWeight: FontWeight.w400,
@@ -32,32 +33,39 @@ class DashedBookingBox extends StatelessWidget {
       color: Theme.of(context).primaryColor,
       borderType: BorderType.Rect,
       child: Container(
-        decoration: BoxDecoration(color: Color(0xffF3F8FF)),
+        decoration: BoxDecoration(color: backgroundColor ?? Color(0xffF3F8FF)),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            getDetailsRow(
-                leftText: 'OTP',
-                rightText: bookingDetail.otp ?? 'N/A',
-                leftStyle: leftSideInfo,
-                rightStyle: rightSideInfoPrimaryColor),
-            SizeConfig.kverticalMargin8,
-            getDetailsRow(
+            bookingDetail.status == BookingStatus.paymentSuccess
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      DetailsRowWidget(
+                          leftText: 'OTP',
+                          rightText: bookingDetail.otp ?? 'N/A',
+                          leftStyle: leftSideInfo,
+                          rightStyle: rightSideInfoPrimaryColor),
+                      SizeConfig.kverticalMargin8,
+                    ],
+                  )
+                : SizedBox.shrink(),
+            DetailsRowWidget(
                 leftText: 'Booking Id',
                 rightText: bookingDetail.bookingId!,
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
             SizeConfig.kverticalMargin8,
-            getDetailsRow(
+            DetailsRowWidget(
                 leftText: 'Car Model:',
                 rightText:
                     '${bookingDetail.vehicleModel!.brand} ${bookingDetail.vehicleModel!.model}',
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
             SizeConfig.kverticalMargin8,
-            getDetailsRow(
+            DetailsRowWidget(
                 leftText: 'Scheduled on',
                 rightText: formatter.format(bookingDetail.event!.startDateTime),
                 leftStyle: leftSideInfo,
@@ -65,7 +73,7 @@ class DashedBookingBox extends StatelessWidget {
             SizeConfig.kverticalMargin8,
             Divider(),
             SizeConfig.kverticalMargin8,
-            getDetailsRow(
+            DetailsRowWidget(
                 leftText: 'Time:',
                 rightText:
                     '${formatterTime.format(bookingDetail.event!.startDateTime)} to ${formatterTime.format(bookingDetail.event!.endDateTime)}',
@@ -76,7 +84,7 @@ class DashedBookingBox extends StatelessWidget {
                 .map((e) => Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        getDetailsRow(
+                        DetailsRowWidget(
                             leftText: e.service,
                             rightText: '₹${e.price}',
                             leftStyle: leftSide14W500,
@@ -85,65 +93,37 @@ class DashedBookingBox extends StatelessWidget {
                       ],
                     ))
                 .toList()),
-            Divider(),
             SizeConfig.kverticalMargin8,
-            bookingDetail.payment != null
-                ? getPaymentSummary(bookingDetail)
-                : Container(),
-            SizeConfig.kverticalMargin8,
+            DetailsRowWidget(
+              leftText: 'Total amount',
+              rightText: '₹${bookingDetail.amount}',
+              leftStyle:
+                  SizeConfig.kStyle14.copyWith(fontWeight: FontWeight.w600),
+              rightStyle: TextStyle(
+                  color: SizeConfig.kPrimaryColor,
+                  fontSize: SizeConfig.kfontSize16,
+                  fontWeight: FontWeight.w500),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget getPaymentSummary(BookingDetailModel bookingDetail) {
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Payment Summary', style: leftSide14W500),
-          SizeConfig.kverticalMargin8,
-          getDetailsRow(
-              leftText: 'Token amount paid',
-              rightText: '₹${bookingDetail.payment!.amount}',
-              leftStyle: leftSideInfo,
-              rightStyle: rightSide12W500),
-          SizeConfig.kverticalMargin8,
-          // getDetailsRow(
-          //     leftText: 'Taxes',
-          //     rightText: '₹0',
-          //     leftStyle: leftSideInfo,
-          //     rightStyle: rightSide12W500),
-          // SizeConfig.kverticalMargin8,
-          getDetailsRow(
-              leftText: 'Amount to be paid at store',
-              rightText: '₹${bookingDetail.remainingAmount}',
-              leftStyle: leftSideInfo.copyWith(
-                  color: SizeConfig.kPrimaryColor,
-                  fontSize: SizeConfig.kfontSize16,
-                  fontWeight: FontWeight.w600),
-              rightStyle: rightSideInfoPrimaryColor.copyWith(
-                  color: Colors.black,
-                  fontSize: SizeConfig.kfontSize16,
-                  fontWeight: FontWeight.w700)),
-        ]);
-  }
-
-  Widget getDetailsRow(
-      {required String leftText,
-      required String rightText,
-      required TextStyle leftStyle,
-      required TextStyle rightStyle}) {
-    return Row(
-      children: <Widget>[
-        Text(
-          leftText,
-          style: leftStyle,
-        ),
-        Spacer(),
-        Text(rightText, style: rightStyle),
-      ],
-    );
-  }
+  // Widget getDetailsRow(
+  //     {required String leftText,
+  //     required String rightText,
+  //     required TextStyle leftStyle,
+  //     required TextStyle rightStyle}) {
+  //   return Row(
+  //     children: <Widget>[
+  //       Text(
+  //         leftText,
+  //         style: leftStyle,
+  //       ),
+  //       Spacer(),
+  //       Text(rightText, style: rightStyle),
+  //     ],
+  //   );
+  // }
 }

@@ -58,6 +58,7 @@ class PaytmPaymentBloc extends Bloc<PaytmPaymentEvent, PaytmPaymentState> {
           .startPaytmTransaction(initiatedPayment: initiatedPayment);
       yield PaytmPaymentSuccessful(paymentResponseModel: paymentResponseModel);
     } on PlatformException catch (e) {
+      print("caught exception");
       yield PaytmPaymentFailed(message: e.toString(), e: e);
     }
   }

@@ -7,8 +7,12 @@ import 'package:themotorwash/ui/screens/store_list/store_list_screen.dart';
 class SearchServiceTile extends StatelessWidget {
   final String serviceName;
   final String imageUrl;
+  final String serviceTag;
   const SearchServiceTile(
-      {Key? key, required this.imageUrl, required this.serviceName})
+      {Key? key,
+      required this.imageUrl,
+      required this.serviceName,
+      required this.serviceTag})
       : super(key: key);
 
   @override
@@ -17,7 +21,8 @@ class SearchServiceTile extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.pushNamed(context, StoreListScreen.route,
-            arguments: StoreListArguments(city: 'bpl', title: serviceName));
+            arguments: StoreListArguments(
+                city: 'bpl', title: serviceName, serviceTag: serviceTag));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),

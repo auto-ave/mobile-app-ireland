@@ -8,13 +8,15 @@ class BadgeWidget extends StatelessWidget {
   final Color? backgroundColor;
   final double? height;
   final double? width;
+  final BorderRadius? borderRadius;
   const BadgeWidget(
       {Key? key,
       required this.text,
       this.textStyle,
       this.backgroundColor,
       this.height,
-      this.width})
+      this.width,
+      this.borderRadius})
       : super(key: key);
 
   @override
@@ -31,7 +33,7 @@ class BadgeWidget extends StatelessWidget {
           //       color: Color.fromRGBO(0, 0, 0, 0.25))
           // ],
           color: backgroundColor ?? SizeConfig.kBadgeColor,
-          borderRadius: BorderRadius.circular(2)),
+          borderRadius: borderRadius ?? BorderRadius.circular(2)),
       child: Center(
         child: Text(
           text,

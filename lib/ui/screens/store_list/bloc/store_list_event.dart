@@ -18,14 +18,16 @@ class LoadNearbyStoreList implements StoreListEvent {
 
 class LoadStoreListByService implements StoreListEvent {
   final int offset;
-  final String service;
+  final String serviceTag;
   final bool forLoadMore;
 
   LoadStoreListByService(
-      {required this.offset, required this.service, required this.forLoadMore});
+      {required this.offset,
+      required this.serviceTag,
+      required this.forLoadMore});
 
   @override
-  List<Object?> get props => [offset, service, forLoadMore];
+  List<Object?> get props => [offset, serviceTag, forLoadMore];
 
   @override
   bool? get stringify => true;

@@ -16,6 +16,7 @@ ServiceEntity _$ServiceEntityFromJson(Map<String, dynamic> json) {
     images:
         (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
     thumbnail: json['thumbnail'] as String?,
+    slug: json['slug'] as String,
   );
 }
 
@@ -28,4 +29,5 @@ Map<String, dynamic> _$ServiceEntityToJson(ServiceEntity instance) =>
       'description': instance.description,
       'images': instance.images,
       'thumbnail': instance.thumbnail,
+      'slug': instance.slug,
     };

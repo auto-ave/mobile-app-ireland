@@ -12,16 +12,20 @@ import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/repos/repository.dart';
+import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_detail/booking_detail.dart';
 import 'package:themotorwash/ui/screens/booking_detail/components/store_detail_tile.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
+import 'package:themotorwash/ui/screens/your_bookings/your_bookings_screen.dart';
 import 'package:themotorwash/ui/widgets/badge.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/ui/widgets/dashed_booking_box.dart';
 import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/utils/utils.dart';
 import 'dart:developer' as d;
+
+import 'package:url_launcher/url_launcher.dart';
 
 class BookingSummaryScreen extends StatefulWidget {
   final bool isTransactionSuccessful;
@@ -66,7 +70,8 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushNamedAndRemoveUntil(
-            context, ExploreScreen.route, (route) => false);
+            context, YourBookingsScreen.route, (route) => false,
+            arguments: YourBookingsScreenArguments(fromBookingSummary: true));
         return false;
       },
       child: Scaffold(
@@ -86,104 +91,109 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
             }
             if (state is BookingSummaryLoaded) {
               var bookingDetail = state.booking;
+
               var reviewState = state.booking.review;
               debugPrint(state.booking.toString().substring(1000));
-              return Center(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: <Widget>[
-                            Image.asset(widget.isTransactionSuccessful
-                                ? 'assets/images/bookingConfirmedHands.png'
-                                : 'assets/images/thumbs_down.png'),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizeConfig.kverticalMargin16,
+                      Row(
+                        children: <Widget>[
+                          Image.asset(widget.isTransactionSuccessful
+                              ? 'assets/images/bookingConfirmedHands.png'
+                              : 'assets/images/thumbs_down.png'),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  widget.isTransactionSuccessful
+                                      ? 'Booking Confirmed'
+                                      : 'Booking Failed',
+                                  style: TextStyle(
+                                      color: widget.isTransactionSuccessful
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.red,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: SizeConfig.kfontSize20),
+                                ),
+                                Text(
                                     widget.isTransactionSuccessful
-                                        ? 'Booking Confirmed'
-                                        : 'Booking Failed',
+                                        ? 'We have sent a receipt on your number and email'
+                                        : 'There was an error processing the payment.\nAny amount deducted will be refunded in 3-5 business days.\nYour order isn’t booked.',
                                     style: TextStyle(
-                                        color: widget.isTransactionSuccessful
-                                            ? Theme.of(context).primaryColor
-                                            : Colors.red,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: SizeConfig.kfontSize20),
-                                  ),
-                                  Text(
-                                      widget.isTransactionSuccessful
-                                          ? 'We have sent a receipt on your number and email'
-                                          : 'There was an error processing the payment.\nAny amount deducted will be refunded in 3-5 business days.\nYour order isn’t booked.',
-                                      style: TextStyle(
-                                          fontSize: SizeConfig.kfontSize12)),
-                                ],
-                              ),
+                                        fontSize: SizeConfig.kfontSize12)),
+                              ],
                             ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 24,
-                        ),
-                        SizedBox(
-                          child: bookingDetail.status ==
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      SizedBox(
+                        child: bookingDetail.status ==
+                                BookingStatus.paymentSuccess
+                            ? AddToCalendarButton(bookingDetail: bookingDetail)
+                            : CommonTextButton(
+                                onPressed: () =>
+                                    Navigator.pushNamedAndRemoveUntil(context,
+                                        ExploreScreen.route, (route) => false),
+                                child: Text(
+                                  'Back to home',
+                                  style: SizeConfig.kStyle16W500
+                                      .copyWith(color: Colors.white),
+                                ),
+                                backgroundColor: SizeConfig.kPrimaryColor),
+                        width: 100.w,
+                      ),
+                      Divider(
+                        height: 32,
+                      ),
+                      bookingDetail.status != BookingStatus.paymentSuccess
+                          ? Divider(
+                              height: 32,
+                            )
+                          : Container(),
+                      StoreDetailTile(bookingDetail: bookingDetail),
+                      bookingDetail.status != BookingStatus.paymentSuccess
+                          ? SizeConfig.kverticalMargin16
+                          : Container(),
+                      bookingDetail.status == BookingStatus.paymentSuccess
+                          ? StoreContactWidget(
+                              personToContact:
+                                  bookingDetail.store!.contactPersonName!,
+                              phoneNumber:
+                                  bookingDetail.store!.contactPersonNumber!,
+                              otp: bookingDetail.otp!,
+                            )
+                          : Container(),
+                      bookingDetail.payment != null &&
+                              bookingDetail.status ==
                                   BookingStatus.paymentSuccess
-                              ? AddToCalendarButton(
-                                  bookingDetail: bookingDetail)
-                              : CommonTextButton(
-                                  onPressed: () =>
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context,
-                                          ExploreScreen.route,
-                                          (route) => false),
-                                  child: Text(
-                                    'Back to home',
-                                    style: SizeConfig.kStyle16W500
-                                        .copyWith(color: Colors.white),
-                                  ),
-                                  backgroundColor: SizeConfig.kPrimaryColor),
-                          width: 100.w,
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        bookingDetail.status != BookingStatus.paymentSuccess
-                            ? Divider(
-                                height: 48,
-                              )
-                            : Container(),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        StoreDetailTile(bookingDetail: bookingDetail),
-                        bookingDetail.status == BookingStatus.paymentSuccess
-                            ? StoreContactWidget(
-                                personToContact:
-                                    bookingDetail.store!.contactPersonName!,
-                                phoneNumber:
-                                    bookingDetail.store!.contactPersonNumber!,
-                                otp: bookingDetail.otp!,
-                              )
-                            : Container(),
-                        Text('Booking Details',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: SizeConfig.kfontSize20)),
-                        SizeConfig.kverticalMargin16,
-                        DashedBookingBox(bookingDetail: bookingDetail),
-                        SizeConfig.kverticalMargin16,
-                        Divider(),
-                      ],
-                    ),
+                          ? PaymentSummaryWidget(bookingDetail: bookingDetail)
+                          : Container(),
+                      Text('Booking Details',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: SizeConfig.kfontSize20)),
+                      SizeConfig.kverticalMargin16,
+                      DashedBookingBox(
+                        bookingDetail: bookingDetail,
+                        backgroundColor: Colors.white,
+                      ),
+                      SizeConfig.kverticalMargin16,
+                      Divider(),
+                    ],
                   ),
                 ),
               );
@@ -209,6 +219,107 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
   }
 }
 
+class DetailsRowWidget extends StatelessWidget {
+  final String? leftText;
+  final String rightText;
+  final TextStyle? leftStyle;
+  final TextStyle rightStyle;
+  final Widget? leftWidget;
+  const DetailsRowWidget(
+      {Key? key,
+      this.leftText,
+      required this.rightText,
+      this.leftStyle,
+      required this.rightStyle,
+      this.leftWidget})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        leftWidget != null
+            ? Expanded(child: leftWidget!)
+            : Expanded(
+                child: Text(
+                  leftText!,
+                  style: leftStyle,
+                ),
+              ),
+        SizeConfig.kHorizontalMargin8,
+        Text(rightText, style: rightStyle),
+      ],
+    );
+  }
+}
+
+class PaymentSummaryWidget extends StatelessWidget {
+  final BookingDetailModel bookingDetail;
+  const PaymentSummaryWidget({Key? key, required this.bookingDetail})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Payment Summary', style: SizeConfig.kStyle16W500),
+          SizeConfig.kverticalMargin16,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: DetailsRowWidget(
+                leftText: 'Total amount',
+                rightText: '₹${bookingDetail.amount}',
+                leftStyle:
+                    SizeConfig.kStyle14.copyWith(fontWeight: FontWeight.w600),
+                rightStyle: TextStyle(
+                    color: SizeConfig.kPrimaryColor,
+                    fontSize: SizeConfig.kfontSize14,
+                    fontWeight: FontWeight.w500)),
+          ),
+          SizeConfig.kverticalMargin8,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: DetailsRowWidget(
+                leftText: 'Booking amount paid',
+                rightText: '₹${bookingDetail.payment!.amount}',
+                leftStyle:
+                    SizeConfig.kStyle14.copyWith(fontWeight: FontWeight.w600),
+                rightStyle: TextStyle(
+                    color: SizeConfig.kPrimaryColor,
+                    fontSize: SizeConfig.kfontSize16,
+                    fontWeight: FontWeight.w500)),
+          ),
+          SizeConfig.kverticalMargin8,
+          // getDetailsRow(
+          //     leftText: 'Taxes',
+          //     rightText: '₹0',
+          //     leftStyle: leftSideInfo,
+          //     rightStyle: rightSide12W500),
+          // SizeConfig.kverticalMargin8,
+          Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+                color: Color(0xffDCECFF),
+                borderRadius: BorderRadius.circular(4)),
+            child: DetailsRowWidget(
+                leftText: 'Amount to be paid at store',
+                rightText: '₹${bookingDetail.remainingAmount}',
+                leftStyle:
+                    SizeConfig.kStyle14.copyWith(fontWeight: FontWeight.w600),
+                rightStyle: TextStyle(
+                    color: SizeConfig.kPrimaryColor,
+                    fontSize: SizeConfig.kfontSize18,
+                    fontWeight: FontWeight.w700)),
+          ),
+          Divider(
+            height: 32,
+          ),
+        ]);
+  }
+}
+
 class StoreContactWidget extends StatelessWidget {
   final String personToContact;
   final String phoneNumber;
@@ -226,9 +337,7 @@ class StoreContactWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Divider(
-          height: 48,
-        ),
+        SizeConfig.kverticalMargin16,
         Row(
           children: [
             Text('OTP',
@@ -240,10 +349,11 @@ class StoreContactWidget extends StatelessWidget {
               text: otp,
               textStyle: SizeConfig.kStyle16Bold.copyWith(color: Colors.white),
               backgroundColor: SizeConfig.kPrimaryColor,
+              borderRadius: BorderRadius.circular(4),
             )
           ],
         ),
-        SizeConfig.kverticalMargin4,
+        SizeConfig.kverticalMargin8,
         Row(
           children: [
             Text('Person to contact: ',
@@ -251,12 +361,22 @@ class StoreContactWidget extends StatelessWidget {
                   color: Colors.black,
                 )),
             Spacer(),
-            Text(personToContact,
-                style: SizeConfig.kStyle16Bold
-                    .copyWith(color: SizeConfig.kPrimaryColor))
+            GestureDetector(
+              onTap: () {
+                final Uri telLaunchUri = Uri(
+                  scheme: 'tel',
+                  path: personToContact,
+                );
+
+                launch(telLaunchUri.toString());
+              },
+              child: Text(personToContact,
+                  style: SizeConfig.kStyle16W500
+                      .copyWith(color: SizeConfig.kPrimaryColor)),
+            )
           ],
         ),
-        SizeConfig.kverticalMargin4,
+        SizeConfig.kverticalMargin8,
         Row(
           children: [
             Text('Contact Number: ',
@@ -265,7 +385,7 @@ class StoreContactWidget extends StatelessWidget {
                 )),
             Spacer(),
             Text(phoneNumber,
-                style: SizeConfig.kStyle16Bold
+                style: SizeConfig.kStyle16W500
                     .copyWith(color: SizeConfig.kPrimaryColor))
           ],
         ),

@@ -10,6 +10,7 @@ class ExploreServicesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(MediaQuery.)
     return MultiSliver(children: [
       SliverPadding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 16),
@@ -44,13 +45,30 @@ class ExploreServicesGrid extends StatelessWidget {
       // //       mainAxisSpacing: 16,
       // //       crossAxisCount: 3,
       // //     ))
-      SliverGrid.count(
-        crossAxisCount: 3,
-        children: items,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 0,
-        childAspectRatio: 1,
+      Center(
+        child: Wrap(
+          spacing: 16,
+          runSpacing: 32,
+          // alignment: WrapAlignment.spaceAround,
+          // crossAxisAlignment: WrapCrossAlignment.start,
+          // alignment: WrapAlignment.start,
+
+          children: items
+              .map((e) => Padding(
+                    padding: EdgeInsets.all(0),
+                    child: e,
+                  ))
+              .toList(),
+        ),
       ),
+      SizeConfig.kverticalMargin16,
+      // SliverGrid.count(
+      //   crossAxisCount: 3,
+      //   children: items,
+      //   mainAxisSpacing: 8,
+      //   crossAxisSpacing: 0,
+      // childAspectRatio: SizeConfig.screenWidth> ,
+      // ),
     ]);
   }
 }

@@ -6,6 +6,7 @@ import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/initiate_payment.dart';
 import 'package:themotorwash/data/models/location_model.dart';
+import 'package:themotorwash/data/models/offer.dart';
 import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/service.dart';
@@ -31,13 +32,17 @@ class RestRepository implements Repository {
 
   @override
   Future<List<StoreListModel>> getStoreListByLocation(
-      {required LocationModel locationModel, required int offset}) async {
+      {required LocationModel locationModel,
+      required int offset,
+      String? tag}) async {
+    print('tag' + tag.toString() + "yoyo");
     List<StoreListEntity> entities =
         await _apiMethodsImp.getStoreListByLocation(
             city: locationModel.cityCode,
             lat: locationModel.lat,
             long: locationModel.long,
-            offset: offset);
+            offset: offset,
+            tag: tag);
     List<StoreListModel> stores =
         entities.map((e) => StoreListModel.fromEntity(e)).toList();
     return stores;
@@ -250,5 +255,25 @@ class RestRepository implements Repository {
     CancelBookingDataEntity entity =
         await _apiMethodsImp.getCancelBookingData(bookingId: bookingId);
     return CancelBookingData.fromEntity(entity);
+  }
+
+  @override
+  Future<List<OfferModel>> getOfferList() async {
+    List<OfferEntity> offers = await _apiMethodsImp.getOfferList();
+
+    return offers.map<OfferModel>((e) => OfferModel.fromEntity(e)).toList();
+  }
+
+  @override
+  Future<List<OfferModel>> getOfferBanners() async {
+    List<OfferEntity> offers = await _apiMethodsImp.getOfferBanners();
+
+    return offers.map<OfferModel>((e) => OfferModel.fromEntity(e)).toList();
+  }
+
+  @override
+  Future<CartModel> applyOffer(String code) async {
+    CartEntity cart = await _apiMethodsImp.applyOffer(code);
+    return CartModel.fromEntity(cart);
   }
 }

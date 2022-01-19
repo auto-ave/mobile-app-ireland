@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:themotorwash/theme_constants.dart';
 
@@ -59,7 +60,10 @@ class DateSelectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => onTap(tabIndex),
+      onTap: () {
+        onTap(tabIndex);
+        HapticFeedback.mediumImpact();
+      },
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(

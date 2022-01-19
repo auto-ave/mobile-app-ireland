@@ -15,63 +15,60 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarIconBrightness: Brightness.dark));
-    return SafeArea(
-      child: Scaffold(
-        appBar: getAppBarLoginScreen(context: context),
-        backgroundColor: Colors.white,
-        body:
-            //  Stack(
-            //   children: [
-            Column(
-          children: [
-            Flexible(
-              child: Image.asset(
-                'assets/images/oreti.png',
-                width: 100.w,
-                fit: BoxFit.fitWidth,
-              ),
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //     statusBarColor: Colors.white,
+    //     statusBarIconBrightness: Brightness.light));
+    return Scaffold(
+      appBar: AppBarLoginScreen(),
+      backgroundColor: Colors.white,
+      body:
+          //  Stack(
+          //   children: [
+          Column(
+        children: [
+          Flexible(
+            child: Image.asset(
+              'assets/images/oreti.png',
+              width: 100.w,
+              fit: BoxFit.fitWidth,
             ),
-            Container(
-              child: LoginBottom(),
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        blurRadius: 16,
-                        offset: Offset(0, -8),
-                        color: Color.fromRGBO(105, 105, 105, 0.16))
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5),
-                      topRight: Radius.circular(5))),
-            ),
-          ],
-        ),
-        // Positioned(
-        //   top: 0,
-        //   child: SizedBox(
-        //     width: MediaQuery.of(context).size.width,
-        //     child: Row(
-        //       children: [
-        //         Image.asset(
-        //           'assets/images/logo.png',
-        //           width: MediaQuery.of(context).size.width * .3,
-        //         ),
-        //         Spacer(),
-        //         Text(
-        //           'skip',
-        //           style: SizeConfig.kStyle16PrimaryColor,
-        //         )
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        //   ],
-        // ),
+          ),
+          Container(
+            child: LoginBottom(),
+            decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 16,
+                      offset: Offset(0, -8),
+                      color: Color.fromRGBO(105, 105, 105, 0.16))
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5), topRight: Radius.circular(5))),
+          ),
+        ],
       ),
+      // Positioned(
+      //   top: 0,
+      //   child: SizedBox(
+      //     width: MediaQuery.of(context).size.width,
+      //     child: Row(
+      //       children: [
+      //         Image.asset(
+      //           'assets/images/logo.png',
+      //           width: MediaQuery.of(context).size.width * .3,
+      //         ),
+      //         Spacer(),
+      //         Text(
+      //           'skip',
+      //           style: SizeConfig.kStyle16PrimaryColor,
+      //         )
+      //       ],
+      //     ),
+      //   ),
+      // ),
+      //   ],
+      // ),
     );
   }
 }
@@ -118,7 +115,9 @@ class _LoginBottomState extends State<LoginBottom> {
                 }
                 if (state is OTPSent) {
                   showSnackbar(context, 'OTP sent');
-                  Navigator.pushNamed(context, VerifyPhoneScreen.route,
+                  print('heloz');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, VerifyPhoneScreen.route, (route) => false,
                       arguments: VerifyPhoneScreenArguments(
                           phoneNumber: "+91" + phoneController.text));
                 }
