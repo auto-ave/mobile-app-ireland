@@ -13,6 +13,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
+import 'package:themotorwash/blocs/global_cart/bloc/global_cart_bloc.dart';
 import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
 import 'package:themotorwash/blocs/global_vehicle_type/bloc/global_vehicle_type_bloc.dart';
 import 'package:themotorwash/blocs/location_functions/bloc/location_functions_bloc.dart';
@@ -170,6 +171,7 @@ class _MyAppState extends State<MyApp> {
   late CartFunctionBloc _cartFunctionBloc;
   late LocalDataService _localDataService;
   late FirebaseMessaging _fcmInstance;
+  late GlobalCartBloc _globalCartBloc;
 
   @override
   void initState() {
@@ -198,9 +200,11 @@ class _MyAppState extends State<MyApp> {
     _authRepository = AuthRestRepository(apiMethodsImp: _apiMethodsImp);
     _orderReviewBloc = OrderReviewBloc();
     _globalLocationBloc = GlobalLocationBloc(repository: _repository);
-
+    _globalCartBloc = GlobalCartBloc();
     _cartFunctionBloc = CartFunctionBloc(
-        repository: _repository, orderReviewBloc: _orderReviewBloc);
+        repository: _repository,
+        orderReviewBloc: _orderReviewBloc,
+        globalCartBloc: _globalCartBloc);
   }
 
   @override
@@ -243,6 +247,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<OrderReviewBloc>(
           create: (_) => _orderReviewBloc,
+        ),
+        BlocProvider<GlobalCartBloc>(
+          create: (_) => _globalCartBloc,
         ),
       ],
       child: MultiRepositoryProvider(

@@ -541,4 +541,16 @@ class ApiService implements ApiMethods {
     CartEntity cart = CartEntity.fromJson(data['cart']);
     return cart;
   }
+
+  @override
+  Future<CartEntity> removeOffer() async {
+    String url = _apiConstants.postOfferRemoveEndpoint();
+    Dio client = _apiConstants.dioClient();
+    Response res = await client.post(
+      url,
+    );
+    dynamic data = jsonDecode(res.data);
+    CartEntity cart = CartEntity.fromJson(data['cart']);
+    return cart;
+  }
 }

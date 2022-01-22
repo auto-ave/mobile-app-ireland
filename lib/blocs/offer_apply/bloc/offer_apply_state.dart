@@ -11,23 +11,24 @@ class OfferApplyInitial extends OfferApplyState {
 
 class OfferApplySuccess extends OfferApplyState {
   final CartModel cart;
-  OfferApplySuccess({
-    required this.cart,
-  });
+  final OfferSuccess offerSuccessType;
+  OfferApplySuccess({required this.cart, required this.offerSuccessType});
   @override
-  List<Object> get props => [cart];
+  List<Object> get props => [cart, offerSuccessType];
 }
 
 class OfferApplyError extends OfferApplyState {
   final String message;
-  OfferApplyError({
-    required this.message,
-  });
+  final OfferError offerErrorType;
+  OfferApplyError({required this.message, required this.offerErrorType});
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, offerErrorType];
 }
 
 class OfferApplyLoading extends OfferApplyState {
   @override
   List<Object> get props => [];
 }
+
+enum OfferError { remove, apply }
+enum OfferSuccess { remove, apply }

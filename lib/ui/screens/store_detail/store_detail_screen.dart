@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
+import 'package:themotorwash/blocs/global_cart/bloc/global_cart_bloc.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
@@ -68,41 +69,10 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
       key: _scaffoldState,
       bottomNavigationBar: BlocBuilder<StoreDetailBloc, StoreDetailState>(
         builder: (context, detailState) {
-          return BlocBuilder<CartFunctionBloc, CartFunctionState>(
+          return BlocBuilder<GlobalCartBloc, GlobalCartState>(
             builder: (context, state) {
               if (detailState is StoreDetailLoaded) {
-                if (state is CartLoading) {
-                  return Container(
-                    width: 0,
-                    height: 0,
-                  );
-                }
-                if (state is CartFunctionUninitialized) {
-                  return Container(
-                    width: 0,
-                    height: 0,
-                  );
-                }
-                if (state is CartItemAdded) {
-                  return state.cart.items!.isNotEmpty &&
-                          detailState.store.id == state.cart.store!.id
-                      ? BottomCartTile(cart: state.cart)
-                      : Container(
-                          width: 0,
-                          height: 0,
-                        );
-                }
-
-                if (state is CartItemDeleted) {
-                  return state.cart.items!.isNotEmpty &&
-                          detailState.store.id == state.cart.store!.id
-                      ? BottomCartTile(cart: state.cart)
-                      : Container(
-                          width: 0,
-                          height: 0,
-                        );
-                }
-                if (state is CartLoaded) {
+                if (state is CartSetSuccess) {
                   return state.cart.items!.isNotEmpty &&
                           detailState.store.id == state.cart.store!.id
                       ? BottomCartTile(cart: state.cart)

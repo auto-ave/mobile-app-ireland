@@ -272,4 +272,9 @@ class ApiConstants {
     var uri = Uri.https(baseUrl, "/offer/apply/");
     return uri.toString();
   }
+
+  String postOfferRemoveEndpoint() {
+    var uri = Uri.https(baseUrl, "/offer/remove/");
+    return uri.toString();
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:themotorwash/blocs/global_cart/bloc/global_cart_bloc.dart';
 import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/repos/repository.dart';
@@ -12,11 +13,15 @@ part 'cart_function_state.dart';
 class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
   final Repository _repository;
   final OrderReviewBloc _orderReviewBloc;
+  final GlobalCartBloc _globalCartBloc;
+
   CartFunctionBloc(
       {required Repository repository,
-      required OrderReviewBloc orderReviewBloc})
+      required OrderReviewBloc orderReviewBloc,
+      required GlobalCartBloc globalCartBloc})
       : _repository = repository,
         _orderReviewBloc = orderReviewBloc,
+        _globalCartBloc = globalCartBloc,
         super(CartFunctionUninitialized());
 
   @override
@@ -53,6 +58,7 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
       CartModel cart = await _repository.postAddItemToCart(
           itemId: itemId, vehicleModel: vehicleModel);
       _orderReviewBloc.add(SetCart(cart: cart));
+      _globalCartBloc.add(NewCart(cart: cart));
       yield CartItemAdded(cart: cart);
     } catch (e) {
       yield CartStateError(message: e.toString());
@@ -72,6 +78,7 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
         yield CartFunctionLoading(itemId: [itemId]);
       }
       CartModel cart = await _repository.postDeleteItemFromCart(itemId: itemId);
+      _globalCartBloc.add(NewCart(cart: cart));
       _orderReviewBloc.add(SetCart(cart: cart));
 
       yield CartItemDeleted(cart: cart);
@@ -94,7 +101,9 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
       yield CartLoading();
 
       CartModel cart = await _repository.getCart();
+
       _orderReviewBloc.add(SetCart(cart: cart));
+      _globalCartBloc.add(NewCart(cart: cart));
 
       yield CartLoaded(cart: cart);
     } catch (e) {

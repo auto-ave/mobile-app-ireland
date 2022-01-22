@@ -12,3 +12,8 @@ class ApplyOffer extends OfferApplyEvent {
   @override
   List<Object> get props => [];
 }
+
+class RemoveOffer extends OfferApplyEvent {
+  @override
+  List<Object> get props => [];
+}

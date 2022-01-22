@@ -72,4 +72,5 @@ abstract class Repository {
   Future<List<OfferModel>> getOfferList();
   Future<List<OfferModel>> getOfferBanners();
   Future<CartModel> applyOffer(String code);
+  Future<CartModel> removeOffer();
 }

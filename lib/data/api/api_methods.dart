@@ -108,4 +108,5 @@ abstract class ApiMethods {
   Future<List<OfferEntity>> getOfferList();
   Future<List<OfferEntity>> getOfferBanners();
   Future<CartEntity> applyOffer(String code);
+  Future<CartEntity> removeOffer();
 }

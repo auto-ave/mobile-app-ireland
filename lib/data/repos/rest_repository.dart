@@ -276,4 +276,10 @@ class RestRepository implements Repository {
     CartEntity cart = await _apiMethodsImp.applyOffer(code);
     return CartModel.fromEntity(cart);
   }
+
+  @override
+  Future<CartModel> removeOffer() async {
+    CartEntity cart = await _apiMethodsImp.removeOffer();
+    return CartModel.fromEntity(cart);
+  }
 }

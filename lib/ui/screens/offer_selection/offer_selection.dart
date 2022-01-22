@@ -125,8 +125,7 @@ class _OfferSelectionScreenState extends State<OfferSelectionScreen> {
                   if (offers.isEmpty) {
                     return SliverFillRemaining(
                       child: Center(
-                        child:
-                            Text('Teri maa ne offers nahi diye toh hum ku de'),
+                        child: Text('No offers available'),
                       ),
                     );
                   }
