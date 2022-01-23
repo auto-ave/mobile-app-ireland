@@ -17,7 +17,10 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 12.x
+          distribution: 'zulu'
+          java-version: '11'
+        # with:
+        #   java-version: 12.x
       - name: Decrypt Android keys
         run: sh ./.github/scripts/decrypt_android_secrets.sh
         env:
@@ -26,6 +29,9 @@ jobs:
         uses: subosito/flutter-action@v2.2.0
         with:
           flutter-version: 2.8.1
+          cache: true
+          cache-key: flutter # optional, change this to force refresh cache
+          cache-path: ${{ runner.tool_cache }}/flutter
       - name: Install Flutter dependencies
         run: flutter pub get
         # Add build runner commands here if you have any
@@ -52,7 +58,11 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 12.x
+          distribution: 'zulu'
+          java-version: '11'
+        
+        # with:
+        #   java-version: 12.x
       - name: Decrypt Android keys
         run: sh ./.github/scripts/decrypt_android_secrets.sh
         env:
@@ -61,6 +71,9 @@ jobs:
         uses: subosito/flutter-action@v2.2.0
         with:
           flutter-version: 2.8.1
+          cache: true
+          cache-key: flutter # optional, change this to force refresh cache
+          cache-path: ${{ runner.tool_cache }}/flutter
       - name: Install Flutter dependencies
         run: flutter pub get
       - name: Build the APK
