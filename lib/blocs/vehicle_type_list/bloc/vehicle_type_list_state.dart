@@ -49,7 +49,7 @@ class VehicleListError extends VehicleListState {
   });
   @override
   List<Object> get props => [message];
-}// class VehicleTypeListLoaded extends VehicleTypeListState {
+} // class VehicleTypeListLoaded extends VehicleTypeListState {
 //   final List<VehicleWheel> wheels;
 //   final List<VehicleTypeModel> vehicleTypes;
 //   VehicleTypeListLoaded({
