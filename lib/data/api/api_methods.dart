@@ -1,16 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
+import 'package:themotorwash/data/models/initiate_razorpay_payment.dart';
+import 'package:themotorwash/data/models/multi_day_slot_detail.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
 import 'package:themotorwash/data/models/cancel_booking_data.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/fcm_topic.dart';
-import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/initiate_paytm_payment.dart';
 import 'package:themotorwash/data/models/offer.dart';
 import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
+import 'package:themotorwash/data/models/razorpay_payment_response.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
 import 'package:themotorwash/data/models/service.dart';
@@ -58,11 +61,11 @@ abstract class ApiMethods {
   Future<List<SlotEntity>> createSlots(
       {required String date, required String cartId});
 
-  Future<InitiatePaymentEntity> initiatePaytmPayment(
+  Future<InitiatePaytmPaymentEntity> initiatePaytmPayment(
       {required String date,
-      required int bay,
-      required String slotStart,
-      required String slotEnd});
+      required int? bay,
+      required String? slotStart,
+      required String? slotEnd});
   Future<PaytmPaymentResponseEntity> checkPaytmPaymentStatus(
       {required PaytmPaymentResponseEntity paymentResponseEntity});
   Future<List<VehicleModelEntity>> getVehicleTypeList();
@@ -109,4 +112,15 @@ abstract class ApiMethods {
   Future<List<OfferEntity>> getOfferBanners();
   Future<CartEntity> applyOffer(String code);
   Future<CartEntity> removeOffer();
+  Future<MultiDaySlotDetailEntity> getMultiDaySlotDetail(
+      {required String date, required String cartId});
+  Future<InitiateRazorpayPaymentEntity> initiateRazorpayPayment(
+      {required String date,
+      required int? bay,
+      required String? slotStart,
+      required String? slotEnd});
+  Future<RazorpayPaymentResponseEntity> checkRazorpayPaymentStatus(
+      {required RazorpayPaymentResponseEntity paymentResponseEntity,
+      required String bookingId,
+      required bool isFailure});
 }

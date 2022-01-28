@@ -24,6 +24,7 @@ import 'package:themotorwash/data/api/api_methods.dart';
 import 'package:themotorwash/data/api/api_service.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
+import 'package:themotorwash/data/models/multi_day_slot_detail.dart';
 import 'package:themotorwash/data/notifications/fcm_helper.dart';
 import 'package:themotorwash/data/repos/auth_repository.dart';
 import 'package:themotorwash/data/repos/auth_rest_repository.dart';
@@ -45,6 +46,7 @@ import 'package:themotorwash/ui/screens/offer_selection/offer_selection.dart';
 import 'package:themotorwash/ui/screens/order_review/order_review.dart';
 import 'package:themotorwash/ui/screens/payment_choice/payment_choice.dart';
 import 'package:themotorwash/ui/screens/profile/profile_screen.dart';
+import 'package:themotorwash/ui/screens/slot_select/components/pages/multi_day_slot_select_screen.dart';
 import 'package:themotorwash/ui/screens/slot_select/slot_select_screen.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_detail_bloc.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_reviews/store_reviews_bloc.dart';
@@ -365,6 +367,7 @@ class _MyAppState extends State<MyApp> {
               return MaterialPageRoute(
                 builder: (context) {
                   return SlotSelectScreen(
+                    isMultiDay: args.isMultiDay,
                     cartTotal: args.cartTotal,
                     cartId: args.cardId,
                   );
@@ -421,6 +424,7 @@ class _MyAppState extends State<MyApp> {
                 builder: (context) {
                   return OrderReviewScreen(
                     dateSelected: args.dateSelected,
+                    isMultiDay: args.isMultiDay,
                   );
                 },
               );
@@ -465,6 +469,7 @@ class _MyAppState extends State<MyApp> {
                   return PaymentChoiceScreen(
                     dateSelected: args.dateSelected,
                     slot: args.slot,
+                    multiDaySlot: args.multiDaySlot,
                   );
                 },
               );
@@ -500,6 +505,15 @@ class _MyAppState extends State<MyApp> {
                 },
               );
             }
+            // if (settings.name == MultiDaySlotSelectScreen.route) {
+            //   final args = settings.arguments as MultiDaySlotSelectScreenArgs;
+            //   return MaterialPageRoute(
+            //     builder: (context) {
+            //       return MultiDaySlotSelectScreen(
+            //           cartTotal: args.cartTotal, cartId: args.cartId);
+            //     },
+            //   );
+            // }
             assert(false, 'Need to implement ${settings.name}');
           },
         ),

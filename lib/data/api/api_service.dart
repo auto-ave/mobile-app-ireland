@@ -2,21 +2,25 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:themotorwash/data/api/api_constants.dart';
 import 'package:themotorwash/data/api/api_methods.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
+import 'package:themotorwash/data/models/initiate_razorpay_payment.dart';
+import 'package:themotorwash/data/models/multi_day_slot_detail.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
 import 'package:themotorwash/data/models/cancel_booking_data.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
 import 'package:themotorwash/data/models/fcm_topic.dart';
-import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/initiate_paytm_payment.dart';
 import 'package:themotorwash/data/models/offer.dart';
 import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
+import 'package:themotorwash/data/models/razorpay_payment_response.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
 import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
@@ -112,6 +116,8 @@ class ApiService implements ApiMethods {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.getCartEndpoint();
     Response res = await client.get(url);
+    Logger log = Logger();
+    log.d(res);
     dynamic cartData = jsonDecode(res.data);
     return CartEntity.fromJson(cartData);
   }
@@ -202,6 +208,7 @@ class ApiService implements ApiMethods {
     String url = _apiConstants.getBookingDetailsEndpoint(bookingId: bookingId);
     Response res = await client.get(url);
     dynamic data = jsonDecode(res.data);
+    // Clipboard.setData(ClipboardData(text: data.toString()));
     // var logger = Logger();
     // logger.d("hello" + res.data.toString().substring(400) + "booking");
 
@@ -225,11 +232,11 @@ class ApiService implements ApiMethods {
   }
 
   @override
-  Future<InitiatePaymentEntity> initiatePaytmPayment(
+  Future<InitiatePaytmPaymentEntity> initiatePaytmPayment(
       {required String date,
-      required int bay,
-      required String slotStart,
-      required String slotEnd}) async {
+      required int? bay,
+      required String? slotStart,
+      required String? slotEnd}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.postInitiatePaytmPaymentEndpoint();
     print({
@@ -245,7 +252,7 @@ class ApiService implements ApiMethods {
       'slot_end': slotEnd
     });
     dynamic data = jsonDecode(res.data);
-    return InitiatePaymentEntity.fromJson(data);
+    return InitiatePaytmPaymentEntity.fromJson(data);
   }
 
   @override
@@ -552,5 +559,58 @@ class ApiService implements ApiMethods {
     dynamic data = jsonDecode(res.data);
     CartEntity cart = CartEntity.fromJson(data['cart']);
     return cart;
+  }
+
+  @override
+  Future<MultiDaySlotDetailEntity> getMultiDaySlotDetail(
+      {required String date, required String cartId}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.postGetSlotsByCartDateEndpoint();
+    Response res = await client.post(url,
+        data: {'date': date}, cancelToken: createSlotsCancelToken);
+    dynamic data = jsonDecode(res.data);
+
+    MultiDaySlotDetailEntity entity = MultiDaySlotDetailEntity.fromJson(data);
+    return entity;
+  }
+
+  @override
+  Future<RazorpayPaymentResponseEntity> checkRazorpayPaymentStatus(
+      {required RazorpayPaymentResponseEntity paymentResponseEntity,
+      required bool isFailure,
+      required String bookingId}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.postCheckRazorpayPaymentStatusEndpoint();
+    print("jjjj" + paymentResponseEntity.toJson().toString());
+    final data = paymentResponseEntity.toJson();
+    data.addAll({'booking_id': bookingId, 'is_failure': isFailure});
+    Response res = await client.post(url, data: data);
+    print(res.toString() + "response");
+    dynamic decodedData = jsonDecode(res.data);
+    return RazorpayPaymentResponseEntity.fromJson(decodedData);
+  }
+
+  @override
+  Future<InitiateRazorpayPaymentEntity> initiateRazorpayPayment(
+      {required String date,
+      required int? bay,
+      required String? slotStart,
+      required String? slotEnd}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.postInitiateRazorpayPaymentEndpoint();
+    print({
+      'date': date,
+      'bay': bay,
+      'slot_start': slotStart,
+      'slot_end': slotEnd
+    }.toString());
+    Response res = await client.post(url, data: {
+      'date': date,
+      'bay': bay,
+      'slot_start': slotStart,
+      'slot_end': slotEnd
+    });
+    dynamic data = jsonDecode(res.data);
+    return InitiateRazorpayPaymentEntity.fromJson(data);
   }
 }

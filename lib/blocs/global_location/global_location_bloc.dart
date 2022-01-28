@@ -54,6 +54,8 @@ class GlobalLocationBloc
 
         // When we reach here, permissions are granted and we can
         // continue accessing the position of the device.
+        // Will throw an expection if permission is denied.
+        yield RetrievingLocation();
         List responses = await Future.wait(
             [Geolocator.getCurrentPosition(), _repository.getListOfCities()]);
         Position location = responses[0];

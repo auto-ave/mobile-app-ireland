@@ -29,6 +29,8 @@ class BookingDetailModel {
   final Review? review;
 
   final String? remainingAmount;
+  final bool isMultiDay;
+
   BookingDetailModel(
       {this.id,
       this.createdAt,
@@ -46,7 +48,8 @@ class BookingDetailModel {
       this.amount,
       this.payment,
       this.review,
-      this.remainingAmount});
+      this.remainingAmount,
+      required this.isMultiDay});
 
   factory BookingDetailModel.fromEntity(BookingDetailEntity e) {
     return BookingDetailModel(
@@ -77,7 +80,8 @@ class BookingDetailModel {
             ? VehicleModel.fromEntity(e.vehicleModel!)
             : null,
         review: e.review != null ? Review.fromEntity(e.review!) : null,
-        remainingAmount: e.remainingAmount);
+        remainingAmount: e.remainingAmount,
+        isMultiDay: e.isMultiDay);
   }
 
   @override
@@ -124,6 +128,8 @@ class BookingDetailEntity {
   final List<PriceTimeListEntity>? services;
 
   final ReviewEntity? review;
+  @JsonKey(name: 'is_multi_day')
+  final bool isMultiDay;
   BookingDetailEntity(
       {this.id,
       this.bookingId,
@@ -141,7 +147,8 @@ class BookingDetailEntity {
       this.isRefunded,
       this.services,
       this.review,
-      this.remainingAmount});
+      this.remainingAmount,
+      required this.isMultiDay});
 
   factory BookingDetailEntity.fromJson(Map<String, dynamic> data) =>
       _$BookingDetailEntityFromJson(data);

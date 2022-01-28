@@ -73,7 +73,7 @@ class StoreServiceTile extends StatelessWidget {
                   ),
                 ),
                 BadgeWidget(
-                  text: '$time mins',
+                  text: '$time',
                   textStyle: SizeConfig.kStyle14Bold
                       .copyWith(color: SizeConfig.kPrimaryColor),
                 ),

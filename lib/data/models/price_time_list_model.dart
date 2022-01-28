@@ -13,7 +13,7 @@ class PriceTimeListModel {
 
   final int? price;
 
-  final int? timeInterval;
+  final String? timeInterval;
 
   final String? description;
 
@@ -70,7 +70,7 @@ class PriceTimeListEntity {
   final int? price;
 
   @JsonKey(name: 'time_interval')
-  final int? timeInterval;
+  final String? timeInterval;
 
   final String? description;
 

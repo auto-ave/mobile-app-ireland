@@ -42,13 +42,14 @@ class _StoreGalleryViewScreenState extends State<StoreGalleryViewScreen> {
         body: Stack(
           children: [
             Align(
-              alignment: Alignment.topCenter,
+              alignment: Alignment.topLeft,
               child: Container(
                 width: 100.w,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 0, vertical: 32),
                 child: Wrap(
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // crossAxisAlignment: WrapCrossAlignment.start,
+                  // runAlignment: WrapAlignment.start,
                   alignment: WrapAlignment.spaceEvenly,
                   runSpacing: 16,
 

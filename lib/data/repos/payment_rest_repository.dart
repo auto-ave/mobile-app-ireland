@@ -1,7 +1,9 @@
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:themotorwash/data/api/api_methods.dart';
-import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/initiate_paytm_payment.dart';
+import 'package:themotorwash/data/models/initiate_razorpay_payment.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
+import 'package:themotorwash/data/models/razorpay_payment_response.dart';
 import 'package:themotorwash/data/repos/payment_repository.dart';
 import 'dart:convert';
 
@@ -11,19 +13,19 @@ class PaymentRestRepository implements PaymentRepository {
       : _apiMethodsImp = apiMethodsImp;
 
   @override
-  Future<InitiatePaymentModel> initiatePaytmPayment(
+  Future<InitiatePaytmPaymentModel> initiatePaytmPayment(
       {required String date,
-      required int bay,
+      required int? bay,
       required String slotStart,
-      required String slotEnd}) async {
-    InitiatePaymentEntity e = await _apiMethodsImp.initiatePaytmPayment(
+      required String? slotEnd}) async {
+    InitiatePaytmPaymentEntity e = await _apiMethodsImp.initiatePaytmPayment(
         date: date, bay: bay, slotStart: slotStart, slotEnd: slotEnd);
-    return InitiatePaymentModel.fromEntity(e);
+    return InitiatePaytmPaymentModel.fromEntity(e);
   }
 
   @override
   Future<PaytmPaymentResponseModel> startPaytmTransaction(
-      {required InitiatePaymentModel initiatedPayment}) async {
+      {required InitiatePaytmPaymentModel initiatedPayment}) async {
     print('INITIATED PAYMENT' + initiatedPayment.toString());
 
     Map<dynamic, dynamic>? result = await AllInOneSdk.startTransaction(
@@ -31,7 +33,7 @@ class PaymentRestRepository implements PaymentRepository {
         initiatedPayment.orderId,
         initiatedPayment.amount,
         initiatedPayment.transactionToken,
-        'https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=${initiatedPayment.orderId}',
+        initiatedPayment.callbackUrl,
         true,
         false);
     print(" hello" + result.toString());
@@ -67,5 +69,30 @@ class PaymentRestRepository implements PaymentRepository {
         await _apiMethodsImp.checkPaytmPaymentStatus(
             paymentResponseEntity: paymentResponseModel.toEntity());
     return PaytmPaymentResponseModel.fromEntity(entity);
+  }
+
+  @override
+  Future<RazorpayPaymentResponse> checkRazorpayPaymentStatus(
+      {required RazorpayPaymentResponse paymentResponseModel,
+      required bool isFailure,
+      required String bookingId}) async {
+    RazorpayPaymentResponseEntity entity =
+        await _apiMethodsImp.checkRazorpayPaymentStatus(
+            paymentResponseEntity: paymentResponseModel.toEntity(),
+            bookingId: bookingId,
+            isFailure: isFailure);
+    return RazorpayPaymentResponse.fromEntity(entity);
+  }
+
+  @override
+  Future<InitiateRazorpayPaymentModel> initiateRazorpayPayment(
+      {required String date,
+      required int? bay,
+      required String slotStart,
+      required String? slotEnd}) async {
+    InitiateRazorpayPaymentEntity e =
+        await _apiMethodsImp.initiateRazorpayPayment(
+            date: date, bay: bay, slotStart: slotStart, slotEnd: slotEnd);
+    return InitiateRazorpayPaymentModel.fromEntity(e);
   }
 }

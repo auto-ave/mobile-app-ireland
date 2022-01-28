@@ -277,4 +277,14 @@ class ApiConstants {
     var uri = Uri.https(baseUrl, "/offer/remove/");
     return uri.toString();
   }
+
+  String postInitiateRazorpayPaymentEndpoint() {
+    var uri = Uri.https(baseUrl, "/payment/razorpay/initiate/");
+    return uri.toString();
+  }
+
+  String postCheckRazorpayPaymentStatusEndpoint() {
+    var uri = Uri.https(baseUrl, "/payment/razorpay/callback/");
+    return uri.toString();
+  }
 }

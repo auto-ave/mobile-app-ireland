@@ -6,8 +6,8 @@ abstract class PaytmPaymentEvent extends Equatable {
 
 class InitiatePaytmPaymentApi extends PaytmPaymentEvent {
   final String slotStart;
-  final String slotEnd;
-  final int bay;
+  final String? slotEnd;
+  final int? bay;
   final String date;
   InitiatePaytmPaymentApi({
     required this.slotStart,
@@ -29,7 +29,7 @@ class CheckPaytmPaymentStatus extends PaytmPaymentEvent {
 }
 
 class StartPaytmTransaction extends PaytmPaymentEvent {
-  final InitiatePaymentModel initiatedPayment;
+  final InitiatePaytmPaymentModel initiatedPayment;
   StartPaytmTransaction({required this.initiatedPayment});
   @override
   List<Object> get props => [initiatedPayment];

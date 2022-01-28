@@ -319,6 +319,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                     SlotSelectScreen.route,
                                                     arguments:
                                                         SlotSelectScreenArguments(
+                                                            isMultiDay:
+                                                                cart.isMultiDay,
                                                             cartTotal:
                                                                 cart.total!,
                                                             cardId: cart.id!
@@ -410,7 +412,7 @@ class CartItemTile extends StatelessWidget {
                         SizedBox(
                           width: 8,
                         ),
-                        Text('$timeInterval min')
+                        Text('$timeInterval')
                       ],
                     )
                   ],

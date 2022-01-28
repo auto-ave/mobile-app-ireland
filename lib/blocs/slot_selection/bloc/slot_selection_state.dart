@@ -33,3 +33,13 @@ class SlotSelectionError extends SlotSelectionState {
   @override
   List<Object?> get props => [message];
 }
+
+class MultiDaySlotDetailLoaded extends SlotSelectionState {
+  final MultiDaySlotDetailModel multiDaySlotDetail;
+  MultiDaySlotDetailLoaded({
+    required this.multiDaySlotDetail,
+  });
+
+  @override
+  List<Object?> get props => [multiDaySlotDetail];
+}

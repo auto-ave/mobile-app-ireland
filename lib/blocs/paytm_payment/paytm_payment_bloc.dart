@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
-import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/initiate_paytm_payment.dart';
 import 'package:themotorwash/data/repos/payment_repository.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
 
@@ -37,12 +37,12 @@ class PaytmPaymentBloc extends Bloc<PaytmPaymentEvent, PaytmPaymentState> {
 
   Stream<PaytmPaymentState> _mapInitiatePaytmPaymentApiToState(
       {required String date,
-      required int bay,
+      required int? bay,
       required String slotStart,
-      required String slotEnd}) async* {
+      required String? slotEnd}) async* {
     try {
       yield InitiatingPaytmPayment();
-      InitiatePaymentModel initiatedPayment =
+      InitiatePaytmPaymentModel initiatedPayment =
           await _paymentRepository.initiatePaytmPayment(
               date: date, bay: bay, slotStart: slotStart, slotEnd: slotEnd);
       yield PaytmPaymentInitiated(initiatedPayment: initiatedPayment);
@@ -52,7 +52,7 @@ class PaytmPaymentBloc extends Bloc<PaytmPaymentEvent, PaytmPaymentState> {
   }
 
   Stream<PaytmPaymentState> _mapStartPaytmTransactionToState(
-      {required InitiatePaymentModel initiatedPayment}) async* {
+      {required InitiatePaytmPaymentModel initiatedPayment}) async* {
     try {
       PaytmPaymentResponseModel paymentResponseModel = await _paymentRepository
           .startPaytmTransaction(initiatedPayment: initiatedPayment);

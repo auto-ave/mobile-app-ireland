@@ -1,9 +1,10 @@
+import 'package:themotorwash/data/models/multi_day_slot_detail.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
 import 'package:themotorwash/data/models/cancel_booking_data.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/models/city.dart';
-import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/initiate_paytm_payment.dart';
 import 'package:themotorwash/data/models/location_model.dart';
 import 'package:themotorwash/data/models/offer.dart';
 import 'package:themotorwash/data/models/payment_choice.dart';
@@ -73,4 +74,6 @@ abstract class Repository {
   Future<List<OfferModel>> getOfferBanners();
   Future<CartModel> applyOffer(String code);
   Future<CartModel> removeOffer();
+  Future<MultiDaySlotDetailModel> getMultiDaySlotDetail(
+      {required String date, required String cartId});
 }

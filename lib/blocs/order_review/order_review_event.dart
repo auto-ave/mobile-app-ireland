@@ -15,10 +15,10 @@ class SetCart extends OrderReviewEvent {
 }
 
 class SetSlot extends OrderReviewEvent {
-  final Slot slot;
-  SetSlot({
-    required this.slot,
-  });
+  final Slot? slot;
+  final MultiDaySlot? multiDaySlot;
+  SetSlot({this.slot, this.multiDaySlot});
+
   @override
-  List<Object> get props => [slot];
+  List<Object> get props => [];
 }

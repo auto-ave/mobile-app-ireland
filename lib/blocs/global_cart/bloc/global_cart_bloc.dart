@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:logger/logger.dart';
 import 'package:themotorwash/data/models/cart.dart';
 
 part 'global_cart_event.dart';

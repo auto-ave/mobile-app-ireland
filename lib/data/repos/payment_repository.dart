@@ -1,16 +1,27 @@
-import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/initiate_paytm_payment.dart';
+import 'package:themotorwash/data/models/initiate_razorpay_payment.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
+import 'package:themotorwash/data/models/razorpay_payment_response.dart';
 
 abstract class PaymentRepository {
-  Future<InitiatePaymentModel> initiatePaytmPayment(
+  Future<InitiatePaytmPaymentModel> initiatePaytmPayment(
       {required String date,
-      required int bay,
+      required int? bay,
       required String slotStart,
-      required String slotEnd});
+      required String? slotEnd});
 
   Future<PaytmPaymentResponseModel> startPaytmTransaction(
-      {required InitiatePaymentModel initiatedPayment});
+      {required InitiatePaytmPaymentModel initiatedPayment});
 
   Future<PaytmPaymentResponseModel> checkPaytmPaymentStatus(
       {required PaytmPaymentResponseModel paymentResponseModel});
+  Future<InitiateRazorpayPaymentModel> initiateRazorpayPayment(
+      {required String date,
+      required int? bay,
+      required String slotStart,
+      required String? slotEnd});
+  Future<RazorpayPaymentResponse> checkRazorpayPaymentStatus(
+      {required RazorpayPaymentResponse paymentResponseModel,
+      required String bookingId,
+      required bool isFailure});
 }

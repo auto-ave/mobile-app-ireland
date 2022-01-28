@@ -22,7 +22,7 @@ class DashedBookingBox extends StatelessWidget {
       TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.kfontSize14);
   final TextStyle rightSide12W500 =
       TextStyle(fontWeight: FontWeight.w600, fontSize: SizeConfig.kfontSize12);
-  final DateFormat formatter = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY);
+  final DateFormat formatter = DateFormat('MMM d hh:mm a');
 
   final DateFormat formatterTime = DateFormat('hh:mm a');
 
@@ -65,20 +65,35 @@ class DashedBookingBox extends StatelessWidget {
                 leftStyle: leftSideInfo,
                 rightStyle: rightSideInfoPrimaryColor),
             SizeConfig.kverticalMargin8,
-            DetailsRowWidget(
-                leftText: 'Scheduled on',
-                rightText: formatter.format(bookingDetail.event!.startDateTime),
-                leftStyle: leftSideInfo,
-                rightStyle: rightSideInfoPrimaryColor),
+            bookingDetail.isMultiDay
+                ? DetailsRowWidget(
+                    leftText: 'Vehicle Drop Off Time:',
+                    rightText:
+                        formatter.format(bookingDetail.event!.startDateTime),
+                    leftStyle: leftSideInfo,
+                    rightStyle: rightSideInfoPrimaryColor)
+                : DetailsRowWidget(
+                    leftText: 'Scheduled on',
+                    rightText:
+                        formatter.format(bookingDetail.event!.startDateTime),
+                    leftStyle: leftSideInfo,
+                    rightStyle: rightSideInfoPrimaryColor),
             SizeConfig.kverticalMargin8,
             Divider(),
             SizeConfig.kverticalMargin8,
-            DetailsRowWidget(
-                leftText: 'Time:',
-                rightText:
-                    '${formatterTime.format(bookingDetail.event!.startDateTime)} to ${formatterTime.format(bookingDetail.event!.endDateTime)}',
-                leftStyle: leftSideInfo,
-                rightStyle: rightSideInfoPrimaryColor),
+            bookingDetail.isMultiDay
+                ? DetailsRowWidget(
+                    leftText: 'Estimated Completion Date:',
+                    rightText:
+                        '${formatter.format(bookingDetail.event!.endDateTime)}',
+                    leftStyle: leftSideInfo,
+                    rightStyle: rightSideInfoPrimaryColor)
+                : DetailsRowWidget(
+                    leftText: 'Time:',
+                    rightText:
+                        '${formatterTime.format(bookingDetail.event!.startDateTime)} to ${formatterTime.format(bookingDetail.event!.endDateTime)}',
+                    leftStyle: leftSideInfo,
+                    rightStyle: rightSideInfoPrimaryColor),
             SizeConfig.kverticalMargin8,
             ...(bookingDetail.services!
                 .map((e) => Column(

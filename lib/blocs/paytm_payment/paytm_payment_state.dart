@@ -17,7 +17,7 @@ class PaytmPaymentStatusRetrieved extends PaytmPaymentState {
 }
 
 class PaytmPaymentInitiated extends PaytmPaymentState {
-  final InitiatePaymentModel initiatedPayment;
+  final InitiatePaytmPaymentModel initiatedPayment;
   PaytmPaymentInitiated({
     required this.initiatedPayment,
   });

@@ -22,6 +22,8 @@ class CartModel {
   final VehicleTypeModel? vehicleType;
   final OfferModel? offer;
   final String? discount;
+  final bool isMultiDay;
+
   CartModel(
       {this.id,
       this.createdAt,
@@ -35,7 +37,8 @@ class CartModel {
       this.vehicleModel,
       this.vehicleType,
       this.discount,
-      this.offer});
+      this.offer,
+      required this.isMultiDay});
 
   factory CartModel.fromEntity(CartEntity entity) {
     return CartModel(
@@ -58,7 +61,8 @@ class CartModel {
             : null,
         offer:
             entity.offer != null ? OfferModel.fromEntity(entity.offer!) : null,
-        discount: entity.discount);
+        discount: entity.discount,
+        isMultiDay: entity.isMultiDay);
   }
 
   @override
@@ -87,6 +91,8 @@ class CartEntity {
   final List<PriceTimeListEntity>? itemsObj;
   @JsonKey(name: 'vehicle_type')
   final VehicleTypeEntity? vehicleType;
+  @JsonKey(name: 'is_multi_day')
+  final bool isMultiDay;
 
   final String? discount;
   final OfferEntity? offer;
@@ -103,7 +109,8 @@ class CartEntity {
       this.vehicleModel,
       this.vehicleType,
       this.discount,
-      this.offer});
+      this.offer,
+      required this.isMultiDay});
 
   factory CartEntity.fromJson(Map<String, dynamic> data) =>
       _$CartEntityFromJson(data);

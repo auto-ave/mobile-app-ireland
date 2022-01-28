@@ -33,6 +33,7 @@ CartEntity _$CartEntityFromJson(Map<String, dynamic> json) {
     offer: json['offer'] == null
         ? null
         : OfferEntity.fromJson(json['offer'] as Map<String, dynamic>),
+    isMultiDay: json['is_multi_day'] as bool,
   );
 }
 
@@ -49,6 +50,7 @@ Map<String, dynamic> _$CartEntityToJson(CartEntity instance) =>
       'vehicle_model': instance.vehicleModel?.toJson(),
       'item_objs': instance.itemsObj?.map((e) => e.toJson()).toList(),
       'vehicle_type': instance.vehicleType?.toJson(),
+      'is_multi_day': instance.isMultiDay,
       'discount': instance.discount,
       'offer': instance.offer?.toJson(),
     };

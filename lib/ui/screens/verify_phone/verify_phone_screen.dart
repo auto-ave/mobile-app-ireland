@@ -173,10 +173,21 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen>
                                           phoneNumber: widget.phoneNumber));
                                     }
                                   : null,
-                              child: Text(
-                                'Verify',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                              child: state is CheckingOTP
+                                  ? SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.white),
+                                        strokeWidth: 1,
+                                      ),
+                                    )
+                                  : Text(
+                                      'Verify',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
                                     enteredOtp.length == 4 &&

@@ -13,7 +13,7 @@ PriceTimeListEntity _$PriceTimeListEntityFromJson(Map<String, dynamic> json) {
     createdAt: json['created_at'] as String?,
     updatedAt: json['updated_at'] as String?,
     price: json['price'] as int?,
-    timeInterval: json['time_interval'] as int?,
+    timeInterval: json['time_interval'] as String?,
     description: json['description'] as String?,
     store: json['store'] as int?,
     vehicleType: json['vehicle_type'] as String?,

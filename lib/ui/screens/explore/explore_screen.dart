@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:logger/logger.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
@@ -164,19 +165,29 @@ class _ExploreScreenState extends State<ExploreScreen>
                 if (state is LocationSet) {
                   return _buildScreen(state);
                 }
+                // if (state is RetrievingLocation) {
+                //   return GrantLocationPermissionScreen(
+                //     globalLocationBloc: _globalLocationBloc,
+                //     forPermission: true,
+                //     isLoading: true,
+                //   );
+                // }
                 if (state is LocationPermissionError) {
+                  Logger().d('LocationPermissionError');
                   return GrantLocationPermissionScreen(
                     globalLocationBloc: _globalLocationBloc,
                     forPermission: true,
                   );
                 }
                 if (state is LocationServiceNotEnabledError) {
+                  Logger().d('LocationServiceNotEnabledError');
                   return GrantLocationPermissionScreen(
                     globalLocationBloc: _globalLocationBloc,
                     forPermission: false,
                   );
                 }
                 if (state is GlobalLocationError) {
+                  Logger().d('GlobalLocationError');
                   return GrantLocationPermissionScreen(
                     globalLocationBloc: _globalLocationBloc,
                     forPermission: true,

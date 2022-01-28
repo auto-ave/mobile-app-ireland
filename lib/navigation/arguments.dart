@@ -1,5 +1,7 @@
 import 'package:themotorwash/blocs/offer_apply/bloc/offer_apply_bloc.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
+import 'package:themotorwash/data/models/multi_day_slot.dart';
+import 'package:themotorwash/data/models/multi_day_slot_detail.dart';
 import 'package:themotorwash/data/models/slot.dart';
 
 class StoreDetailArguments {
@@ -25,7 +27,11 @@ class BookingSummaryScreenArguments {
 class SlotSelectScreenArguments {
   final String cartTotal;
   final String cardId;
-  SlotSelectScreenArguments({required this.cartTotal, required this.cardId});
+  final bool isMultiDay;
+  SlotSelectScreenArguments(
+      {required this.cartTotal,
+      required this.cardId,
+      required this.isMultiDay});
 }
 
 class VerifyPhoneScreenArguments {
@@ -37,8 +43,10 @@ class VerifyPhoneScreenArguments {
 
 class OrderReviewScreenArguments {
   final DateTime dateSelected;
+  final bool isMultiDay;
   OrderReviewScreenArguments({
     required this.dateSelected,
+    required this.isMultiDay,
   });
 }
 
@@ -68,12 +76,11 @@ class FeedbackScreenArguments {
 }
 
 class PaymentChoiceScreenArguments {
-  final Slot slot;
+  final Slot? slot;
+  final MultiDaySlot? multiDaySlot;
   final DateTime dateSelected;
-  PaymentChoiceScreenArguments({
-    required this.slot,
-    required this.dateSelected,
-  });
+  PaymentChoiceScreenArguments(
+      {this.slot, required this.dateSelected, this.multiDaySlot});
 }
 
 class CancelOrderScreenArguments {
@@ -101,5 +108,14 @@ class OfferSelectionScreenArgs {
   final OfferApplyBloc offerApplyBloc;
   OfferSelectionScreenArgs({
     required this.offerApplyBloc,
+  });
+}
+
+class MultiDaySlotSelectScreenArgs {
+  final String cartTotal;
+  final String cartId;
+  MultiDaySlotSelectScreenArgs({
+    required this.cartTotal,
+    required this.cartId,
   });
 }

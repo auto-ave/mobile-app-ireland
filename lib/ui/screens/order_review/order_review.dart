@@ -9,7 +9,9 @@ import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
 import 'package:themotorwash/blocs/paytm_payment/paytm_payment_bloc.dart';
 import 'package:themotorwash/blocs/slot_selection/bloc/slot_selection_bloc.dart';
 import 'package:themotorwash/data/models/cart.dart';
-import 'package:themotorwash/data/models/initiate_payment.dart';
+import 'package:themotorwash/data/models/initiate_paytm_payment.dart';
+import 'package:themotorwash/data/models/multi_day_slot.dart';
+import 'package:themotorwash/data/models/multi_day_slot_detail.dart';
 import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/vehicle_model.dart';
@@ -26,11 +28,11 @@ import 'package:themotorwash/data/models/paytm_payment_response.dart';
 
 class OrderReviewScreen extends StatefulWidget {
   final DateTime dateSelected;
+  final bool isMultiDay;
   static final String route = '/orderReview';
-  const OrderReviewScreen({
-    Key? key,
-    required this.dateSelected,
-  }) : super(key: key);
+  const OrderReviewScreen(
+      {Key? key, required this.dateSelected, required this.isMultiDay})
+      : super(key: key);
 
   @override
   _OrderReviewScreenState createState() => _OrderReviewScreenState();
@@ -76,7 +78,8 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                   'Review Order',
                   style: SizeConfig.kStyleAppBarTitle,
                 )),
-            bottomNavigationBar: buildBottom(slot: state.slot),
+            bottomNavigationBar:
+                buildBottom(slot: state.slot, multiDaySlot: state.multiDaySlot),
             body: SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.all(16),
@@ -87,7 +90,10 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                     SizeConfig.kverticalMargin24,
                     _buildCarTypeDetails(vehicle: state.cart.vehicleModel!),
                     SizeConfig.kverticalMargin24,
-                    _buildSlotTiming(slot: state.slot),
+                    state.multiDaySlot != null
+                        ? _buildMultiDaySlotTiming(
+                            multiDaySlot: state.multiDaySlot!)
+                        : _buildSlotTiming(slot: state.slot!),
                     SizeConfig.kverticalMargin24,
                     ..._buildServices(cart: state.cart),
                     ..._buildListPriceInfo(cart: state.cart),
@@ -130,6 +136,31 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
     return VehicleSelectedInfo(
       vehicleModel: vehicle,
       showChangeButton: false,
+    );
+  }
+
+  Widget _buildMultiDaySlotTiming({required MultiDaySlot multiDaySlot}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('VEHICLE DROP TIME', style: headingTextStyle),
+        SizeConfig.kverticalMargin8,
+        Text(
+          '${formatter.format(widget.dateSelected)}',
+          style: SizeConfig.kStyle14,
+        ),
+        Divider(
+          height: 32,
+          thickness: 1,
+        ),
+        Text('ESTIMATED COMPLETION TIME', style: headingTextStyle),
+        SizeConfig.kverticalMargin8,
+        Text(
+          '${multiDaySlot.estimatedCompleteTime}',
+          style: SizeConfig.kStyle14,
+        ),
+      ],
     );
   }
 
@@ -237,7 +268,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
     );
   }
 
-  Widget buildBottom({required Slot slot}) {
+  Widget buildBottom({Slot? slot, MultiDaySlot? multiDaySlot}) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -261,7 +292,9 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                 onPressed: () {
                   Navigator.of(context).pushNamed(PaymentChoiceScreen.route,
                       arguments: PaymentChoiceScreenArguments(
-                          slot: slot, dateSelected: widget.dateSelected));
+                          slot: slot,
+                          dateSelected: widget.dateSelected,
+                          multiDaySlot: multiDaySlot));
                 },
                 backgroundColor: Colors.green,
                 padding: EdgeInsets.symmetric(vertical: 16),

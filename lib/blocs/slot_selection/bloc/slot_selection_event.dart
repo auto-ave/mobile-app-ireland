@@ -14,3 +14,14 @@ class GetSlots extends SlotSelectionEvent {
   @override
   List<Object?> get props => [date];
 }
+
+class GetMultiDaySlotDetail extends SlotSelectionEvent {
+  final String date;
+  final String cartId;
+  final CancelToken cancelToken;
+  GetMultiDaySlotDetail(
+      {required this.date, required this.cartId, required this.cancelToken});
+
+  @override
+  List<Object?> get props => [date];
+}

@@ -38,6 +38,7 @@ BookingDetailEntity _$BookingDetailEntityFromJson(Map<String, dynamic> json) {
         ? null
         : ReviewEntity.fromJson(json['review'] as Map<String, dynamic>),
     remainingAmount: json['remaining_amount'] as String?,
+    isMultiDay: json['is_multi_day'] as bool,
   );
 }
 
@@ -61,4 +62,5 @@ Map<String, dynamic> _$BookingDetailEntityToJson(
       'is_refunded': instance.isRefunded,
       'price_times': instance.services?.map((e) => e.toJson()).toList(),
       'review': instance.review?.toJson(),
+      'is_multi_day': instance.isMultiDay,
     };

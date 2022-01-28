@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'initiate_payment.dart';
+part of 'initiate_paytm_payment.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-InitiatePaymentEntity _$InitiatePaymentEntityFromJson(
+InitiatePaytmPaymentEntity _$InitiatePaytmPaymentEntityFromJson(
     Map<String, dynamic> json) {
-  return InitiatePaymentEntity(
+  return InitiatePaytmPaymentEntity(
     mid: json['mid'] as String,
     orderId: json['order_id'] as String,
     amount: json['amount'] as String,
@@ -17,8 +17,8 @@ InitiatePaymentEntity _$InitiatePaymentEntityFromJson(
   );
 }
 
-Map<String, dynamic> _$InitiatePaymentEntityToJson(
-        InitiatePaymentEntity instance) =>
+Map<String, dynamic> _$InitiatePaytmPaymentEntityToJson(
+        InitiatePaytmPaymentEntity instance) =>
     <String, dynamic>{
       'mid': instance.mid,
       'order_id': instance.orderId,

@@ -7,14 +7,31 @@ import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
 import 'package:themotorwash/data/models/location_model.dart';
 import 'package:themotorwash/theme_constants.dart';
 
-class GrantLocationPermissionScreen extends StatelessWidget {
+class GrantLocationPermissionScreen extends StatefulWidget {
   final bool forPermission;
   final GlobalLocationBloc globalLocationBloc;
-  const GrantLocationPermissionScreen({
+  bool isLoading;
+  GrantLocationPermissionScreen({
     Key? key,
     required this.globalLocationBloc,
     required this.forPermission,
-  }) : super(key: key);
+    this.isLoading = false,
+  });
+
+  @override
+  State<GrantLocationPermissionScreen> createState() =>
+      _GrantLocationPermissionScreenState();
+}
+
+class _GrantLocationPermissionScreenState
+    extends State<GrantLocationPermissionScreen> {
+  bool isLoading = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isLoading = widget.isLoading;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +52,7 @@ class GrantLocationPermissionScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Text(
-                forPermission
+                widget.forPermission
                     ? 'Would you please permit us to access your location to serve you in nearby places?'
                     : 'Would you please turn on your location service to serve you in nearby places?',
                 style: SizeConfig.kStyle14.copyWith(
@@ -46,16 +63,19 @@ class GrantLocationPermissionScreen extends StatelessWidget {
             ),
             SizeConfig.kverticalMargin16,
             LocationButton(
-                onPressed:
-                    forPermission ? requestPermission : requestLocationService,
-                text: forPermission
-                    ? 'Grant location permission'
-                    : 'Turn on location service'),
+              onPressed: widget.forPermission
+                  ? requestPermission
+                  : requestLocationService,
+              text: widget.forPermission
+                  ? 'Grant location permission'
+                  : 'Turn on location service',
+              isLoading: isLoading,
+            ),
             SizeConfig.kverticalMargin8,
             GestureDetector(
               behavior: HitTestBehavior.opaque,
 
-              onTap: () => globalLocationBloc
+              onTap: () => widget.globalLocationBloc
                   .add(SkipUserLocation()), //TODO : Get lat long for banglore
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -91,53 +111,86 @@ class GrantLocationPermissionScreen extends StatelessWidget {
 
   requestPermission() async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       var locationPermission = await Geolocator.requestPermission();
       if (locationPermission == LocationPermission.deniedForever) {
+        setState(() {
+          isLoading = false;
+        });
         Geolocator.openAppSettings();
       }
+
       if (locationPermission == LocationPermission.always ||
           locationPermission == LocationPermission.whileInUse) {
-        globalLocationBloc.add(GetCurrentUserLocation());
+        setState(() {
+          isLoading = false;
+        });
+        widget.globalLocationBloc.add(GetCurrentUserLocation());
       }
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       print(e.toString());
     }
   }
 
   requestLocationService() async {
+    setState(() {
+      isLoading = true;
+    });
     var result = await Location().requestService();
     if (result) {
-      globalLocationBloc.add(GetCurrentUserLocation());
+      widget.globalLocationBloc.add(GetCurrentUserLocation());
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 }
 
 class LocationButton extends StatelessWidget {
   final Function() onPressed;
   final String text;
-  const LocationButton({
+  bool isLoading;
+  LocationButton({
     Key? key,
     required this.onPressed,
     required this.text,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
-      icon: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Icon(
-            Icons.my_location_rounded,
-            color: Colors.white,
-          )),
+      icon: isLoading
+          ? SizedBox.shrink()
+          : Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Icon(
+                Icons.my_location_rounded,
+                color: Colors.white,
+              )),
       onPressed: onPressed,
-      label: Padding(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: Text(
-          text,
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
+      label: isLoading
+          ? Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ))
+          : Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text(
+                text,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(SizeConfig.kPrimaryColor),
         shape: MaterialStateProperty.all(

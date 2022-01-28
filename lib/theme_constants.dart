@@ -18,6 +18,7 @@ class SizeConfig {
   static double? textScaleFactor;
 
   static Color kPrimaryColor = Color(0xff3570B5);
+  static Color kReddish = Color(0xffDC1313);
   static late double kfontSize18;
   static late double kfontSize16;
   static late double kfontSize12;

@@ -1,14 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'initiate_payment.g.dart';
+part 'initiate_paytm_payment.g.dart';
 
-class InitiatePaymentModel {
+class InitiatePaytmPaymentModel {
   final String mid;
   final String orderId;
   final String amount;
   final String callbackUrl;
   final String transactionToken;
-  InitiatePaymentModel({
+  InitiatePaytmPaymentModel({
     required this.mid,
     required this.orderId,
     required this.amount,
@@ -16,8 +16,8 @@ class InitiatePaymentModel {
     required this.transactionToken,
   });
 
-  factory InitiatePaymentModel.fromEntity(InitiatePaymentEntity e) {
-    return InitiatePaymentModel(
+  factory InitiatePaytmPaymentModel.fromEntity(InitiatePaytmPaymentEntity e) {
+    return InitiatePaytmPaymentModel(
         mid: e.mid,
         orderId: e.orderId,
         amount: e.amount,
@@ -32,7 +32,7 @@ class InitiatePaymentModel {
 }
 
 @JsonSerializable()
-class InitiatePaymentEntity {
+class InitiatePaytmPaymentEntity {
   final String mid;
   @JsonKey(name: 'order_id')
   final String orderId;
@@ -41,17 +41,17 @@ class InitiatePaymentEntity {
   final String callbackUrl;
   @JsonKey(name: 'txn_token')
   final String transactionToken;
-  InitiatePaymentEntity({
+  InitiatePaytmPaymentEntity({
     required this.mid,
     required this.orderId,
     required this.amount,
     required this.callbackUrl,
     required this.transactionToken,
   });
-  factory InitiatePaymentEntity.fromJson(Map<String, dynamic> data) =>
-      _$InitiatePaymentEntityFromJson(data);
+  factory InitiatePaytmPaymentEntity.fromJson(Map<String, dynamic> data) =>
+      _$InitiatePaytmPaymentEntityFromJson(data);
 
-  Map<String, dynamic> toJson() => _$InitiatePaymentEntityToJson(this);
+  Map<String, dynamic> toJson() => _$InitiatePaytmPaymentEntityToJson(this);
 
   @override
   String toString() {

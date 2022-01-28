@@ -22,7 +22,7 @@ class BookingListModel {
   final bool? isRefunded;
   final List<String>? serviceNames;
   final String? amount;
-
+  final bool isMultiDay;
   BookingListModel(
       {this.id,
       this.createdAt,
@@ -37,7 +37,8 @@ class BookingListModel {
       this.store,
       this.bookedBy,
       this.isRefunded,
-      this.amount});
+      this.amount,
+      required this.isMultiDay});
   factory BookingListModel.fromEntity(BookingListEntity e) {
     return BookingListModel(
         amount: e.amount,
@@ -57,7 +58,8 @@ class BookingListModel {
             : null,
         store: Store.fromEntity(e.store!),
         updatedAt: DateTime.parse(e.updatedAt!),
-        vehicleType: e.vehicleType);
+        vehicleType: e.vehicleType,
+        isMultiDay: e.isMultiDay);
   }
 
   @override
@@ -104,6 +106,8 @@ class BookingListEntity {
   final String? amount;
 
   final ReviewEntity? review;
+  @JsonKey(name: 'is_multi_day')
+  final bool isMultiDay;
   BookingListEntity(
       {this.id,
       this.createdAt,
@@ -119,7 +123,8 @@ class BookingListEntity {
       this.isRefunded,
       this.serviceNames,
       this.amount,
-      this.review});
+      this.review,
+      required this.isMultiDay});
   factory BookingListEntity.fromJson(Map<String, dynamic> data) =>
       _$BookingListEntityFromJson(data);
 
