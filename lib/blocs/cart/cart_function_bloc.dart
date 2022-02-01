@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:themotorwash/blocs/global_cart/bloc/global_cart_bloc.dart';
 import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
 import 'package:themotorwash/data/models/cart.dart';
@@ -42,6 +43,17 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
 
   Stream<CartFunctionState> _mapAddItemToCartToState(
       {required int itemId, required String vehicleModel}) async* {
+    try {
+      FirebaseAnalytics.instance.logAddToCart(items: [
+        AnalyticsEventItem(
+          itemId: itemId.toString(),
+          itemName: vehicleModel,
+          itemCategory: 'Vehicle',
+        )
+      ]);
+    } catch (e) {
+      print(e.toString() + " Analytics");
+    }
     try {
       if (state is CartFunctionLoading) {
         var previousItems = (state as CartFunctionLoading).itemId;

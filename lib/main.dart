@@ -1,5 +1,8 @@
 import 'dart:io';
-
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:in_app_update/in_app_update.dart';
+import 'package:themotorwash/utils/utils.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -95,7 +98,11 @@ void main() async {
   } on Exception catch (e) {
     print("helllo" + e.toString());
   }
-
+  try {
+    await FirebaseAnalytics.instance.logAppOpen();
+  } on Exception catch (e) {
+    print(e.toString() + " Analytics");
+  }
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   try {
     await FlutterDisplayMode.setHighRefreshRate();
@@ -161,6 +168,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // AppUpdateInfo? _updateInfo;
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      // setState(() {
+      //   _updateInfo = info;
+      // });
+      print('helllll' + info.toString());
+      info.updateAvailability == UpdateAvailability.updateAvailable
+          ? () {
+              print(' update available');
+              InAppUpdate.performImmediateUpdate()
+                  .catchError((e) => print(e.toString() + "check err 1"));
+            }
+          : () {
+              print('no update available');
+            };
+    }).catchError((e) {
+      print(e.toString() + "check error");
+    });
+  }
+
   late Repository _repository;
   late PaymentRepository _paymentRepository;
 
@@ -178,6 +206,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    checkForUpdate();
     precacheImage(AssetImage('assets/images/splash_background.png'), context);
     FcmHelper().onMessageFCM();
     _fcmInstance = FirebaseMessaging.instance;
@@ -293,43 +322,53 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'DM Sans',
             scaffoldBackgroundColor: Colors.white,
           ),
-          home: FutureBuilder<AuthTokensModel>(
-              future: LocalDataService().getAuthTokens(),
-              builder: (ctx, snapshot) {
-                SizeConfig().init(ctx);
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.authenticated) {
-                      // return OfferSelectionScreen();
-                      // return BookingSummaryScreen(bookingId: '8D6D98');
-                      // return CancelOrderScreen();
+          home: UpgradeAlert(
+            debugLogging: true,
+            canDismissDialog: false,
+            countryCode: 'in',
+            // durationToAlertAgain: Duration(seconds: 1),
+            showIgnore: false,
+            showLater: false,
+            // debugAlwaysUpgrade: true,
+            // debugDisplayOnce: false,
+            child: FutureBuilder<AuthTokensModel>(
+                future: LocalDataService().getAuthTokens(),
+                builder: (ctx, snapshot) {
+                  SizeConfig().init(ctx);
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.authenticated) {
+                        // return OfferSelectionScreen();
+                        // return BookingSummaryScreen(bookingId: '8D6D98');
+                        // return CancelOrderScreen();
 
-                      return ExploreScreen();
-                    } else {
-                      return LoginScreen();
+                        return ExploreScreen();
+                      } else {
+                        return LoginScreen();
+                      }
                     }
                   }
-                }
-                return Scaffold(
-                  body: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image:
-                            AssetImage('assets/images/splash_background.png'),
-                        fit: BoxFit.cover,
+                  return Scaffold(
+                    body: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image:
+                              AssetImage('assets/images/splash_background.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Center(
+                        child: Builder(builder: (ctx) {
+                          return Image.asset(
+                            'assets/images/logo.png',
+                            scale: 4,
+                          );
+                        }),
                       ),
                     ),
-                    child: Center(
-                      child: Builder(builder: (ctx) {
-                        return Image.asset(
-                          'assets/images/logo.png',
-                          scale: 4,
-                        );
-                      }),
-                    ),
-                  ),
-                );
-              }),
+                  );
+                }),
+          ),
           onGenerateRoute: (settings) {
             if (settings.name == StoreListScreen.route) {
               final args = settings.arguments as StoreListArguments;
