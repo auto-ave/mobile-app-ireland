@@ -83,6 +83,7 @@ class _PaymentChoiceScreenState extends State<PaymentChoiceScreen> {
         bottomNavigationBar: BottomButton(
           title: 'Continue',
           onTap: () {
+            // Logger().d(widget.multiDaySlot!.startTime);
             _paytmPaymentBloc.add(
               InitiateRazorpayPayment(
                 slotStart: widget.slot != null

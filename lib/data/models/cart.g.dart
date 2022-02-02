@@ -33,7 +33,7 @@ CartEntity _$CartEntityFromJson(Map<String, dynamic> json) {
     offer: json['offer'] == null
         ? null
         : OfferEntity.fromJson(json['offer'] as Map<String, dynamic>),
-    isMultiDay: json['is_multi_day'] as bool,
+    isMultiDay: json['is_multi_day'] as bool?,
   );
 }
 

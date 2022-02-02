@@ -319,8 +319,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                     SlotSelectScreen.route,
                                                     arguments:
                                                         SlotSelectScreenArguments(
-                                                            isMultiDay:
-                                                                cart.isMultiDay,
+                                                            isMultiDay: cart
+                                                                .isMultiDay!,
                                                             cartTotal:
                                                                 cart.total!,
                                                             cardId: cart.id!

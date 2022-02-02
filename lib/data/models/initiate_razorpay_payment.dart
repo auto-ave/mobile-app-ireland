@@ -86,11 +86,11 @@ class InitiateRazorpayPaymentEntity {
 
 @JsonSerializable()
 class PrefillModel {
-  final String contact;
-  final String email;
+  final String? contact;
+  final String? email;
   PrefillModel({
-    required this.contact,
-    required this.email,
+    this.contact,
+    this.email,
   });
 
   factory PrefillModel.fromJson(Map<String, dynamic> data) =>
@@ -101,9 +101,9 @@ class PrefillModel {
 
 @JsonSerializable()
 class RazorpayTheme {
-  final String color;
+  final String? color;
   RazorpayTheme({
-    required this.color,
+    this.color,
   });
 
   factory RazorpayTheme.fromJson(Map<String, dynamic> data) =>

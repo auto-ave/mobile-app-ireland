@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
@@ -120,6 +121,7 @@ class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
               }
               if (state is MultiDaySlotDetailLoaded) {
                 var multiDaySlotDetail = state.multiDaySlotDetail;
+                Logger().d(multiDaySlotDetail.slots.toString());
                 return Expanded(
                   child: multiDaySlotDetail.slots.isEmpty
                       ? Center(child: NoSlotsWidget())
@@ -138,6 +140,8 @@ class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
                               }).toList(),
                               selectedIndex: selectedTimeIndex,
                               onChange: (index) {
+                                Logger()
+                                    .d('ON CHANGE CALLED' + index.toString());
                                 selectedTimeIndex = index;
                               },
                             ),
@@ -252,7 +256,8 @@ class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
                           currentSelectedDateIndex >= 0) {
                         MultiDaySlotDetailModel multiDaySlotDetailModel =
                             state.multiDaySlotDetail;
-
+                        Logger().d(
+                            multiDaySlotDetailModel.slots[selectedTimeIndex]);
                         _orderReviewBloc.add(SetSlot(
                           slot: null,
                           multiDaySlot:

@@ -22,7 +22,7 @@ class CartModel {
   final VehicleTypeModel? vehicleType;
   final OfferModel? offer;
   final String? discount;
-  final bool isMultiDay;
+  final bool? isMultiDay;
 
   CartModel(
       {this.id,
@@ -92,7 +92,7 @@ class CartEntity {
   @JsonKey(name: 'vehicle_type')
   final VehicleTypeEntity? vehicleType;
   @JsonKey(name: 'is_multi_day')
-  final bool isMultiDay;
+  final bool? isMultiDay;
 
   final String? discount;
   final OfferEntity? offer;

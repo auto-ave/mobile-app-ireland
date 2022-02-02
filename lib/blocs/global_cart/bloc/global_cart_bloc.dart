@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logger/logger.dart';
@@ -13,11 +15,17 @@ class GlobalCartBloc extends Bloc<GlobalCartEvent, GlobalCartState> {
 
       if (event is NewCart) {
         _mapSetCartToState(cart: event.cart, emit: emit);
+      } else if (event is ClearLocalCart) {
+        _mapClearLocalCartToState(emit);
       }
     });
   }
 
   void _mapSetCartToState({required CartModel cart, required Emitter emit}) {
     emit(CartSetSuccess(cart: cart));
+  }
+
+  void _mapClearLocalCartToState(Emitter emit) {
+    emit(GlobalCartInitial());
   }
 }

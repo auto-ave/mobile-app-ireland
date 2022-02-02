@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
+import 'package:themotorwash/blocs/global_cart/bloc/global_cart_bloc.dart';
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/navigation/arguments.dart';
@@ -64,6 +66,8 @@ class AppDrawer extends StatelessWidget {
                   'log_out_drawer.svg',
                   Text("Log out"),
                   () async {
+                    BlocProvider.of<GlobalCartBloc>(context)
+                      ..add(ClearLocalCart());
                     BlocProvider.of<PhoneAuthBloc>(context)..add(LogOut());
                   },
                 ),

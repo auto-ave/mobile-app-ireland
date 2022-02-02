@@ -37,8 +37,8 @@ Map<String, dynamic> _$InitiateRazorpayPaymentEntityToJson(
 
 PrefillModel _$PrefillModelFromJson(Map<String, dynamic> json) {
   return PrefillModel(
-    contact: json['contact'] as String,
-    email: json['email'] as String,
+    contact: json['contact'] as String?,
+    email: json['email'] as String?,
   );
 }
 
@@ -50,7 +50,7 @@ Map<String, dynamic> _$PrefillModelToJson(PrefillModel instance) =>
 
 RazorpayTheme _$RazorpayThemeFromJson(Map<String, dynamic> json) {
   return RazorpayTheme(
-    color: json['color'] as String,
+    color: json['color'] as String?,
   );
 }
 

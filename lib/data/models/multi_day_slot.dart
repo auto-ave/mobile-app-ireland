@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'multi_day_slot.g.dart';
 
 class MultiDaySlot {
@@ -22,6 +23,11 @@ class MultiDaySlot {
         time: entity.time,
         startTime: entity.startTime,
         estimatedCompleteTime: entity.estimatedCompleteTime);
+  }
+
+  @override
+  String toString() {
+    return 'MultiDaySlot(image: $image, title: $title, time: $time, startTime: $startTime, estimatedCompleteTime: $estimatedCompleteTime)';
   }
 }
 

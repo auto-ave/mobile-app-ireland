@@ -12,3 +12,8 @@ class NewCart extends GlobalCartEvent {
   @override
   List<Object> get props => [cart];
 }
+
+class ClearLocalCart extends GlobalCartEvent {
+  @override
+  List<Object> get props => [];
+}
