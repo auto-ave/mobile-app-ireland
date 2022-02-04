@@ -304,7 +304,9 @@ class PaymentSummaryWidget extends StatelessWidget {
                 color: Color(0xffDCECFF),
                 borderRadius: BorderRadius.circular(4)),
             child: DetailsRowWidget(
-                leftText: 'Amount to be paid at store',
+                leftText: bookingDetail.status == BookingStatus.serviceCompleted
+                    ? 'Amount paid at store'
+                    : 'Amount to be paid at store',
                 rightText: '₹${bookingDetail.remainingAmount}',
                 leftStyle:
                     SizeConfig.kStyle14.copyWith(fontWeight: FontWeight.w600),
