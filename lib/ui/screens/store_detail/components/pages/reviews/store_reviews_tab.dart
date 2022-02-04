@@ -49,83 +49,85 @@ class _StoreReviewsTabState extends State<StoreReviewsTab>
                     forLoadMore: true));
               }
             },
-      child: CustomScrollView(slivers: <Widget>[
-        SliverOverlapInjector(
-          // This is the flip side of the SliverOverlapAbsorber
-          // above.
-          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-              widget.nestedScrollContext),
-        ),
-        BlocConsumer<StoreReviewsBloc, StoreReviewsState>(
-          bloc: _reviewsBloc,
-          listener: (_, state) {
-            setState(
-                () {}); //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
-          },
-          builder: (context, state) {
-            if (state is StoreReviewsLoaded ||
-                state is MoreStoreReviewsLoading) {
-              if (state is StoreReviewsLoaded) {
-                reviews = state.reviews;
-              }
-              return reviews.isNotEmpty
-                  ? SliverList(
-                      delegate: SliverChildBuilderDelegate((_, index) {
-                      Review review = reviews[index];
-                      var tile = Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 16),
-                        child: StoreReviewTile(
-                          userImage: review.image!,
-                          customerName: review.customerName!,
-                          date: review.createdAt!,
-                          rating: review.rating!,
-                          reviewDescription: review.reviewDescription,
-                        ),
-                      );
+      child: CustomScrollView(
+          key: PageStorageKey<String>('StoreReviewsTab'),
+          slivers: <Widget>[
+            SliverOverlapInjector(
+              // This is the flip side of the SliverOverlapAbsorber
+              // above.
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                  widget.nestedScrollContext),
+            ),
+            BlocConsumer<StoreReviewsBloc, StoreReviewsState>(
+              bloc: _reviewsBloc,
+              listener: (_, state) {
+                setState(
+                    () {}); //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
+              },
+              builder: (context, state) {
+                if (state is StoreReviewsLoaded ||
+                    state is MoreStoreReviewsLoading) {
+                  if (state is StoreReviewsLoaded) {
+                    reviews = state.reviews;
+                  }
+                  return reviews.isNotEmpty
+                      ? SliverList(
+                          delegate: SliverChildBuilderDelegate((_, index) {
+                          Review review = reviews[index];
+                          var tile = Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 16),
+                            child: StoreReviewTile(
+                              userImage: review.image!,
+                              customerName: review.customerName!,
+                              date: review.createdAt!,
+                              rating: review.rating!,
+                              reviewDescription: review.reviewDescription,
+                            ),
+                          );
 
-                      if (state is MoreStoreReviewsLoading &&
-                          index == reviews.length - 1) {
-                        return LoadingMoreTile(tile: tile);
-                      }
-                      return tile;
-                    }, childCount: reviews.length))
-                  : SliverFillRemaining(
-                      child: Center(
-                        child: NoReviewWidget(),
+                          if (state is MoreStoreReviewsLoading &&
+                              index == reviews.length - 1) {
+                            return LoadingMoreTile(tile: tile);
+                          }
+                          return tile;
+                        }, childCount: reviews.length))
+                      : SliverFillRemaining(
+                          child: Center(
+                            child: NoReviewWidget(),
+                          ),
+                        );
+                }
+                if (state is StoreReviewsLoading) {
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: loadingAnimation(),
+                    ),
+                  );
+                }
+                if (state is StoreReviewsError) {
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: ErrorScreen(
+                        ctaType: ErrorCTA.reload,
+                        onCTAPressed: () {
+                          _reviewsBloc.add(LoadStoreReviews(
+                              slug: widget.storeSlug,
+                              offset: 0,
+                              forLoadMore: false));
+                        },
                       ),
-                    );
-            }
-            if (state is StoreReviewsLoading) {
-              return SliverFillRemaining(
-                child: Center(
-                  child: loadingAnimation(),
-                ),
-              );
-            }
-            if (state is StoreReviewsError) {
-              return SliverFillRemaining(
-                child: Center(
-                  child: ErrorScreen(
-                    ctaType: ErrorCTA.reload,
-                    onCTAPressed: () {
-                      _reviewsBloc.add(LoadStoreReviews(
-                          slug: widget.storeSlug,
-                          offset: 0,
-                          forLoadMore: false));
-                    },
+                    ),
+                  );
+                }
+                return SliverFillRemaining(
+                  child: Center(
+                    child: loadingAnimation(),
                   ),
-                ),
-              );
-            }
-            return SliverFillRemaining(
-              child: Center(
-                child: loadingAnimation(),
-              ),
-            );
-          },
-        )
-      ]),
+                );
+              },
+            )
+          ]),
     );
   }
 

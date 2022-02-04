@@ -218,7 +218,9 @@ class _PaymentChoiceScreenState extends State<PaymentChoiceScreen> {
                   child: Column(
                     children: [
                       PaymentChoiceTile(
-                          amount: state.paymentChoices[0].amount.toString(),
+                          amount: state.paymentChoices[0].amount
+                              .toString()
+                              .rupees(),
                           descriptionWidget:
                               Text(state.paymentChoices[0].description),
                           isSelected: currentSelectedIndex == 0,
@@ -240,7 +242,9 @@ class _PaymentChoiceScreenState extends State<PaymentChoiceScreen> {
                       ORWithDividerWidget(),
                       SizeConfig.kverticalMargin16,
                       PaymentChoiceTile(
-                          amount: state.paymentChoices[1].amount.toString(),
+                          amount: state.paymentChoices[1].amount
+                              .toString()
+                              .rupees(),
                           descriptionWidget:
                               Text(state.paymentChoices[1].description),
                           isActive: state.paymentChoices[1].active,

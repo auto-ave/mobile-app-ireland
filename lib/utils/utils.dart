@@ -46,10 +46,7 @@ showSnackbar(BuildContext context, String text) {
 PreferredSizeWidget getAppBarWithBackButton(
     {required BuildContext context, Widget? title, List<Widget>? actions}) {
   return AppBar(
-    systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        // statusBarBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.light),
+    systemOverlayStyle: SystemUiOverlayStyle.dark,
     title: title,
     actions: actions,
     leading: IconButton(

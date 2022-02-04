@@ -127,7 +127,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                     ),
                     SizeConfig.kverticalMargin16,
                     Divider(),
-                    widget.status == BookingStatus.serviceCompleted
+                    bookingDetail.status == BookingStatus.serviceCompleted
                         ? (_review != null || reviewState != null)
                             ? ReviewWidget(
                                 rating: double.parse(

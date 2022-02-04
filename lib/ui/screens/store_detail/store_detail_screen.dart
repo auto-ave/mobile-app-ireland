@@ -229,61 +229,6 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
                           ),
                         ),
                       ),
-
-                      // SliverToBoxAdapter(
-                      //   child: Stack(
-                      //     children: [
-                      //       CarouselSlider(
-                      //         options: CarouselOptions(
-                      //             viewportFraction: 1,
-                      //             onPageChanged: (index, _) {
-                      //               setState(() {
-                      //                 carouselPageNumber = index + 1;
-                      //               });
-                      //             }),
-                      //         items: store.images!.map<Widget>((i) {
-                      //           return Builder(
-                      //             builder: (BuildContext context) {
-                      //               return CachedNetworkImage(
-                      //                 placeholder: (_, __) {
-                      //                   return ShimmerPlaceholder();
-                      //                 },
-                      //                 imageUrl: i,
-                      //                 width: 100.w,
-                      //                 height: 100.w * 9 / 16,
-                      //                 fit: BoxFit.cover,
-                      //               );
-                      //             },
-                      //           );
-                      //         }).toList(),
-                      //       ),
-                      //       Positioned(
-                      //         bottom: 0,
-                      //         right: 0,
-                      //         child: Padding(
-                      //           padding: const EdgeInsets.all(8.0),
-                      //           child: Container(
-                      //               width: 40,
-                      //               height: 24,
-                      //               // padding: EdgeInsets.symmetric(
-                      //               //     horizontal: 8, vertical: 4),
-                      //               child: Center(
-                      //                 child: Text(
-                      //                   '$carouselPageNumber/${store.images!.length}',
-                      //                   style: TextStyle(
-                      //                       color: Colors.white, fontSize: 12),
-                      //                 ),
-                      //               ),
-                      //               decoration: BoxDecoration(
-                      //                   border: Border.all(
-                      //                       color: Colors.white, width: 1),
-                      //                   borderRadius: BorderRadius.circular(4),
-                      //                   color: Color.fromRGBO(0, 0, 0, 0.35))),
-                      //         ),
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
                       SliverOverlapAbsorber(
                         handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                             context),

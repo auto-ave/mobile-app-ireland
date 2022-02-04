@@ -340,6 +340,7 @@ class _ExploreScreenState extends State<ExploreScreen>
       _privateSearchServicesBloc.add(SearchServices(
           query: '', forLoadMore: false, offset: 0, pageLimit: 6));
       _bannersBloc.add(GetOffersBanners());
+      HapticFeedback.mediumImpact();
     }
   }
 

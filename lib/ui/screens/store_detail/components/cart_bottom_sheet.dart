@@ -50,7 +50,18 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
             if (state is OfferApplySuccess) {
               if (state.offerSuccessType == OfferSuccess.apply) {
                 Navigator.pop(context);
-                showSnackbar(context, 'Offer appyle hua');
+                showSnackbar(context, 'Offer applied');
+              } else if (state.offerSuccessType == OfferSuccess.remove) {
+                Navigator.pop(context);
+                showSnackbar(context, 'Offer removed');
+              }
+            } else if (state is OfferApplyError) {
+              if (state.offerErrorType == OfferSuccess.apply) {
+                Navigator.pop(context);
+                showSnackbar(context, 'Failed to apply offer');
+              } else if (state.offerErrorType == OfferSuccess.remove) {
+                Navigator.pop(context);
+                showSnackbar(context, 'Failed to remove offer');
               }
             }
           },
@@ -181,9 +192,10 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                           SizeConfig
                                                               .kHorizontalMargin4,
                                                           GestureDetector(
-                                                            onTap: () =>
-                                                                _offerApplyBloc.add(
-                                                                    RemoveOffer()),
+                                                            onTap: () {
+                                                              _offerApplyBloc.add(
+                                                                  RemoveOffer());
+                                                            },
                                                             child: Icon(
                                                               Icons
                                                                   .remove_circle_outline,
@@ -233,7 +245,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                             children: [
                                               DetailsRowWidget(
                                                   leftText: 'Item total',
-                                                  rightText: cart.subTotal!,
+                                                  rightText:
+                                                      cart.subTotal!.rupees(),
                                                   leftStyle: SizeConfig.kStyle14
                                                       .copyWith(
                                                           color: Color(

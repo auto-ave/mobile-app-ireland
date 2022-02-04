@@ -457,9 +457,11 @@ class _RateServiceWidgetState extends State<RateServiceWidget> {
                 half: Container(),
                 full: SvgPicture.asset(
                   'assets/icons/rating_star_filled.svg',
+                  width: 24,
                 ),
-                empty: SvgPicture.asset(
-                  'assets/icons/rating_star_raw.svg',
+                empty: Image.asset(
+                  'assets/icons/rating_star_raw.png',
+                  width: 24,
                 ),
               ),
               itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
@@ -481,7 +483,7 @@ class _RateServiceWidgetState extends State<RateServiceWidget> {
                 maxLines: 100,
                 decoration: InputDecoration(
                     contentPadding:
-                        EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                        EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4),
                         borderSide:

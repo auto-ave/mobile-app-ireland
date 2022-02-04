@@ -42,6 +42,7 @@ class _StoreOverviewTabState extends State<StoreOverviewTab>
         ),
       ),
       body: CustomScrollView(
+        key: PageStorageKey<String>('StoreOverviewTab'),
         slivers: [
           SliverOverlapInjector(
             // This is the flip side of the SliverOverlapAbsorber

@@ -46,11 +46,13 @@ class _OfferSelectionScreenState extends State<OfferSelectionScreen> {
         bloc: widget.offerApplyBloc,
         listener: (context, state) {
           // TODO: implement listener
-          if (state is OfferApplyError) {
+          if (state is OfferApplyError &&
+              state.offerErrorType == OfferError.apply) {
             showSnackbar(context, 'Offer code not valid');
-          } else if (state is OfferApplySuccess) {
-            showSnackbar(context, 'Offer Applied');
           }
+          // else if (state is OfferApplySuccess) {
+          //   showSnackbar(context, 'Offer Applied');
+          // }
         },
         child: CustomScrollView(
           slivers: [
@@ -133,6 +135,7 @@ class _OfferSelectionScreenState extends State<OfferSelectionScreen> {
                       delegate: SliverChildBuilderDelegate((ctx, index) {
                     var offer = offers[index];
                     return OfferTile(
+                        saving: offer.saving ?? '',
                         offerApplyBloc: widget.offerApplyBloc,
                         onApply: () {
                           widget.offerApplyBloc
@@ -159,6 +162,7 @@ class OfferTile extends StatelessWidget {
   final String title;
   final String description;
   final String code;
+  final String saving;
   final VoidCallback onApply;
   final OfferApplyBloc offerApplyBloc;
   OfferTile(
@@ -167,7 +171,8 @@ class OfferTile extends StatelessWidget {
       required this.description,
       required this.code,
       required this.onApply,
-      required this.offerApplyBloc})
+      required this.offerApplyBloc,
+      required this.saving})
       : super(key: key);
   final RoundedLoadingButtonController _controller =
       RoundedLoadingButtonController();
@@ -232,7 +237,7 @@ class OfferTile extends StatelessWidget {
               ),
               Divider(),
               Text(
-                'You’ll save ₹200 on this order ',
+                saving,
                 style: SizeConfig.kStyle12W500
                     .copyWith(color: SizeConfig.kPrimaryColor),
               )

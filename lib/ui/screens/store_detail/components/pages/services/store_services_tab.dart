@@ -105,121 +105,124 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                     forLoadMore: true));
               }
             },
-      child: CustomScrollView(slivers: <Widget>[
-        SliverOverlapInjector(
-          // This is the flip side of the SliverOverlapAbsorber
-          // above.
-          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-              widget.nestedScrollContext),
-        ),
-        SliverPadding(
-          padding: EdgeInsets.all(16),
-          sliver: SliverToBoxAdapter(
-              child: VehicleSelectedInfo(
-                  vehicleModel: vehicleState.vehicleTypeModel,
-                  showChangeButton: true,
-                  onChangePressed: () => _showVehicleBottomSheet(context))),
-        ),
-        BlocBuilder<CartFunctionBloc, CartFunctionState>(
-          bloc: _cartFunctionBloc,
-          builder: (context, cartFunctionState) {
-            if (cartFunctionState is CartItemAdded) {
-              cartItems = cartFunctionState.cart.items!;
-            }
-            if (cartFunctionState is CartItemDeleted) {
-              cartItems = cartFunctionState.cart.items!;
-            }
-            if (cartFunctionState is CartLoaded) {
-              cartItems = cartFunctionState.cart.items!;
-            }
-            return BlocConsumer<StoreServicesBloc, StoreServicesState>(
-              bloc: _servicesBloc,
-              listener: (_, state) {
-                setState(
-                    () {}); //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
-              },
-              builder: (context, state) {
-                if (state is StoreServicesLoading) {
-                  return SliverFillRemaining(
-                    child: Center(
-                      child: loadingAnimation(),
-                    ),
-                  );
+      child: CustomScrollView(
+          key: PageStorageKey<String>('StoreServicesTab'),
+          slivers: <Widget>[
+            SliverOverlapInjector(
+              // This is the flip side of the SliverOverlapAbsorber
+              // above.
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                  widget.nestedScrollContext),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.all(16),
+              sliver: SliverToBoxAdapter(
+                  child: VehicleSelectedInfo(
+                      vehicleModel: vehicleState.vehicleTypeModel,
+                      showChangeButton: true,
+                      onChangePressed: () => _showVehicleBottomSheet(context))),
+            ),
+            BlocBuilder<CartFunctionBloc, CartFunctionState>(
+              bloc: _cartFunctionBloc,
+              builder: (context, cartFunctionState) {
+                if (cartFunctionState is CartItemAdded) {
+                  cartItems = cartFunctionState.cart.items!;
                 }
-                if (state is StoreServicesLoaded ||
-                    state is MoreStoreServicesLoading) {
-                  if (state is StoreServicesLoaded) {
-                    print(state.services.toString() + "he");
-                    services = state.services;
-                  }
+                if (cartFunctionState is CartItemDeleted) {
+                  cartItems = cartFunctionState.cart.items!;
+                }
+                if (cartFunctionState is CartLoaded) {
+                  cartItems = cartFunctionState.cart.items!;
+                }
+                return BlocConsumer<StoreServicesBloc, StoreServicesState>(
+                  bloc: _servicesBloc,
+                  listener: (_, state) {
+                    setState(
+                        () {}); //TODO Find alternative for this workaround (Need setState for lazyloading to trigger)
+                  },
+                  builder: (context, state) {
+                    if (state is StoreServicesLoading) {
+                      return SliverFillRemaining(
+                        child: Center(
+                          child: loadingAnimation(),
+                        ),
+                      );
+                    }
+                    if (state is StoreServicesLoaded ||
+                        state is MoreStoreServicesLoading) {
+                      if (state is StoreServicesLoaded) {
+                        print(state.services.toString() + "he");
+                        services = state.services;
+                      }
 
-                  return services.isEmpty
-                      ? SliverFillRemaining(
-                          child: Center(
-                            child: NoServiceWidget(),
-                          ),
-                        )
-                      : SliverList(
-                          delegate: SliverChildBuilderDelegate((_, index) {
-                          var service = services[index];
-                          var tile = StoreServiceTile(
-                              vehicleModel:
-                                  vehicleState.vehicleTypeModel.model!,
-                              time: service.timeInterval.toString(),
-                              scaffoldState: widget.scaffoldState,
-                              itemId: service.id!,
-                              bloc: _cartFunctionBloc,
-                              globalAuthBloc: _globalAuthBloc,
-                              isAddedToCart:
-                                  getIsAddedToCart(itemId: services[index].id!),
-                              isLoading:
-                                  (cartFunctionState is CartFunctionLoading &&
+                      return services.isEmpty
+                          ? SliverFillRemaining(
+                              child: Center(
+                                child: NoServiceWidget(),
+                              ),
+                            )
+                          : SliverList(
+                              delegate: SliverChildBuilderDelegate((_, index) {
+                              var service = services[index];
+                              var tile = StoreServiceTile(
+                                  vehicleModel:
+                                      vehicleState.vehicleTypeModel.model!,
+                                  time: service.timeInterval.toString(),
+                                  scaffoldState: widget.scaffoldState,
+                                  itemId: service.id!,
+                                  bloc: _cartFunctionBloc,
+                                  globalAuthBloc: _globalAuthBloc,
+                                  isAddedToCart: getIsAddedToCart(
+                                      itemId: services[index].id!),
+                                  isLoading: (cartFunctionState
+                                          is CartFunctionLoading &&
                                       (cartFunctionState)
                                           .itemId
                                           .contains(services[index].id!)),
-                              description: services[index].description!,
-                              price: service.price!.toString(),
-                              service: service.service!);
+                                  description: services[index].description!,
+                                  price: service.price!.toString(),
+                                  service: service.service!);
 
-                          if (state is MoreStoreServicesLoading &&
-                              index == services.length - 1) {
-                            return LoadingMoreTile(tile: tile);
-                          }
-                          return tile;
-                        }, childCount: services.length));
-                }
-                if (state is StoreServicesError) {
-                  return SliverFillRemaining(
-                    child: Center(
-                      child: ErrorScreen(
-                        ctaType: ErrorCTA.reload,
-                        onCTAPressed: () {
-                          _servicesBloc.add(LoadStoreServices(
-                              slug: widget.storeSlug,
-                              vehicleType:
-                                  vehicleState.vehicleTypeModel.vehicleType!,
-                              offset: 0,
-                              forLoadMore: false));
-                        },
+                              if (state is MoreStoreServicesLoading &&
+                                  index == services.length - 1) {
+                                return LoadingMoreTile(tile: tile);
+                              }
+                              return tile;
+                            }, childCount: services.length));
+                    }
+                    if (state is StoreServicesError) {
+                      return SliverFillRemaining(
+                        child: Center(
+                          child: ErrorScreen(
+                            ctaType: ErrorCTA.reload,
+                            onCTAPressed: () {
+                              _servicesBloc.add(LoadStoreServices(
+                                  slug: widget.storeSlug,
+                                  vehicleType: vehicleState
+                                      .vehicleTypeModel.vehicleType!,
+                                  offset: 0,
+                                  forLoadMore: false));
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                    return SliverFillRemaining(
+                      child: Center(
+                        child: loadingAnimation(),
                       ),
-                    ),
-                  );
-                }
-                return SliverFillRemaining(
-                  child: Center(
-                    child: loadingAnimation(),
-                  ),
+                    );
+                  },
                 );
               },
-            );
-          },
-        )
-      ]),
+            )
+          ]),
     );
   }
 
   _buildSelectVehicleTypeButton() {
     return CustomScrollView(
+      key: PageStorageKey<String>('StoreServicesTab'),
       slivers: [
         SliverOverlapInjector(
           // This is the flip side of the SliverOverlapAbsorber

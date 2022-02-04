@@ -44,6 +44,7 @@ class OfferApplyBloc extends Bloc<OfferApplyEvent, OfferApplyState> {
     try {
       emit(OfferApplyLoading());
       CartModel cart = await _repository.removeOffer();
+      _globalCartBloc.add(NewCart(cart: cart));
       emit(
           OfferApplySuccess(cart: cart, offerSuccessType: OfferSuccess.remove));
     } catch (e) {

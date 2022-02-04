@@ -12,6 +12,7 @@ OfferEntity _$OfferEntityFromJson(Map<String, dynamic> json) {
     code: json['code'] as String?,
     title: json['title'] as String?,
     description: json['description'] as String?,
+    saving: json['saving'] as String?,
     banner: json['banner'] as String?,
   );
 }
@@ -23,4 +24,5 @@ Map<String, dynamic> _$OfferEntityToJson(OfferEntity instance) =>
       'title': instance.title,
       'description': instance.description,
       'banner': instance.banner,
+      'saving': instance.saving,
     };

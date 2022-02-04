@@ -191,6 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     state is FailedToLoadProfile
                                 ? SizedBox.shrink()
                                 : CommonTextButton(
+                                    padding: EdgeInsets.symmetric(vertical: 16),
                                     child: state is UpdatingProfile
                                         ? SizedBox(
                                             child: CircularProgressIndicator(
