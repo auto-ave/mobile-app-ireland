@@ -15,7 +15,7 @@ class GlobalCartBloc extends Bloc<GlobalCartEvent, GlobalCartState> {
 
       if (event is NewCart) {
         _mapSetCartToState(cart: event.cart, emit: emit);
-      } else if (event is ClearLocalCart) {
+      } else if (event is ClearGlobalLocalCart) {
         _mapClearLocalCartToState(emit);
       }
     });

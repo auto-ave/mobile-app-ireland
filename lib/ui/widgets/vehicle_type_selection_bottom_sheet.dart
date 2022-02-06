@@ -94,14 +94,16 @@ class _VehicleTypeSelectionBottomSheetState
                     itemBuilder: (ctx, index) {
                       if (index == 0) {
                         return VehicleWheelSelectionPage(
+                            key: UniqueKey(),
                             onWheelTapped: (wheel) {
-                          selectedWheel = wheel;
-                          widget.pageController.animateToPage(1,
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.linear);
-                        });
+                              selectedWheel = wheel;
+                              widget.pageController.animateToPage(1,
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.linear);
+                            });
                       } else if (index == 1) {
                         return VehicleBrandSelectionPage(
+                          key: UniqueKey(),
                           onBrandTapped: (brand) {
                             selectedBrand = brand;
                             widget.pageController.animateToPage(2,
@@ -117,6 +119,7 @@ class _VehicleTypeSelectionBottomSheetState
                         );
                       } else {
                         return VehicleModelSelectionPage(
+                          key: UniqueKey(),
                           onVehicleModelTapped: (model) {
                             _vehicleTypeFunctionsBloc.add(
                                 SelectVehicleType(vehicleTypeModel: model));
@@ -391,27 +394,6 @@ class _VehicleBrandSelectionPageState extends State<VehicleBrandSelectionPage> {
                     ),
                   ),
                 );
-                return GridView.builder(
-                  itemCount: filteredBrands.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      mainAxisExtent: 100),
-                  itemBuilder: (ctx, index) {
-                    VehicleBrand brand = filteredBrands[index];
-                    return VehicleBrandWidget(
-                        brand: brand, onTap: widget.onBrandTapped);
-                    // (wheelTapped) {
-                    //   setState(() {
-                    //     selectedWheel = wheelTapped;
-                    //     widget.pageController.animateToPage(1,
-                    //         duration: Duration(milliseconds: 300),
-                    //         curve: Curves.linear);
-                    //   });
-                    // });
-                  },
-                );
               }
               return Center(
                 child: loadingAnimation(),
@@ -643,7 +625,7 @@ class VehicleModelWidget extends StatelessWidget {
               ),
               Text(
                 vehicleModel.model!,
-                maxLines: 1,
+                // maxLines: 1,
               )
             ],
           ),

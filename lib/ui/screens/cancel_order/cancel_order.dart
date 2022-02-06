@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:themotorwash/blocs/cancel_booking_data/cancel_booking_data_bloc.dart';
 import 'package:themotorwash/blocs/cancel_booking_request/cancel_booking_request_bloc.dart';
 import 'package:themotorwash/data/models/cancel_booking_data.dart';
@@ -18,7 +19,10 @@ class CancelOrderScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CancelOrderScreen> createState() => _CancelOrderScreenState();
+  State<CancelOrderScreen> createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _CancelOrderScreenState();
+  }
 }
 
 class _CancelOrderScreenState extends State<CancelOrderScreen> {

@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
@@ -79,6 +80,7 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
           : OTPCheckFailed(message: 'Wrong OTP entered');
 
       if (tokens.authenticated) {
+        await FlutterUxcam.setUserIdentity(phoneNumber);
         _globalAuthBloc.add(YieldAuthenticatedState(tokens: tokens));
       }
     } catch (e) {

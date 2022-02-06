@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:themotorwash/data/models/review.dart';
@@ -19,7 +20,10 @@ class StoreReviewsTab extends StatefulWidget {
   StoreReviewsTab({required this.nestedScrollContext, required this.storeSlug});
 
   @override
-  _StoreReviewsTabState createState() => _StoreReviewsTabState();
+  _StoreReviewsTabState createState() {
+    FlutterUxcam.tagScreenName('StoreReviewTab');
+    return _StoreReviewsTabState();
+  }
 }
 
 class _StoreReviewsTabState extends State<StoreReviewsTab>

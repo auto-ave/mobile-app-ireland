@@ -38,6 +38,8 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
       yield* _mapClearCartToState();
     } else if (event is GetCart) {
       yield* _mapGetCartToState();
+    } else if (event is ClearLocalCart) {
+      yield* _mapClearLocalCartToState();
     }
   }
 
@@ -121,5 +123,10 @@ class CartFunctionBloc extends Bloc<CartFunctionEvent, CartFunctionState> {
     } catch (e) {
       yield CartStateError(message: e.toString());
     }
+  }
+
+  Stream<CartFunctionState> _mapClearLocalCartToState() async* {
+    yield CartFunctionUninitialized();
+    _globalCartBloc.add(ClearGlobalLocalCart());
   }
 }

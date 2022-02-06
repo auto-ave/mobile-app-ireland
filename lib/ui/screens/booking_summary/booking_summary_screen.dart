@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
@@ -38,7 +39,11 @@ class BookingSummaryScreen extends StatefulWidget {
   final String bookingId;
 
   @override
-  _BookingSummaryScreenState createState() => _BookingSummaryScreenState();
+  _BookingSummaryScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    FlutterUxcam.occludeSensitiveScreen(false);
+    return _BookingSummaryScreenState();
+  }
 }
 
 class _BookingSummaryScreenState extends State<BookingSummaryScreen> {

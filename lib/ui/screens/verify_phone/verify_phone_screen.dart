@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
@@ -19,7 +20,10 @@ class VerifyPhoneScreen extends StatefulWidget {
   static final String route = '/verifyPhoneScreen';
 
   @override
-  _VerifyPhoneScreenState createState() => _VerifyPhoneScreenState();
+  _VerifyPhoneScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _VerifyPhoneScreenState();
+  }
 }
 
 class _VerifyPhoneScreenState extends State<VerifyPhoneScreen>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/widgets/or_divider_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,7 +25,10 @@ class FeedbackScreen extends StatefulWidget {
   static final String route = '/feedbackScreen';
 
   @override
-  _FeedbackScreenState createState() => _FeedbackScreenState();
+  _FeedbackScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _FeedbackScreenState();
+  }
 }
 
 class _FeedbackScreenState extends State<FeedbackScreen> {

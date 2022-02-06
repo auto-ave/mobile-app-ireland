@@ -65,11 +65,9 @@ class AuthInterceptor extends Interceptor {
                 authenticated: true);
             await localDataService.storeAuthToken(tokens);
             _globalAuthBloc.add(YieldAuthenticatedState(tokens: tokens));
-            //set bearer
-            // headers = {'Authorization': 'JWT ${state.tokens.accessToken}'};
+
             err.requestOptions.headers["Authorization"] = 'JWT $accessToken';
-            // err.requestOptions.headers["Authorization"] = "JWT " + accessToken;
-            //create request with new access token
+
             final opts = new Options(
                 method: err.requestOptions.method,
                 headers: err.requestOptions.headers,

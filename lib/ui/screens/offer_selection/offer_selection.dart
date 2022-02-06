@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:themotorwash/blocs/offer_apply/bloc/offer_apply_bloc.dart';
 
@@ -17,7 +18,10 @@ class OfferSelectionScreen extends StatefulWidget {
   final OfferApplyBloc offerApplyBloc;
 
   @override
-  _OfferSelectionScreenState createState() => _OfferSelectionScreenState();
+  _OfferSelectionScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _OfferSelectionScreenState();
+  }
 }
 
 class _OfferSelectionScreenState extends State<OfferSelectionScreen> {

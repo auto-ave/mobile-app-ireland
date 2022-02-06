@@ -31,6 +31,11 @@ class ClearCart extends CartFunctionEvent {
   List<Object> get props => [];
 }
 
+class ClearLocalCart extends CartFunctionEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class GetCart extends CartFunctionEvent {
   @override
   List<Object> get props => [];

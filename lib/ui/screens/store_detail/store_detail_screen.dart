@@ -3,7 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
+import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/global_cart/bloc/global_cart_bloc.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/navigation/arguments.dart';
@@ -25,7 +27,10 @@ class StoreDetailScreen extends StatefulWidget {
   static final String route = "/storeDetails";
 
   @override
-  _StoreDetailScreenState createState() => _StoreDetailScreenState();
+  _StoreDetailScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _StoreDetailScreenState();
+  }
 }
 
 class _StoreDetailScreenState extends State<StoreDetailScreen>
@@ -35,6 +40,8 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
   late CartFunctionBloc _cartFunctionBloc;
   final _scaffoldState = GlobalKey<ScaffoldState>();
   late final TabController _tabController;
+  late final GlobalAuthBloc _globalAuthBloc;
+
   @override
   void initState() {
     super.initState();
@@ -42,7 +49,10 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
 
     _storeDetailBloc = BlocProvider.of<StoreDetailBloc>(context);
     _cartFunctionBloc = BlocProvider.of<CartFunctionBloc>(context);
-    _cartFunctionBloc.add(GetCart());
+    _globalAuthBloc = BlocProvider.of<GlobalAuthBloc>(context);
+    if (_globalAuthBloc.state is Authenticated) {
+      _cartFunctionBloc.add(GetCart());
+    }
     _storeDetailBloc.add(LoadStoreDetail(storeSlug: widget.storeSlug));
   }
 
@@ -287,7 +297,9 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
               child: ErrorScreen(
                 ctaType: ErrorCTA.reload,
                 onCTAPressed: () {
-                  _cartFunctionBloc.add(GetCart());
+                  if (_globalAuthBloc.state is Authenticated) {
+                    _cartFunctionBloc.add(GetCart());
+                  }
                   _storeDetailBloc
                       .add(LoadStoreDetail(storeSlug: widget.storeSlug));
                 },

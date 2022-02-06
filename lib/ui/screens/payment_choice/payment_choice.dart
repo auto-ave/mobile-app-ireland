@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -40,7 +41,11 @@ class PaymentChoiceScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _PaymentChoiceScreenState createState() => _PaymentChoiceScreenState();
+  _PaymentChoiceScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    FlutterUxcam.occludeSensitiveScreen(true);
+    return _PaymentChoiceScreenState();
+  }
 }
 
 class _PaymentChoiceScreenState extends State<PaymentChoiceScreen> {

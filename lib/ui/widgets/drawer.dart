@@ -66,7 +66,7 @@ class AppDrawer extends StatelessWidget {
                   'log_out_drawer.svg',
                   Text("Log out"),
                   () async {
-                    BlocProvider.of<GlobalCartBloc>(context)
+                    BlocProvider.of<CartFunctionBloc>(context)
                       ..add(ClearLocalCart());
                     BlocProvider.of<PhoneAuthBloc>(context)..add(LogOut());
                   },
@@ -127,14 +127,20 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           Container(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: CircleAvatar(
-                  child: FaIcon(FontAwesomeIcons.user),
-                  backgroundColor: Colors.white,
-                  radius: totalHeight * .05,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, ProfileScreen.route,
+                    arguments: ProfileScreenArguments(showSkip: false));
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: CircleAvatar(
+                    child: FaIcon(FontAwesomeIcons.user),
+                    backgroundColor: Colors.white,
+                    radius: totalHeight * .05,
+                  ),
                 ),
               ),
             ),

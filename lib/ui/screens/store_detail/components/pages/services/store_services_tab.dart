@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
@@ -34,7 +35,10 @@ class StoreServicesTab extends StatefulWidget {
       required this.scaffoldState});
 
   @override
-  _StoreServicesTabState createState() => _StoreServicesTabState();
+  _StoreServicesTabState createState() {
+    FlutterUxcam.tagScreenName('StoreServicesTab');
+    return _StoreServicesTabState();
+  }
 }
 
 class _StoreServicesTabState extends State<StoreServicesTab>

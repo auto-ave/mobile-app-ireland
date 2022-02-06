@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
@@ -28,7 +29,10 @@ class StoreListScreen extends StatefulWidget {
   }) : super(key: key);
   static final String route = "/storeList";
   @override
-  _StoreListScreenState createState() => _StoreListScreenState();
+  _StoreListScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _StoreListScreenState();
+  }
 }
 
 class _StoreListScreenState extends State<StoreListScreen> {

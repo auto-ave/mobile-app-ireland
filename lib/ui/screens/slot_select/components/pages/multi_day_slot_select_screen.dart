@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
@@ -37,8 +38,10 @@ class MultiDaySlotSelectScreen extends StatefulWidget {
   final String cartId;
   static final String route = '/multiDaySlotSelect';
   @override
-  _MultiDaySlotSelectScreenState createState() =>
-      _MultiDaySlotSelectScreenState();
+  _MultiDaySlotSelectScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _MultiDaySlotSelectScreenState();
+  }
 }
 
 class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
@@ -75,7 +78,7 @@ class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
       appBar: getAppBarWithBackButton(
           context: context,
           title: Text(
-            'Select Slot',
+            'Select Vehicle Drop Time',
             style: SizeConfig.kStyleAppBarTitle,
           )),
       backgroundColor: Colors.white,
@@ -101,7 +104,7 @@ class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
               ? Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 16),
                   child: Text(
-                      'Slots on  ${calendarDays[currentSelectedDateIndex].day}',
+                      'Slots on  ${calendarDays[currentSelectedDateIndex].day.ordinalSuffix()}',
                       style: SizeConfig.kStyle20Bold),
                 )
               : Container(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
@@ -20,7 +21,10 @@ class YourBookingsScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _YourBookingsScreenState createState() => _YourBookingsScreenState();
+  _YourBookingsScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _YourBookingsScreenState();
+  }
 }
 
 class _YourBookingsScreenState extends State<YourBookingsScreen> {

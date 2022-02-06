@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 import 'package:themotorwash/blocs/booking_summary/bloc/booking_summary_bloc.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
@@ -34,7 +35,11 @@ class BookingDetailScreen extends StatefulWidget {
   }) : super(key: key);
   static final String route = '/bookingDetailScreen';
   @override
-  _BookingDetailScreenState createState() => _BookingDetailScreenState();
+  _BookingDetailScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+
+    return _BookingDetailScreenState();
+  }
 }
 
 class _BookingDetailScreenState extends State<BookingDetailScreen> {

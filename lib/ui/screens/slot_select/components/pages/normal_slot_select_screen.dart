@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:intl/intl.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
@@ -31,7 +32,10 @@ class NormalSlotSelectScreen extends StatefulWidget {
   final String cartId;
   static final String route = '/normalSlotSelect';
   @override
-  _NormalSlotSelectScreenState createState() => _NormalSlotSelectScreenState();
+  _NormalSlotSelectScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _NormalSlotSelectScreenState();
+  }
 }
 
 class _NormalSlotSelectScreenState extends State<NormalSlotSelectScreen> {
@@ -97,7 +101,7 @@ class _NormalSlotSelectScreenState extends State<NormalSlotSelectScreen> {
               ? Padding(
                   padding: const EdgeInsets.only(left: 16.0, top: 16),
                   child: Text(
-                      'Slots on  ${calendarDays[currentSelectedDateIndex].day}',
+                      'Slots on  ${calendarDays[currentSelectedDateIndex].day.ordinalSuffix()}',
                       style: SizeConfig.kStyle20Bold),
                 )
               : Container(),

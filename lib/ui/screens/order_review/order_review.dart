@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
@@ -35,7 +36,10 @@ class OrderReviewScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _OrderReviewScreenState createState() => _OrderReviewScreenState();
+  _OrderReviewScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _OrderReviewScreenState();
+  }
 }
 
 class _OrderReviewScreenState extends State<OrderReviewScreen> {

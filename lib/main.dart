@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:themotorwash/utils/utils.dart';
 import 'package:upgrader/upgrader.dart';
@@ -240,6 +241,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterUxcam.optIntoSchematicRecordings();
+    FlutterUxcam.setAutomaticScreenNameTagging(false);
+    FlutterUxcam.startWithKey("gmibl3fq1byxxa6").then((value) async {
+      if (value == true) {
+        String? sessionUrl = await FlutterUxcam.urlForCurrentSession();
+        FirebaseCrashlytics.instance.setCustomKey(
+            "UXCam: Session Recording link", sessionUrl.toString());
+      }
+    });
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark));
@@ -331,43 +341,62 @@ class _MyAppState extends State<MyApp> {
             showLater: false,
             // debugAlwaysUpgrade: true,
             // debugDisplayOnce: false,
-            child: FutureBuilder<AuthTokensModel>(
-                future: LocalDataService().getAuthTokens(),
-                builder: (ctx, snapshot) {
-                  SizeConfig().init(ctx);
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data!.authenticated) {
-                        // return OfferSelectionScreen();
-                        // return BookingSummaryScreen(bookingId: '8D6D98');
-                        // return CancelOrderScreen();
+            child: BlocListener<GlobalAuthBloc, GlobalAuthState>(
+              bloc: _globalAuthBloc,
+              listener: (context, state) {
+                // TODO: implement listener
+                if (state is Authenticated) {
+                  _cartFunctionBloc.add(GetCart());
+                }
+                if (state is Unauthenticated) {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, LoginScreen.route, (route) => false);
+                }
+              },
+              listenWhen: (previous, current) {
+                if (previous is Unauthenticated && current is Unauthenticated) {
+                  return false;
+                }
+                return true;
+              },
+              child: FutureBuilder<AuthTokensModel>(
+                  future: LocalDataService().getAuthTokens(),
+                  builder: (ctx, snapshot) {
+                    SizeConfig().init(ctx);
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.authenticated) {
+                          // return OfferSelectionScreen();
+                          // return BookingSummaryScreen(bookingId: '8D6D98');
+                          // return CancelOrderScreen();
 
-                        return ExploreScreen();
-                      } else {
-                        return LoginScreen();
+                          return ExploreScreen();
+                        } else {
+                          return LoginScreen();
+                        }
                       }
                     }
-                  }
-                  return Scaffold(
-                    body: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image:
-                              AssetImage('assets/images/splash_background.png'),
-                          fit: BoxFit.cover,
+                    return Scaffold(
+                      body: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'assets/images/splash_background.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: Center(
+                          child: Builder(builder: (ctx) {
+                            return Image.asset(
+                              'assets/images/logo.png',
+                              scale: 4,
+                            );
+                          }),
                         ),
                       ),
-                      child: Center(
-                        child: Builder(builder: (ctx) {
-                          return Image.asset(
-                            'assets/images/logo.png',
-                            scale: 4,
-                          );
-                        }),
-                      ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+            ),
           ),
           onGenerateRoute: (settings) {
             if (settings.name == StoreListScreen.route) {

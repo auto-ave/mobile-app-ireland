@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:themotorwash/navigation/arguments.dart';
@@ -15,6 +16,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterUxcam.tagScreenName(route);
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //     statusBarColor: Colors.white,
     //     statusBarIconBrightness: Brightness.light));

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 import 'package:themotorwash/data/models/store.dart';
@@ -25,7 +26,10 @@ class StoreOverviewTab extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _StoreOverviewTabState createState() => _StoreOverviewTabState();
+  _StoreOverviewTabState createState() {
+    FlutterUxcam.tagScreenName('StoreOverviewTab');
+    return _StoreOverviewTabState();
+  }
 }
 
 class _StoreOverviewTabState extends State<StoreOverviewTab>

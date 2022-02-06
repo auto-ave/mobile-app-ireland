@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -53,7 +54,10 @@ class ExploreScreen extends StatefulWidget {
   static final String route = '/exploreScreen';
 
   @override
-  _ExploreScreenState createState() => _ExploreScreenState();
+  _ExploreScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _ExploreScreenState();
+  }
 }
 
 class _ExploreScreenState extends State<ExploreScreen>
@@ -142,12 +146,7 @@ class _ExploreScreenState extends State<ExploreScreen>
       },
       child: Scaffold(
         body: BlocListener<GlobalAuthBloc, GlobalAuthState>(
-          listener: (context, state) {
-            if (state is Unauthenticated) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, LoginScreen.route, (route) => false);
-            }
-          },
+          listener: (context, state) {},
           child: BlocConsumer<GlobalLocationBloc, GlobalLocationState>(
               bloc: _globalLocationBloc,
               listener: (context, state) {

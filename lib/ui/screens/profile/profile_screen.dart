@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 
 import 'package:themotorwash/blocs/profile/profile_bloc.dart';
 import 'package:themotorwash/data/models/user_profile.dart';
@@ -17,7 +18,10 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key, required this.showSkip}) : super(key: key);
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _ProfileScreenState createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _ProfileScreenState();
+  }
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {

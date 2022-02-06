@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:themotorwash/theme_constants.dart';
@@ -12,7 +13,10 @@ class StoreGalleryViewScreen extends StatefulWidget {
   StoreGalleryViewScreen({Key? key, required this.images}) : super(key: key);
 
   @override
-  State<StoreGalleryViewScreen> createState() => _StoreGalleryViewScreenState();
+  State<StoreGalleryViewScreen> createState() {
+    FlutterUxcam.tagScreenName(route);
+    return _StoreGalleryViewScreenState();
+  }
 }
 
 class _StoreGalleryViewScreenState extends State<StoreGalleryViewScreen> {
