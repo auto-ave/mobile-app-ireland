@@ -361,44 +361,50 @@ class StoreContactWidget extends StatelessWidget {
           ],
         ),
         SizeConfig.kverticalMargin8,
-        Row(
-          children: [
-            Text('Person to contact: ',
-                style: SizeConfig.kStyle14.copyWith(
-                  color: Colors.black,
-                )),
-            Spacer(),
-            GestureDetector(
-              onTap: () {
-                final Uri telLaunchUri = Uri(
-                  scheme: 'tel',
-                  path: personToContact,
-                );
+        GestureDetector(
+          onTap: () {
+            final Uri telLaunchUri = Uri(
+              scheme: 'tel',
+              path: personToContact,
+            );
 
-                launch(telLaunchUri.toString());
-              },
-              child: Text(personToContact,
-                  style: SizeConfig.kStyle16W500
-                      .copyWith(color: SizeConfig.kPrimaryColor)),
-            )
-          ],
-        ),
-        SizeConfig.kverticalMargin8,
-        Row(
-          children: [
-            Text('Contact Number: ',
-                style: SizeConfig.kStyle14.copyWith(
-                  color: Colors.black,
-                )),
-            Spacer(),
-            Text(phoneNumber,
-                style: SizeConfig.kStyle16W500
-                    .copyWith(color: SizeConfig.kPrimaryColor))
-          ],
-        ),
-        Divider(
-          height: 48,
-        ),
+            launch(telLaunchUri.toString());
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text('Person to contact: ',
+                      style: SizeConfig.kStyle14.copyWith(
+                        color: Colors.black,
+                      )),
+                  Spacer(),
+                  Text(personToContact,
+                      style: SizeConfig.kStyle16W500
+                          .copyWith(color: SizeConfig.kPrimaryColor)),
+                ],
+              ),
+              SizeConfig.kverticalMargin8,
+              Row(
+                children: [
+                  Text('Contact Number: ',
+                      style: SizeConfig.kStyle14.copyWith(
+                        color: Colors.black,
+                      )),
+                  Spacer(),
+                  Text(phoneNumber,
+                      style: SizeConfig.kStyle16W500
+                          .copyWith(color: SizeConfig.kPrimaryColor))
+                ],
+              ),
+              Divider(
+                height: 48,
+              ),
+            ],
+          ),
+        )
       ],
     );
   }

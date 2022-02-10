@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:logger/logger.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:themotorwash/blocs/offer_apply/bloc/offer_apply_bloc.dart';
 
@@ -186,6 +187,8 @@ class OfferTile extends StatelessWidget {
       bloc: offerApplyBloc,
       listener: (context, state) {
         // TODO: implement listener
+        Logger().d(
+            "gelll" + _controller.currentState.toString() + state.toString());
         if (state is OfferApplyError &&
             _controller.currentState == ButtonState.loading) {
           _controller.stop();
@@ -234,7 +237,7 @@ class OfferTile extends StatelessWidget {
                       width: 60,
                       height: 40,
                       elevation: 0,
-                      controller: RoundedLoadingButtonController(),
+                      controller: _controller,
                     ),
                   ),
                 ],

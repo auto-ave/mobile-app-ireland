@@ -18,6 +18,10 @@ PriceTimeListEntity _$PriceTimeListEntityFromJson(Map<String, dynamic> json) {
     store: json['store'] as int?,
     vehicleType: json['vehicle_type'] as String?,
     bays: (json['bays'] as List<dynamic>?)?.map((e) => e as int).toList(),
+    mrp: json['mrp'] as int?,
+    offer: json['offer'] == null
+        ? null
+        : PriceTimeOfferDetail.fromJson(json['offer'] as Map<String, dynamic>),
   );
 }
 
@@ -29,9 +33,25 @@ Map<String, dynamic> _$PriceTimeListEntityToJson(
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
       'price': instance.price,
+      'mrp': instance.mrp,
+      'offer': instance.offer?.toJson(),
       'time_interval': instance.timeInterval,
       'description': instance.description,
       'store': instance.store,
       'vehicle_type': instance.vehicleType,
       'bays': instance.bays,
+    };
+
+PriceTimeOfferDetail _$PriceTimeOfferDetailFromJson(Map<String, dynamic> json) {
+  return PriceTimeOfferDetail(
+    offerText: json['text'] as String?,
+    offerCode: json['code'] as String?,
+  );
+}
+
+Map<String, dynamic> _$PriceTimeOfferDetailToJson(
+        PriceTimeOfferDetail instance) =>
+    <String, dynamic>{
+      'text': instance.offerText,
+      'code': instance.offerCode,
     };

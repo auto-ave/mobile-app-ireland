@@ -1,22 +1,49 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:logger/logger.dart';
 
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
+import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
 import 'package:themotorwash/utils/utils.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  final PendingDynamicLinkData? initialLink;
+
   static final String route = '/loginScreen';
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key, required this.initialLink}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.initialLink != null) {
+      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+        if (widget.initialLink?.link?.queryParameters['store'] != null) {
+          final slug =
+              widget.initialLink?.link?.queryParameters['store'] as String;
+          Logger().d('slug $slug');
+          Navigator.pushNamed(context, StoreDetailScreen.route,
+              arguments: StoreDetailArguments(storeSlug: slug));
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    FlutterUxcam.tagScreenName(route);
+    FlutterUxcam.tagScreenName(LoginScreen.route);
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //     statusBarColor: Colors.white,
     //     statusBarIconBrightness: Brightness.light));

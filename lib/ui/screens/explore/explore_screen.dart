@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 // import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,9 @@ import 'package:themotorwash/ui/widgets/search_bar.dart';
 import 'package:themotorwash/utils/utils.dart';
 
 class ExploreScreen extends StatefulWidget {
-  const ExploreScreen({Key? key}) : super(key: key);
+  final PendingDynamicLinkData? initialLink;
+
+  const ExploreScreen({Key? key, required this.initialLink}) : super(key: key);
   static final String route = '/exploreScreen';
 
   @override
@@ -125,6 +128,17 @@ class _ExploreScreenState extends State<ExploreScreen>
       print('if called');
       _cartFunctionBloc.add(GetCart());
     }
+    if (widget.initialLink != null) {
+      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+        if (widget.initialLink?.link?.queryParameters['store'] != null) {
+          final slug =
+              widget.initialLink?.link?.queryParameters['store'] as String;
+          Logger().d('slug $slug');
+          Navigator.pushNamed(context, StoreDetailScreen.route,
+              arguments: StoreDetailArguments(storeSlug: slug));
+        }
+      });
+    }
   }
 
   @override
@@ -146,7 +160,12 @@ class _ExploreScreenState extends State<ExploreScreen>
       },
       child: Scaffold(
         body: BlocListener<GlobalAuthBloc, GlobalAuthState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state is Unauthenticated) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, LoginScreen.route, (route) => false);
+            }
+          },
           child: BlocConsumer<GlobalLocationBloc, GlobalLocationState>(
               bloc: _globalLocationBloc,
               listener: (context, state) {

@@ -32,6 +32,14 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+    <action android:name="android.intent.action.VIEW"/>
+    <category android:name="android.intent.category.DEFAULT"/>
+    <category android:name="android.intent.category.BROWSABLE"/>
+    <data
+        android:host="autoave.page.link"
+        android:scheme="https"/>
+</intent-filter>
         </activity>
          <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyD4s5qQirdCwk8ehEL_A1gTU-NAW6L9SYw"/>
@@ -67,6 +75,8 @@
   <intent>
     <action android:name="android.intent.action.SEND" />
     <data android:mimeType="*/*" />
+
   </intent>
+  
 </queries>
 </manifest>

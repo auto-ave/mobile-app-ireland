@@ -1,10 +1,9 @@
 import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter_uxcam/flutter_uxcam.dart';
-import 'package:in_app_update/in_app_update.dart';
-import 'package:themotorwash/utils/utils.dart';
-import 'package:upgrader/upgrader.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +11,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_uxcam/flutter_uxcam.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:in_app_update/in_app_update.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:upgrader/upgrader.dart';
+
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/global_cart/bloc/global_cart_bloc.dart';
@@ -58,12 +64,11 @@ import 'package:themotorwash/ui/screens/store_detail/components/pages/gallery/ga
 import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/screens/store_list/bloc/store_list_bloc.dart';
 import 'package:themotorwash/ui/screens/store_list/store_list_screen.dart';
-import 'package:get_it/get_it.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/bloc/your_bookings_bloc.dart';
 import 'package:themotorwash/ui/screens/your_bookings/your_bookings_screen.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:themotorwash/utils/utils.dart';
+
 import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
@@ -98,6 +103,13 @@ void main() async {
     await Firebase.initializeApp();
   } on Exception catch (e) {
     print("helllo" + e.toString());
+  }
+  PendingDynamicLinkData? initialLink;
+  try {
+    initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
+  } on Exception catch (e) {
+    // TODO
+    print(e.toString() + " Dynamic Link ");
   }
   try {
     await FirebaseAnalytics.instance.logAppOpen();
@@ -158,12 +170,19 @@ void main() async {
   Bloc.observer = SimpleBlocObserver();
 
   runApp(
-    MyApp(),
+    MyApp(
+      initialLink: initialLink,
+    ),
     // Wrap your app
   );
 }
 
 class MyApp extends StatefulWidget {
+  final PendingDynamicLinkData? initialLink;
+  const MyApp({
+    Key? key,
+    this.initialLink,
+  }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -237,6 +256,9 @@ class _MyAppState extends State<MyApp> {
         repository: _repository,
         orderReviewBloc: _orderReviewBloc,
         globalCartBloc: _globalCartBloc);
+    // WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    //   N
+    // });
   }
 
   @override
@@ -332,71 +354,10 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'DM Sans',
             scaffoldBackgroundColor: Colors.white,
           ),
-          home: UpgradeAlert(
-            debugLogging: true,
-            canDismissDialog: false,
-            countryCode: 'in',
-            // durationToAlertAgain: Duration(seconds: 1),
-            showIgnore: false,
-            showLater: false,
-            // debugAlwaysUpgrade: true,
-            // debugDisplayOnce: false,
-            child: BlocListener<GlobalAuthBloc, GlobalAuthState>(
-              bloc: _globalAuthBloc,
-              listener: (context, state) {
-                // TODO: implement listener
-                if (state is Authenticated) {
-                  _cartFunctionBloc.add(GetCart());
-                }
-                if (state is Unauthenticated) {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, LoginScreen.route, (route) => false);
-                }
-              },
-              listenWhen: (previous, current) {
-                if (previous is Unauthenticated && current is Unauthenticated) {
-                  return false;
-                }
-                return true;
-              },
-              child: FutureBuilder<AuthTokensModel>(
-                  future: LocalDataService().getAuthTokens(),
-                  builder: (ctx, snapshot) {
-                    SizeConfig().init(ctx);
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.authenticated) {
-                          // return OfferSelectionScreen();
-                          // return BookingSummaryScreen(bookingId: '8D6D98');
-                          // return CancelOrderScreen();
-
-                          return ExploreScreen();
-                        } else {
-                          return LoginScreen();
-                        }
-                      }
-                    }
-                    return Scaffold(
-                      body: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                                'assets/images/splash_background.png'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: Center(
-                          child: Builder(builder: (ctx) {
-                            return Image.asset(
-                              'assets/images/logo.png',
-                              scale: 4,
-                            );
-                          }),
-                        ),
-                      ),
-                    );
-                  }),
-            ),
+          home: MainScreen(
+            cartFunctionBloc: _cartFunctionBloc,
+            globalAuthBloc: _globalAuthBloc,
+            initialLink: widget.initialLink,
           ),
           onGenerateRoute: (settings) {
             if (settings.name == StoreListScreen.route) {
@@ -456,7 +417,9 @@ class _MyAppState extends State<MyApp> {
             if (settings.name == LoginScreen.route) {
               return MaterialPageRoute(
                 builder: (context) {
-                  return LoginScreen();
+                  return LoginScreen(
+                    initialLink: null,
+                  );
                 },
               );
             }
@@ -482,7 +445,9 @@ class _MyAppState extends State<MyApp> {
             if (settings.name == ExploreScreen.route) {
               return MaterialPageRoute(
                 builder: (context) {
-                  return ExploreScreen();
+                  return ExploreScreen(
+                    initialLink: null,
+                  );
                 },
               );
             }
@@ -589,9 +554,100 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
 // TODO : Implement Vehicle type ui with bloc
 // TODO : Implement search services bloc with ui  and apis
 // TODO : Implement search stores bloc with ui  and apis
 // TODO :
 // TODO : remove ! force check
 // TODO : create home screen blocs, integrate them with ui
+class MainScreen extends StatefulWidget {
+  final GlobalAuthBloc globalAuthBloc;
+  final CartFunctionBloc cartFunctionBloc;
+  final PendingDynamicLinkData? initialLink;
+  const MainScreen(
+      {Key? key,
+      required this.cartFunctionBloc,
+      required this.globalAuthBloc,
+      required this.initialLink})
+      : super(key: key);
+
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return UpgradeAlert(
+      debugLogging: true,
+      canDismissDialog: false,
+      countryCode: 'in',
+      // durationToAlertAgain: Duration(seconds: 1),
+      showIgnore: false,
+      showLater: false,
+      // debugAlwaysUpgrade: true,
+      // debugDisplayOnce: false,
+      child: BlocListener<GlobalAuthBloc, GlobalAuthState>(
+        bloc: widget.globalAuthBloc,
+        listener: (context, state) {
+          // TODO: implement listener
+          if (state is Authenticated) {
+            widget.cartFunctionBloc.add(GetCart());
+          }
+        },
+        // listenWhen: (previous, current) {
+        //   if (previous is Unauthenticated && current is Unauthenticated) {
+        //     return false;
+        //   }
+        //   return true;
+        // },
+        child: FutureBuilder<AuthTokensModel>(
+            future: LocalDataService().getAuthTokens(),
+            builder: (ctx, snapshot) {
+              SizeConfig().init(ctx);
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.authenticated) {
+                    // return OfferSelectionScreen();
+                    // return BookingSummaryScreen(bookingId: '8D6D98');
+                    // return CancelOrderScreen();
+
+                    return ExploreScreen(
+                      initialLink: widget.initialLink,
+                    );
+                  } else {
+                    return LoginScreen(
+                      initialLink: widget.initialLink,
+                    );
+                  }
+                }
+              }
+              return Scaffold(
+                body: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/splash_background.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Center(
+                    child: Builder(builder: (ctx) {
+                      return Image.asset(
+                        'assets/images/logo.png',
+                        scale: 4,
+                      );
+                    }),
+                  ),
+                ),
+              );
+            }),
+      ),
+    );
+  }
+}

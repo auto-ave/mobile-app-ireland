@@ -169,6 +169,7 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                               delegate: SliverChildBuilderDelegate((_, index) {
                               var service = services[index];
                               var tile = StoreServiceTile(
+                                  offer: service.offer,
                                   vehicleModel:
                                       vehicleState.vehicleTypeModel.model!,
                                   time: service.timeInterval.toString(),

@@ -148,6 +148,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                         itemId: e.id,
                                         price: e.price!.toString(),
                                         service: e.service!,
+                                        mrp: e.mrp!.toString(),
                                         timeInterval:
                                             e.timeInterval!.toString());
                                   }).toList()),
@@ -386,15 +387,17 @@ class CartItemTile extends StatelessWidget {
   final int? itemId;
   final bool isLoading;
   final CartFunctionBloc cartFunctionBloc;
-  const CartItemTile({
-    Key? key,
-    this.service,
-    this.timeInterval,
-    this.price,
-    this.itemId,
-    required this.isLoading,
-    required this.cartFunctionBloc,
-  }) : super(key: key);
+  final String? mrp;
+  const CartItemTile(
+      {Key? key,
+      this.service,
+      this.timeInterval,
+      this.price,
+      this.itemId,
+      required this.isLoading,
+      required this.cartFunctionBloc,
+      required this.mrp})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -431,12 +434,32 @@ class CartItemTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(
-                '₹ $price',
-                style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: SizeConfig.kfontSize16),
-              ),
+              if (mrp != 0.toString())
+                Text.rich(
+                  TextSpan(
+                    children: <TextSpan>[
+                      new TextSpan(
+                        text: '₹ $mrp',
+                        style: new TextStyle(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                      new TextSpan(
+                          text: ' ₹ $price',
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: SizeConfig.kfontSize16)),
+                    ],
+                  ),
+                )
+              else
+                Text(
+                  '₹ $price',
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: SizeConfig.kfontSize16),
+                ),
               SizedBox(
                 width: 16,
               ),

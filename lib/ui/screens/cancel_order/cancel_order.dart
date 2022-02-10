@@ -51,102 +51,70 @@ class _CancelOrderScreenState extends State<CancelOrderScreen> {
         }
         return true;
       },
-      child: Scaffold(
-          appBar: getAppBarWithBackButton(context: context),
-          bottomNavigationBar: BlocBuilder<CancelBookingRequestBloc,
-                  CancelBookingRequestState>(
-              bloc: _cancelBookingRequestBloc,
-              builder: (context, state) {
-                if (state is CancelBookingRequestSuccess) {
-                  return Container(
-                    height: 0,
-                    width: 0,
-                  );
-                }
-                return BlocBuilder<CancelBookingDataBloc,
-                        CancelBookingDataState>(
-                    bloc: _cancelBookingDataBloc,
-                    builder: (context, state) {
-                      if (state is CancelBookingDataLoaded) {
-                        return BottomSubmitButton(
-                          onTap: () {
-                            if (selectedReason.trim().isNotEmpty) {
-                              _cancelBookingRequestBloc.add(
-                                  SubmitCancelBookingRequest(
-                                      reason: selectedReason,
-                                      bookingId: widget.bookingId));
-                            } else {
-                              showSnackbar(context, 'Please select a reason');
-                            }
-                          },
-                          title: 'Submit',
-                          cancelBookingRequestBloc: _cancelBookingRequestBloc,
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          print('on tappppp');
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Scaffold(
+            appBar: getAppBarWithBackButton(context: context),
+            bottomNavigationBar: BlocBuilder<CancelBookingRequestBloc,
+                    CancelBookingRequestState>(
+                bloc: _cancelBookingRequestBloc,
+                builder: (context, state) {
+                  if (state is CancelBookingRequestSuccess) {
+                    return Container(
+                      height: 0,
+                      width: 0,
+                    );
+                  }
+                  return BlocBuilder<CancelBookingDataBloc,
+                          CancelBookingDataState>(
+                      bloc: _cancelBookingDataBloc,
+                      builder: (context, state) {
+                        if (state is CancelBookingDataLoaded) {
+                          return BottomSubmitButton(
+                            onTap: () {
+                              if (selectedReason.trim().isNotEmpty) {
+                                _cancelBookingRequestBloc.add(
+                                    SubmitCancelBookingRequest(
+                                        reason: selectedReason,
+                                        bookingId: widget.bookingId));
+                              } else {
+                                showSnackbar(context, 'Please select a reason');
+                              }
+                            },
+                            title: 'Submit',
+                            cancelBookingRequestBloc: _cancelBookingRequestBloc,
+                          );
+                        }
+                        return Container(
+                          height: 0,
+                          width: 0,
                         );
-                      }
-                      return Container(
-                        height: 0,
-                        width: 0,
-                      );
-                    });
-              }),
-          body:
-              BlocBuilder<CancelBookingRequestBloc, CancelBookingRequestState>(
-                  bloc: _cancelBookingRequestBloc,
-                  builder: (context, state) {
-                    if (state is CancelBookingRequestSuccess) {
-                      return SizedBox(
-                        child: CancellationRequestSentWidget(),
-                        width: 100.w,
-                      );
-                    }
-                    return BlocBuilder<CancelBookingDataBloc,
-                            CancelBookingDataState>(
-                        bloc: _cancelBookingDataBloc,
-                        builder: (context, state) {
-                          if (state is CancelBookingDataLoading) {
-                            return Center(
-                              child: loadingAnimation(),
-                            );
-                          }
-                          if (state is CancelBookingDataError) {
-                            return Center(
-                              child: ErrorScreen(
-                                ctaType: ErrorCTA.reload,
-                                onCTAPressed: () {
-                                  _cancelBookingDataBloc.add(
-                                      GetCancelBookingData(
-                                          bookingId: widget.bookingId));
-                                },
-                              ),
-                            );
-                          }
-                          if (state is CancelBookingDataLoaded) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Submit order cancellation request',
-                                    style: SizeConfig.kStyle20Bold,
-                                  ),
-                                  SizeConfig.kverticalMargin8,
-                                  CancelDescription(
-                                    isRefundable: state.data.isRefundable,
-                                    refundAmount: state.data.refundAmount,
-                                  ),
-                                  SizeConfig.kverticalMargin24,
-                                  ReasonsOfCancellationWidget(
-                                    reasons: state.data.reasons,
-                                    onReasonChanged: (reason) {
-                                      selectedReason = reason;
-                                    },
-                                  )
-                                ],
-                              ),
-                            );
-                          }
+                      });
+                }),
+            body: BlocBuilder<CancelBookingRequestBloc,
+                    CancelBookingRequestState>(
+                bloc: _cancelBookingRequestBloc,
+                builder: (context, state) {
+                  if (state is CancelBookingRequestSuccess) {
+                    return SizedBox(
+                      child: CancellationRequestSentWidget(),
+                      width: 100.w,
+                    );
+                  }
+                  return BlocBuilder<CancelBookingDataBloc,
+                          CancelBookingDataState>(
+                      bloc: _cancelBookingDataBloc,
+                      builder: (context, state) {
+                        if (state is CancelBookingDataLoading) {
+                          return Center(
+                            child: loadingAnimation(),
+                          );
+                        }
+                        if (state is CancelBookingDataError) {
                           return Center(
                             child: ErrorScreen(
                               ctaType: ErrorCTA.reload,
@@ -156,8 +124,45 @@ class _CancelOrderScreenState extends State<CancelOrderScreen> {
                               },
                             ),
                           );
-                        });
-                  })),
+                        }
+                        if (state is CancelBookingDataLoaded) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Submit order cancellation request',
+                                  style: SizeConfig.kStyle20Bold,
+                                ),
+                                SizeConfig.kverticalMargin8,
+                                CancelDescription(
+                                  isRefundable: state.data.isRefundable,
+                                  refundAmount: state.data.refundAmount,
+                                ),
+                                SizeConfig.kverticalMargin24,
+                                ReasonsOfCancellationWidget(
+                                  reasons: state.data.reasons,
+                                  onReasonChanged: (reason) {
+                                    selectedReason = reason;
+                                  },
+                                )
+                              ],
+                            ),
+                          );
+                        }
+                        return Center(
+                          child: ErrorScreen(
+                            ctaType: ErrorCTA.reload,
+                            onCTAPressed: () {
+                              _cancelBookingDataBloc.add(GetCancelBookingData(
+                                  bookingId: widget.bookingId));
+                            },
+                          ),
+                        );
+                      });
+                })),
+      ),
     );
   }
 }
@@ -216,7 +221,7 @@ class _BottomSubmitButtonState extends State<BottomSubmitButton> {
                           onPressed: () {},
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 12.0, horizontal: 8),
+                                vertical: 8.0, horizontal: 8),
                             child: SizedBox(
                               height: 20,
                               width: 20,
@@ -232,7 +237,7 @@ class _BottomSubmitButtonState extends State<BottomSubmitButton> {
                         onPressed: widget.onTap,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 12.0, horizontal: 8),
+                              vertical: 8.0, horizontal: 8),
                           child: Text(widget.title,
                               style: SizeConfig.kStyle14W500
                                   .copyWith(color: Colors.white)),

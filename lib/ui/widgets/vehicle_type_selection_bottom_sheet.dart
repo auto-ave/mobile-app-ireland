@@ -85,25 +85,23 @@ class _VehicleTypeSelectionBottomSheetState
                   padding: EdgeInsets.only(
                     top: 16,
                   ),
-                  child: PageView.builder(
+                  child: PageView.custom(
                     onPageChanged: (index) {
                       setState(() {});
                     },
                     physics: NeverScrollableScrollPhysics(),
                     controller: widget.pageController,
-                    itemBuilder: (ctx, index) {
+                    childrenDelegate: SliverChildBuilderDelegate((ctx, index) {
                       if (index == 0) {
                         return VehicleWheelSelectionPage(
-                            key: UniqueKey(),
                             onWheelTapped: (wheel) {
-                              selectedWheel = wheel;
-                              widget.pageController.animateToPage(1,
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.linear);
-                            });
+                          selectedWheel = wheel;
+                          widget.pageController.animateToPage(1,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.linear);
+                        });
                       } else if (index == 1) {
                         return VehicleBrandSelectionPage(
-                          key: UniqueKey(),
                           onBrandTapped: (brand) {
                             selectedBrand = brand;
                             widget.pageController.animateToPage(2,
@@ -119,7 +117,6 @@ class _VehicleTypeSelectionBottomSheetState
                         );
                       } else {
                         return VehicleModelSelectionPage(
-                          key: UniqueKey(),
                           onVehicleModelTapped: (model) {
                             _vehicleTypeFunctionsBloc.add(
                                 SelectVehicleType(vehicleTypeModel: model));
@@ -133,8 +130,7 @@ class _VehicleTypeSelectionBottomSheetState
                           },
                         );
                       }
-                    },
-                    itemCount: 3,
+                    }, childCount: 3, addAutomaticKeepAlives: false),
                   ),
                 ));
           }),
@@ -154,7 +150,8 @@ class VehicleWheelSelectionPage extends StatefulWidget {
       _VehicleWheelSelectionPageState();
 }
 
-class _VehicleWheelSelectionPageState extends State<VehicleWheelSelectionPage> {
+class _VehicleWheelSelectionPageState extends State<VehicleWheelSelectionPage>
+    with AutomaticKeepAliveClientMixin<VehicleWheelSelectionPage> {
   late final vehicleListBloc;
   @override
   void initState() {
@@ -227,6 +224,10 @@ class _VehicleWheelSelectionPageState extends State<VehicleWheelSelectionPage> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => false;
 }
 
 class VehicleWheelWidget extends StatelessWidget {
@@ -301,7 +302,8 @@ class VehicleBrandSelectionPage extends StatefulWidget {
       _VehicleBrandSelectionPageState();
 }
 
-class _VehicleBrandSelectionPageState extends State<VehicleBrandSelectionPage> {
+class _VehicleBrandSelectionPageState extends State<VehicleBrandSelectionPage>
+    with AutomaticKeepAliveClientMixin<VehicleBrandSelectionPage> {
   late final vehicleListBloc;
   FocusNode focusNode = FocusNode();
   final TextEditingController searchController = TextEditingController();
@@ -404,6 +406,10 @@ class _VehicleBrandSelectionPageState extends State<VehicleBrandSelectionPage> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => false;
 }
 
 class VehicleBrandWidget extends StatelessWidget {
@@ -472,7 +478,8 @@ class VehicleModelSelectionPage extends StatefulWidget {
       _VehicleModelSelectionPageState();
 }
 
-class _VehicleModelSelectionPageState extends State<VehicleModelSelectionPage> {
+class _VehicleModelSelectionPageState extends State<VehicleModelSelectionPage>
+    with AutomaticKeepAliveClientMixin<VehicleModelSelectionPage> {
   late final vehicleListBloc;
   FocusNode focusNode = FocusNode();
   final TextEditingController searchController = TextEditingController();
@@ -584,6 +591,10 @@ class _VehicleModelSelectionPageState extends State<VehicleModelSelectionPage> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => false;
 }
 
 class VehicleModelWidget extends StatelessWidget {
