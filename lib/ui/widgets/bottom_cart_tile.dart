@@ -40,11 +40,13 @@ class BottomCartTile extends StatelessWidget {
                 ),
                 Spacer(),
                 CommonTextButton(
-                    onPressed: () => _showCartSheet(
-                        storeName: 'Store Name', context: context),
-                    child: Text('View Cart',
-                        style: TextStyle(color: Colors.white)),
-                    backgroundColor: Theme.of(context).primaryColor)
+                  onPressed: () =>
+                      _showCartSheet(storeName: 'Store Name', context: context),
+                  child:
+                      Text('View Cart', style: TextStyle(color: Colors.white)),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  buttonSemantics: 'View Cart',
+                )
                 // TextButton(
                 //   child: Text('View Cart', style: TextStyle(color: Colors.white)),
                 //   onPressed: () =>

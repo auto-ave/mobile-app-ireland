@@ -46,6 +46,13 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _animController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarLoginScreen(),

@@ -19,7 +19,6 @@ class CartModel {
   final List<int>? items;
   final List<PriceTimeListModel>? itemsObj;
   final VehicleModel? vehicleModel;
-  final VehicleTypeModel? vehicleType;
   final OfferModel? offer;
   final String? discount;
   final bool? isMultiDay;
@@ -35,7 +34,6 @@ class CartModel {
       this.items,
       this.itemsObj,
       this.vehicleModel,
-      this.vehicleType,
       this.discount,
       this.offer,
       required this.isMultiDay});
@@ -56,9 +54,6 @@ class CartModel {
         vehicleModel: entity.vehicleModel != null
             ? VehicleModel.fromEntity(entity.vehicleModel!)
             : null,
-        vehicleType: entity.vehicleType != null
-            ? VehicleTypeModel.fromEntity(entity.vehicleType!)
-            : null,
         offer:
             entity.offer != null ? OfferModel.fromEntity(entity.offer!) : null,
         discount: entity.discount,
@@ -67,7 +62,7 @@ class CartModel {
 
   @override
   String toString() {
-    return 'CartModel(id: $id, createdAt: $createdAt, subTotal: $subTotal, total: $total, completed: $completed, store: $store, consumer: $consumer, items: $items, itemsObj: $itemsObj, vehicleModel: $vehicleModel, vehicleType: $vehicleType, offer: $offer)';
+    return 'CartModel(id: $id, createdAt: $createdAt, subTotal: $subTotal, total: $total, completed: $completed, store: $store, consumer: $consumer, items: $items, itemsObj: $itemsObj, vehicleModel: $vehicleModel,  offer: $offer)';
   }
 }
 
@@ -89,8 +84,7 @@ class CartEntity {
   final VehicleModelEntity? vehicleModel;
   @JsonKey(name: 'item_objs')
   final List<PriceTimeListEntity>? itemsObj;
-  @JsonKey(name: 'vehicle_type')
-  final VehicleTypeEntity? vehicleType;
+
   @JsonKey(name: 'is_multi_day')
   final bool? isMultiDay;
 
@@ -107,7 +101,6 @@ class CartEntity {
       this.items,
       this.itemsObj,
       this.vehicleModel,
-      this.vehicleType,
       this.discount,
       this.offer,
       required this.isMultiDay});

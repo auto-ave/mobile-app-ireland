@@ -124,7 +124,7 @@ class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
               }
               if (state is MultiDaySlotDetailLoaded) {
                 var multiDaySlotDetail = state.multiDaySlotDetail;
-                Logger().d(multiDaySlotDetail.slots.toString());
+                autoaveLog(multiDaySlotDetail.slots.toString());
                 return Expanded(
                   child: multiDaySlotDetail.slots.isEmpty
                       ? Center(child: NoSlotsWidget())
@@ -143,8 +143,8 @@ class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
                               }).toList(),
                               selectedIndex: selectedTimeIndex,
                               onChange: (index) {
-                                Logger()
-                                    .d('ON CHANGE CALLED' + index.toString());
+                                autoaveLog(
+                                    'ON CHANGE CALLED' + index.toString());
                                 selectedTimeIndex = index;
                               },
                             ),
@@ -252,32 +252,34 @@ class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
                 ),
                 Spacer(),
                 CommonTextButton(
-                    onPressed: () {
-                      SlotSelectionState state = _bloc.state;
-                      if (selectedTimeIndex >= 0 &&
-                          state is MultiDaySlotDetailLoaded &&
-                          currentSelectedDateIndex >= 0) {
-                        MultiDaySlotDetailModel multiDaySlotDetailModel =
-                            state.multiDaySlotDetail;
-                        Logger().d(
-                            multiDaySlotDetailModel.slots[selectedTimeIndex]);
-                        _orderReviewBloc.add(SetSlot(
-                          slot: null,
-                          multiDaySlot:
-                              multiDaySlotDetailModel.slots[selectedTimeIndex],
-                        ));
-                        Navigator.pushNamed(context, OrderReviewScreen.route,
-                            arguments: OrderReviewScreenArguments(
-                              dateSelected:
-                                  calendarDays[currentSelectedDateIndex],
-                              isMultiDay: true,
-                            ));
-                      }
-                    },
-                    child:
-                        Text('Proceed', style: TextStyle(color: Colors.white)),
-                    backgroundColor:
-                        selectedTimeIndex >= 0 ? Colors.green : Colors.grey)
+                  onPressed: () {
+                    SlotSelectionState state = _bloc.state;
+                    if (selectedTimeIndex >= 0 &&
+                        state is MultiDaySlotDetailLoaded &&
+                        currentSelectedDateIndex >= 0) {
+                      MultiDaySlotDetailModel multiDaySlotDetailModel =
+                          state.multiDaySlotDetail;
+                      autoaveLog(multiDaySlotDetailModel
+                          .slots[selectedTimeIndex]
+                          .toString());
+                      _orderReviewBloc.add(SetSlot(
+                        slot: null,
+                        multiDaySlot:
+                            multiDaySlotDetailModel.slots[selectedTimeIndex],
+                      ));
+                      Navigator.pushNamed(context, OrderReviewScreen.route,
+                          arguments: OrderReviewScreenArguments(
+                            dateSelected:
+                                calendarDays[currentSelectedDateIndex],
+                            isMultiDay: true,
+                          ));
+                    }
+                  },
+                  child: Text('Proceed', style: TextStyle(color: Colors.white)),
+                  backgroundColor:
+                      selectedTimeIndex >= 0 ? Colors.green : Colors.grey,
+                  buttonSemantics: 'MultiDay Slots Proceed',
+                )
               ],
             ),
           ),

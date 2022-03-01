@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:themotorwash/main.dart';
 
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/slot_select/components/no_slots_widget.dart';
@@ -90,7 +91,10 @@ class DayTimeTabWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => onTap(tabIndex),
+      onTap: () {
+        onTap(tabIndex);
+        mixpanel?.track('DayTime Slot Selected');
+      },
       child: Container(
         width: 25.w,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),

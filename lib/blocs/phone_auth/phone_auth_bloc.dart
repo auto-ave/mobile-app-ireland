@@ -10,6 +10,8 @@ import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
 import 'package:themotorwash/data/repos/auth_repository.dart';
+import 'package:themotorwash/main.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 part 'phone_auth_event.dart';
 part 'phone_auth_state.dart';
@@ -80,7 +82,16 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
           : OTPCheckFailed(message: 'Wrong OTP entered');
 
       if (tokens.authenticated) {
-        await FlutterUxcam.setUserIdentity(phoneNumber);
+        try {
+          mixpanel?.identify(
+            phoneNumber,
+          );
+
+          await FlutterUxcam.setUserIdentity(phoneNumber);
+        } on Exception catch (e) {
+          autoaveLog(e.toString());
+        }
+
         _globalAuthBloc.add(YieldAuthenticatedState(tokens: tokens));
       }
     } catch (e) {

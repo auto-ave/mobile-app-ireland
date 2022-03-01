@@ -227,6 +227,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       }
                                     },
                                     backgroundColor: SizeConfig.kPrimaryColor,
+                                    buttonSemantics: 'Profile Save',
                                   ))
                       ],
                     );

@@ -203,25 +203,26 @@ class _NormalSlotSelectScreenState extends State<NormalSlotSelectScreen> {
                 ),
                 Spacer(),
                 CommonTextButton(
-                    onPressed: () {
-                      SlotSelectionState state = _bloc.state;
-                      if (currentSelectedSlotIndex >= 0 &&
-                          state is SlotsLoaded &&
-                          currentSelectedDateIndex >= 0) {
-                        Slot slot = state.slots[currentSelectedSlotIndex];
-                        _orderReviewBloc.add(SetSlot(slot: slot));
-                        Navigator.pushNamed(context, OrderReviewScreen.route,
-                            arguments: OrderReviewScreenArguments(
-                                dateSelected:
-                                    calendarDays[currentSelectedDateIndex],
-                                isMultiDay: false));
-                      }
-                    },
-                    child:
-                        Text('Proceed', style: TextStyle(color: Colors.white)),
-                    backgroundColor: currentSelectedSlotIndex >= 0
-                        ? Colors.green
-                        : Colors.grey)
+                  onPressed: () {
+                    SlotSelectionState state = _bloc.state;
+                    if (currentSelectedSlotIndex >= 0 &&
+                        state is SlotsLoaded &&
+                        currentSelectedDateIndex >= 0) {
+                      Slot slot = state.slots[currentSelectedSlotIndex];
+                      _orderReviewBloc.add(SetSlot(slot: slot));
+                      Navigator.pushNamed(context, OrderReviewScreen.route,
+                          arguments: OrderReviewScreenArguments(
+                              dateSelected:
+                                  calendarDays[currentSelectedDateIndex],
+                              isMultiDay: false));
+                    }
+                  },
+                  child: Text('Proceed', style: TextStyle(color: Colors.white)),
+                  backgroundColor: currentSelectedSlotIndex >= 0
+                      ? Colors.green
+                      : Colors.grey,
+                  buttonSemantics: 'Normal Slots Proceed',
+                )
               ],
             ),
           ),

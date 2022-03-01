@@ -7,6 +7,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:themotorwash/data/models/initiate_razorpay_payment.dart';
 import 'package:themotorwash/data/models/razorpay_payment_response.dart';
 import 'package:themotorwash/data/repos/payment_repository.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 part 'razorpay_payment_event.dart';
 part 'razorpay_payment_state.dart';
@@ -160,6 +161,6 @@ class RazorpayPaymentBloc
       {required Emitter<RazorpayPaymentState> emit,
       required ExternalWalletResponse response}) {
     print('Handle External Wallet Called' + " " + response.toString());
-    Logger().d(response);
+    autoaveLog(response.toString());
   }
 }

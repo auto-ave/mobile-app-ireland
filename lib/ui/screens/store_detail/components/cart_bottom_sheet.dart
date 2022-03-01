@@ -8,6 +8,7 @@ import 'package:themotorwash/blocs/offer_apply/bloc/offer_apply_bloc.dart';
 import 'package:themotorwash/blocs/order_review/order_review_bloc.dart';
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/data/repos/repository.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
@@ -196,6 +197,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                             onTap: () {
                                                               _offerApplyBloc.add(
                                                                   RemoveOffer());
+                                                              mixpanel?.track(
+                                                                  'Offer Remove');
                                                             },
                                                             child: Icon(
                                                               Icons
@@ -206,24 +209,31 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                         ],
                                                       )
                                                     : GestureDetector(
-                                                        onTap: () => Navigator.pushNamed(
-                                                            context,
-                                                            OfferSelectionScreen
-                                                                .route,
-                                                            arguments: OfferSelectionScreenArgs(
-                                                                offerApplyBloc:
-                                                                    _offerApplyBloc)),
+                                                        onTap: () {
+                                                          mixpanel?.track(
+                                                              'View Offers Left');
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              OfferSelectionScreen
+                                                                  .route,
+                                                              arguments: OfferSelectionScreenArgs(
+                                                                  offerApplyBloc:
+                                                                      _offerApplyBloc));
+                                                        },
                                                         child: Text(
                                                             'Select a promo code'))),
                                             SizeConfig.kHorizontalMargin8,
                                             GestureDetector(
-                                              onTap: () => Navigator.pushNamed(
-                                                  context,
-                                                  OfferSelectionScreen.route,
-                                                  arguments:
-                                                      OfferSelectionScreenArgs(
-                                                          offerApplyBloc:
-                                                              _offerApplyBloc)),
+                                              onTap: () {
+                                                mixpanel?.track(
+                                                    'View Offers Right');
+                                                Navigator.pushNamed(context,
+                                                    OfferSelectionScreen.route,
+                                                    arguments:
+                                                        OfferSelectionScreenArgs(
+                                                            offerApplyBloc:
+                                                                _offerApplyBloc));
+                                              },
                                               child: Text('View offers',
                                                   style: SizeConfig
                                                       .kStyle14PrimaryColor),
@@ -325,26 +335,28 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                           ),
                                           Spacer(),
                                           CommonTextButton(
-                                              onPressed: () {
-                                                _orderReviewBloc
-                                                    .add(SetCart(cart: cart));
-                                                Navigator.pop(context);
-                                                Navigator.pushNamed(context,
-                                                    SlotSelectScreen.route,
-                                                    arguments:
-                                                        SlotSelectScreenArguments(
-                                                            isMultiDay: cart
-                                                                .isMultiDay!,
-                                                            cartTotal:
-                                                                cart.total!,
-                                                            cardId: cart.id!
-                                                                .toString()));
-                                              },
-                                              child: Text('Select Slot',
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                              backgroundColor:
-                                                  SizeConfig.kPrimaryColor)
+                                            onPressed: () {
+                                              _orderReviewBloc
+                                                  .add(SetCart(cart: cart));
+                                              Navigator.pop(context);
+                                              Navigator.pushNamed(context,
+                                                  SlotSelectScreen.route,
+                                                  arguments:
+                                                      SlotSelectScreenArguments(
+                                                          isMultiDay:
+                                                              cart.isMultiDay!,
+                                                          cartTotal:
+                                                              cart.total!,
+                                                          cardId: cart.id!
+                                                              .toString()));
+                                            },
+                                            child: Text('Select Slot',
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            backgroundColor:
+                                                SizeConfig.kPrimaryColor,
+                                            buttonSemantics: 'Cart Select Slot',
+                                          )
                                           // TextButton(
                                           //   child: Text('Select Slot',
                                           //       style: TextStyle(color: Colors.white)),
@@ -479,6 +491,7 @@ class CartItemTile extends StatelessWidget {
                   onPressed: () {
                     cartFunctionBloc.add(DeleteItemFromCart(itemId: itemId!));
                   },
+                  buttonSemantics: 'Cart Delete Item',
                   child: isLoading
                       ? SizedBox(
                           width: 25,

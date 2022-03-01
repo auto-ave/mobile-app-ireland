@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:themotorwash/data/analytics/analytics_events.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/widgets/badge.dart';
@@ -30,6 +32,7 @@ class StoreSearchTile extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
+        mixpanel?.track(SearchStoreClick().eventName());
         Navigator.of(context).pushNamed(StoreDetailScreen.route,
             arguments: StoreDetailArguments(storeSlug: storeSlug));
       },

@@ -302,6 +302,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                 },
                 backgroundColor: Colors.green,
                 padding: EdgeInsets.symmetric(vertical: 16),
+                buttonSemantics: 'Proceed To Payment',
                 // style: ButtonStyle(
                 //     padding: MaterialStateProperty.all(
                 //         EdgeInsets.symmetric(horizontal: 16)),

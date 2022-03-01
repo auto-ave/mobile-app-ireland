@@ -4,8 +4,10 @@ import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import 'package:themotorwash/blocs/search_services/search_services_bloc.dart';
 import 'package:themotorwash/blocs/search_stores/search_stores_bloc.dart';
+import 'package:themotorwash/data/analytics/analytics_events.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/components/search_service_tile.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
@@ -34,6 +36,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
   @override
   void initState() {
     super.initState();
+    mixpanel?.track(SearchClick().eventName());
     // widget.searchServicesBloc.stream.listen((state) {
     //   if (state is SearchedServicesResult && mounted) {
     //     setState(() {
@@ -169,7 +172,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
                                               .map((e) => SearchServiceTile(
                                                     imageUrl: e.thumbnail!,
                                                     serviceName: e.name!,
-                                                    serviceTag: e.slug,
+                                                    serviceTag: e.slug!,
                                                   ))
                                               .toList(),
                                     ),
@@ -232,8 +235,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
                                     imageURL: store.thumbnail ?? 'thumb',
                                     rating: store.rating,
                                     storeName: store.name,
-                                    startingFrom:
-                                        store.servicesStart ?? 'serviceStarts',
+                                    startingFrom: store.servicesStart ?? '',
                                     storeSlug: store.storeSlug ?? 'store-slug');
                                 if (state is LoadingMoreSearchStoresResult &&
                                     index == stores.length - 1) {

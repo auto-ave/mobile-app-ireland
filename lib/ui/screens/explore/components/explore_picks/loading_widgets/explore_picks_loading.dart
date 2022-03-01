@@ -4,8 +4,8 @@ import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 import 'package:themotorwash/utils/packages/multi_sliver/multi_sliver.dart';
 
-class ExploreFeaturedLoading extends StatelessWidget {
-  const ExploreFeaturedLoading({Key? key}) : super(key: key);
+class ExplorePicksLoading extends StatelessWidget {
+  const ExplorePicksLoading({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +31,13 @@ class ExploreFeaturedLoading extends StatelessWidget {
         ),
       ),
       SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 16),
         sliver: SliverToBoxAdapter(
           child: Container(
-            height: (132 / 290) * 85.w,
-            width: 85.w,
+            // height: 70.w,
+            height: 200,
+            // width: 200,
+            // width: 200,
             child: ShimmerPlaceholder(borderRadius: BorderRadius.circular(4)),
           ),
         ),

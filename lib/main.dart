@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,6 +20,8 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:themotorwash/ui/screens/offer_stores_list/offer_stores_list_screen.dart';
+import 'package:themotorwash/ui/screens/onboarding/onboarding_screen.dart';
 import 'package:upgrader/upgrader.dart';
 
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
@@ -72,6 +75,7 @@ import 'package:themotorwash/utils/utils.dart';
 import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
+late Mixpanel? mixpanel;
 
 /// Create a [AndroidNotificationChannel] for heads up notifications
 late AndroidNotificationChannel channel;
@@ -80,6 +84,11 @@ late AndroidNotificationChannel channel;
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
+}
+
+Future<void> initMixpanel() async {
+  mixpanel = await Mixpanel.init("28271a708d8c89da55aca5ed84b79ddd",
+      optOutTrackingDefault: false);
 }
 
 void main() async {
@@ -168,7 +177,11 @@ void main() async {
     FirebaseMessaging.instance.requestPermission();
   }
   Bloc.observer = SimpleBlocObserver();
-
+  try {
+    await initMixpanel();
+  } catch (e) {
+    print(e.toString());
+  }
   runApp(
     MyApp(
       initialLink: initialLink,
@@ -189,26 +202,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // AppUpdateInfo? _updateInfo;
-  Future<void> checkForUpdate() async {
-    InAppUpdate.checkForUpdate().then((info) {
-      // setState(() {
-      //   _updateInfo = info;
-      // });
-      print('helllll' + info.toString());
-      info.updateAvailability == UpdateAvailability.updateAvailable
-          ? () {
-              print(' update available');
-              InAppUpdate.performImmediateUpdate()
-                  .catchError((e) => print(e.toString() + "check err 1"));
-            }
-          : () {
-              print('no update available');
-            };
-    }).catchError((e) {
-      print(e.toString() + "check error");
-    });
-  }
-
   late Repository _repository;
   late PaymentRepository _paymentRepository;
 
@@ -226,7 +219,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    checkForUpdate();
     precacheImage(AssetImage('assets/images/splash_background.png'), context);
     FcmHelper().onMessageFCM();
     _fcmInstance = FirebaseMessaging.instance;
@@ -263,15 +255,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    FlutterUxcam.optIntoSchematicRecordings();
-    FlutterUxcam.setAutomaticScreenNameTagging(false);
-    FlutterUxcam.startWithKey("gmibl3fq1byxxa6").then((value) async {
-      if (value == true) {
-        String? sessionUrl = await FlutterUxcam.urlForCurrentSession();
-        FirebaseCrashlytics.instance.setCustomKey(
-            "UXCam: Session Recording link", sessionUrl.toString());
-      }
-    });
+    if (kReleaseMode) {
+      FlutterUxcam.optIntoSchematicRecordings();
+      FlutterUxcam.setAutomaticScreenNameTagging(false);
+      FlutterUxcam.startWithKey("gmibl3fq1byxxa6").then((value) async {
+        if (value == true) {
+          String? sessionUrl = await FlutterUxcam.urlForCurrentSession();
+          FirebaseCrashlytics.instance.setCustomKey(
+              "UXCam: Session Recording link", sessionUrl.toString());
+        }
+      });
+    } else {
+      FlutterUxcam.optOutOfSchematicRecordings();
+    }
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark));
@@ -369,6 +366,19 @@ class _MyAppState extends State<MyApp> {
                     city: args.city,
                     title: args.title,
                     serviceTag: args.serviceTag,
+                    imageUrl: args.imageUrl,
+                  );
+                },
+              );
+            }
+            if (settings.name == OfferStoresListScreen.route) {
+              final args = settings.arguments as OfferStoresListArguments;
+
+              return MaterialPageRoute(
+                builder: (context) {
+                  return OfferStoresListScreen(
+                    title: args.title,
+                    imageUrl: args.imageUrl,
                   );
                 },
               );
@@ -386,6 +396,7 @@ class _MyAppState extends State<MyApp> {
                 builder: (context) {
                   return StoreDetailScreen(
                     storeSlug: args.storeSlug,
+                    serviceTag: args.serviceTag,
                   );
                 },
               );
@@ -588,6 +599,7 @@ class _MainScreenState extends State<MainScreen> {
       debugLogging: true,
       canDismissDialog: false,
       countryCode: 'in',
+
       // durationToAlertAgain: Duration(seconds: 1),
       showIgnore: false,
       showLater: false,
@@ -611,6 +623,7 @@ class _MainScreenState extends State<MainScreen> {
             future: LocalDataService().getAuthTokens(),
             builder: (ctx, snapshot) {
               SizeConfig().init(ctx);
+
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   if (snapshot.data!.authenticated) {
@@ -622,6 +635,7 @@ class _MainScreenState extends State<MainScreen> {
                       initialLink: widget.initialLink,
                     );
                   } else {
+                    return OnboardingScreen();
                     return LoginScreen(
                       initialLink: widget.initialLink,
                     );

@@ -20,6 +20,7 @@ import 'package:themotorwash/data/models/razorpay_payment_response.dart';
 import 'package:themotorwash/data/models/slot.dart';
 import 'package:themotorwash/data/repos/payment_repository.dart';
 import 'package:themotorwash/data/repos/repository.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
@@ -223,50 +224,52 @@ class _PaymentChoiceScreenState extends State<PaymentChoiceScreen> {
                   child: Column(
                     children: [
                       PaymentChoiceTile(
-                          amount: state.paymentChoices[0].amount
-                              .toString()
-                              .rupees(),
-                          descriptionWidget:
-                              Text(state.paymentChoices[0].description),
-                          isSelected: currentSelectedIndex == 0,
-                          paymentChoice: state.paymentChoices[0].title,
-                          primaryColor: Colors.grey,
-                          isActive: state.paymentChoices[0].active,
-                          onTap: (index) {
-                            if (state.paymentChoices[0].active) {
-                              setState(() {
-                                currentSelectedIndex = index;
-                              });
-                            } else {
-                              showSnackbar(context,
-                                  'Option not available for the select store');
-                            }
-                          },
-                          widgetIndex: 0),
+                        amount:
+                            state.paymentChoices[0].amount.toString().rupees(),
+                        descriptionWidget:
+                            Text(state.paymentChoices[0].description),
+                        isSelected: currentSelectedIndex == 0,
+                        paymentChoice: state.paymentChoices[0].title,
+                        primaryColor: Colors.grey,
+                        isActive: state.paymentChoices[0].active,
+                        onTap: (index) {
+                          if (state.paymentChoices[0].active) {
+                            setState(() {
+                              currentSelectedIndex = index;
+                            });
+                          } else {
+                            showSnackbar(context,
+                                'Option not available for the select store');
+                          }
+                        },
+                        widgetIndex: 0,
+                        buttonSemantics: state.paymentChoices[0].title,
+                      ),
                       SizeConfig.kverticalMargin16,
                       ORWithDividerWidget(),
                       SizeConfig.kverticalMargin16,
                       PaymentChoiceTile(
-                          amount: state.paymentChoices[1].amount
-                              .toString()
-                              .rupees(),
-                          descriptionWidget:
-                              Text(state.paymentChoices[1].description),
-                          isActive: state.paymentChoices[1].active,
-                          isSelected: currentSelectedIndex == 1,
-                          paymentChoice: state.paymentChoices[1].title,
-                          primaryColor: SizeConfig.kPrimaryColor,
-                          onTap: (index) {
-                            if (state.paymentChoices[1].active) {
-                              setState(() {
-                                currentSelectedIndex = index;
-                              });
-                            } else {
-                              showSnackbar(context,
-                                  'Option not available for the select store');
-                            }
-                          },
-                          widgetIndex: 1),
+                        amount:
+                            state.paymentChoices[1].amount.toString().rupees(),
+                        descriptionWidget:
+                            Text(state.paymentChoices[1].description),
+                        isActive: state.paymentChoices[1].active,
+                        isSelected: currentSelectedIndex == 1,
+                        paymentChoice: state.paymentChoices[1].title,
+                        primaryColor: SizeConfig.kPrimaryColor,
+                        onTap: (index) {
+                          if (state.paymentChoices[1].active) {
+                            setState(() {
+                              currentSelectedIndex = index;
+                            });
+                          } else {
+                            showSnackbar(context,
+                                'Option not available for the select store');
+                          }
+                        },
+                        widgetIndex: 1,
+                        buttonSemantics: state.paymentChoices[1].title,
+                      ),
                       Spacer(),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -321,15 +324,17 @@ class BottomButton extends StatelessWidget {
               children: <Widget>[
                 Spacer(),
                 CommonTextButton(
-                    onPressed: onTap,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 8),
-                      child: Text(title,
-                          style: SizeConfig.kStyle14W500
-                              .copyWith(color: Colors.white)),
-                    ),
-                    backgroundColor: SizeConfig.kPrimaryColor)
+                  onPressed: onTap,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 8),
+                    child: Text(title,
+                        style: SizeConfig.kStyle14W500
+                            .copyWith(color: Colors.white)),
+                  ),
+                  backgroundColor: SizeConfig.kPrimaryColor,
+                  buttonSemantics: 'Payment Choice Continue',
+                )
               ],
             ),
           ),
@@ -374,6 +379,7 @@ class PaymentChoiceTile extends StatelessWidget {
   final int widgetIndex;
   final Function(int index) onTap;
   final bool isActive;
+  final String buttonSemantics;
 
   const PaymentChoiceTile(
       {Key? key,
@@ -384,6 +390,7 @@ class PaymentChoiceTile extends StatelessWidget {
       required this.primaryColor,
       required this.onTap,
       required this.widgetIndex,
+      required this.buttonSemantics,
       required this.isActive})
       : super(key: key);
 
@@ -421,7 +428,11 @@ class PaymentChoiceTile extends StatelessWidget {
           descriptionWidget,
           SizeConfig.kverticalMargin16,
           GestureDetector(
-            onTap: () => onTap(widgetIndex),
+            onTap: () {
+              onTap(widgetIndex);
+              mixpanel?.track(buttonSemantics,
+                  properties: {'is_active': isActive.toString()});
+            },
             child: Container(
               width: 100.w,
               padding: EdgeInsets.symmetric(vertical: 8),

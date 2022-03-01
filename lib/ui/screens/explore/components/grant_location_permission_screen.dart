@@ -4,7 +4,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 
 import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
+import 'package:themotorwash/data/analytics/analytics_events.dart';
 import 'package:themotorwash/data/models/location_model.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 
 class GrantLocationPermissionScreen extends StatefulWidget {
@@ -75,8 +77,10 @@ class _GrantLocationPermissionScreenState
             GestureDetector(
               behavior: HitTestBehavior.opaque,
 
-              onTap: () => widget.globalLocationBloc
-                  .add(SkipUserLocation()), //TODO : Get lat long for banglore
+              onTap: () {
+                widget.globalLocationBloc.add(SkipUserLocation());
+                mixpanel?.track(SkipLocationAnalytics().eventName());
+              }, //TODO : Get lat long for banglore
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

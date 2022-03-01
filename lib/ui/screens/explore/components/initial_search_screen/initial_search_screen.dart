@@ -46,7 +46,9 @@ class _InitialSearchScreenState extends State<InitialSearchScreen> {
                           .map((e) => ExploreServiceTile(
                                 imageUrl: e.thumbnail!,
                                 serviceName: e.name!,
-                                serviceTag: e.slug,
+                                serviceTag: e.slug!,
+                                bannerUrl:
+                                    e.bannerUrl ?? SizeConfig.autoaveBanner,
                               ))
                           .toList(),
                     )

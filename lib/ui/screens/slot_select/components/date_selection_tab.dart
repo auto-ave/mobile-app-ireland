@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 
 class DateSelectionTab extends StatelessWidget {
@@ -63,6 +64,7 @@ class DateSelectionWidget extends StatelessWidget {
       onTap: () {
         onTap(tabIndex);
         HapticFeedback.mediumImpact();
+        mixpanel?.track("Slot Date Selected");
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),

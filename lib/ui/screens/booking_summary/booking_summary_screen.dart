@@ -9,10 +9,12 @@ import 'package:logger/logger.dart';
 
 import 'package:themotorwash/blocs/booking_summary/bloc/booking_summary_bloc.dart';
 import 'package:themotorwash/blocs/review/review_bloc.dart';
+import 'package:themotorwash/data/analytics/analytics_events.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/repos/repository.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_detail/booking_detail.dart';
@@ -63,6 +65,11 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    mixpanel?.track(
+        widget.isTransactionSuccessful
+            ? BookingSuccessEvent().eventName()
+            : BookingFailedEvent().eventName(),
+        properties: {'booking_id': widget.bookingId});
     _bookingSummaryBloc = BookingSummaryBloc(
         repository: RepositoryProvider.of<Repository>(context));
     _bookingSummaryBloc.add(GetBookingSummary(bookingId: widget.bookingId));
@@ -158,7 +165,9 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
                                   style: SizeConfig.kStyle16W500
                                       .copyWith(color: Colors.white),
                                 ),
-                                backgroundColor: SizeConfig.kPrimaryColor),
+                                backgroundColor: SizeConfig.kPrimaryColor,
+                                buttonSemantics: 'Back To Home Booking Summary',
+                              ),
                         width: 100.w,
                       ),
                       Divider(
@@ -363,6 +372,7 @@ class StoreContactWidget extends StatelessWidget {
         SizeConfig.kverticalMargin8,
         GestureDetector(
           onTap: () {
+            mixpanel?.track('Person To Contact Click');
             final Uri telLaunchUri = Uri(
               scheme: 'tel',
               path: personToContact,
@@ -509,36 +519,38 @@ class _RateServiceWidgetState extends State<RateServiceWidget> {
               ),
             ),
             CommonTextButton(
-                onPressed: () {
-                  if (_rating == 0) {
-                    showSnackbar(context, 'Please rate from 1-5 stars');
-                  } else {
-                    bool isOnlyRating =
-                        reviewDescriptionController.text.trim() == "";
-                    _reviewBloc.add(
-                      AddReview(
-                        review: ReviewEntity(
-                          bookingId: widget.bookingId,
-                          isOnlyRating: isOnlyRating,
-                          store: widget.store.id,
-                          reviewDescription: reviewDescriptionController.text,
-                          rating: _rating.toString(),
-                        ),
+              onPressed: () {
+                if (_rating == 0) {
+                  showSnackbar(context, 'Please rate from 1-5 stars');
+                } else {
+                  bool isOnlyRating =
+                      reviewDescriptionController.text.trim() == "";
+                  _reviewBloc.add(
+                    AddReview(
+                      review: ReviewEntity(
+                        bookingId: widget.bookingId,
+                        isOnlyRating: isOnlyRating,
+                        store: widget.store.id,
+                        reviewDescription: reviewDescriptionController.text,
+                        rating: _rating.toString(),
                       ),
-                    );
-                  }
-                },
-                child: state is AddingReview
-                    ? SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text('Post', style: TextStyle(color: Colors.white)),
-                backgroundColor: Theme.of(context).primaryColor),
+                    ),
+                  );
+                }
+              },
+              child: state is AddingReview
+                  ? SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Text('Post', style: TextStyle(color: Colors.white)),
+              backgroundColor: Theme.of(context).primaryColor,
+              buttonSemantics: 'Post Review',
+            ),
           ],
         );
       },

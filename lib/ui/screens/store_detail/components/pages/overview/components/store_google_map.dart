@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 
 class StoreGoogleMap extends StatefulWidget {
@@ -85,7 +86,10 @@ class StoreGoogleMapState extends State<StoreGoogleMap> {
             )),
         Positioned(
           child: GestureDetector(
-            onTap: _goToPinned,
+            onTap: () {
+              _goToPinned();
+              mixpanel?.track('Go To Pinned Location');
+            },
             child: Container(
               padding: EdgeInsets.all(8),
               decoration: BoxDecoration(

@@ -147,28 +147,32 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       ),
                       SizeConfig.kverticalMargin16,
                       CommonTextButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _feedbackBloc.add(SendFeedback(
-                                  email: 'suryansh@gmail.com',
-                                  phone: '+917000037559',
-                                  message: messageController.text));
-                            }
-                          },
-                          child: state is FeedbackLoading
-                              ? SizedBox(
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    backgroundColor: Colors.white,
-                                  ),
-                                  width: 25,
-                                  height: 25,
-                                )
-                              : Text(
-                                  'Submit',
-                                  style: TextStyle(color: Colors.white),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _feedbackBloc.add(SendFeedback(
+                                email: 'suryansh@gmail.com',
+                                phone: '+917000037559',
+                                message: messageController.text));
+                          }
+                        },
+                        child: state is FeedbackLoading
+                            ? SizedBox(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  backgroundColor: Colors.white,
                                 ),
-                          backgroundColor: SizeConfig.kPrimaryColor),
+                                width: 25,
+                                height: 25,
+                              )
+                            : Text(
+                                'Submit',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                        backgroundColor: SizeConfig.kPrimaryColor,
+                        buttonSemantics: widget.isFeedback
+                            ? 'Submit Feedback'
+                            : 'Submit Order Support',
+                      ),
 
                       SizeConfig.kverticalMargin24,
                       ORWithDividerWidget(),
@@ -177,32 +181,36 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           ContactOptionButton(
-                              onTap: () {
-                                final Uri emailLaunchUri = Uri(
-                                  scheme: 'mailto',
-                                  path: 'support@autoave.in',
-                                  query: encodeQueryParameters(<String, String>{
-                                    'subject': widget.isFeedback
-                                        ? 'Feedback'
-                                        : 'Order number : ${widget.orderNumber}'
-                                  }),
-                                );
+                            onTap: () {
+                              final Uri emailLaunchUri = Uri(
+                                scheme: 'mailto',
+                                path: 'support@autoave.in',
+                                query: encodeQueryParameters(<String, String>{
+                                  'subject': widget.isFeedback
+                                      ? 'Feedback'
+                                      : 'Order number : ${widget.orderNumber}'
+                                }),
+                              );
 
-                                launch(emailLaunchUri.toString());
-                              },
-                              text: 'Mail us',
-                              svgAsset: 'assets/icons/mail.svg'),
+                              launch(emailLaunchUri.toString());
+                            },
+                            text: 'Mail us',
+                            svgAsset: 'assets/icons/mail.svg',
+                            buttonSemantics: 'Mail Us Click',
+                          ),
                           ContactOptionButton(
-                              onTap: () {
-                                final Uri telLaunchUri = Uri(
-                                  scheme: 'tel',
-                                  path: '+917000037559',
-                                );
+                            onTap: () {
+                              final Uri telLaunchUri = Uri(
+                                scheme: 'tel',
+                                path: '+917000037559',
+                              );
 
-                                launch(telLaunchUri.toString());
-                              },
-                              text: 'Call us',
-                              svgAsset: 'assets/icons/phone.svg'),
+                              launch(telLaunchUri.toString());
+                            },
+                            text: 'Call us',
+                            svgAsset: 'assets/icons/phone.svg',
+                            buttonSemantics: 'Call us Click',
+                          ),
                         ],
                       )
                     ],
@@ -334,6 +342,7 @@ class FeedbackSentWidget extends StatelessWidget {
                   ),
                 ),
                 backgroundColor: SizeConfig.kPrimaryColor,
+                buttonSemantics: 'Feedback Sent Home',
               ),
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 import 'package:themotorwash/data/models/store.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/components/store_google_map.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/pages/overview/components/store_heading.dart';
@@ -143,7 +144,10 @@ class BookServiceButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: () {
+        onPressed();
+        mixpanel?.track('Book Service Button');
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(

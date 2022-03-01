@@ -6,6 +6,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:meta/meta.dart';
 import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
 import 'package:themotorwash/data/models/location_model.dart';
+import 'package:themotorwash/data/models/sort_param.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
@@ -23,6 +24,8 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
         _globalLocationBloc = globalLocationBloc,
         super(StoreListUninitialized());
 
+  SortParam sortParam = Distance();
+
   @override
   Stream<StoreListState> mapEventToState(
     StoreListEvent event,
@@ -35,6 +38,10 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
           offset: event.offset,
           serviceTag: event.serviceTag,
           forLoadMore: event.forLoadMore);
+    } else if (event is ChangeSortParam) {
+      sortParam = event.sortParam;
+      add(LoadStoreListByService(
+          offset: 0, forLoadMore: false, serviceTag: event.serviceTag));
     }
   }
 
@@ -94,7 +101,8 @@ class StoreListBloc extends Bloc<StoreListEvent, StoreListState> {
             await _repository.getStoreListByLocation(
                 locationModel: locationState.location,
                 offset: offset,
-                tag: serviceTag);
+                tag: serviceTag,
+                sortParam: sortParam);
         yield StoreListLoaded(
             stores: stores + moreStores,
             hasReachedMax: moreStores.length != 10); //Page limit 10

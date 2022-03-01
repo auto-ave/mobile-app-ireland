@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:paytm_allinonesdk/paytm_allinonesdk.dart';
 import 'package:themotorwash/data/models/auth_tokens.dart';
 import 'package:themotorwash/data/models/initiate_razorpay_payment.dart';
+import 'package:themotorwash/data/models/location_model.dart';
 import 'package:themotorwash/data/models/multi_day_slot_detail.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/data/models/booking_list_model.dart';
@@ -18,6 +19,7 @@ import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
 import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
+import 'package:themotorwash/data/models/sort_param.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/paytm_payment_response.dart';
@@ -34,12 +36,16 @@ abstract class ApiMethods {
       required double lat,
       required double long,
       required int offset,
-      String? tag});
+      String? tag,
+      SortParam? sortParam});
   Future<StoreEntity> getStoreDetailBySlug({required String slug});
   Future<List<ReviewEntity>> getStoreReviewsBySlug(
       {required String slug, required int offset});
   Future<List<PriceTimeListEntity>> getStoreServicesBySlugAndVehicleType(
-      {required String slug, required String vehicleType, required int offset});
+      {required String slug,
+      required String vehicleType,
+      required int offset,
+      String? firstServiceTag});
 
   Future<CartEntity> postAddItemToCart(
       {required int itemId, required String vehicleModel});
@@ -123,4 +129,7 @@ abstract class ApiMethods {
       {required RazorpayPaymentResponseEntity paymentResponseEntity,
       required String bookingId,
       required bool isFailure});
+  Future<List<StoreListEntity>> getFeaturedStores({
+    required String city,
+  });
 }

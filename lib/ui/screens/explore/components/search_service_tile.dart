@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:themotorwash/data/analytics/analytics_events.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_list/store_list_screen.dart';
@@ -20,9 +22,16 @@ class SearchServiceTile extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
+        mixpanel?.track(SearchServiceClick().eventName(), properties: {
+          'service_name': serviceName,
+          'service_tag': serviceTag
+        });
         Navigator.pushNamed(context, StoreListScreen.route,
             arguments: StoreListArguments(
-                city: 'bpl', title: serviceName, serviceTag: serviceTag));
+                city: 'bpl',
+                title: serviceName,
+                serviceTag: serviceTag,
+                imageUrl: imageUrl));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),

@@ -62,7 +62,9 @@ class VehicleSelectedInfo extends StatelessWidget {
                       style: SizeConfig.kStyle12.copyWith(color: Colors.white),
                     ),
                   ),
-                  backgroundColor: SizeConfig.kPrimaryColor)
+                  backgroundColor: SizeConfig.kPrimaryColor,
+                  buttonSemantics: 'Change Vehicle Type',
+                )
               : Container()
         ],
       ),

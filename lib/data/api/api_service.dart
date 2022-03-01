@@ -24,6 +24,7 @@ import 'package:themotorwash/data/models/razorpay_payment_response.dart';
 import 'package:themotorwash/data/models/send_otp_response.dart';
 import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
+import 'package:themotorwash/data/models/sort_param.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/review.dart';
@@ -31,6 +32,7 @@ import 'package:themotorwash/data/models/user_profile.dart';
 import 'package:themotorwash/data/models/vehicle_brand.dart';
 import 'package:themotorwash/data/models/vehicle_model.dart';
 import 'package:themotorwash/data/models/vehicle_wheel.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class ApiService implements ApiMethods {
   static final getItInstanceName = 'ApiService';
@@ -59,15 +61,22 @@ class ApiService implements ApiMethods {
       required double lat,
       required double long,
       required int offset,
-      String? tag}) async {
+      String? tag,
+      SortParam? sortParam}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.getStoreListByLocationEndPoint(
-        city: city, lat: lat, long: long, offset: offset, tag: tag);
+        city: city,
+        lat: lat,
+        long: long,
+        offset: offset,
+        tag: tag,
+        sortParam: sortParam);
 
     Response res = await client.get(url);
 
     // log(res.data.toString());
     Map<dynamic, dynamic> data = jsonDecode(res.data);
+
     List<StoreListEntity> stores = data['results']
         .map<StoreListEntity>((e) => StoreListEntity.fromJson(e))
         .toList();
@@ -94,10 +103,14 @@ class ApiService implements ApiMethods {
   Future<List<PriceTimeListEntity>> getStoreServicesBySlugAndVehicleType(
       {required String slug,
       required String vehicleType,
-      required int offset}) async {
+      required int offset,
+      String? firstServiceTag}) async {
     Dio client = _apiConstants.dioClient();
     String url = _apiConstants.getStoreServicesBySlugVehicleTypeEndPoint(
-        slug: slug, vehicleType: vehicleType, offset: offset);
+        slug: slug,
+        vehicleType: vehicleType,
+        offset: offset,
+        firstServiceTag: firstServiceTag);
     Response res = await client.get(url);
     print(res.data.toString() + "hello");
 
@@ -289,7 +302,7 @@ class ApiService implements ApiMethods {
     Response res = await client.get(url);
 
     dynamic data = jsonDecode(res.data);
-
+    autoaveLog('dataaaa: $data');
     // print(data.toString() + "hello");
     List<ServiceEntity> services = data['results']
         .map<ServiceEntity>((e) => ServiceEntity.fromJson(e))
@@ -612,5 +625,23 @@ class ApiService implements ApiMethods {
     });
     dynamic data = jsonDecode(res.data);
     return InitiateRazorpayPaymentEntity.fromJson(data);
+  }
+
+  @override
+  Future<List<StoreListEntity>> getFeaturedStores({
+    required String city,
+  }) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.getFeaturedStoreListEndPoint(city: city);
+
+    Response res = await client.get(url);
+
+    // log(res.data.toString());
+    Map<dynamic, dynamic> data = jsonDecode(res.data);
+
+    List<StoreListEntity> stores = data['results']
+        .map<StoreListEntity>((e) => StoreListEntity.fromJson(e))
+        .toList();
+    return stores;
   }
 }

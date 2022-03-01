@@ -60,16 +60,18 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
     return Scaffold(
       appBar: getAppBarWithBackButton(context: context, actions: [
         CommonTextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, FeedbackScreen.route,
-                  arguments: FeedbackScreenArguments(
-                      isFeedback: false, orderNumber: widget.bookingId));
-            },
-            child: Text(
-              'Support',
-              style: SizeConfig.kStyle16PrimaryColor,
-            ),
-            backgroundColor: Colors.white)
+          onPressed: () {
+            Navigator.pushNamed(context, FeedbackScreen.route,
+                arguments: FeedbackScreenArguments(
+                    isFeedback: false, orderNumber: widget.bookingId));
+          },
+          child: Text(
+            'Support',
+            style: SizeConfig.kStyle16PrimaryColor,
+          ),
+          backgroundColor: Colors.white,
+          buttonSemantics: 'Order Support Button',
+        )
       ]),
       body: BlocBuilder<BookingSummaryBloc, BookingSummaryState>(
         bloc: _bookingSummaryBloc,
@@ -175,6 +177,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                               ],
                             ),
                             backgroundColor: Colors.white,
+                            buttonSemantics: 'Cancel Order',
                           )
                         : Container(),
                     Divider(),
@@ -231,6 +234,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 border: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                     side: BorderSide(color: Colors.red)),
+                buttonSemantics: 'Order Cancel Proceed',
               ),
               CommonTextButton(
                 onPressed: () {
@@ -244,6 +248,7 @@ class _BookingDetailScreenState extends State<BookingDetailScreen> {
                 border: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
+                buttonSemantics: 'Order Cancel Back',
               )
             ],
             title: Text(

@@ -14,18 +14,22 @@ import 'package:logger/logger.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
+import 'package:themotorwash/blocs/featured_stores/bloc/featured_stores_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/global_location/global_location_bloc.dart';
 import 'package:themotorwash/blocs/location_functions/bloc/location_functions_bloc.dart';
 import 'package:themotorwash/blocs/offer_banners/offer_banners_bloc.dart';
 import 'package:themotorwash/blocs/search_services/search_services_bloc.dart';
 import 'package:themotorwash/blocs/search_stores/search_stores_bloc.dart';
+import 'package:themotorwash/data/analytics/analytics_events.dart';
 import 'package:themotorwash/data/models/location_model.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/repos/repository.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/ui/screens/explore/components/explore_featured/explore_featured_carousel.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_offers/explore_offers_carousel.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_picks/explore_picks_widget.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_services/explore_services_grid.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_services/explore_services_tile.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_stores/explore_stores_list.dart';
@@ -80,6 +84,7 @@ class _ExploreScreenState extends State<ExploreScreen>
   late CartFunctionBloc _cartFunctionBloc;
   late GlobalAuthBloc _globalAuthBloc;
   late final OfferBannersBloc _bannersBloc;
+  late final FeaturedStoresBloc _featuredStoresBloc;
   // late final AnimationController _animationController;
   // late final Animation _appBarAnimation;
   double begin = 0;
@@ -100,6 +105,8 @@ class _ExploreScreenState extends State<ExploreScreen>
         SearchServices(query: '', forLoadMore: false, offset: 0, pageLimit: 6));
     _searchStoresBloc = SearchStoresBloc(
         repository: repository, globalLocationBloc: _globalLocationBloc);
+    _featuredStoresBloc = FeaturedStoresBloc(
+        repository: repository, globalLocationBloc: _globalLocationBloc);
     // _animationController = AnimationController(
     //   vsync: this,
     //   duration: Duration(milliseconds: 300),
@@ -110,12 +117,13 @@ class _ExploreScreenState extends State<ExploreScreen>
       // _node.hasFocus
       //     ? _animationController.forward()
       //     : _animationController.reverse();
-
-      setState(() {
-        begin = !_node.hasFocus ? 0 : 56;
-        end = !_node.hasFocus ? 56 : 0;
-        _node.hasFocus ? _showSearch = true : _showSearch = false;
-      });
+      if (mounted) {
+        setState(() {
+          begin = !_node.hasFocus ? 0 : 56;
+          end = !_node.hasFocus ? 56 : 0;
+          _node.hasFocus ? _showSearch = true : _showSearch = false;
+        });
+      }
     });
     // _appBarAnimation.addListener(() {
     //   setState(() {});
@@ -131,9 +139,11 @@ class _ExploreScreenState extends State<ExploreScreen>
     if (widget.initialLink != null) {
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
         if (widget.initialLink?.link?.queryParameters['store'] != null) {
+          mixpanel?.track(DynamicLinkOpen().eventName(),
+              properties: {'url': widget.initialLink?.link.toString()});
           final slug =
               widget.initialLink?.link?.queryParameters['store'] as String;
-          Logger().d('slug $slug');
+          autoaveLog('slug $slug');
           Navigator.pushNamed(context, StoreDetailScreen.route,
               arguments: StoreDetailArguments(storeSlug: slug));
         }
@@ -173,6 +183,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                   print('Location Set');
                   _storeListBloc
                       .add(LoadNearbyStoreList(offset: 0, forLoadMore: false));
+                  _featuredStoresBloc.add(LoadFeaturedStores());
                 }
                 if (state is GlobalLocationError) {
                   showSnackbar(context,
@@ -191,21 +202,22 @@ class _ExploreScreenState extends State<ExploreScreen>
                 //   );
                 // }
                 if (state is LocationPermissionError) {
-                  Logger().d('LocationPermissionError');
+                  autoaveLog('LocationPermissionError');
+
                   return GrantLocationPermissionScreen(
                     globalLocationBloc: _globalLocationBloc,
                     forPermission: true,
                   );
                 }
                 if (state is LocationServiceNotEnabledError) {
-                  Logger().d('LocationServiceNotEnabledError');
+                  autoaveLog('LocationServiceNotEnabledError');
                   return GrantLocationPermissionScreen(
                     globalLocationBloc: _globalLocationBloc,
                     forPermission: false,
                   );
                 }
                 if (state is GlobalLocationError) {
-                  Logger().d('GlobalLocationError');
+                  autoaveLog('GlobalLocationError');
                   return GrantLocationPermissionScreen(
                     globalLocationBloc: _globalLocationBloc,
                     forPermission: true,
@@ -379,12 +391,13 @@ class _ExploreScreenState extends State<ExploreScreen>
           controller: _refreshController,
           onRefresh: _onRefresh,
           child: CustomScrollView(slivers: [
-            ExploreFeaturedCarousel(
+            ExploreOffersCarousel(
               bannersBloc: _bannersBloc,
             ),
             SliverToBoxAdapter(
               child: SizeConfig.kverticalMargin16,
             ),
+
             BlocBuilder<SearchServicesBloc, SearchServicesState>(
               bloc: _privateSearchServicesBloc,
               builder: (context, state) {
@@ -392,13 +405,16 @@ class _ExploreScreenState extends State<ExploreScreen>
                   return ExploreServicesGridLoading();
                 }
                 if (state is SearchedServicesResult) {
+                  autoaveLog(state.searchedServices.toString());
                   return state.searchedServices.isNotEmpty
                       ? ExploreServicesGrid(
                           items: state.searchedServices
                               .map((e) => ExploreServiceTile(
                                     imageUrl: e.thumbnail!,
                                     serviceName: e.name!,
-                                    serviceTag: e.slug,
+                                    serviceTag: e.slug!,
+                                    bannerUrl:
+                                        e.bannerUrl ?? SizeConfig.autoaveBanner,
                                   ))
                               .toList(),
                         )
@@ -412,6 +428,9 @@ class _ExploreScreenState extends State<ExploreScreen>
 
                 return ExploreServicesGridLoading();
               },
+            ),
+            ExplorePicksWidget(
+              featuredStoresBloc: _featuredStoresBloc,
             ),
             // SliverPadding(
             //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -498,8 +517,11 @@ class _ExploreScreenState extends State<ExploreScreen>
             children: [
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () => showSnackbar(context,
-                    'We currently only serve in ${locationModel.cityName}'),
+                onTap: () {
+                  showSnackbar(context,
+                      'We currently only serve in ${locationModel.cityName}');
+                  mixpanel?.track('City Change Click');
+                },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

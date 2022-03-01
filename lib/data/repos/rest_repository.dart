@@ -12,6 +12,7 @@ import 'package:themotorwash/data/models/payment_choice.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
+import 'package:themotorwash/data/models/sort_param.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/review.dart';
@@ -35,7 +36,8 @@ class RestRepository implements Repository {
   Future<List<StoreListModel>> getStoreListByLocation(
       {required LocationModel locationModel,
       required int offset,
-      String? tag}) async {
+      String? tag,
+      SortParam? sortParam}) async {
     print('tag' + tag.toString() + "yoyo");
     List<StoreListEntity> entities =
         await _apiMethodsImp.getStoreListByLocation(
@@ -43,7 +45,8 @@ class RestRepository implements Repository {
             lat: locationModel.lat,
             long: locationModel.long,
             offset: offset,
-            tag: tag);
+            tag: tag,
+            sortParam: sortParam);
     List<StoreListModel> stores =
         entities.map((e) => StoreListModel.fromEntity(e)).toList();
     return stores;
@@ -62,10 +65,14 @@ class RestRepository implements Repository {
   Future<List<PriceTimeListModel>> getStoreServicesBySlugAndVehicleType(
       {required String slug,
       required String vehicleType,
-      required int offset}) async {
+      required int offset,
+      String? firstServiceTag}) async {
     List<PriceTimeListEntity> entities =
         await _apiMethodsImp.getStoreServicesBySlugAndVehicleType(
-            slug: slug, vehicleType: vehicleType, offset: offset);
+            slug: slug,
+            vehicleType: vehicleType,
+            offset: offset,
+            firstServiceTag: firstServiceTag);
     List<PriceTimeListModel> services =
         entities.map((e) => PriceTimeListModel.fromEntity(e)).toList();
     return services;
@@ -290,5 +297,16 @@ class RestRepository implements Repository {
     MultiDaySlotDetailEntity entity =
         await _apiMethodsImp.getMultiDaySlotDetail(date: date, cartId: cartId);
     return MultiDaySlotDetailModel.fromEntity(entity);
+  }
+
+  @override
+  Future<List<StoreListModel>> getFeaturedStores(
+      {required LocationModel locationModel}) async {
+    List<StoreListEntity> stores =
+        await _apiMethodsImp.getFeaturedStores(city: locationModel.cityCode);
+
+    final List<StoreListModel> storeList =
+        stores.map((e) => StoreListModel.fromEntity(e)).toList();
+    return storeList;
   }
 }

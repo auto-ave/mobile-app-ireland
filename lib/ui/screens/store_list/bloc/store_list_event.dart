@@ -32,3 +32,16 @@ class LoadStoreListByService implements StoreListEvent {
   @override
   bool? get stringify => true;
 }
+
+class ChangeSortParam implements StoreListEvent {
+  final SortParam sortParam;
+  final String serviceTag;
+  ChangeSortParam({required this.sortParam, required this.serviceTag});
+
+  @override
+  List<Object?> get props => [sortParam];
+
+  @override
+  // TODO: implement stringify
+  bool? get stringify => true;
+}

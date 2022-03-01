@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themotorwash/main.dart';
 
 import 'package:themotorwash/theme_constants.dart';
 
@@ -28,7 +29,10 @@ class StoreHeading extends StatelessWidget {
         rating != null
             ? GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () => onPressedRating(),
+                onTap: () {
+                  onPressedRating();
+                  mixpanel?.track('Store Overview Rating Pressed');
+                },
                 child: Column(
                   children: <Widget>[
                     Row(

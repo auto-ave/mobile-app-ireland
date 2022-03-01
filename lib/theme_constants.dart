@@ -5,7 +5,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
+import 'package:themotorwash/utils/utils.dart';
+
 class SizeConfig {
+  static String autoaveBanner = 'https://www.autoave.in/autoave-banner.jpg';
   static late MediaQueryData mediaQueryData;
   static late double screenWidth;
   static late double screenHeight;
@@ -16,6 +19,14 @@ class SizeConfig {
   static double? safeBlockHorizontal;
   static double? safeBlockVertical;
   static double? textScaleFactor;
+  static List<BadgeColors> badgeColors = [
+    BadgeColors(
+        backgroundColor: Color(0xffF1FFDB), textColor: Color(0xff436C00)),
+    BadgeColors(
+        textColor: Color(0xff026C00), backgroundColor: Color(0xffDBFFE5)),
+    BadgeColors(
+        backgroundColor: Color(0xffEAF4FF), textColor: Color(0xff3570B5))
+  ];
 
   static Color kPrimaryColor = Color(0xff3570B5);
   static Color kReddish = Color(0xffDC1313);
@@ -178,8 +189,7 @@ class SizeConfig {
   }
 
   double getTextScaleFactor(double original) {
-    var logger = Logger();
-    logger.d(original.toString() + "hellowwwww");
+    autoaveLog(original.toString() + "hellowwwww");
     // return 1.5;
     //  var min(a, b)
     if (original <= 1) {
@@ -206,7 +216,16 @@ extension MediaQuerySizesInt on int {
   double get w => (this / 100) * SizeConfig.screenWidth;
 }
 
-// const Color kPrimaryColor = Color(0xff3570B5);
+class BadgeColors {
+  final Color textColor;
+  final Color backgroundColor;
+  BadgeColors({
+    required this.textColor,
+    required this.backgroundColor,
+  });
+}
+
+const Color kPrimaryColor = Color(0xff3570B5);
 // const double kfontSize18 = 18;
 // const double kfontSize16 = 16;
 // const double kfontSize12 = 12;

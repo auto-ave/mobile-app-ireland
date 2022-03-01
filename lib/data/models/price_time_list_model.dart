@@ -1,12 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:themotorwash/data/models/service.dart';
+
 part 'price_time_list_model.g.dart';
 
 class PriceTimeListModel {
   final int? id;
 
   final service;
-
+  final List<ServiceModel>? tags;
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -38,7 +40,8 @@ class PriceTimeListModel {
       this.vehicleType,
       this.bays,
       this.mrp,
-      this.offer});
+      this.offer,
+      this.tags});
 
   factory PriceTimeListModel.fromEntity(PriceTimeListEntity entity) {
     return PriceTimeListModel(
@@ -50,16 +53,21 @@ class PriceTimeListModel {
       vehicleType: entity.vehicleType,
       timeInterval: entity.timeInterval,
       description: entity.description,
-      createdAt: DateTime.parse(entity.createdAt!),
-      updatedAt: DateTime.parse(entity.updatedAt!),
+      createdAt:
+          entity.createdAt != null ? DateTime.parse(entity.createdAt!) : null,
+      updatedAt:
+          entity.updatedAt != null ? DateTime.parse(entity.updatedAt!) : null,
       mrp: entity.mrp,
       offer: entity.offer,
+      tags: entity.tags != null
+          ? entity.tags!.map((e) => ServiceModel.fromEntity(e)).toList()
+          : null,
     );
   }
 
   @override
   String toString() {
-    return 'PriceTimeListModel(offer: $offer id: $id, createdAt: $createdAt, updatedAt: $updatedAt, price: $price, timeInterval: $timeInterval, description: $description, store: $store, vehicleType: $vehicleType, bays: $bays, mrp: $mrp, offer: $offer)';
+    return 'PriceTimeListModel(id: $id, tags: $tags, createdAt: $createdAt, updatedAt: $updatedAt, price: $price, timeInterval: $timeInterval, description: $description, store: $store, vehicleType: $vehicleType, bays: $bays, mrp: $mrp, offer: $offer)';
   }
 }
 
@@ -90,6 +98,8 @@ class PriceTimeListEntity {
   final String? vehicleType;
 
   final List<int>? bays;
+  final List<ServiceEntity>? tags;
+
   PriceTimeListEntity(
       {this.id,
       this.service,
@@ -102,7 +112,8 @@ class PriceTimeListEntity {
       this.vehicleType,
       this.bays,
       this.mrp,
-      this.offer});
+      this.offer,
+      this.tags});
 
   factory PriceTimeListEntity.fromJson(Map<String, dynamic> data) =>
       _$PriceTimeListEntityFromJson(data);

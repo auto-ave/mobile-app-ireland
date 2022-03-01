@@ -22,6 +22,9 @@ PriceTimeListEntity _$PriceTimeListEntityFromJson(Map<String, dynamic> json) {
     offer: json['offer'] == null
         ? null
         : PriceTimeOfferDetail.fromJson(json['offer'] as Map<String, dynamic>),
+    tags: (json['tags'] as List<dynamic>?)
+        ?.map((e) => ServiceEntity.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -40,6 +43,7 @@ Map<String, dynamic> _$PriceTimeListEntityToJson(
       'store': instance.store,
       'vehicle_type': instance.vehicleType,
       'bays': instance.bays,
+      'tags': instance.tags?.map((e) => e.toJson()).toList(),
     };
 
 PriceTimeOfferDetail _$PriceTimeOfferDetailFromJson(Map<String, dynamic> json) {

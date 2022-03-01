@@ -33,7 +33,7 @@ class ExploreStoresList extends StatelessWidget {
             imageURL: store.thumbnail!,
             rating: store.rating,
             storeName: store.name,
-            startingFrom: store.servicesStart!,
+            startingFrom: store.servicesStart ?? '',
             storeSlug: store.storeSlug!,
           );
           if (state is MoreStoreListLoading && index == stores.length - 1) {

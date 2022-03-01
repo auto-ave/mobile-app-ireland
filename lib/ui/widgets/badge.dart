@@ -34,12 +34,10 @@ class BadgeWidget extends StatelessWidget {
           // ],
           color: backgroundColor ?? SizeConfig.kBadgeColor,
           borderRadius: borderRadius ?? BorderRadius.circular(2)),
-      child: Center(
-        child: Text(
-          text,
-          style: textStyle ??
-              TextStyle(fontSize: 10, color: SizeConfig.kPrimaryColor),
-        ),
+      child: Text(
+        text,
+        style: textStyle ??
+            TextStyle(fontSize: 10, color: SizeConfig.kPrimaryColor),
       ),
     );
   }

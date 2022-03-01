@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/slot_select/components/no_slots_widget.dart';
 
@@ -125,7 +126,12 @@ class SlotSelectionTabWidget extends StatelessWidget {
       children: [
         GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: _slotsAvailable == 0 ? () {} : () => onTap(tabIndex),
+          onTap: _slotsAvailable == 0
+              ? () {}
+              : () {
+                  onTap(tabIndex);
+                  mixpanel?.track('Normal Slot Selected');
+                },
           child: Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(

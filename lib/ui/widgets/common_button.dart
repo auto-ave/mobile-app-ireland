@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:themotorwash/main.dart';
 
 class CommonTextButton extends StatelessWidget {
+  final String buttonSemantics;
   final Function() onPressed;
   final Widget child;
   final Color backgroundColor;
@@ -12,6 +14,7 @@ class CommonTextButton extends StatelessWidget {
       required this.onPressed,
       required this.child,
       required this.backgroundColor,
+      required this.buttonSemantics,
       this.border,
       this.padding})
       : super(key: key);
@@ -20,7 +23,10 @@ class CommonTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       child: child,
-      onPressed: onPressed,
+      onPressed: () {
+        onPressed();
+        mixpanel?.track(buttonSemantics);
+      },
       style: ButtonStyle(
           padding: MaterialStateProperty.all(
               padding ?? EdgeInsets.symmetric(horizontal: 32, vertical: 8)),

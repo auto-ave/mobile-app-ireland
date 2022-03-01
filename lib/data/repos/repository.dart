@@ -12,6 +12,7 @@ import 'package:themotorwash/data/models/price_time_list_model.dart';
 import 'package:themotorwash/data/models/review.dart';
 import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/data/models/slot.dart';
+import 'package:themotorwash/data/models/sort_param.dart';
 import 'package:themotorwash/data/models/store.dart';
 import 'package:themotorwash/data/models/store_list_model.dart';
 import 'package:themotorwash/data/models/user_profile.dart';
@@ -21,12 +22,18 @@ import 'package:themotorwash/data/models/vehicle_wheel.dart';
 
 abstract class Repository {
   Future<List<StoreListModel>> getStoreListByLocation(
-      {required LocationModel locationModel, required int offset, String? tag});
+      {required LocationModel locationModel,
+      required int offset,
+      String? tag,
+      SortParam? sortParam});
   Future<Store> getStoreDetailBySlug({required String slug});
   Future<List<Review>> getStoreReviewsBySlug(
       {required String slug, required int offset});
   Future<List<PriceTimeListModel>> getStoreServicesBySlugAndVehicleType(
-      {required String slug, required String vehicleType, required int offset});
+      {required String slug,
+      required String vehicleType,
+      required int offset,
+      String? firstServiceTag});
 
   Future<CartModel> postAddItemToCart(
       {required int itemId, required String vehicleModel});
@@ -76,4 +83,7 @@ abstract class Repository {
   Future<CartModel> removeOffer();
   Future<MultiDaySlotDetailModel> getMultiDaySlotDetail(
       {required String date, required String cartId});
+  Future<List<StoreListModel>> getFeaturedStores({
+    required LocationModel locationModel,
+  });
 }

@@ -142,6 +142,7 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
                     }
                   },
                   backgroundColor: SizeConfig.kPrimaryColor,
+                  buttonSemantics: 'Sent OTP Bottom Sheet',
                   child: Text(
                     'Send OTP',
                     style: TextStyle(color: Colors.white),
@@ -194,6 +195,7 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
                     style: TextStyle(color: Colors.white),
                   ),
                   backgroundColor: SizeConfig.kPrimaryColor,
+                  buttonSemantics: 'Check OTP Bottom Sheet',
                 ),
               ),
             ),

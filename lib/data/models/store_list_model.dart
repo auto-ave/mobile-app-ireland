@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:themotorwash/data/models/price_time_list_model.dart';
+
 part 'store_list_model.g.dart';
 
 class StoreListModel {
@@ -11,6 +13,7 @@ class StoreListModel {
   final String? storeSlug;
   final List<String>? images;
   final String? address;
+  final List<PriceTimeListModel>? taggedServices;
 
   StoreListModel(
       {required this.name,
@@ -20,7 +23,8 @@ class StoreListModel {
       this.thumbnail,
       this.storeSlug,
       this.images,
-      this.address});
+      this.address,
+      required this.taggedServices});
 
   factory StoreListModel.fromEntity(StoreListEntity e) {
     return StoreListModel(
@@ -31,16 +35,21 @@ class StoreListModel {
         thumbnail: e.thumbnail,
         storeSlug: e.storeSlug,
         images: e.images,
-        address: e.address);
+        address: e.address,
+        taggedServices: e.taggedServices != null
+            ? e.taggedServices!
+                .map((e) => PriceTimeListModel.fromEntity(e))
+                .toList()
+            : null);
   }
 
   @override
   String toString() {
-    return 'StoreListModel(name: $name, distance: $distance, rating: $rating, servicesStart: $servicesStart, thumbnail: $thumbnail, storeSlug: $storeSlug, images: $images)';
+    return 'StoreListModel(name: $name, distance: $distance, rating: $rating, servicesStart: $servicesStart, thumbnail: $thumbnail, storeSlug: $storeSlug, images: $images, address: $address, taggedServices: $taggedServices)';
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class StoreListEntity {
   final String name;
   final String? distance;
@@ -54,6 +63,8 @@ class StoreListEntity {
   final String? storeSlug;
 
   final String? address;
+  @JsonKey(name: 'tagged_services')
+  final List<PriceTimeListEntity>? taggedServices;
 
   StoreListEntity(
       {required this.name,
@@ -63,7 +74,8 @@ class StoreListEntity {
       this.thumbnail,
       this.storeSlug,
       this.images,
-      this.address});
+      this.address,
+      required this.taggedServices});
 
   factory StoreListEntity.fromJson(Map<String, dynamic> data) =>
       _$StoreListEntityFromJson(data);

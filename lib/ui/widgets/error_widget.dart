@@ -41,7 +41,9 @@ class ErrorScreen extends StatelessWidget {
                   ctaType == ErrorCTA.reload ? 'Reload' : 'Home',
                   style: SizeConfig.kStyle16W500.copyWith(color: Colors.white),
                 ),
-                backgroundColor: SizeConfig.kPrimaryColor)
+                backgroundColor: SizeConfig.kPrimaryColor,
+                buttonSemantics: 'Error Reload/Home',
+              )
             : Container()
       ],
     );

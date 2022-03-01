@@ -17,6 +17,9 @@ StoreListEntity _$StoreListEntityFromJson(Map<String, dynamic> json) {
     images:
         (json['images'] as List<dynamic>?)?.map((e) => e as String).toList(),
     address: json['address'] as String?,
+    taggedServices: (json['tagged_services'] as List<dynamic>?)
+        ?.map((e) => PriceTimeListEntity.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -30,4 +33,6 @@ Map<String, dynamic> _$StoreListEntityToJson(StoreListEntity instance) =>
       'thumbnail': instance.thumbnail,
       'slug': instance.storeSlug,
       'address': instance.address,
+      'tagged_services':
+          instance.taggedServices?.map((e) => e.toJson()).toList(),
     };

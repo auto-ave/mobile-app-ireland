@@ -9,11 +9,13 @@ class ExploreServiceTile extends StatelessWidget {
   final String serviceName;
   final String imageUrl;
   final String serviceTag;
+  final String bannerUrl;
   const ExploreServiceTile(
       {Key? key,
       required this.imageUrl,
       required this.serviceName,
-      required this.serviceTag})
+      required this.serviceTag,
+      required this.bannerUrl})
       : super(key: key);
 
   @override
@@ -23,7 +25,10 @@ class ExploreServiceTile extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(context, StoreListScreen.route,
             arguments: StoreListArguments(
-                city: 'bpl', title: serviceName, serviceTag: serviceTag));
+                city: 'bpl',
+                title: serviceName,
+                serviceTag: serviceTag,
+                imageUrl: bannerUrl));
       },
       child: SizedBox(
         width: 120,

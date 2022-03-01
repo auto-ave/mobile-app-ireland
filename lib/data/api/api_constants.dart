@@ -5,6 +5,7 @@ import 'package:themotorwash/data/api/api_service.dart';
 import 'package:themotorwash/data/api/auth_interceptor.dart';
 import 'package:themotorwash/data/api/log_interceptor.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
+import 'package:themotorwash/data/models/sort_param.dart';
 import 'package:themotorwash/data/repos/auth_repository.dart';
 import 'package:themotorwash/data/repos/auth_rest_repository.dart';
 
@@ -34,9 +35,9 @@ class ApiConstants {
   }
 
   // final String baseUrl = "motorwash.herokuapp.com";
-  final String baseUrl = "api.autoave.in";
+  // final String baseUrl = "api.autoave.in";
 
-  // final String baseUrl = "testapi.autoave.in";
+  final String baseUrl = "testapi.autoave.in";
   final int pageLimit = 10;
 
   String getStoreListEndPoint() {
@@ -48,15 +49,19 @@ class ApiConstants {
       required double lat,
       required double long,
       required int offset,
-      String? tag}) {
+      String? tag,
+      SortParam? sortParam}) {
     Map<String, dynamic> params = {
       'offset': offset.toString(),
       'limit': pageLimit.toString(),
       'latitude': lat.toString(),
-      'longitude': long.toString()
+      'longitude': long.toString(),
     };
     if (tag != null) {
       params.addAll({'tag': tag});
+    }
+    if (sortParam != null) {
+      params.addAll({'sort': sortParam.toParam()});
     }
     var uri = Uri.https(baseUrl, "/store/list/$city", params);
     return uri.toString();
@@ -81,12 +86,16 @@ class ApiConstants {
   String getStoreServicesBySlugVehicleTypeEndPoint(
       {required String slug,
       required String vehicleType,
-      required int offset}) {
+      required int offset,
+      String? firstServiceTag}) {
     Map<String, dynamic> params = {
       'offset': offset.toString(),
       'limit': pageLimit.toString(),
       'vehicle_type': vehicleType.toString()
     };
+    if (firstServiceTag != null) {
+      params.addAll({'first_service_tag': firstServiceTag});
+    }
     var uri = Uri.https(baseUrl, "/store/$slug/services", params);
     return uri.toString();
   }
@@ -285,6 +294,13 @@ class ApiConstants {
 
   String postCheckRazorpayPaymentStatusEndpoint() {
     var uri = Uri.https(baseUrl, "/payment/razorpay/callback/");
+    return uri.toString();
+  }
+
+  String getFeaturedStoreListEndPoint({
+    required String city,
+  }) {
+    var uri = Uri.https(baseUrl, "/store/list/$city/featured/");
     return uri.toString();
   }
 }

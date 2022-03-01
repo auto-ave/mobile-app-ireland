@@ -28,11 +28,13 @@ class StoreServicesTab extends StatefulWidget {
   final BuildContext nestedScrollContext;
   final String storeSlug;
   final GlobalKey<ScaffoldState> scaffoldState;
+  final String? serviceTag;
 
   StoreServicesTab(
       {required this.nestedScrollContext,
       required this.storeSlug,
-      required this.scaffoldState});
+      required this.scaffoldState,
+      this.serviceTag});
 
   @override
   _StoreServicesTabState createState() {
@@ -82,7 +84,8 @@ class _StoreServicesTabState extends State<StoreServicesTab>
               slug: widget.storeSlug,
               vehicleType: vehicleState.vehicleTypeModel.vehicleType!,
               offset: 0,
-              forLoadMore: false));
+              forLoadMore: false,
+              firstServiceTag: widget.serviceTag));
         }
         if (vehicleState is GlobalVehicleTypeError) {
           showSnackbar(context, 'Error Loading Vehicle Type');
@@ -106,6 +109,7 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                     slug: widget.storeSlug,
                     vehicleType: vehicleState.vehicleTypeModel.vehicleType!,
                     offset: services.length,
+                    firstServiceTag: widget.serviceTag,
                     forLoadMore: true));
               }
             },
@@ -169,24 +173,26 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                               delegate: SliverChildBuilderDelegate((_, index) {
                               var service = services[index];
                               var tile = StoreServiceTile(
-                                  offer: service.offer,
-                                  vehicleModel:
-                                      vehicleState.vehicleTypeModel.model!,
-                                  time: service.timeInterval.toString(),
-                                  scaffoldState: widget.scaffoldState,
-                                  itemId: service.id!,
-                                  bloc: _cartFunctionBloc,
-                                  globalAuthBloc: _globalAuthBloc,
-                                  isAddedToCart: getIsAddedToCart(
-                                      itemId: services[index].id!),
-                                  isLoading: (cartFunctionState
-                                          is CartFunctionLoading &&
-                                      (cartFunctionState)
-                                          .itemId
-                                          .contains(services[index].id!)),
-                                  description: services[index].description!,
-                                  price: service.price!.toString(),
-                                  service: service.service!);
+                                offer: service.offer,
+                                vehicleModel:
+                                    vehicleState.vehicleTypeModel.model!,
+                                time: service.timeInterval.toString(),
+                                scaffoldState: widget.scaffoldState,
+                                itemId: service.id!,
+                                bloc: _cartFunctionBloc,
+                                globalAuthBloc: _globalAuthBloc,
+                                isAddedToCart: getIsAddedToCart(
+                                    itemId: services[index].id!),
+                                isLoading:
+                                    (cartFunctionState is CartFunctionLoading &&
+                                        (cartFunctionState)
+                                            .itemId
+                                            .contains(services[index].id!)),
+                                description: services[index].description!,
+                                price: service.price!.toString(),
+                                service: service.service!,
+                                tags: service.tags,
+                              );
 
                               if (state is MoreStoreServicesLoading &&
                                   index == services.length - 1) {
@@ -206,7 +212,8 @@ class _StoreServicesTabState extends State<StoreServicesTab>
                                   vehicleType: vehicleState
                                       .vehicleTypeModel.vehicleType!,
                                   offset: 0,
-                                  forLoadMore: false));
+                                  forLoadMore: false,
+                                  firstServiceTag: widget.serviceTag));
                             },
                           ),
                         ),
@@ -238,12 +245,14 @@ class _StoreServicesTabState extends State<StoreServicesTab>
         SliverFillRemaining(
           child: Center(
               child: CommonTextButton(
-                  onPressed: () => _showVehicleBottomSheet(context),
-                  child: Text(
-                    'Select Vehicle Type',
-                    style: SizeConfig.kStyle14.copyWith(color: Colors.white),
-                  ),
-                  backgroundColor: SizeConfig.kPrimaryColor)),
+            onPressed: () => _showVehicleBottomSheet(context),
+            child: Text(
+              'Select Vehicle Type',
+              style: SizeConfig.kStyle14.copyWith(color: Colors.white),
+            ),
+            backgroundColor: SizeConfig.kPrimaryColor,
+            buttonSemantics: 'Select Vehicle Type',
+          )),
         )
       ],
     );

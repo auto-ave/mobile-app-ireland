@@ -9,12 +9,14 @@ class LoadStoreServices extends StoreServicesEvent {
   final String vehicleType;
   final int offset;
   final bool forLoadMore;
+  final String? firstServiceTag;
 
   LoadStoreServices(
       {required this.slug,
       required this.vehicleType,
       required this.offset,
-      required this.forLoadMore});
+      required this.forLoadMore,
+      required this.firstServiceTag});
   @override
   List<Object?> get props => [slug, vehicleType, offset, forLoadMore];
 }

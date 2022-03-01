@@ -3,7 +3,10 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:logger/logger.dart';
 import 'package:rive/rive.dart';
+import 'package:themotorwash/data/analytics/analytics_events.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 
@@ -84,8 +87,11 @@ class AppBarLoginScreen extends StatelessWidget with PreferredSizeWidget {
                 Spacer(),
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () => Navigator.pushNamedAndRemoveUntil(
-                      context, ExploreScreen.route, (route) => false),
+                  onTap: () {
+                    mixpanel?.track(SkipLoginAnalytics().eventName());
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, ExploreScreen.route, (route) => false);
+                  },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -136,8 +142,11 @@ PreferredSizeWidget getAppBarLoginScreen(
               Spacer(),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () => Navigator.pushNamedAndRemoveUntil(
-                    context, ExploreScreen.route, (route) => false),
+                onTap: () {
+                  mixpanel?.track(SkipLoginAnalytics().eventName());
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, ExploreScreen.route, (route) => false);
+                },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -230,4 +239,8 @@ extension IntUtils on int {
     }
     return i.toString() + "th";
   }
+}
+
+void autoaveLog(String log) {
+  Logger().d(log);
 }

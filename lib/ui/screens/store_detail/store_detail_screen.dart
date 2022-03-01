@@ -8,6 +8,7 @@ import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/global_cart/bloc/global_cart_bloc.dart';
 import 'package:themotorwash/data/models/store.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/blocs/store_detail_bloc.dart';
@@ -23,7 +24,9 @@ import 'package:themotorwash/utils/utils.dart';
 
 class StoreDetailScreen extends StatefulWidget {
   final String storeSlug;
-  StoreDetailScreen({Key? key, required this.storeSlug}) : super(key: key);
+  final String? serviceTag;
+  StoreDetailScreen({Key? key, required this.storeSlug, this.serviceTag})
+      : super(key: key);
   static final String route = "/storeDetails";
 
   @override
@@ -46,7 +49,9 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-
+    if (widget.serviceTag != null) {
+      _tabController.animateTo(1);
+    }
     _storeDetailBloc = BlocProvider.of<StoreDetailBloc>(context);
     _cartFunctionBloc = BlocProvider.of<CartFunctionBloc>(context);
     _globalAuthBloc = BlocProvider.of<GlobalAuthBloc>(context);
@@ -185,12 +190,14 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
                                   return Builder(
                                     builder: (BuildContext context) {
                                       return GestureDetector(
-                                        onTap: () => Navigator.pushNamed(
-                                            context,
-                                            StoreGalleryViewScreen.route,
-                                            arguments:
-                                                StoreGalleryViewArguments(
-                                                    images: store.images!)),
+                                        onTap: () {
+                                          mixpanel?.track('Gallery View Click');
+                                          Navigator.pushNamed(context,
+                                              StoreGalleryViewScreen.route,
+                                              arguments:
+                                                  StoreGalleryViewArguments(
+                                                      images: store.images!));
+                                        },
                                         child: Container(
                                           color: Colors.amber,
                                           child: CachedNetworkImage(
@@ -338,6 +345,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
         nestedScrollContext: nestedScrollContext,
         storeSlug: widget.storeSlug,
         scaffoldState: _scaffoldState,
+        serviceTag: widget.serviceTag,
       ),
       StoreReviewsTab(
         nestedScrollContext: nestedScrollContext,

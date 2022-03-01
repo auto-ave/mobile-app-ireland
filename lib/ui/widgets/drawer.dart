@@ -7,6 +7,7 @@ import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/blocs/global_cart/bloc/global_cart_bloc.dart';
 import 'package:themotorwash/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:themotorwash/data/local/local_data_service.dart';
+import 'package:themotorwash/main.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
@@ -96,6 +97,7 @@ class AppDrawer extends StatelessWidget {
               border: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                   side: BorderSide(color: SizeConfig.kPrimaryColor)),
+              buttonSemantics: 'Drawer Login',
             ))),
           ],
         ));
@@ -129,6 +131,7 @@ class AppDrawer extends StatelessWidget {
           Container(
             child: GestureDetector(
               onTap: () {
+                mixpanel?.track('Drawer Profile Tile Click');
                 Navigator.pushNamed(context, ProfileScreen.route,
                     arguments: ProfileScreenArguments(showSkip: false));
               },

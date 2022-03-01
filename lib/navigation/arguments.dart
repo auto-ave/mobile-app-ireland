@@ -6,15 +6,26 @@ import 'package:themotorwash/data/models/slot.dart';
 
 class StoreDetailArguments {
   final String storeSlug;
-  StoreDetailArguments({required this.storeSlug});
+  final String? serviceTag;
+  StoreDetailArguments({required this.storeSlug, this.serviceTag});
 }
 
 class StoreListArguments {
   final String city;
   final String title;
   final String? serviceTag;
+  final String imageUrl;
   StoreListArguments(
-      {required this.city, required this.title, this.serviceTag});
+      {required this.city,
+      required this.title,
+      this.serviceTag,
+      required this.imageUrl});
+}
+
+class OfferStoresListArguments {
+  final String title;
+  final String imageUrl;
+  OfferStoresListArguments({required this.title, required this.imageUrl});
 }
 
 class BookingSummaryScreenArguments {

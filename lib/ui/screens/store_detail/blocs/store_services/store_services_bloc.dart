@@ -23,7 +23,8 @@ class StoreServicesBloc extends Bloc<StoreServicesEvent, StoreServicesState> {
           slug: event.slug,
           vehicleType: event.vehicleType,
           offset: event.offset,
-          forLoadMore: event.forLoadMore);
+          forLoadMore: event.forLoadMore,
+          firstServiceTag: event.firstServiceTag);
     }
   }
 
@@ -34,7 +35,8 @@ class StoreServicesBloc extends Bloc<StoreServicesEvent, StoreServicesState> {
       {required String slug,
       required String vehicleType,
       required int offset,
-      required bool forLoadMore}) async* {
+      required bool forLoadMore,
+      String? firstServiceTag}) async* {
     if (!hasReachedMax(state, forLoadMore)) {
       try {
         List<PriceTimeListModel> services = [];
@@ -47,7 +49,10 @@ class StoreServicesBloc extends Bloc<StoreServicesEvent, StoreServicesState> {
         }
         List<PriceTimeListModel> moreServices =
             await _repository.getStoreServicesBySlugAndVehicleType(
-                slug: slug, vehicleType: vehicleType, offset: offset);
+                slug: slug,
+                vehicleType: vehicleType,
+                offset: offset,
+                firstServiceTag: firstServiceTag);
         yield StoreServicesLoaded(
             vehicleType: vehicleType,
             services: services + moreServices,

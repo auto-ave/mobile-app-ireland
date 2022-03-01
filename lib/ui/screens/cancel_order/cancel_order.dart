@@ -218,31 +218,35 @@ class _BottomSubmitButtonState extends State<BottomSubmitButton> {
                   builder: (context, state) {
                     if (state is CancelBookingRequestLoading) {
                       return CommonTextButton(
-                          onPressed: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 8),
-                            child: SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: SizeConfig.kPrimaryColor,
-                              ),
-                            ),
-                          ),
-                          backgroundColor: SizeConfig.kPrimaryColor);
-                    }
-
-                    return CommonTextButton(
-                        onPressed: widget.onTap,
+                        onPressed: () {},
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 8),
-                          child: Text(widget.title,
-                              style: SizeConfig.kStyle14W500
-                                  .copyWith(color: Colors.white)),
+                          child: SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: SizeConfig.kPrimaryColor,
+                            ),
+                          ),
                         ),
-                        backgroundColor: SizeConfig.kPrimaryColor);
+                        backgroundColor: SizeConfig.kPrimaryColor,
+                        buttonSemantics: 'Loading Cancel Button',
+                      );
+                    }
+
+                    return CommonTextButton(
+                      onPressed: widget.onTap,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 8),
+                        child: Text(widget.title,
+                            style: SizeConfig.kStyle14W500
+                                .copyWith(color: Colors.white)),
+                      ),
+                      backgroundColor: SizeConfig.kPrimaryColor,
+                      buttonSemantics: 'Send Cancel Button Request',
+                    );
                   })
             ],
           ),
@@ -455,6 +459,7 @@ class CancellationRequestSentWidget extends StatelessWidget {
                 ),
               ),
               backgroundColor: SizeConfig.kPrimaryColor,
+              buttonSemantics: 'Cancel Request Sent Home',
             ),
           ),
         ),

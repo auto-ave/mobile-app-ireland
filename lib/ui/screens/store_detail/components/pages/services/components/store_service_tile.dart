@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +7,8 @@ import 'package:lottie/lottie.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
+import 'package:themotorwash/data/models/service.dart';
+import 'package:themotorwash/main.dart';
 
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/widgets/authentication_bottom_sheet.dart';
@@ -23,11 +27,13 @@ class StoreServiceTile extends StatelessWidget {
   final String time;
   final String vehicleModel;
   final PriceTimeOfferDetail? offer;
+  final List<ServiceModel>? tags;
 
   final GlobalKey<ScaffoldState> scaffoldState;
   final GlobalAuthBloc globalAuthBloc;
-
-  const StoreServiceTile(
+  final List<BadgeColors> _badgeColors = SizeConfig.badgeColors;
+  final Random _rand = Random();
+  StoreServiceTile(
       {Key? key,
       required this.description,
       required this.service,
@@ -40,7 +46,8 @@ class StoreServiceTile extends StatelessWidget {
       required this.time,
       required this.globalAuthBloc,
       required this.vehicleModel,
-      required this.offer})
+      required this.offer,
+      this.tags})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -105,6 +112,27 @@ class StoreServiceTile extends StatelessWidget {
                     // textAlign: TextAlign.left,
                     // prefixStyle: ,
                   ),
+                  tags != null
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: tags!.map((e) {
+                              final badgeColor = _badgeColors[_rand.nextInt(3)];
+                              return BadgeWidget(
+                                text:
+                                    e.name != null ? e.name!.toUpperCase() : '',
+                                backgroundColor: badgeColor.backgroundColor,
+                                textStyle: SizeConfig.kStyle10.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1,
+                                    color: badgeColor.textColor),
+                              );
+                            }).toList(),
+                          ),
+                        )
+                      : SizedBox.shrink(),
                   // Text(
                   //   description,
                   //   maxLines: 8,
@@ -202,6 +230,7 @@ class StoreServiceTile extends StatelessWidget {
                       showSnackbar(context, 'Code copied');
                       HapticFeedback.heavyImpact();
                       Clipboard.setData(ClipboardData(text: offer!.offerCode!));
+                      mixpanel?.track('Service Tile Offer Click');
                     },
                     child: Container(
                       padding:

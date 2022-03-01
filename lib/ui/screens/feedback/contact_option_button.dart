@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:themotorwash/main.dart';
 
 import 'package:themotorwash/theme_constants.dart';
 
 class ContactOptionButton extends StatelessWidget {
+  final String buttonSemantics;
   final VoidCallback onTap;
   final String text;
   final String svgAsset;
-  const ContactOptionButton({
-    Key? key,
-    required this.onTap,
-    required this.text,
-    required this.svgAsset,
-  }) : super(key: key);
+  const ContactOptionButton(
+      {Key? key,
+      required this.onTap,
+      required this.text,
+      required this.svgAsset,
+      required this.buttonSemantics})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: onTap,
+        onTap: () {
+          onTap();
+          mixpanel?.track(buttonSemantics);
+        },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 16),
           width: (100.w - 40) / 2 - 20,
