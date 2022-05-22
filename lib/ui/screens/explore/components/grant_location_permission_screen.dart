@@ -79,7 +79,7 @@ class _GrantLocationPermissionScreenState
 
               onTap: () {
                 widget.globalLocationBloc.add(SkipUserLocation());
-                mixpanel?.track(SkipLocationAnalytics().eventName());
+                // mixpanel?.track(SkipLocationAnalytics().eventName());
               }, //TODO : Get lat long for banglore
               child: Row(
                 mainAxisSize: MainAxisSize.min,

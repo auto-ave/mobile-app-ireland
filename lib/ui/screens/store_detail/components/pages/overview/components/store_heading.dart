@@ -31,7 +31,7 @@ class StoreHeading extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
                   onPressedRating();
-                  mixpanel?.track('Store Overview Rating Pressed');
+                  // mixpanel?.track('Store Overview Rating Pressed');
                 },
                 child: Column(
                   children: <Widget>[

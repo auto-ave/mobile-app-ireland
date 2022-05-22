@@ -139,8 +139,6 @@ class _ExploreScreenState extends State<ExploreScreen>
     if (widget.initialLink != null) {
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
         if (widget.initialLink?.link?.queryParameters['store'] != null) {
-          mixpanel?.track(DynamicLinkOpen().eventName(),
-              properties: {'url': widget.initialLink?.link.toString()});
           final slug =
               widget.initialLink?.link?.queryParameters['store'] as String;
           autoaveLog('slug $slug');
@@ -293,42 +291,6 @@ class _ExploreScreenState extends State<ExploreScreen>
                       builder: (context, state) {
                         if (state is SearchServicesUninitialized) {
                           return InitialSearchScreen();
-                          // return CustomScrollView(
-                          //   slivers: [
-                          //     BlocBuilder<SearchServicesBloc,
-                          //         SearchServicesState>(
-                          //       bloc: _privateSearchServicesBloc,
-                          //       builder: (context, state) {
-                          //         if (state is LoadingSearchServicesResult) {
-                          //           return ExploreServicesGridLoading();
-                          //         }
-                          //         if (state is SearchedServicesResult) {
-                          //           return state.searchedServices.isNotEmpty
-                          //               ? ExploreServicesGrid(
-                          //                   items: state.searchedServices
-                          //                       .map((e) => ExploreServiceTile(
-                          //                             imageUrl: e.thumbnail!,
-                          //                             serviceName: e.name!,
-                          //                           ))
-                          //                       .toList(),
-                          //                 )
-                          //               : SliverToBoxAdapter(
-                          //                   child: Container());
-                          //         }
-                          //         if (state is SearchedServicesError) {
-                          //           return SliverToBoxAdapter(
-                          //             child: Container(),
-                          //           );
-                          //         }
-
-                          //         return ExploreServicesGridLoading();
-                          //       },
-                          //     ),
-                          //   ],
-                          // );
-                          // return Center(
-                          //   child: Image.asset('assets/images/no_results.png'),
-                          // );
                         }
                         return SearchOverlay(
                           textController: textController,
@@ -370,6 +332,7 @@ class _ExploreScreenState extends State<ExploreScreen>
       _privateSearchServicesBloc.add(SearchServices(
           query: '', forLoadMore: false, offset: 0, pageLimit: 6));
       _bannersBloc.add(GetOffersBanners());
+      _featuredStoresBloc.add(LoadFeaturedStores());
       HapticFeedback.mediumImpact();
     }
   }
@@ -520,7 +483,7 @@ class _ExploreScreenState extends State<ExploreScreen>
                 onTap: () {
                   showSnackbar(context,
                       'We currently only serve in ${locationModel.cityName}');
-                  mixpanel?.track('City Change Click');
+                  //
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

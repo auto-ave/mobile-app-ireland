@@ -10,11 +10,13 @@ class SearchServiceTile extends StatelessWidget {
   final String serviceName;
   final String imageUrl;
   final String serviceTag;
+  final String bannerUrl;
   const SearchServiceTile(
       {Key? key,
       required this.imageUrl,
       required this.serviceName,
-      required this.serviceTag})
+      required this.serviceTag,
+      required this.bannerUrl})
       : super(key: key);
 
   @override
@@ -22,16 +24,16 @@ class SearchServiceTile extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        mixpanel?.track(SearchServiceClick().eventName(), properties: {
-          'service_name': serviceName,
-          'service_tag': serviceTag
-        });
+        // mixpanel?.track(SearchServiceClick().eventName(), properties: {
+        //   'service_name': serviceName,
+        //   'service_tag': serviceTag
+        // });
         Navigator.pushNamed(context, StoreListScreen.route,
             arguments: StoreListArguments(
                 city: 'bpl',
                 title: serviceName,
                 serviceTag: serviceTag,
-                imageUrl: imageUrl));
+                imageUrl: bannerUrl));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),

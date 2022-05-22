@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/data/api/api_service.dart';
@@ -10,10 +11,17 @@ import 'package:themotorwash/data/repos/auth_repository.dart';
 import 'package:themotorwash/data/repos/auth_rest_repository.dart';
 
 class ApiConstants {
-  final GlobalAuthBloc _globalAuthBloc;
+  late GlobalAuthBloc _globalAuthBloc;
   ApiConstants({
     required GlobalAuthBloc globalAuthBloc,
-  }) : _globalAuthBloc = globalAuthBloc;
+  }) {
+    _globalAuthBloc = globalAuthBloc;
+    if (kReleaseMode) {
+      baseUrl = "api.autoave.in";
+    } else {
+      baseUrl = "testapi.autoave.in";
+    }
+  }
 
   Dio dioClient() {
     var state = _globalAuthBloc.state;
@@ -37,7 +45,7 @@ class ApiConstants {
   // final String baseUrl = "motorwash.herokuapp.com";
   // final String baseUrl = "api.autoave.in";
 
-  final String baseUrl = "testapi.autoave.in";
+  late final String baseUrl;
   final int pageLimit = 10;
 
   String getStoreListEndPoint() {

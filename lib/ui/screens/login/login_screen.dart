@@ -149,14 +149,18 @@ class LoginBottom extends StatefulWidget {
   _LoginBottomState createState() => _LoginBottomState();
 }
 
-class _LoginBottomState extends State<LoginBottom> {
+class _LoginBottomState extends State<LoginBottom> with WidgetsBindingObserver {
   late PhoneAuthBloc phoneAuthBloc;
+
   final phoneController = TextEditingController();
   late final Animation<double> _animation;
+  // late final FocusNode _phoneFocusNode;
   @override
   void initState() {
     super.initState();
     phoneAuthBloc = BlocProvider.of<PhoneAuthBloc>(context);
+    // _phoneFocusNode = FocusNode();
+
     _animation = widget.animation;
   }
 
@@ -216,8 +220,10 @@ class _LoginBottomState extends State<LoginBottom> {
                       FadeSlideTransition(
                           animation: _animation,
                           additionalOffset: 16 * 2,
-                          child:
-                              PhoneTextField(phoneController: phoneController)),
+                          child: PhoneTextField(
+                            phoneController: phoneController,
+                            // focusNode: _phoneFocusNode,
+                          )),
                       SizeConfig.kverticalMargin16,
                       FadeSlideTransition(
                           animation: _animation,
@@ -268,6 +274,7 @@ class _LoginBottomState extends State<LoginBottom> {
 
 class PhoneTextField extends StatelessWidget {
   final TextEditingController phoneController;
+  // final FocusNode focusNode;
   const PhoneTextField({
     Key? key,
     required this.phoneController,
@@ -279,6 +286,7 @@ class PhoneTextField extends StatelessWidget {
       validator: validatePhone,
       controller: phoneController,
       keyboardType: TextInputType.phone,
+      autofocus: true,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4),

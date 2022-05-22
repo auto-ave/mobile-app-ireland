@@ -65,11 +65,11 @@ class _BookingSummaryScreenState extends State<BookingSummaryScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    mixpanel?.track(
-        widget.isTransactionSuccessful
-            ? BookingSuccessEvent().eventName()
-            : BookingFailedEvent().eventName(),
-        properties: {'booking_id': widget.bookingId});
+    // mixpanel?.track(
+    // widget.isTransactionSuccessful
+    //     ? BookingSuccessEvent().eventName()
+    //     : BookingFailedEvent().eventName(),
+    // properties: {'booking_id': widget.bookingId});
     _bookingSummaryBloc = BookingSummaryBloc(
         repository: RepositoryProvider.of<Repository>(context));
     _bookingSummaryBloc.add(GetBookingSummary(bookingId: widget.bookingId));
@@ -372,7 +372,7 @@ class StoreContactWidget extends StatelessWidget {
         SizeConfig.kverticalMargin8,
         GestureDetector(
           onTap: () {
-            mixpanel?.track('Person To Contact Click');
+            // mixpanel?.track('Person To Contact Click');
             final Uri telLaunchUri = Uri(
               scheme: 'tel',
               path: personToContact,

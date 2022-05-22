@@ -146,7 +146,7 @@ class BookServiceButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         onPressed();
-        mixpanel?.track('Book Service Button');
+        // mixpanel?.track('Book Service Button');
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),

@@ -43,7 +43,7 @@ class SearchServicesBloc
     }
   }
 
-  bool _hasReachedMax(SearchServicesState state, bool forLoadMore) =>
+  bool hasReachedMax(SearchServicesState state, bool forLoadMore) =>
       state is SearchedServicesResult && state.hasReachedMax && forLoadMore;
 
   Stream<SearchServicesState> _mapSearchServiceToState(
@@ -51,7 +51,7 @@ class SearchServicesBloc
       required bool forLoadMore,
       required int offset,
       int? pageLimit}) async* {
-    if (!_hasReachedMax(state, forLoadMore)) {
+    if (!hasReachedMax(state, forLoadMore)) {
       try {
         List<ServiceModel> services = [];
         if (state is SearchedServicesResult && forLoadMore) {

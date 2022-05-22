@@ -8,6 +8,9 @@ import 'package:logger/logger.dart';
 import 'package:themotorwash/utils/utils.dart';
 
 class SizeConfig {
+  static final SizeConfig _instance = SizeConfig._internal();
+  factory SizeConfig() => _instance;
+  SizeConfig._internal();
   static String autoaveBanner = 'https://www.autoave.in/autoave-banner.jpg';
   static late MediaQueryData mediaQueryData;
   static late double screenWidth;
@@ -114,7 +117,9 @@ class SizeConfig {
     // textScaleFactor = Platform.isIOS ? 1.5 : _mediaQueryData!.textScaleFactor;
     textScaleFactor = getTextScaleFactor(mediaQueryData.textScaleFactor);
 
-    // textScaleFactor = 1.1;
+    textScaleFactor = 1.1;
+    // screenHeight = 700;
+    // screenWidth = 370;
     screenWidth = mediaQueryData.size.width;
     screenHeight = mediaQueryData.size.height;
     blockSizeHorizontal = screenWidth / 100;

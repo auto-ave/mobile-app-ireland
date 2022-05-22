@@ -88,7 +88,7 @@ class StoreGoogleMapState extends State<StoreGoogleMap> {
           child: GestureDetector(
             onTap: () {
               _goToPinned();
-              mixpanel?.track('Go To Pinned Location');
+              // mixpanel?.track('Go To Pinned Location');
             },
             child: Container(
               padding: EdgeInsets.all(8),

@@ -25,9 +25,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-   				<string>fb564259118703196</string>
- 			</array>
-			<array>
+				<string>fb564259118703196</string>
 				<string>paytmXjcrPx92242589915926</string>
 			</array>
 		</dict>
@@ -42,12 +40,12 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>564259118703196</string>
 	<key>FacebookDisplayName</key>
 	<string>Autoave</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>tez</string>

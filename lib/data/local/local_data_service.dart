@@ -10,6 +10,7 @@ class LocalDataService {
   final String accessTokenKey = 'access_token';
   final String refreshTokenKey = 'refresh_token';
   final String vehicleKey = 'saved_vehicle';
+  final String firstTimeAppOpenKey = 'first_time_app_open';
   LocalDataService() {
     Hive.registerAdapter<VehicleModel>(VehicleModelAdapter(), override: true);
   }
@@ -77,5 +78,16 @@ class LocalDataService {
     }
 
     await vehicleBox.put(0, vehicleTypeModel);
+  }
+
+  Future<bool> isFirstOpen() async {
+    // return false;
+    var appOpenBox = await Hive.openBox(firstTimeAppOpenKey);
+    if (!appOpenBox.containsKey(0)) {
+      await appOpenBox.put(0, true);
+      return true;
+    }
+    return false;
+    // return true;
   }
 }

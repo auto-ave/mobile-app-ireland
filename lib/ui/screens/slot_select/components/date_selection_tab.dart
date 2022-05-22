@@ -64,7 +64,7 @@ class DateSelectionWidget extends StatelessWidget {
       onTap: () {
         onTap(tabIndex);
         HapticFeedback.mediumImpact();
-        mixpanel?.track("Slot Date Selected");
+        // mixpanel?.track("Slot Date Selected");
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),

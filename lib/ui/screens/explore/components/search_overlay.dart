@@ -36,7 +36,7 @@ class _SearchOverlayState extends State<SearchOverlay> {
   @override
   void initState() {
     super.initState();
-    mixpanel?.track(SearchClick().eventName());
+    // mixpanel?.track(SearchClick().eventName());
     // widget.searchServicesBloc.stream.listen((state) {
     //   if (state is SearchedServicesResult && mounted) {
     //     setState(() {
@@ -173,6 +173,9 @@ class _SearchOverlayState extends State<SearchOverlay> {
                                                     imageUrl: e.thumbnail!,
                                                     serviceName: e.name!,
                                                     serviceTag: e.slug!,
+                                                    bannerUrl: e.bannerUrl ??
+                                                        SizeConfig
+                                                            .autoaveBanner,
                                                   ))
                                               .toList(),
                                     ),

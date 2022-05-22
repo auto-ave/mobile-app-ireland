@@ -184,7 +184,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                             MainAxisSize.min,
                                                         children: [
                                                           Text(
-                                                            '${cart.offer!.code} (appilied)',
+                                                            '${cart.offer!.code} (applied)',
                                                             style: SizeConfig
                                                                 .kStyle14Bold
                                                                 .copyWith(
@@ -197,8 +197,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                             onTap: () {
                                                               _offerApplyBloc.add(
                                                                   RemoveOffer());
-                                                              mixpanel?.track(
-                                                                  'Offer Remove');
+                                                              // mixpanel?.track(
+                                                              // 'Offer Remove');
                                                             },
                                                             child: Icon(
                                                               Icons
@@ -210,8 +210,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                       )
                                                     : GestureDetector(
                                                         onTap: () {
-                                                          mixpanel?.track(
-                                                              'View Offers Left');
+                                                          // mixpanel?.track(
+                                                          // 'View Offers Left');
                                                           Navigator.pushNamed(
                                                               context,
                                                               OfferSelectionScreen
@@ -225,8 +225,8 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                             SizeConfig.kHorizontalMargin8,
                                             GestureDetector(
                                               onTap: () {
-                                                mixpanel?.track(
-                                                    'View Offers Right');
+                                                // mixpanel?.track(
+                                                // 'View Offers Right');
                                                 Navigator.pushNamed(context,
                                                     OfferSelectionScreen.route,
                                                     arguments:
@@ -295,84 +295,115 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                             ],
                                           ))
                                       : SizedBox.shrink(),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                              blurRadius: 4,
-                                              color:
-                                                  Color.fromRGBO(0, 0, 0, .08),
-                                              offset: Offset(0, -2))
-                                        ]),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0, horizontal: 16),
-                                    child: SafeArea(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Text('₹${cart.total}',
-                                                  style: TextStyle(
-                                                      fontSize: SizeConfig
-                                                          .kfontSize16,
-                                                      fontWeight:
-                                                          FontWeight.w500)),
-                                              SizedBox(
-                                                height: 4,
-                                              ),
-                                              Text(
-                                                'T O T A L',
-                                                style: SizeConfig.kStyle12
-                                                    .copyWith(
-                                                        color:
-                                                            Colors.grey[700]),
-                                              ),
-                                            ],
-                                          ),
-                                          Spacer(),
-                                          CommonTextButton(
-                                            onPressed: () {
-                                              _orderReviewBloc
-                                                  .add(SetCart(cart: cart));
-                                              Navigator.pop(context);
-                                              Navigator.pushNamed(context,
-                                                  SlotSelectScreen.route,
-                                                  arguments:
-                                                      SlotSelectScreenArguments(
-                                                          isMultiDay:
-                                                              cart.isMultiDay!,
-                                                          cartTotal:
-                                                              cart.total!,
-                                                          cardId: cart.id!
-                                                              .toString()));
-                                            },
-                                            child: Text('Select Slot',
-                                                style: TextStyle(
-                                                    color: Colors.white)),
-                                            backgroundColor:
-                                                SizeConfig.kPrimaryColor,
-                                            buttonSemantics: 'Cart Select Slot',
-                                          )
-                                          // TextButton(
-                                          //   child: Text('Select Slot',
-                                          //       style: TextStyle(color: Colors.white)),
-                                          //   onPressed: () {
-                                          //     _orderReviewBloc.add(SetCart(cart: cart));
-                                          //     Navigator.pushNamed(
-                                          //         context, SlotSelectScreen.route,
-                                          //         arguments: SlotSelectScreenArguments(
-                                          //             cartTotal: cart.total!,
-                                          //             cardId: cart.id!.toString()));
-                                          //   },
-                                          //   style: ButtonStyle(
-                                          //       backgroundColor: MaterialStateProperty.all(
-                                          //           Theme.of(context).primaryColor)),
-                                          // ),
-                                        ],
+                                  SafeArea(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _orderReviewBloc
+                                            .add(SetCart(cart: cart));
+                                        Navigator.pop(context);
+                                        Navigator.pushNamed(
+                                            context, SlotSelectScreen.route,
+                                            arguments:
+                                                SlotSelectScreenArguments(
+                                                    isMultiDay:
+                                                        cart.isMultiDay!,
+                                                    cartTotal: cart.total!,
+                                                    cardId:
+                                                        cart.id!.toString()));
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: SizeConfig.kPrimaryColor,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  blurRadius: 4,
+                                                  color: Color.fromRGBO(
+                                                      0, 0, 0, .08),
+                                                  offset: Offset(0, -2))
+                                            ]),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12.0, horizontal: 16),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Text(
+                                                  'T O T A L',
+                                                  style: SizeConfig.kStyle12
+                                                      .copyWith(
+                                                          color: Colors.white),
+                                                ),
+                                                SizedBox(
+                                                  height: 4,
+                                                ),
+                                                Text('₹${cart.total}',
+                                                    style: SizeConfig
+                                                        .kStyle20W500
+                                                        .copyWith(
+                                                            color:
+                                                                Colors.white)),
+                                              ],
+                                            ),
+                                            Spacer(),
+                                            Row(
+                                              children: [
+                                                CommonTextButton(
+                                                  onPressed: () {
+                                                    _orderReviewBloc.add(
+                                                        SetCart(cart: cart));
+                                                    Navigator.pop(context);
+                                                    Navigator.pushNamed(context,
+                                                        SlotSelectScreen.route,
+                                                        arguments:
+                                                            SlotSelectScreenArguments(
+                                                                isMultiDay: cart
+                                                                    .isMultiDay!,
+                                                                cartTotal:
+                                                                    cart.total!,
+                                                                cardId: cart.id!
+                                                                    .toString()));
+                                                  },
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text('Proceed',
+                                                          style: SizeConfig
+                                                              .kStyle16W500
+                                                              .copyWith(
+                                                                  color: SizeConfig
+                                                                      .kPrimaryColor)),
+                                                    ],
+                                                  ),
+                                                  backgroundColor: Colors.white,
+                                                  buttonSemantics:
+                                                      'Cart Select Slot',
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 8),
+                                                ),
+                                              ],
+                                            )
+                                            // TextButton(
+                                            //   child: Text('Select Slot',
+                                            //       style: TextStyle(color: Colors.white)),
+                                            //   onPressed: () {
+                                            //     _orderReviewBloc.add(SetCart(cart: cart));
+                                            //     Navigator.pushNamed(
+                                            //         context, SlotSelectScreen.route,
+                                            //         arguments: SlotSelectScreenArguments(
+                                            //             cartTotal: cart.total!,
+                                            //             cardId: cart.id!.toString()));
+                                            //   },
+                                            //   style: ButtonStyle(
+                                            //       backgroundColor: MaterialStateProperty.all(
+                                            //           Theme.of(context).primaryColor)),
+                                            // ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )

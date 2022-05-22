@@ -239,6 +239,7 @@ class OTPFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PinCodeTextField(
+      autoFocus: true,
       appContext: context,
       length: 4,
       onChanged: onChange,

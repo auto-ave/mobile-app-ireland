@@ -142,7 +142,7 @@ class PicksCardTile extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        mixpanel?.track(SearchStoreClick().eventName());
+        // mixpanel?.track(SearchStoreClick().eventName());
         Navigator.pushNamed(context, StoreDetailScreen.route,
             arguments: StoreDetailArguments(storeSlug: storeSlug));
       },

@@ -93,7 +93,7 @@ class DayTimeTabWidget extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         onTap(tabIndex);
-        mixpanel?.track('DayTime Slot Selected');
+        // mixpanel?.track('DayTime Slot Selected');
       },
       child: Container(
         width: 25.w,

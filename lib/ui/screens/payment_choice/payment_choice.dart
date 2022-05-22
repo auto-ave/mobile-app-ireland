@@ -430,8 +430,8 @@ class PaymentChoiceTile extends StatelessWidget {
           GestureDetector(
             onTap: () {
               onTap(widgetIndex);
-              mixpanel?.track(buttonSemantics,
-                  properties: {'is_active': isActive.toString()});
+              // mixpanel?.track(buttonSemantics,
+              // properties: {'is_active': isActive.toString()});
             },
             child: Container(
               width: 100.w,

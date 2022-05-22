@@ -83,9 +83,9 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
 
       if (tokens.authenticated) {
         try {
-          mixpanel?.identify(
-            phoneNumber,
-          );
+          // mixpanel?.identify(
+          //   phoneNumber,
+          // );
 
           await FlutterUxcam.setUserIdentity(phoneNumber);
         } on Exception catch (e) {

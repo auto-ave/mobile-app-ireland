@@ -23,7 +23,7 @@ class ContactOptionButton extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         onTap: () {
           onTap();
-          mixpanel?.track(buttonSemantics);
+          // mixpanel?.track(buttonSemantics);
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 16),

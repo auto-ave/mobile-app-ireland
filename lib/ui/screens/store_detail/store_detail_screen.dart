@@ -88,13 +88,17 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
             builder: (context, state) {
               if (detailState is StoreDetailLoaded) {
                 if (state is CartSetSuccess) {
-                  return state.cart.items!.isNotEmpty &&
-                          detailState.store.id == state.cart.store!.id
-                      ? BottomCartTile(cart: state.cart)
-                      : Container(
-                          width: 0,
-                          height: 0,
-                        );
+                  return AnimatedSwitcher(
+                      // transitionBuilder: AnimatedSwitcher.defaultTransitionBuilder(child, animation),
+                      duration: Duration(milliseconds: 200),
+                      child: state.cart.items!.isNotEmpty &&
+                              detailState.store.id == state.cart.store!.id
+                          ? BottomCartTile(cart: state.cart)
+                          : Container(
+                              width: 0,
+                              height: 0,
+                            ));
+                  // return ;
                 }
               }
               return Container(
@@ -191,7 +195,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen>
                                     builder: (BuildContext context) {
                                       return GestureDetector(
                                         onTap: () {
-                                          mixpanel?.track('Gallery View Click');
+                                          // mixpanel?.track('Gallery View Click');
                                           Navigator.pushNamed(context,
                                               StoreGalleryViewScreen.route,
                                               arguments:

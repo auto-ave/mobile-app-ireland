@@ -77,7 +77,7 @@ class AppBarLoginScreen extends StatelessWidget with PreferredSizeWidget {
           width: 100.w,
           child: Padding(
             padding:
-                const EdgeInsets.only(right: 16.0, left: 8, top: 8, bottom: 8),
+                const EdgeInsets.only(right: 20.0, left: 20, top: 8, bottom: 8),
             child: Row(
               children: [
                 Image.asset(
@@ -88,7 +88,7 @@ class AppBarLoginScreen extends StatelessWidget with PreferredSizeWidget {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    mixpanel?.track(SkipLoginAnalytics().eventName());
+                    // mixpanel?.track(SkipLoginAnalytics().eventName());
                     Navigator.pushNamedAndRemoveUntil(
                         context, ExploreScreen.route, (route) => false);
                   },
@@ -128,41 +128,44 @@ PreferredSizeWidget getAppBarLoginScreen(
     // brightness: Brightness.light,
     backgroundColor: Colors.white,
     actions: [
-      SizedBox(
-        width: 100.w,
-        child: Padding(
-          padding:
-              const EdgeInsets.only(right: 16.0, left: 8, top: 8, bottom: 8),
-          child: Row(
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 30.w,
-              ),
-              Spacer(),
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  mixpanel?.track(SkipLoginAnalytics().eventName());
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, ExploreScreen.route, (route) => false);
-                },
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Skip',
-                      style: SizeConfig.kStyle16PrimaryColor,
-                    ),
-                    Icon(
-                      Icons.arrow_forward,
-                      color: SizeConfig.kPrimaryColor,
-                      size: 20,
-                    )
-                  ],
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          width: 100.w,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(right: 16.0, left: 8, top: 8, bottom: 8),
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/images/logo.png',
+                  width: 30.w,
                 ),
-              )
-            ],
+                Spacer(),
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    // mixpanel?.track(SkipLoginAnalytics().eventName());
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, ExploreScreen.route, (route) => false);
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Skip',
+                        style: SizeConfig.kStyle16PrimaryColor,
+                      ),
+                      Icon(
+                        Icons.arrow_forward,
+                        color: SizeConfig.kPrimaryColor,
+                        size: 20,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       )
@@ -243,4 +246,46 @@ extension IntUtils on int {
 
 void autoaveLog(String log) {
   Logger().d(log);
+}
+
+class BadgeCharColors {
+  int a = "a".codeUnitAt(0);
+  int z = "z".codeUnitAt(0);
+  List<BadgeColors> badgeColors = [
+    BadgeColors(
+        textColor: Color(0xff026C00), backgroundColor: Color(0xffDBFFE5)),
+    BadgeColors(
+        backgroundColor: Color(0xffF1FFDB), textColor: Color(0xff436C00)),
+    BadgeColors(
+        backgroundColor: Color(0xffEAF4FF), textColor: Color(0xff3570B5))
+  ];
+  // List<MaterialColor> colors = [
+  //   Colors.cyan,
+  //   Colors.deepOrange,
+  //   Colors.purple,
+  //   Colors.orange,
+  //   Colors.amber,
+  //   Colors.lightBlue,
+  //   Colors.deepPurple,
+  //   Colors.indigo,
+  //   Colors.orange,
+  //   Colors.pink,
+  //   Colors.grey,
+  //   Colors.blue,
+  // ];
+
+  BadgeColors getColorForChar(String string) {
+    autoaveLog(string);
+    int x = string.toLowerCase().codeUnitAt(0);
+    int toCompare = a + 3;
+
+    for (int i = 0; i < 3; i++) {
+      if (x < toCompare) {
+        autoaveLog('$x < $toCompare');
+        return badgeColors[i];
+      }
+      toCompare = toCompare + 3;
+    }
+    return badgeColors.last;
+  }
 }

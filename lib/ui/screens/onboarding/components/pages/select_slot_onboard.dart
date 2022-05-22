@@ -51,13 +51,17 @@ class _SelectSlotOnboardPageState extends State<SelectSlotOnboardPage>
           mainAxisSize: MainAxisSize.min,
           children: [
             // SizeConfig.kverticalMargin32,
-            Image.asset(
-              'assets/images/onboarding/slot/dates.png',
-              scale: 2,
+            Flexible(
+              child: Image.asset(
+                'assets/images/onboarding/slot/dates.png',
+                scale: 2,
+              ),
             ),
-            Image.asset(
-              'assets/images/onboarding/slot/slots.png',
-              scale: 2,
+            Flexible(
+              child: Image.asset(
+                'assets/images/onboarding/slot/slots.png',
+                scale: 2,
+              ),
             ),
           ],
         ));

@@ -9,14 +9,15 @@ class OfferModel {
   final String? description;
   final String? bannerUrl;
   final String? saving;
-
+  final String? storeSlug;
   OfferModel(
       {required this.id,
       required this.code,
       required this.title,
       required this.description,
       required this.saving,
-      required this.bannerUrl});
+      required this.bannerUrl,
+      required this.storeSlug});
   factory OfferModel.fromEntity(OfferEntity e) {
     return OfferModel(
         id: e.id,
@@ -24,12 +25,13 @@ class OfferModel {
         title: e.title,
         description: e.description,
         saving: e.saving,
-        bannerUrl: e.banner);
+        bannerUrl: e.banner,
+        storeSlug: e.storeSlug);
   }
 
   @override
   String toString() {
-    return 'OfferModel(id: $id, code: $code, title: $title, description: $description, bannerUrl: $bannerUrl, saving: $saving)';
+    return 'OfferModel(id: $id, code: $code, title: $title, description: $description, bannerUrl: $bannerUrl, saving: $saving, storeSlug: $storeSlug)';
   }
 }
 
@@ -41,6 +43,8 @@ class OfferEntity {
   final String? description;
   final String? banner;
   final String? saving;
+  @JsonKey(name: 'store_slug')
+  final String? storeSlug;
 
   OfferEntity(
       {required this.id,
@@ -48,7 +52,8 @@ class OfferEntity {
       required this.title,
       required this.description,
       required this.saving,
-      required this.banner});
+      required this.banner,
+      required this.storeSlug});
   factory OfferEntity.fromJson(Map<String, dynamic> data) =>
       _$OfferEntityFromJson(data);
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
 import 'package:themotorwash/blocs/global_auth/global_auth_bloc.dart';
 import 'package:themotorwash/data/models/price_time_list_model.dart';
@@ -112,46 +113,22 @@ class StoreServiceTile extends StatelessWidget {
                     // textAlign: TextAlign.left,
                     // prefixStyle: ,
                   ),
-                  tags != null
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: tags!.map((e) {
-                              final badgeColor = _badgeColors[_rand.nextInt(3)];
-                              return BadgeWidget(
-                                text:
-                                    e.name != null ? e.name!.toUpperCase() : '',
-                                backgroundColor: badgeColor.backgroundColor,
-                                textStyle: SizeConfig.kStyle10.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1,
-                                    color: badgeColor.textColor),
-                              );
-                            }).toList(),
-                          ),
-                        )
-                      : SizedBox.shrink(),
-                  // Text(
-                  //   description,
-                  //   maxLines: 8,
-                  //   overflow: TextOverflow.ellipsis,
-                  // ),
-                  SizedBox(
-                    height: 8,
-                  ),
+
                   // Text(
                   //   "More info",
                   //   style: TextStyle(
                   //       decoration: TextDecoration.underline,
                   //       color: SizeConfig.kPrimaryColor),
                   // ),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Row(
                     children: <Widget>[
                       Text(
                         "₹ $price",
-                        style: SizeConfig.kStyle16W500,
+                        style: SizeConfig.kStyle16W500.copyWith(
+                            fontSize: 18, fontWeight: FontWeight.w700),
                       ),
                       Spacer(),
                       BlocBuilder<GlobalAuthBloc, GlobalAuthState>(
@@ -159,63 +136,29 @@ class StoreServiceTile extends StatelessWidget {
                         builder: (context, state) {
                           return Builder(
                             builder: (ctx) => SizedBox(
-                              width: 120,
-                              child: OutlinedButton(
-                                onPressed: () {
-                                  if (state is Authenticated) {
-                                    if (!isAddedToCart) {
-                                      bloc.add(AddItemToCart(
-                                          itemId: itemId,
-                                          vehicleModel: vehicleModel));
-                                    } else {
-                                      bloc.add(
-                                          DeleteItemFromCart(itemId: itemId));
-                                    }
-                                  } else {
-                                    showAuthBottomSheet(ctx);
-                                  }
-                                },
-                                style: ButtonStyle(
-                                  side: MaterialStateProperty.all(BorderSide(
-                                      color: !isAddedToCart
-                                          ? SizeConfig.kPrimaryColor
-                                          : Colors.red)),
-                                  padding: MaterialStateProperty.all(
-                                      EdgeInsets.symmetric(
-                                          vertical: 8, horizontal: 16)),
-                                  shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                  ),
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.white),
-                                ),
-                                child: isLoading
-                                    ? SizedBox(
-                                        height: 25,
-                                        width: 25,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: !isAddedToCart
-                                              ? SizeConfig.kPrimaryColor
-                                              : Colors.red,
-                                        ),
-                                      )
-                                    : FittedBox(
-                                        child: Text(
-                                          !isAddedToCart
-                                              ? "Add to cart"
-                                              : "Remove",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: !isAddedToCart
-                                                  ? SizeConfig.kPrimaryColor
-                                                  : Colors.red),
-                                        ),
-                                      ),
-                              ),
-                            ),
+                                // width: 150,
+                                child: !isAddedToCart
+                                    ? AddToCartButton(
+                                        isLoading: isLoading,
+                                        onPressed: () {
+                                          if (state is Authenticated) {
+                                            bloc.add(AddItemToCart(
+                                                itemId: itemId,
+                                                vehicleModel: vehicleModel));
+                                          } else {
+                                            showAuthBottomSheet(ctx);
+                                          }
+                                        })
+                                    : RemoveFromCartButton(
+                                        isLoading: isLoading,
+                                        onPressed: () {
+                                          if (state is Authenticated) {
+                                            bloc.add(DeleteItemFromCart(
+                                                itemId: itemId));
+                                          } else {
+                                            showAuthBottomSheet(ctx);
+                                          }
+                                        })),
                           );
                         },
                       ),
@@ -224,13 +167,46 @@ class StoreServiceTile extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(
+              height: 8,
+            ),
+            tags != null
+                ? Padding(
+                    padding: const EdgeInsets.only(
+                        top: 8, bottom: 8, left: 20, right: 8),
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: tags!.map((e) {
+                        final badgeColor =
+                            BadgeCharColors().getColorForChar(e.name ?? 'a');
+                        return BadgeWidget(
+                          text: e.name != null ? e.name!.toUpperCase() : '',
+                          backgroundColor: badgeColor.backgroundColor,
+                          textStyle: SizeConfig.kStyle10.copyWith(
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                              color: badgeColor.textColor),
+                        );
+                      }).toList(),
+                    ),
+                  )
+                : SizedBox.shrink(),
+            // Text(
+            //   description,
+            //   maxLines: 8,
+            //   overflow: TextOverflow.ellipsis,
+            // ),
+            SizedBox(
+              height: 8,
+            ),
             offer != null
                 ? GestureDetector(
                     onTap: () {
                       showSnackbar(context, 'Code copied');
                       HapticFeedback.heavyImpact();
                       Clipboard.setData(ClipboardData(text: offer!.offerCode!));
-                      mixpanel?.track('Service Tile Offer Click');
+                      // mixpanel?.track('Service Tile Offer Click');
                     },
                     child: Container(
                       padding:
@@ -298,5 +274,120 @@ class StoreServiceTile extends StatelessWidget {
             ),
           );
         });
+  }
+}
+
+class AddToCartButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final bool isLoading;
+
+  const AddToCartButton(
+      {Key? key, required this.isLoading, required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: () {
+        onPressed();
+        HapticFeedback.mediumImpact();
+      },
+      style: ButtonStyle(
+        side: MaterialStateProperty.all(
+            BorderSide(color: SizeConfig.kPrimaryColor)),
+        padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(vertical: 0, horizontal: 0)),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.white),
+      ),
+      child: isLoading
+          ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 25,
+                width: 25,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: SizeConfig.kPrimaryColor,
+                ),
+              ),
+            )
+          : Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: SizeConfig.kPrimaryColor,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(5),
+                          bottomLeft: Radius.circular(5))),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      right: 16, left: 8, top: 8, bottom: 8),
+                  child: FittedBox(
+                    child: Text(
+                      " Add Service",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: SizeConfig.kPrimaryColor),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+}
+
+class RemoveFromCartButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final bool isLoading;
+  const RemoveFromCartButton(
+      {Key? key, required this.isLoading, required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: () {
+        onPressed();
+        HapticFeedback.mediumImpact();
+      },
+      style: ButtonStyle(
+        side: MaterialStateProperty.all(BorderSide(color: Colors.red)),
+        padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(vertical: 8, horizontal: 16)),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.white),
+      ),
+      child: isLoading
+          ? SizedBox(
+              height: 25,
+              width: 25,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.red,
+              ),
+            )
+          : FittedBox(
+              child: Text(
+                "Remove",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+    );
   }
 }

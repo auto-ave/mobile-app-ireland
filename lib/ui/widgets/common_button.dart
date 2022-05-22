@@ -25,7 +25,7 @@ class CommonTextButton extends StatelessWidget {
       child: child,
       onPressed: () {
         onPressed();
-        mixpanel?.track(buttonSemantics);
+        // mixpanel?.track(buttonSemantics);
       },
       style: ButtonStyle(
           padding: MaterialStateProperty.all(

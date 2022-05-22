@@ -130,7 +130,7 @@ class SlotSelectionTabWidget extends StatelessWidget {
               ? () {}
               : () {
                   onTap(tabIndex);
-                  mixpanel?.track('Normal Slot Selected');
+                  // mixpanel?.track('Normal Slot Selected');
                 },
           child: Container(
             padding: const EdgeInsets.all(8.0),

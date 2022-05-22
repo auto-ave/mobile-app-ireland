@@ -44,7 +44,7 @@ class StoreListTile extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        mixpanel?.track(SearchStoreClick().eventName());
+        // mixpanel?.track(SearchStoreClick().eventName());
         Navigator.of(context).pushNamed(StoreDetailScreen.route,
             arguments: StoreDetailArguments(
                 storeSlug: storeSlug, serviceTag: serviceTag));
@@ -87,8 +87,12 @@ class StoreListTile extends StatelessWidget {
                     right: 0,
                     left: 0,
                     child: Container(
-                      decoration:
-                          BoxDecoration(color: Colors.black.withOpacity(.5)),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(.5),
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8.0),
+                            bottomRight: Radius.circular(8.0)),
+                      ),
                       padding: EdgeInsets.all(4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -166,8 +170,8 @@ class StoreListTile extends StatelessWidget {
                           )
                         : BadgeWidget(
                             text: 'New',
-                            height: 5.w,
-                            width: 10.w,
+                            // height: 5.w,
+                            // width: 10.w,
                             backgroundColor: SizeConfig.kPrimaryColor,
                             textStyle: SizeConfig.kStyle12.copyWith(
                                 color: Colors.white,
@@ -253,7 +257,7 @@ class StoreListTile extends StatelessWidget {
 //     return GestureDetector(
 //       behavior: HitTestBehavior.opaque,
 //       onTap: () {
-//         mixpanel?.track(SearchStoreClick().eventName());
+//         // mixpanel?.track(SearchStoreClick().eventName());
 //         Navigator.of(context).pushNamed(StoreDetailScreen.route,
 //             arguments: StoreDetailArguments(
 //                 storeSlug: storeSlug, serviceTag: serviceTag));

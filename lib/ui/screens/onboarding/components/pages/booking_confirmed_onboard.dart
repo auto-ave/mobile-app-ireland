@@ -47,17 +47,14 @@ class _BookingConfirmedOnboardPageState
   @override
   Widget build(BuildContext context) {
     return FadeSlideTransition(
-        animation: _formElementAnimation,
-        additionalOffset: 0,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // SizeConfig.kverticalMargin32,
-            Image.asset(
-              'assets/images/onboarding/booking_confirmed/bc.png',
-              scale: 2,
-            ),
-          ],
-        ));
+      animation: _formElementAnimation,
+      additionalOffset: 0,
+      child:
+          // SizeConfig.kverticalMargin32,
+          Image.asset(
+        'assets/images/onboarding/booking_confirmed/bc.png',
+        scale: 2,
+      ),
+    );
   }
 }

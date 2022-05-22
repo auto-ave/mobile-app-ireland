@@ -32,7 +32,7 @@ class StoreSearchTile extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        mixpanel?.track(SearchStoreClick().eventName());
+        // mixpanel?.track(SearchStoreClick().eventName());
         Navigator.of(context).pushNamed(StoreDetailScreen.route,
             arguments: StoreDetailArguments(storeSlug: storeSlug));
       },

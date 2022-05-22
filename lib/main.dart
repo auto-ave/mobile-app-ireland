@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,12 +15,12 @@ import 'package:flutter_uxcam/flutter_uxcam.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:in_app_update/in_app_update.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:themotorwash/ui/screens/offer_stores_list/offer_stores_list_screen.dart';
 import 'package:themotorwash/ui/screens/onboarding/onboarding_screen.dart';
+import 'package:themotorwash/ui/screens/services_list/services_list_screen.dart';
 import 'package:upgrader/upgrader.dart';
 
 import 'package:themotorwash/blocs/cart/cart_function_bloc.dart';
@@ -75,7 +74,7 @@ import 'package:themotorwash/utils/utils.dart';
 import 'firebase_options.dart';
 
 GetIt getIt = GetIt.instance;
-late Mixpanel? mixpanel;
+// late // mixpanel? // mixpanel;
 
 /// Create a [AndroidNotificationChannel] for heads up notifications
 late AndroidNotificationChannel channel;
@@ -86,10 +85,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
-Future<void> initMixpanel() async {
-  mixpanel = await Mixpanel.init("28271a708d8c89da55aca5ed84b79ddd",
-      optOutTrackingDefault: false);
-}
+// Future<void> initmixpanel() async {
+//   // // mixpanel = await // mixpanel.init("28271a708d8c89da55aca5ed84b79ddd",
+//   //     optOutTrackingDefault: false);
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -177,11 +176,11 @@ void main() async {
     FirebaseMessaging.instance.requestPermission();
   }
   Bloc.observer = SimpleBlocObserver();
-  try {
-    await initMixpanel();
-  } catch (e) {
-    print(e.toString());
-  }
+  // try {
+  //   await initmixpanel();
+  // } catch (e) {
+  //   print(e.toString());
+  // }
   runApp(
     MyApp(
       initialLink: initialLink,
@@ -253,6 +252,7 @@ class _MyAppState extends State<MyApp> {
     // });
   }
 
+  int count = 0;
   @override
   Widget build(BuildContext context) {
     if (kReleaseMode) {
@@ -351,11 +351,62 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'DM Sans',
             scaffoldBackgroundColor: Colors.white,
           ),
-          home: MainScreen(
-            cartFunctionBloc: _cartFunctionBloc,
-            globalAuthBloc: _globalAuthBloc,
-            initialLink: widget.initialLink,
-          ),
+          home: FutureBuilder<bool>(
+              future: _localDataService.isFirstOpen(),
+              builder: (ctx, snapshot) {
+                if (count == 0) {
+                  SizeConfig().init(ctx);
+                  count++;
+                }
+                if (widget.initialLink != null) {
+                  autoaveLog('Initial Link');
+                  return MainScreen(
+                    cartFunctionBloc: _cartFunctionBloc,
+                    globalAuthBloc: _globalAuthBloc,
+                    initialLink: widget.initialLink,
+                  );
+                }
+                // if(  snapshot.data == true) {
+                //   autoaveLog('First Open');
+                //   return SplashScreen();
+                // }
+                if (snapshot.hasData &&
+                    snapshot.connectionState == ConnectionState.done) {
+                  autoaveLog('Snapshot has data');
+                  if (snapshot.data ?? false) {
+                    autoaveLog('Snapshot has data and is true');
+                    return OnboardingScreen();
+                  } else {
+                    autoaveLog('False Snapshot');
+                    return MainScreen(
+                      cartFunctionBloc: _cartFunctionBloc,
+                      globalAuthBloc: _globalAuthBloc,
+                      initialLink: widget.initialLink,
+                    );
+                  }
+                  // return SplashScreen();
+                }
+                autoaveLog('Returning Splash Main');
+                return Scaffold(
+                  body: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image:
+                            AssetImage('assets/images/splash_background.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Center(
+                      child: Builder(builder: (ctx) {
+                        return Image.asset(
+                          'assets/images/logo.png',
+                          scale: 4,
+                        );
+                      }),
+                    ),
+                  ),
+                );
+              }),
           onGenerateRoute: (settings) {
             if (settings.name == StoreListScreen.route) {
               final args = settings.arguments as StoreListArguments;
@@ -549,6 +600,11 @@ class _MyAppState extends State<MyApp> {
                 },
               );
             }
+            if (settings.name == ServicesListScreen.routeName) {
+              return MaterialPageRoute(builder: (_) {
+                return ServicesListScreen();
+              });
+            }
             // if (settings.name == MultiDaySlotSelectScreen.route) {
             //   final args = settings.arguments as MultiDaySlotSelectScreenArgs;
             //   return MaterialPageRoute(
@@ -595,73 +651,79 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return UpgradeAlert(
-      debugLogging: true,
-      canDismissDialog: false,
-      countryCode: 'in',
+    return
+        //  UpgradeAlert(
+        //   debugLogging: true,
+        //   canDismissDialog: false,
+        //   countryCode: 'in',
 
-      // durationToAlertAgain: Duration(seconds: 1),
-      showIgnore: false,
-      showLater: false,
-      // debugAlwaysUpgrade: true,
-      // debugDisplayOnce: false,
-      child: BlocListener<GlobalAuthBloc, GlobalAuthState>(
-        bloc: widget.globalAuthBloc,
-        listener: (context, state) {
-          // TODO: implement listener
-          if (state is Authenticated) {
-            widget.cartFunctionBloc.add(GetCart());
-          }
-        },
-        // listenWhen: (previous, current) {
-        //   if (previous is Unauthenticated && current is Unauthenticated) {
-        //     return false;
-        //   }
-        //   return true;
-        // },
-        child: FutureBuilder<AuthTokensModel>(
-            future: LocalDataService().getAuthTokens(),
-            builder: (ctx, snapshot) {
-              SizeConfig().init(ctx);
+        //   // durationToAlertAgain: Duration(seconds: 1),
+        //   showIgnore: false,
+        //   showLater: false,
+        //   // debugAlwaysUpgrade: true,
+        //   // debugDisplayOnce: false,
+        //   child:
+        BlocListener<GlobalAuthBloc, GlobalAuthState>(
+      bloc: widget.globalAuthBloc,
+      listener: (context, state) {
+        // TODO: implement listener
+        if (state is Authenticated) {
+          // autoaveLog('GetCartCal')
+          widget.cartFunctionBloc.add(GetCart());
+        }
+      },
+      // listenWhen: (previous, current) {
+      //   if (previous is Unauthenticated && current is Unauthenticated) {
+      //     return false;
+      //   }
+      //   return true;
+      // },
+      child: FutureBuilder<AuthTokensModel>(
+          future: LocalDataService().getAuthTokens(),
+          builder: (ctx, snapshot) {
+            // SizeConfig().init(ctx);
+            autoaveLog('MainScreen FutureBuilder ' +
+                snapshot.connectionState.toString());
+            // if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              if (snapshot.data != null && snapshot.data!.authenticated) {
+                // return OfferSelectionScreen();
+                // return BookingSummaryScreen(bookingId: '8D6D98');
+                // return CancelOrderScreen();
 
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!.authenticated) {
-                    // return OfferSelectionScreen();
-                    // return BookingSummaryScreen(bookingId: '8D6D98');
-                    // return CancelOrderScreen();
-
-                    return ExploreScreen(
-                      initialLink: widget.initialLink,
-                    );
-                  } else {
-                    return OnboardingScreen();
-                    return LoginScreen(
-                      initialLink: widget.initialLink,
-                    );
-                  }
-                }
+                return ExploreScreen(
+                  initialLink: widget.initialLink,
+                );
+              } else {
+                // return OnboardingScreen();
+                return LoginScreen(
+                  initialLink: widget.initialLink,
+                );
               }
-              return Scaffold(
-                body: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/splash_background.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Center(
-                    child: Builder(builder: (ctx) {
-                      return Image.asset(
-                        'assets/images/logo.png',
-                        scale: 4,
-                      );
-                    }),
+            }
+            // }
+            autoaveLog('Returning Splash 2');
+            // return Text('asd');
+            return Scaffold(
+              body: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/splash_background.png'),
+                    fit: BoxFit.cover,
                   ),
                 ),
-              );
-            }),
-      ),
+                child: Center(
+                  child: Builder(builder: (ctx) {
+                    return Image.asset(
+                      'assets/images/logo.png',
+                      scale: 4,
+                    );
+                  }),
+                ),
+              ),
+            );
+          }),
+      // ),
     );
   }
 }

@@ -45,26 +45,15 @@ class _SelectServiceOnboardState extends State<SelectServiceOnboardPage>
   @override
   Widget build(BuildContext context) {
     return FadeSlideTransition(
-        animation: _formElementAnimation,
-        additionalOffset: 0,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // SizeConfig.kverticalMargin32,
-            Image.asset(
-              'assets/images/onboarding/select_services/select_services_1.png',
-              scale: 2,
-              width: 100.w,
-              fit: BoxFit.fitWidth,
-            ),
-            Image.asset(
-              'assets/images/onboarding/select_services/select_services_2.png',
-              scale: 2,
-              width: 100.w,
-              fit: BoxFit.fitWidth,
-            ),
-          ],
-        ));
+      animation: _formElementAnimation,
+      additionalOffset: 0,
+      child: Image.asset(
+        'assets/images/onboarding/select_services/select_services.png',
+        scale: 2,
+        width: 100.w,
+        fit: BoxFit.fitWidth,
+      ),
+    );
     ;
   }
 }

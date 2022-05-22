@@ -131,7 +131,7 @@ class AppDrawer extends StatelessWidget {
           Container(
             child: GestureDetector(
               onTap: () {
-                mixpanel?.track('Drawer Profile Tile Click');
+                // mixpanel?.track('Drawer Profile Tile Click');
                 Navigator.pushNamed(context, ProfileScreen.route,
                     arguments: ProfileScreenArguments(showSkip: false));
               },

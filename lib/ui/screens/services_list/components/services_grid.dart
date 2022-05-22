@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_services/explore_services_tile.dart';
-import 'package:themotorwash/ui/screens/services_list/services_list_screen.dart';
 import 'package:themotorwash/utils/packages/multi_sliver/multi_sliver.dart';
 
-class ExploreServicesGrid extends StatelessWidget {
+class ServicesGrid extends StatelessWidget {
   final List<ExploreServiceTile> items;
-  const ExploreServicesGrid({Key? key, required this.items}) : super(key: key);
+  final bool isLoadingMore;
+  const ServicesGrid(
+      {Key? key, required this.items, required this.isLoadingMore})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,6 @@ class ExploreServicesGrid extends StatelessWidget {
           ),
         ),
       ),
-
       // SliverStaggeredGrid.count(
       //   crossAxisCount: 3,
       //   children: items.sublist(2),
@@ -64,30 +64,7 @@ class ExploreServicesGrid extends StatelessWidget {
         ),
       ),
       SizeConfig.kverticalMargin16,
-      SliverToBoxAdapter(
-        child: GestureDetector(
-          onTap: () =>
-              Navigator.pushNamed(context, ServicesListScreen.routeName),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Container(
-              width: 100.w,
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: Center(
-                child: Text(
-                  'See all',
-                  style: SizeConfig.kStyle12PrimaryColor,
-                ),
-              ),
-              decoration: BoxDecoration(
-                  border: Border.all(color: SizeConfig.kPrimaryColor, width: 1),
-                  borderRadius: BorderRadius.circular(4)),
-            ),
-          ),
-        ),
-      ),
-      SizeConfig.kverticalMargin16,
-
+      isLoadingMore ? CircularProgressIndicator() : SizedBox.shrink()
       // SliverGrid.count(
       //   crossAxisCount: 3,
       //   children: items,

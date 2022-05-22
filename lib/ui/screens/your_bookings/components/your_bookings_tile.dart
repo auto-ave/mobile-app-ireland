@@ -50,7 +50,7 @@ class _YourBookingTileState extends State<YourBookingTile> {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () {
-            mixpanel?.track('Your Booking Tile Click');
+            // mixpanel?.track('Your Booking Tile Click');
             Navigator.pushNamed(context, BookingDetailScreen.route,
                 arguments: BookingDetailScreenArguments(
                     bookingId: widget.bookingId, status: widget.status));

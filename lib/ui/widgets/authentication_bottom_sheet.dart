@@ -35,12 +35,14 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   String otpEntered = '';
-
+  late final FocusNode _phoneFocusNode;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    _phoneFocusNode = FocusNode();
+    _phoneFocusNode.requestFocus();
     _phoneAuthBloc = PhoneAuthBloc(
         repository: RepositoryProvider.of<AuthRepository>(context),
         globalAuthBloc: BlocProvider.of<GlobalAuthBloc>(context),
@@ -124,7 +126,10 @@ class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
           Text('Continue with number'),
           SizeConfig.kverticalMargin8,
           Form(
-            child: PhoneTextField(phoneController: phoneController),
+            child: PhoneTextField(
+              phoneController: phoneController,
+              // focusNode: _phoneFocusNode,
+            ),
             key: _formKey,
           ),
           SizeConfig.kverticalMargin16,

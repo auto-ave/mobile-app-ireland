@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/theme_constants.dart';
@@ -15,50 +16,70 @@ class BottomCartTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Divider(
-            height: 1,
-            thickness: 1,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-            child: Row(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+      child: GestureDetector(
+        onTap: () {
+          _showCartSheet(storeName: 'Store Name', context: context);
+          HapticFeedback.lightImpact();
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Divider(
+              height: 1,
+              thickness: 2,
+            ),
+            Container(
+              color: kPrimaryColor,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20),
+                child: Row(
                   children: <Widget>[
-                    Text('${cart.items!.length} items',
-                        style: SizeConfig.kStyle16),
-                    SizedBox(
-                      height: 4,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text('${cart.items!.length} items',
+                            style: SizeConfig.kStyle16
+                                .copyWith(color: Colors.white)),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text('₹${cart.total}',
+                            style: SizeConfig.kStyle20W500
+                                .copyWith(color: Colors.white)),
+                      ],
                     ),
-                    Text('₹${cart.total}', style: SizeConfig.kStyle16),
+                    Spacer(),
+                    CommonTextButton(
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                      onPressed: () => _showCartSheet(
+                          storeName: 'Store Name', context: context),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Proceed',
+                              style: SizeConfig.kStyle16W500
+                                  .copyWith(color: SizeConfig.kPrimaryColor)),
+                        ],
+                      ),
+                      backgroundColor: Colors.white,
+                      buttonSemantics: 'Proceed',
+                    )
+                    // TextButton(
+                    //   child: Text('View Cart', style: TextStyle(color: Colors.white)),
+                    //   onPressed: () =>
+                    //       _showCartSheet(storeName: 'Store Name', context: context),
+                    //   style: ButtonStyle(
+                    //       backgroundColor: MaterialStateProperty.all(
+                    //           Theme.of(context).primaryColor)),
+                    // ),
                   ],
                 ),
-                Spacer(),
-                CommonTextButton(
-                  onPressed: () =>
-                      _showCartSheet(storeName: 'Store Name', context: context),
-                  child:
-                      Text('View Cart', style: TextStyle(color: Colors.white)),
-                  backgroundColor: Theme.of(context).primaryColor,
-                  buttonSemantics: 'View Cart',
-                )
-                // TextButton(
-                //   child: Text('View Cart', style: TextStyle(color: Colors.white)),
-                //   onPressed: () =>
-                //       _showCartSheet(storeName: 'Store Name', context: context),
-                //   style: ButtonStyle(
-                //       backgroundColor: MaterialStateProperty.all(
-                //           Theme.of(context).primaryColor)),
-                // ),
-              ],
-            ),
-          )
-        ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

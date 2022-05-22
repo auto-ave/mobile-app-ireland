@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/login/login_screen.dart';
+import 'package:themotorwash/ui/screens/onboarding/components/app_bar.dart';
 import 'package:themotorwash/ui/screens/onboarding/components/next_page_button.dart';
 import 'package:themotorwash/ui/screens/onboarding/components/onboard_header.dart';
 import 'package:themotorwash/ui/screens/onboarding/components/onboarding_page_indicator.dart';
@@ -63,6 +64,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarOnboardingScreen(),
       backgroundColor: Colors.white,
       // appBar: AppBar(
       //   backgroundColor: Colors.transparent,
@@ -77,69 +79,88 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       //   //   },
       //   // ),
       // ),
-      body: Stack(
-        children: <Widget>[
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
-              child: Column(
-                children: <Widget>[
-                  // Header(onSkip: _goToLogin),
-                  SizeConfig.kverticalMargin32,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                    child: OnboardHeader(
-                      currentIndex: _currentPage,
-                      headers: [
-                        OnboardHeaderModel(
-                            title: 'Select a store',
-                            subtitle:
-                                'Compare Images, Prices, Ratings and Reviews to find the best store according to your needs.'),
-                        OnboardHeaderModel(
-                            title: 'Add services',
-                            subtitle:
-                                'Select your desired services and apply exciting offers to get upto 15% off on all services.'),
-                        OnboardHeaderModel(
-                            title: 'Select a time slot',
-                            subtitle:
-                                'No more waiting in queues, pre-book a slot according to your schedule.'),
-                        OnboardHeaderModel(
-                            title: 'Booking Complete!',
-                            subtitle:
-                                'Voila! Your slot is now booked, reach the store at the selected time slot and get your service without any wait.'),
-                        OnboardHeaderModel(
-                            title: 'Booking Complete!',
-                            subtitle:
-                                'Voila! Your slot is now booked, reach the store at the selected time slot and get your service without any wait.'),
-                      ],
+      body: Builder(builder: (ctx) {
+        SizeConfig().init(ctx);
+        return Stack(
+          children: <Widget>[
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 32,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // Header(onSkip: _goToLogin),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                    //   child: Text(
+                    //     'Steps to get your car washed',
+                    //     style: SizeConfig.kStyle24Bold,
+                    //   ),
+                    // ),
+
+                    SizeConfig.kverticalMargin32,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      child: OnboardHeader(
+                        currentIndex: _currentPage,
+                        headers: [
+                          OnboardHeaderModel(
+                              title: 'Choose from a variety of stores',
+                              subtitle:
+                                  'Compare Images, Prices, Ratings and Reviews to find the best store according to your needs.'),
+                          OnboardHeaderModel(
+                              title: 'Explore services',
+                              subtitle:
+                                  'Select your desired services and apply exciting offers to get upto 15% off on all services.'),
+                          OnboardHeaderModel(
+                              title: 'Get time slots',
+                              subtitle:
+                                  'No more waiting in queues, pre-book a slot according to your schedule.'),
+                          OnboardHeaderModel(
+                              title: 'Booking in 3 simple steps',
+                              subtitle:
+                                  'After your slot is booked, reach the store at the selected time slot and get your service without any wait.'),
+                          // OnboardHeaderModel(
+                          //     title: 'Booking Complete!',
+                          //     subtitle:
+                          //         'Voila! Your slot is now booked, reach the store at the selected time slot and get your service without any wait.'),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(child: Center(child: _getPage())),
-                  AnimatedBuilder(
-                    animation: _pageIndicatorAnimation,
-                    builder: (_, Widget? child) {
-                      return OnboardingPageIndicator(
-                        angle: _pageIndicatorAnimation.value,
-                        currentPage: _currentPage,
-                        child: child!,
-                      );
-                    },
-                    child: NextPageButton(
-                      onPressed: _nextPage,
+                    SizeConfig.kverticalMargin8,
+                    Flexible(child: Center(child: _getPage())),
+                    SizeConfig.kverticalMargin8,
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: AnimatedBuilder(
+                        animation: _pageIndicatorAnimation,
+                        builder: (_, Widget? child) {
+                          return OnboardingPageIndicator(
+                            angle: _pageIndicatorAnimation.value,
+                            currentPage: _currentPage,
+                            child: child!,
+                          );
+                        },
+                        child: NextPageButton(
+                          onPressed: _nextPage,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          AnimatedBuilder(
-            animation: _rippleAnimation,
-            builder: (_, Widget? child) {
-              return Ripple(radius: _rippleAnimation.value);
-            },
-          ),
-        ],
-      ),
+            AnimatedBuilder(
+              animation: _rippleAnimation,
+              builder: (_, Widget? child) {
+                return Ripple(radius: _rippleAnimation.value);
+              },
+            ),
+          ],
+        );
+      }),
     );
   }
 

@@ -9,6 +9,7 @@ import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_offers/loading_widgets/explore_offers_loading.dart';
 import 'package:themotorwash/ui/screens/offer_stores_list/offer_stores_list_screen.dart';
+import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/screens/store_list/store_list_screen.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 import 'package:themotorwash/utils/packages/multi_sliver/multi_sliver.dart';
@@ -91,15 +92,22 @@ class _ExploreOffersCarouselState extends State<ExploreOffersCarousel> {
                     items: offers
                         .map((e) => GestureDetector(
                               onTap: () {
-                                mixpanel?.track('Offer Banner Click',
-                                    properties: {
-                                      'url': e.bannerUrl.toString()
-                                    });
-                                Navigator.pushNamed(
-                                    context, OfferStoresListScreen.route,
-                                    arguments: OfferStoresListArguments(
-                                        title: 'Stores',
-                                        imageUrl: e.bannerUrl.toString()));
+                                // mixpanel?.track('Offer Banner Click',
+                                // properties: {
+                                //   'url': e.bannerUrl.toString()
+                                // });
+                                if (e.storeSlug != null) {
+                                  Navigator.pushNamed(
+                                      context, StoreDetailScreen.route,
+                                      arguments: StoreDetailArguments(
+                                          storeSlug: e.storeSlug!));
+                                } else {
+                                  Navigator.pushNamed(
+                                      context, OfferStoresListScreen.route,
+                                      arguments: OfferStoresListArguments(
+                                          title: 'Stores',
+                                          imageUrl: e.bannerUrl.toString()));
+                                }
                               },
                               child: CachedNetworkImage(
                                 imageUrl: e.bannerUrl!,
