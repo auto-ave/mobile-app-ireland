@@ -299,7 +299,7 @@ class CancelDescription extends StatelessWidget {
                   color: Colors.black,
                 )),
             TextSpan(
-                text: '₹$refundAmount ',
+                text: '$refundAmount '.euro(),
                 style: SizeConfig.kStyle16Bold
                     .copyWith(color: SizeConfig.kPrimaryColor)),
             TextSpan(

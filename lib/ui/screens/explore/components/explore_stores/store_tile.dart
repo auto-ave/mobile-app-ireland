@@ -135,7 +135,7 @@ class StoreTile extends StatelessWidget {
                                 )
                               : Container(),
                           Text(
-                            'Starts from ₹$startingFrom',
+                            'Starts from €$startingFrom',
                             style: SizeConfig.kStyle12
                                 .copyWith(color: SizeConfig.kGreyTextColor),
                           )

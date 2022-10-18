@@ -10,6 +10,7 @@ import 'package:themotorwash/ui/screens/booking_detail/booking_detail.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
 import 'package:themotorwash/ui/widgets/badge.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class YourBookingTile extends StatefulWidget {
   final String? otp;
@@ -109,7 +110,7 @@ class _YourBookingTileState extends State<YourBookingTile> {
                     ),
                   ),
                   SizeConfig.kHorizontalMargin8,
-                  Text('₹${widget.total}', style: SizeConfig.kStyle16W500)
+                  Text('${widget.total}'.euro(), style: SizeConfig.kStyle16W500)
                 ]),
                 Divider(),
                 getBookingStatusTag(widget.status),

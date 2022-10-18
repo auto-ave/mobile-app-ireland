@@ -309,4 +309,11 @@ class RestRepository implements Repository {
         stores.map((e) => StoreListModel.fromEntity(e)).toList();
     return storeList;
   }
+
+  @override
+  Future<VehicleModel> getVehicleFromRegNo({required String vehicleNum}) async {
+    VehicleModelEntity entity =
+        await _apiMethodsImp.getVehicleFromRegNo(vehicleNum: vehicleNum);
+    return VehicleModel.fromEntity(entity);
+  }
 }

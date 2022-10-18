@@ -6,6 +6,7 @@ import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/widgets/badge.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 import '../../theme_constants.dart';
 
@@ -105,7 +106,7 @@ class StoreSearchTile extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: "₹$startingFrom",
+                        text: "$startingFrom".euro(),
                         style: TextStyle(
                             color: SizeConfig.kPrimaryColor,
                             fontSize: 16,

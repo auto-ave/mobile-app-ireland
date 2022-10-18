@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override
@@ -16,6 +17,7 @@ class SimpleBlocObserver extends BlocObserver {
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) async {
+    Clipboard.setData(ClipboardData(text: error.toString()));
     print("$error BLOC" + bloc.toString());
     await FirebaseCrashlytics.instance
         .recordError(error, StackTrace.current, reason: error);

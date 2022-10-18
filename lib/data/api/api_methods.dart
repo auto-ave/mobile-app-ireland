@@ -132,4 +132,11 @@ abstract class ApiMethods {
   Future<List<StoreListEntity>> getFeaturedStores({
     required String city,
   });
+
+  Future<VehicleModelEntity> getVehicleFromRegNo({required String vehicleNum});
+  Future<AuthTokensEntity> authenticateEmailAndName(
+      {required String firstName,
+      required String lastName,
+      required String email,
+      required String token});
 }

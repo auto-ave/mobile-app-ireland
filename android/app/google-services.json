@@ -1,63 +1,41 @@
 {
   "project_info": {
-    "project_number": "606914451469",
-    "project_id": "autoave-global",
-    "storage_bucket": "autoave-global.appspot.com"
+    "project_number": "123669852351",
+    "project_id": "autoave-ireland",
+    "storage_bucket": "autoave-ireland.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:606914451469:android:4af042d6d22c64ead8dd44",
+        "mobilesdk_app_id": "1:123669852351:android:a3bf97caa40feb471d160a",
         "android_client_info": {
-          "package_name": "com.autoave.app"
+          "package_name": "ie.autoave.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "606914451469-ghmkkg683uhaabj618p5e32j9ugdrf70.apps.googleusercontent.com",
+          "client_id": "123669852351-dqtj8d99j53jvhu24tc0raga10ln14n0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD4s5qQirdCwk8ehEL_A1gTU-NAW6L9SYw"
+          "current_key": "AIzaSyAN226ix94VKl69VFXOCt-jt75kZTtrcss"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "606914451469-ghmkkg683uhaabj618p5e32j9ugdrf70.apps.googleusercontent.com",
+              "client_id": "123669852351-dqtj8d99j53jvhu24tc0raga10ln14n0.apps.googleusercontent.com",
               "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:606914451469:android:a82b20bed4ac9514d8dd44",
-        "android_client_info": {
-          "package_name": "com.autoave.owner_app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "606914451469-ghmkkg683uhaabj618p5e32j9ugdrf70.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyD4s5qQirdCwk8ehEL_A1gTU-NAW6L9SYw"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
+            },
             {
-              "client_id": "606914451469-ghmkkg683uhaabj618p5e32j9ugdrf70.apps.googleusercontent.com",
-              "client_type": 3
+              "client_id": "123669852351-87ia2p6j46afka16f4l847nt1gkobcmp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ie.autoave.app"
+              }
             }
           ]
         }

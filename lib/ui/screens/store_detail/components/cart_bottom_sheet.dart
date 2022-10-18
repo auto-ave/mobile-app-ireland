@@ -257,7 +257,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                               DetailsRowWidget(
                                                   leftText: 'Item total',
                                                   rightText:
-                                                      cart.subTotal!.rupees(),
+                                                      cart.subTotal!.euro(),
                                                   leftStyle: SizeConfig.kStyle14
                                                       .copyWith(
                                                           color: Color(
@@ -286,7 +286,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                                     0xff6326C7)))
                                                   ])),
                                                   rightText:
-                                                      '- ${cart.discount!.rupees()}',
+                                                      '- ${cart.discount!.euro()}',
                                                   rightStyle: SizeConfig
                                                       .kStyle14W500
                                                       .copyWith(
@@ -339,7 +339,7 @@ class _CartBottomSheetState extends State<CartBottomSheet> {
                                                 SizedBox(
                                                   height: 4,
                                                 ),
-                                                Text('₹${cart.total}',
+                                                Text('${cart.total}'.euro(),
                                                     style: SizeConfig
                                                         .kStyle20W500
                                                         .copyWith(
@@ -482,14 +482,14 @@ class CartItemTile extends StatelessWidget {
                   TextSpan(
                     children: <TextSpan>[
                       new TextSpan(
-                        text: '₹ $mrp',
+                        text: ' $mrp'.euro(),
                         style: new TextStyle(
                           color: Colors.grey,
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
                       new TextSpan(
-                          text: ' ₹ $price',
+                          text: '  $price'.euro(),
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontSize: SizeConfig.kfontSize16)),
@@ -498,7 +498,7 @@ class CartItemTile extends StatelessWidget {
                 )
               else
                 Text(
-                  '₹ $price',
+                  ' $price'.euro(),
                   style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: SizeConfig.kfontSize16),

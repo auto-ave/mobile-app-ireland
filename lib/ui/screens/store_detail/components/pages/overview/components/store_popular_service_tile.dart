@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class PopularServiceTile extends StatelessWidget {
   @override
@@ -49,7 +50,7 @@ class PopularServiceTile extends StatelessWidget {
             ),
             Row(
               children: <Widget>[
-                Text("₹ 1299"),
+                Text(" 1299"..euro()),
                 Spacer(),
                 TextButton(
                   onPressed: () {},

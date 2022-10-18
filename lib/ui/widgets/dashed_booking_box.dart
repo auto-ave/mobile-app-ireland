@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:themotorwash/data/models/booking_detail.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/booking_summary/booking_summary_screen.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class DashedBookingBox extends StatelessWidget {
   final BookingDetailModel bookingDetail;
@@ -101,7 +102,7 @@ class DashedBookingBox extends StatelessWidget {
                       children: [
                         DetailsRowWidget(
                             leftText: e.service,
-                            rightText: '₹${e.price}',
+                            rightText: '${e.price}'.euro(),
                             leftStyle: leftSide14W500,
                             rightStyle: rightSide12W500),
                         SizeConfig.kverticalMargin8
@@ -111,7 +112,7 @@ class DashedBookingBox extends StatelessWidget {
             SizeConfig.kverticalMargin8,
             DetailsRowWidget(
               leftText: 'Total amount',
-              rightText: '₹${bookingDetail.amount}',
+              rightText: '${bookingDetail.amount}'.euro(),
               leftStyle:
                   SizeConfig.kStyle14.copyWith(fontWeight: FontWeight.w600),
               rightStyle: TextStyle(

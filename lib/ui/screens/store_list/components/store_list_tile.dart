@@ -195,7 +195,7 @@ class StoreListTile extends StatelessWidget {
                                       color: SizeConfig.kGreyTextColor)),
                               TextSpan(
                                   text:
-                                      '${taggedServices!.first.price.toString().rupees()}',
+                                      '${taggedServices!.first.price.toString().euro()}',
                                   style: SizeConfig.kStyle14Bold.copyWith(
                                       fontWeight: FontWeight.bold,
                                       color: SizeConfig.kPrimaryColor))

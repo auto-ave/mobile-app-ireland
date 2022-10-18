@@ -2,7 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/ui/screens/login/login_screen.dart';
+import 'package:themotorwash/ui/screens/login/email_login_screen.dart';
+import 'package:themotorwash/ui/screens/login/phone_login_screen.dart';
 import 'package:themotorwash/ui/screens/onboarding/components/app_bar.dart';
 import 'package:themotorwash/ui/screens/onboarding/components/next_page_button.dart';
 import 'package:themotorwash/ui/screens/onboarding/components/onboard_header.dart';
@@ -269,7 +270,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   Future<void> _goToLogin() async {
     await _rippleAnimationController.forward();
-    Navigator.of(context).pushNamed(LoginScreen.route);
+    Navigator.of(context).pushNamed(EmailLoginScreen.route);
   }
 
   void _setNextPage(int nextPageNumber) {

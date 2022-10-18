@@ -28,6 +28,7 @@ import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/main.dart';
 import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/explore/components/explore_hamper/explore_hamper_widget.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_offers/explore_offers_carousel.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_picks/explore_picks_widget.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_services/explore_services_grid.dart';
@@ -38,7 +39,8 @@ import 'package:themotorwash/ui/screens/explore/components/initial_search_screen
 import 'package:themotorwash/ui/screens/explore/components/search_overlay.dart';
 import 'package:themotorwash/ui/screens/explore/components/search_service_tile.dart';
 import 'package:themotorwash/ui/screens/explore/components/explore_stores/store_tile.dart';
-import 'package:themotorwash/ui/screens/login/login_screen.dart';
+import 'package:themotorwash/ui/screens/login/email_login_screen.dart';
+import 'package:themotorwash/ui/screens/login/phone_login_screen.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/cart_bottom_sheet.dart';
 import 'package:themotorwash/ui/screens/store_detail/store_detail_screen.dart';
 import 'package:themotorwash/ui/screens/store_list/bloc/store_list_bloc.dart';
@@ -171,7 +173,7 @@ class _ExploreScreenState extends State<ExploreScreen>
           listener: (context, state) {
             if (state is Unauthenticated) {
               Navigator.pushNamedAndRemoveUntil(
-                  context, LoginScreen.route, (route) => false);
+                  context, EmailLoginScreen.route, (route) => false);
             }
           },
           child: BlocConsumer<GlobalLocationBloc, GlobalLocationState>(
@@ -242,7 +244,7 @@ class _ExploreScreenState extends State<ExploreScreen>
             // TODO: implement listenerprint('Satate' + state.toString());
             if (state is Unauthenticated) {
               Navigator.pushNamedAndRemoveUntil(
-                  context, LoginScreen.route, (route) => false);
+                  context, EmailLoginScreen.route, (route) => false);
             }
           },
           child: Scaffold(
@@ -354,6 +356,10 @@ class _ExploreScreenState extends State<ExploreScreen>
           controller: _refreshController,
           onRefresh: _onRefresh,
           child: CustomScrollView(slivers: [
+            // ExploreHamperWidget(),
+            // SliverToBoxAdapter(
+            //   child: SizeConfig.kverticalMargin16,
+            // ),
             ExploreOffersCarousel(
               bannersBloc: _bannersBloc,
             ),

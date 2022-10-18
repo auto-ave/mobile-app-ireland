@@ -207,7 +207,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
                   SizeConfig.kverticalMargin8,
                   getDetailsRow(
                       leftText: e.service,
-                      rightText: '₹${e.price}',
+                      rightText: '${e.price}'.euro(),
                       leftStyle: leftSide14W500,
                       rightStyle: rightSide14W500),
                   SizeConfig.kverticalMargin8
@@ -224,13 +224,13 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       ),
       getDetailsRow(
           leftText: 'Item Total',
-          rightText: '₹${cart.total}',
+          rightText: '${cart.total}'.euro(),
           leftStyle: leftSideInfo,
           rightStyle: rightSide14W500),
       SizeConfig.kverticalMargin8,
       getDetailsRow(
           leftText: 'Taxes',
-          rightText: '₹0',
+          rightText: '0'.euro(),
           leftStyle: leftSideInfo,
           rightStyle: rightSide14W500),
       Divider(
@@ -238,7 +238,7 @@ class _OrderReviewScreenState extends State<OrderReviewScreen> {
       ),
       getDetailsRow(
           leftText: 'Grand Total',
-          rightText: '₹${cart.total}',
+          rightText: '${cart.total}'.euro(),
           leftStyle: leftSideInfo.copyWith(
               color: Theme.of(context).primaryColor,
               fontSize: SizeConfig.kfontSize16,

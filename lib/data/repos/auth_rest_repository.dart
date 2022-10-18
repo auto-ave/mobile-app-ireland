@@ -44,4 +44,15 @@ class AuthRestRepository implements AuthRepository {
   Future<void> logout({required String token}) async {
     await _apiMethodsImp.logout(token: token);
   }
+
+  @override
+  Future<AuthTokensModel> authenticateEmailAndName(
+      {required String firstName,
+      required String lastName,
+      required String email,
+      required String token}) async {
+    AuthTokensEntity entity = await _apiMethodsImp.authenticateEmailAndName(
+        firstName: firstName, lastName: lastName, email: email, token: token);
+    return AuthTokensModel.fromEntity(entity);
+  }
 }

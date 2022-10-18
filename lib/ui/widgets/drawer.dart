@@ -12,7 +12,8 @@ import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/feedback/feedback_screen.dart';
-import 'package:themotorwash/ui/screens/login/login_screen.dart';
+import 'package:themotorwash/ui/screens/login/email_login_screen.dart';
+import 'package:themotorwash/ui/screens/login/phone_login_screen.dart';
 import 'package:themotorwash/ui/screens/profile/profile_screen.dart';
 import 'package:themotorwash/ui/screens/your_bookings/your_bookings_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
@@ -86,7 +87,7 @@ class AppDrawer extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(
                   context,
-                  LoginScreen.route,
+                  EmailLoginScreen.route,
                 );
               },
               child: Text(

@@ -284,7 +284,7 @@ class PaymentSummaryWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: DetailsRowWidget(
                 leftText: 'Total amount',
-                rightText: '₹${bookingDetail.amount}',
+                rightText: '${bookingDetail.amount}'.euro(),
                 leftStyle:
                     SizeConfig.kStyle14.copyWith(fontWeight: FontWeight.w600),
                 rightStyle: TextStyle(
@@ -297,7 +297,7 @@ class PaymentSummaryWidget extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: DetailsRowWidget(
                 leftText: 'Booking amount paid',
-                rightText: '₹${bookingDetail.payment!.amount}',
+                rightText: '${bookingDetail.payment!.amount}'.euro(),
                 leftStyle:
                     SizeConfig.kStyle14.copyWith(fontWeight: FontWeight.w600),
                 rightStyle: TextStyle(
@@ -306,12 +306,6 @@ class PaymentSummaryWidget extends StatelessWidget {
                     fontWeight: FontWeight.w500)),
           ),
           SizeConfig.kverticalMargin8,
-          // getDetailsRow(
-          //     leftText: 'Taxes',
-          //     rightText: '₹0',
-          //     leftStyle: leftSideInfo,
-          //     rightStyle: rightSide12W500),
-          // SizeConfig.kverticalMargin8,
           Container(
             padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -321,7 +315,7 @@ class PaymentSummaryWidget extends StatelessWidget {
                 leftText: bookingDetail.status == BookingStatus.serviceCompleted
                     ? 'Amount paid at store'
                     : 'Amount to be paid at store',
-                rightText: '₹${bookingDetail.remainingAmount}',
+                rightText: '${bookingDetail.remainingAmount}'.euro(),
                 leftStyle:
                     SizeConfig.kStyle14.copyWith(fontWeight: FontWeight.w600),
                 rightStyle: TextStyle(

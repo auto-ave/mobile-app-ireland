@@ -86,4 +86,5 @@ abstract class Repository {
   Future<List<StoreListModel>> getFeaturedStores({
     required LocationModel locationModel,
   });
+  Future<VehicleModel> getVehicleFromRegNo({required String vehicleNum});
 }

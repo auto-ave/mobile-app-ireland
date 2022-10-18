@@ -21,7 +21,7 @@ import 'package:themotorwash/ui/widgets/error_widget.dart';
 import 'package:themotorwash/ui/widgets/loading_more_tile.dart';
 import 'package:themotorwash/ui/widgets/loading_widgets/shimmer_placeholder.dart';
 import 'package:themotorwash/ui/widgets/vehicle_dropdown.dart';
-import 'package:themotorwash/ui/widgets/vehicle_type_selection_bottom_sheet.dart';
+import 'package:themotorwash/ui/widgets/vehicle_type_selection/vehicle_type_selection_bottom_sheet.dart';
 import 'package:themotorwash/utils/utils.dart';
 
 class StoreServicesTab extends StatefulWidget {
@@ -270,6 +270,7 @@ class _StoreServicesTabState extends State<StoreServicesTab>
         builder: (_) {
           return VehicleTypeSelectionBottomSheet(
             pageController: pageController,
+            isOldRoute: false,
           );
         });
   }

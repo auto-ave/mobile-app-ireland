@@ -12,7 +12,8 @@ import 'package:themotorwash/data/models/service.dart';
 import 'package:themotorwash/main.dart';
 
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/ui/widgets/authentication_bottom_sheet.dart';
+import 'package:themotorwash/ui/widgets/email_authentication_bottom_sheet.dart';
+import 'package:themotorwash/ui/widgets/phone_authentication_bottom_sheet.dart';
 import 'package:themotorwash/ui/widgets/badge.dart';
 import 'package:themotorwash/utils/utils.dart';
 import 'package:expandable_text/expandable_text.dart';
@@ -126,7 +127,7 @@ class StoreServiceTile extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        "₹ $price",
+                        " $price".euro(),
                         style: SizeConfig.kStyle16W500.copyWith(
                             fontSize: 18, fontWeight: FontWeight.w700),
                       ),
@@ -265,7 +266,7 @@ class StoreServiceTile extends StatelessWidget {
         builder: (context) {
           return Padding(
             padding: MediaQuery.of(context).viewInsets,
-            child: AuthenticationBottomSheet(
+            child: EmailAuthenticationBottomSheet(
               ctx: ctx,
               cartBloc: bloc,
               event: !isAddedToCart

@@ -15,4 +15,10 @@ abstract class AuthRepository {
   Future<List<FcmTopic>> getFcmTopics();
 
   Future<void> logout({required String token});
+
+  Future<AuthTokensModel> authenticateEmailAndName(
+      {required String firstName,
+      required String lastName,
+      required String email,
+      required String token});
 }

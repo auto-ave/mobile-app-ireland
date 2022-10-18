@@ -5,6 +5,7 @@ import 'package:themotorwash/data/models/cart.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/store_detail/components/cart_bottom_sheet.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class BottomCartTile extends StatelessWidget {
   final CartModel cart;
@@ -45,7 +46,7 @@ class BottomCartTile extends StatelessWidget {
                         SizedBox(
                           height: 4,
                         ),
-                        Text('₹${cart.total}',
+                        Text('${cart.total}'.euro(),
                             style: SizeConfig.kStyle20W500
                                 .copyWith(color: Colors.white)),
                       ],

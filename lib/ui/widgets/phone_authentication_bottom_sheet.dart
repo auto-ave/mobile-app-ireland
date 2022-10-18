@@ -9,16 +9,16 @@ import 'package:themotorwash/data/local/local_data_service.dart';
 import 'package:themotorwash/data/repos/auth_repository.dart';
 import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
-import 'package:themotorwash/ui/screens/login/login_screen.dart';
+import 'package:themotorwash/ui/screens/login/phone_login_screen.dart';
 import 'package:themotorwash/ui/screens/verify_phone/verify_phone_screen.dart';
 import 'package:themotorwash/ui/widgets/common_button.dart';
 import 'package:themotorwash/utils/utils.dart';
 
-class AuthenticationBottomSheet extends StatefulWidget {
+class PhoneAuthenticationBottomSheet extends StatefulWidget {
   final CartFunctionEvent event;
   final CartFunctionBloc cartBloc;
   final BuildContext ctx;
-  const AuthenticationBottomSheet(
+  const PhoneAuthenticationBottomSheet(
       {Key? key,
       required this.event,
       required this.cartBloc,
@@ -26,11 +26,12 @@ class AuthenticationBottomSheet extends StatefulWidget {
       : super(key: key);
 
   @override
-  _AuthenticationBottomSheetState createState() =>
-      _AuthenticationBottomSheetState();
+  _PhoneAuthenticationBottomSheetState createState() =>
+      _PhoneAuthenticationBottomSheetState();
 }
 
-class _AuthenticationBottomSheetState extends State<AuthenticationBottomSheet> {
+class _PhoneAuthenticationBottomSheetState
+    extends State<PhoneAuthenticationBottomSheet> {
   late PhoneAuthBloc _phoneAuthBloc;
   TextEditingController phoneController = TextEditingController();
   TextEditingController otpController = TextEditingController();

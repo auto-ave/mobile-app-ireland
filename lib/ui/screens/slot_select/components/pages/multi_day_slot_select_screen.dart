@@ -235,7 +235,7 @@ class _MultiDaySlotSelectScreenState extends State<MultiDaySlotSelectScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text('₹${widget.cartTotal}',
+                    Text('${widget.cartTotal}'.euro(),
                         style: TextStyle(
                             fontSize: SizeConfig.kfontSize16,
                             fontWeight: FontWeight.w500)),

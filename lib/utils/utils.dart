@@ -224,7 +224,7 @@ String? encodeQueryParameters(Map<String, String> params) {
 }
 
 extension StringUtils on String {
-  String rupees() => "₹" + this;
+  String euro() => "€" + this;
 }
 
 extension IntUtils on int {

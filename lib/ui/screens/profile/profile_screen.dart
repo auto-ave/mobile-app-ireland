@@ -248,15 +248,27 @@ class CommonTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool filled;
   final int? maxLines;
-  const CommonTextField({
-    Key? key,
-    this.fieldName,
-    this.hintText,
-    required this.fieldController,
-    this.validator,
-    this.filled = true,
-    this.maxLines,
-  }) : super(key: key);
+  final Widget? prefixIcon;
+  final EdgeInsets? contentPadding;
+  final OutlineInputBorder? inputBorder;
+  final TextStyle? hintStyle;
+  final TextInputType? keyboardType;
+  final bool? autoFocus;
+  const CommonTextField(
+      {Key? key,
+      this.fieldName,
+      this.hintText,
+      required this.fieldController,
+      this.validator,
+      this.filled = true,
+      this.maxLines,
+      this.prefixIcon,
+      this.contentPadding,
+      this.inputBorder,
+      this.hintStyle,
+      this.keyboardType,
+      this.autoFocus})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -265,22 +277,30 @@ class CommonTextField extends StatelessWidget {
       controller: fieldController,
       style: SizeConfig.kStyle14W500,
       maxLines: maxLines,
+      keyboardType: keyboardType,
+      autofocus: autoFocus ?? false,
       decoration: InputDecoration(
+        prefixIcon: prefixIcon,
         filled: filled,
         fillColor: Color(0xffF2F8FF),
         labelText: fieldName,
         hintText: hintText,
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: SizeConfig.kPrimaryColor)),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4),
-            borderSide: BorderSide(color: SizeConfig.kPrimaryColor)),
-        contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4),
-          borderSide: BorderSide(color: SizeConfig.kPrimaryColor),
-        ),
+        hintStyle: hintStyle,
+        focusedBorder: inputBorder ??
+            OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4),
+                borderSide: BorderSide(color: SizeConfig.kPrimaryColor)),
+        enabledBorder: inputBorder ??
+            OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4),
+                borderSide: BorderSide(color: SizeConfig.kPrimaryColor)),
+        contentPadding: contentPadding ??
+            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        border: inputBorder ??
+            OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4),
+              borderSide: BorderSide(color: SizeConfig.kPrimaryColor),
+            ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:themotorwash/blocs/global_vehicle_type/bloc/global_vehicle_type_bloc.dart';
@@ -13,14 +14,19 @@ import 'package:themotorwash/data/models/vehicle_wheel.dart';
 import 'package:themotorwash/data/repos/repository.dart';
 import 'package:themotorwash/main.dart';
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/ui/screens/profile/profile_screen.dart';
+import 'package:themotorwash/ui/widgets/common_button.dart';
+import 'package:themotorwash/ui/widgets/or_divider_widget.dart';
 import 'package:themotorwash/ui/widgets/search_bar.dart';
+import 'package:themotorwash/ui/widgets/vehicle_type_selection/components/vehicle_select_options_page.dart';
 import 'package:themotorwash/utils/utils.dart';
 
 class VehicleTypeSelectionBottomSheet extends StatefulWidget {
   final PageController pageController;
+  final bool isOldRoute;
 
   const VehicleTypeSelectionBottomSheet(
-      {Key? key, required this.pageController})
+      {Key? key, required this.pageController, required this.isOldRoute})
       : super(key: key);
 
   @override
@@ -85,53 +91,57 @@ class _VehicleTypeSelectionBottomSheetState
                   padding: EdgeInsets.only(
                     top: 16,
                   ),
-                  child: PageView.custom(
-                    onPageChanged: (index) {
-                      setState(() {});
-                    },
-                    physics: NeverScrollableScrollPhysics(),
-                    controller: widget.pageController,
-                    childrenDelegate: SliverChildBuilderDelegate((ctx, index) {
-                      if (index == 0) {
-                        return VehicleWheelSelectionPage(
-                            onWheelTapped: (wheel) {
-                          selectedWheel = wheel;
-                          widget.pageController.animateToPage(1,
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.linear);
-                        });
-                      } else if (index == 1) {
-                        return VehicleBrandSelectionPage(
-                          onBrandTapped: (brand) {
-                            selectedBrand = brand;
-                            widget.pageController.animateToPage(2,
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.linear);
+                  child: !widget.isOldRoute
+                      ? VehicleSelectOptions()
+                      : PageView.custom(
+                          onPageChanged: (index) {
+                            setState(() {});
                           },
-                          selectedWheel: selectedWheel,
-                          onBackPressed: () {
-                            widget.pageController.animateToPage(0,
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.linear);
-                          },
-                        );
-                      } else {
-                        return VehicleModelSelectionPage(
-                          onVehicleModelTapped: (model) {
-                            _vehicleTypeFunctionsBloc.add(
-                                SelectVehicleType(vehicleTypeModel: model));
-                            Navigator.pop(context);
-                          },
-                          selectedBrand: selectedBrand,
-                          onBackPressed: () {
-                            widget.pageController.animateToPage(1,
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.linear);
-                          },
-                        );
-                      }
-                    }, childCount: 3, addAutomaticKeepAlives: false),
-                  ),
+                          physics: NeverScrollableScrollPhysics(),
+                          controller: widget.pageController,
+                          childrenDelegate:
+                              SliverChildBuilderDelegate((ctx, index) {
+                            if (index == 0) {
+                              return VehicleWheelSelectionPage(
+                                  onWheelTapped: (wheel) {
+                                selectedWheel = wheel;
+                                widget.pageController.animateToPage(1,
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.linear);
+                              });
+                            } else if (index == 1) {
+                              return VehicleBrandSelectionPage(
+                                onBrandTapped: (brand) {
+                                  selectedBrand = brand;
+                                  widget.pageController.animateToPage(2,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.linear);
+                                },
+                                selectedWheel: selectedWheel,
+                                onBackPressed: () {
+                                  widget.pageController.animateToPage(0,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.linear);
+                                },
+                              );
+                            } else {
+                              return VehicleModelSelectionPage(
+                                onVehicleModelTapped: (model) {
+                                  _vehicleTypeFunctionsBloc.add(
+                                      SelectVehicleType(
+                                          vehicleTypeModel: model));
+                                  Navigator.pop(context);
+                                },
+                                selectedBrand: selectedBrand,
+                                onBackPressed: () {
+                                  widget.pageController.animateToPage(1,
+                                      duration: Duration(milliseconds: 300),
+                                      curve: Curves.linear);
+                                },
+                              );
+                            }
+                          }, childCount: 3, addAutomaticKeepAlives: false),
+                        ),
                 ));
           }),
     );

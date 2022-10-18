@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:themotorwash/theme_constants.dart';
+import 'package:themotorwash/utils/utils.dart';
 
 class StoreInfo extends StatelessWidget {
   final String address;
@@ -112,7 +113,7 @@ class StoreInfo extends StatelessWidget {
               ),
             ),
             TextSpan(
-              text: '₹$serviceStartsAt ',
+              text: '$serviceStartsAt '.euro(),
               style: TextStyle(
                   color: SizeConfig.kPrimaryColor,
                   fontSize: 16,

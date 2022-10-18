@@ -18,6 +18,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:themotorwash/blocs/email_auth/bloc/email_auth_bloc.dart';
+import 'package:themotorwash/ui/screens/login/email_login_screen.dart';
 import 'package:themotorwash/ui/screens/offer_stores_list/offer_stores_list_screen.dart';
 import 'package:themotorwash/ui/screens/onboarding/onboarding_screen.dart';
 import 'package:themotorwash/ui/screens/services_list/services_list_screen.dart';
@@ -53,7 +55,7 @@ import 'package:themotorwash/ui/screens/cancel_order/cancel_order.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/feedback/feedback_screen.dart';
 import 'package:themotorwash/ui/screens/home/home_screen.dart';
-import 'package:themotorwash/ui/screens/login/login_screen.dart';
+import 'package:themotorwash/ui/screens/login/phone_login_screen.dart';
 import 'package:themotorwash/ui/screens/offer_selection/offer_selection.dart';
 import 'package:themotorwash/ui/screens/order_review/order_review.dart';
 import 'package:themotorwash/ui/screens/payment_choice/payment_choice.dart';
@@ -108,7 +110,8 @@ void main() async {
   //   print(e.toString() + "permission noti");
   // }
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
   } on Exception catch (e) {
     print("helllo" + e.toString());
   }
@@ -214,6 +217,8 @@ class _MyAppState extends State<MyApp> {
   late LocalDataService _localDataService;
   late FirebaseMessaging _fcmInstance;
   late GlobalCartBloc _globalCartBloc;
+  late EmailAuthBloc _emailAuthBloc;
+  late PhoneAuthBloc _phoneAuthBloc;
 
   @override
   void initState() {
@@ -247,6 +252,16 @@ class _MyAppState extends State<MyApp> {
         repository: _repository,
         orderReviewBloc: _orderReviewBloc,
         globalCartBloc: _globalCartBloc);
+    _phoneAuthBloc = PhoneAuthBloc(
+        repository: _authRepository,
+        globalAuthBloc: _globalAuthBloc,
+        fcmInstance: _fcmInstance,
+        localDataService: _localDataService);
+    _emailAuthBloc = EmailAuthBloc(
+        repository: _authRepository,
+        globalAuthBloc: _globalAuthBloc,
+        fcmInstance: _fcmInstance,
+        localDataService: _localDataService);
     // WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
     //   N
     // });
@@ -293,11 +308,10 @@ class _MyAppState extends State<MyApp> {
           create: (_) => YourBookingsBloc(repository: _repository),
         ),
         BlocProvider<PhoneAuthBloc>(
-          create: (_) => PhoneAuthBloc(
-              repository: _authRepository,
-              globalAuthBloc: _globalAuthBloc,
-              fcmInstance: _fcmInstance,
-              localDataService: _localDataService),
+          create: (_) => _phoneAuthBloc,
+        ),
+        BlocProvider<EmailAuthBloc>(
+          create: (_) => _emailAuthBloc,
         ),
         BlocProvider<GlobalLocationBloc>(
           create: (_) => _globalLocationBloc,
@@ -408,6 +422,7 @@ class _MyAppState extends State<MyApp> {
                 );
               }),
           onGenerateRoute: (settings) {
+            print(settings.name.toString());
             if (settings.name == StoreListScreen.route) {
               final args = settings.arguments as StoreListArguments;
 
@@ -476,10 +491,19 @@ class _MyAppState extends State<MyApp> {
                 },
               );
             }
-            if (settings.name == LoginScreen.route) {
+            if (settings.name == PhoneLoginScreen.route) {
               return MaterialPageRoute(
                 builder: (context) {
-                  return LoginScreen(
+                  return PhoneLoginScreen(
+                    initialLink: null,
+                  );
+                },
+              );
+            }
+            if (settings.name == EmailLoginScreen.route) {
+              return MaterialPageRoute(
+                builder: (context) {
+                  return EmailLoginScreen(
                     initialLink: null,
                   );
                 },
@@ -696,7 +720,7 @@ class _MainScreenState extends State<MainScreen> {
                 );
               } else {
                 // return OnboardingScreen();
-                return LoginScreen(
+                return EmailLoginScreen(
                   initialLink: widget.initialLink,
                 );
               }

@@ -9,7 +9,7 @@ import 'package:themotorwash/navigation/arguments.dart';
 import 'package:themotorwash/theme_constants.dart';
 import 'package:themotorwash/ui/screens/explore/explore_screen.dart';
 import 'package:themotorwash/ui/screens/home/home_screen.dart';
-import 'package:themotorwash/ui/screens/login/login_screen.dart';
+import 'package:themotorwash/ui/screens/login/phone_login_screen.dart';
 import 'package:themotorwash/utils/utils.dart';
 
 class VerifyPhoneScreen extends StatefulWidget {
@@ -60,6 +60,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen>
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: BlocListener<GlobalAuthBloc, GlobalAuthState>(
             listener: (context, state) {
+              // autoaveLog('')
               if (state is Authenticated) {
                 ScaffoldMessenger.of(context).removeCurrentSnackBar();
                 Navigator.pushNamedAndRemoveUntil(
@@ -111,7 +112,7 @@ class _VerifyPhoneScreenState extends State<VerifyPhoneScreen>
                                         ..onTap = () =>
                                             Navigator.pushNamedAndRemoveUntil(
                                                 context,
-                                                LoginScreen.route,
+                                                PhoneLoginScreen.route,
                                                 (route) => false),
                                       text: 'Change number',
                                       style: SizeConfig.kStyle12PrimaryColor

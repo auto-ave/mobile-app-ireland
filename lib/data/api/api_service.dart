@@ -644,4 +644,35 @@ class ApiService implements ApiMethods {
         .toList();
     return stores;
   }
+
+  @override
+  Future<VehicleModelEntity> getVehicleFromRegNo(
+      {required String vehicleNum}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.postVehicleFromRegNoEndpoint();
+
+    Response res = await client.post(url, data: {'reg_num': vehicleNum});
+    dynamic data = jsonDecode(res.data);
+
+    VehicleModelEntity entity = VehicleModelEntity.fromJson(data);
+    return entity;
+  }
+
+  @override
+  Future<AuthTokensEntity> authenticateEmailAndName(
+      {required String firstName,
+      required String lastName,
+      required String email,
+      required String token}) async {
+    Dio client = _apiConstants.dioClient();
+    String url = _apiConstants.postAuthenticateEmailAndNameEndpoint();
+    Response res = await client.post(url, data: {
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'token': token
+    });
+    dynamic data = jsonDecode(res.data);
+    return AuthTokensEntity.fromJson(data);
+  }
 }
